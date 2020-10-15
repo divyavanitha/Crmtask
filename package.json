@@ -1,0 +1,63 @@
+{
+  "name": "freelancer",
+  "version": "1.0.0",
+  "description": "Freelancer Application",
+  "main": "app.js",
+  "scripts": {
+    "start": "node server/bin/www",
+    "client": "npm start --prefix client",
+    "client-install": "npm install --prefix client",
+    "client-build": "npm run build --prefix client",
+    "server": "nodemon server/bin/www",
+    "seed": "node server/seed.js",
+    "dev": "concurrently \"npm run client\" \"npm run server\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Freelancer"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "async": "^3.2.0",
+    "bcrypt": "^4.0.1",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "datatables.net-bs4": "^1.10.22",
+    "datatables.net-buttons": "^1.6.4",
+    "datatables.net-buttons-bs4": "^1.6.4",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "google-translate-api": "^2.3.0",
+    "googleapis": "^54.0.0",
+    "i18n": "^0.13.2",
+    "jsonwebtoken": "^8.5.1",
+    "jwt-decode": "^2.2.0",
+    "moment": "^2.27.0",
+    "moment-timezone": "^0.5.31",
+    "mongodb": "^3.6.2",
+    "mongoose": "^5.9.18",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "nodemailer": "^6.4.10",
+    "nodemailer-smtp-transport": "^2.7.4",
+    "nodemon": "^2.0.4",
+    "passport": "^0.4.1",
+    "passport-facebook": "^3.0.0",
+    "passport-google-oauth": "^2.0.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-jwt": "^4.0.0",
+    "pdfmake": "^0.1.68",
+    "query-string": "^6.13.5",
+    "rand-token": "^1.0.1",
+    "reactjs-popup": "^2.0.3",
+    "socket.io": "^2.3.0",
+    "uuid": "^8.3.0",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "concurrently": "^5.2.0"
+  }
+}
