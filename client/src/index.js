@@ -1,13 +1,56 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import App from './components/App';
 import * as serviceWorker from './serviceWorker';
+import { BrowserRouter as Router } from "react-router-dom";
+
+import { Provider } from 'react-redux';
+import setToken from './components/utils/set_token';
+import jwt_decode from 'jwt-decode';
+
+import "popper.js/dist/popper.js";
+import "jquery/dist/jquery.js";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.min.js";
+import "animate.css/animate.css";
+import "font-awesome/css/font-awesome.min.css";
+
+/* import "./css/App.css";
+import "./css/Responsive.css"; */
+
+import { AUTH_USER } from './_actions/types';
+import { ADMIN_USER } from './_actions/admin/types';
+import store from "./store.js";
+
+
+if (localStorage.token) {
+  setToken(localStorage.token);
+
+  const decoded = jwt_decode(localStorage.token);
+
+  store.dispatch({
+    type: AUTH_USER,
+    payload: decoded
+  })
+
+}
+if (localStorage.admin_token) {
+  setToken(localStorage.admin_token);
+
+  const decoded = jwt_decode(localStorage.admin_token);
+
+  store.dispatch({
+    type: ADMIN_USER,
+    payload: decoded
+  })
+
+}
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Provider store={store}>
+    <Router><App /></Router>
+  </Provider>,
   document.getElementById('root')
 );
 
