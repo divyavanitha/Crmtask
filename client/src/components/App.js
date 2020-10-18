@@ -5,7 +5,13 @@ import { Route, Switch } from "react-router-dom";
 import AdminRoute from './utils/admin_route';
 import AdminAuthRoute from './utils/admin_auth_route'; */
 
-import LandingPage from "./views/LandingPage/LandingPage.js";
+import LandingPage from "./views/user/Home.js";
+import AdminLogin from './views/admin/auth/Login';
+import Admin from './views/admin/layout/Base';
+import User from './views/user/layout/Base';
+import ProtectedRoute from './utils/protected_route';
+import AdminRoute from './utils/admin_route';
+import AdminAuthRoute from './utils/admin_auth_route';
 /* import LoginPage from "./views/LoginPage/LoginPage.js";
 import RegisterPage from "./views/RegisterPage/RegisterPage.js";
 import clientfreelancer from "./views/freelancer/clientfreelancer.js";
@@ -24,18 +30,7 @@ import postjob from "./views/job/post-job.js";
 import AdminLogin from './views/admin/auth/Login';
 import Admin from './views/admin/layout/Base'; */
 
-import "../css/bootstrap.css";
-import "../css/custom.css";
-import "../css/customStyle.css";
-import "../css/styles.css";
-import "../css/cate-nav-styles.css";
-import "../css/owl.carousel.css";
-import "../css/animate.css";
-import "../css/knowledge_bank.css";
-import "../css/owl.theme.default.css";
-import "../css/mainStyle.css";
-import "../css/homepage.css";
-import "../css/msdropdown.css";
+
 
 
 import "popper.js/dist/popper.js";
@@ -46,7 +41,7 @@ import "bootstrap/dist/js/bootstrap.min.js";
 
 
 //import "../js/jquery.min.js";
-import "../js/msdropdown.js";
+/* import "../js/msdropdown.js"; */
 //import "../js/jquery.sticky.js";
 //import "../js/popper.min.js";
 //import "../js/owl.carousel.min.js";
@@ -56,20 +51,20 @@ import "../js/msdropdown.js";
 
 
 function App() {
-  
+
   return (
     <Suspense fallback={(<div>Loading...</div>)}>
       <div>
         <Switch>
-        <Route  exact={true}  path="/" component={LandingPage} />
-         {/*  <Route path="/login" component={LoginPage} />
+          {/* <Route  exact={true}  path="/" component={LandingPage} /> */}
+          {/*  <Route path="/login" component={LoginPage} />
           <Route path="/register" component={RegisterPage} />
           <ProtectedRoute path="/explore" component={explore} />
           <ProtectedRoute path="/freelancer" component={clientfreeuser} />
           <ProtectedRoute path="/job" component={jobcardbeforeclick} />
           <ProtectedRoute path="/gig/create" component={CreateGig} />
           <ProtectedRoute path="/gig/edit" component={EditGig} /> */}
-         {/* <Route  exact={true}  path="/" component={LandingPage} />
+          {/* <Route  exact={true}  path="/" component={LandingPage} />
           <Route path="/login" component={LoginPage} />
           <Route path="/register" component={RegisterPage} />
           <ProtectedRoute path="/explore" component={explore} />
@@ -84,11 +79,13 @@ function App() {
           <ProtectedRoute path="/create-freelancer-job" component={createfreelancerjob} /> */}
 
 
-         {/*  <AdminRoute path="/admin" >
+          {/* <AdminRoute exact={true} path="/admin" >
             <Admin />
           </AdminRoute>
-          <AdminAuthRoute path="/admin/login"><AdminLogin /></AdminAuthRoute> */}
-          {/* <Redirect from="*" to="/" /> */}
+
+          <AdminAuthRoute exact={true} path="/admin/login"><AdminLogin /></AdminAuthRoute> */}
+          <User />
+          {/* <Redirect from="*" to="/" />  */}
         </Switch>
       </div>
     </Suspense>

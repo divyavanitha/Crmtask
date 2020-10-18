@@ -1,58 +1,78 @@
-import React, { Fragment } from "react";
+import React, { useState, FormEvent, Dispatch } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Redirect, withRouter, useHistory } from "react-router-dom";
+import { login } from "../../../../_actions/admin/auth.action";
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import Notifications from "../common/Notification";
 import Sidepanel from "../includes/Sidepanel";
 import Header from "../includes/Header";
-import { Switch, Route } from "react-router";
-/* import "../../../../css/Admin.css";
-import "../../../../css/sb-admin-2.css"; */
-import Dashboard from "../Dashboard";
-import User from "../users/User";
-import AddUser from "../users/AddUser";
-import Category from "../category/Category";
-import AddCategory from "../category/AddCategory";
-import SubCategory from "../subcategory/SubCategory";
-import AddSubCategory from "../subcategory/AddSubCategory";
-import Skill from "../skill/Skill";
-import AddSkill from "../skill/AddSkill";
-import DeliveryTime from "../deliverytime/DeliveryTime";
-import AddDeliveryTime from "../deliverytime/AddDeliveryTime";
-import Language from "../language/Language";
-import AddLanguage from "../language/AddLanguage";
-import Notifications from "../common/Notification";
+
 
 const Base = () => {
 
   return (
-    <div className="App" id="wrapper">
-      <Notifications />
-      <Sidepanel />
-      <div id="content-wrapper" className="d-flex flex-column">
-        <div id="content">
-          <Header />
-          <div className="container-fluid">
-            <Switch>
-              <Route path="/admin/dashboard" component={Dashboard}></Route>
-              <Route path="/admin/language/add" component={AddLanguage}></Route>
-              <Route path="/admin/language/:id/edit" component={AddLanguage}></Route>
-              <Route path="/admin/language" component={Language}></Route>
-              <Route path="/admin/delivery/time/add" component={AddDeliveryTime}></Route>
-              <Route path="/admin/delivery/time/:id/edit" component={AddDeliveryTime}></Route>
-              <Route path="/admin/delivery/time" component={DeliveryTime}></Route>
-              <Route path="/admin/skill/add" component={AddSkill}></Route>
-              <Route path="/admin/skill/:id/edit" component={AddSkill}></Route>
-              <Route path="/admin/skill" component={Skill}></Route>
-              <Route path="/admin/subcategory/add" component={AddSubCategory}></Route>
-              <Route path="/admin/subcategory/:id/edit" component={AddSubCategory}></Route>
-              <Route path="/admin/subcategory" component={SubCategory}></Route>
-              <Route path="/admin/category/add" component={AddCategory}></Route>
-              <Route path="/admin/category/:id/edit" component={AddCategory}></Route>
-              <Route path="/admin/category" component={Category}></Route>
-              <Route path="/admin/users/add" component={AddUser}></Route>
-              <Route path="/admin/users" component={User}></Route>
-            </Switch>
+    <React.Fragment>
+      <section class="clearfix post_footer">@ Copyright GigToDoScript 2019. Pixinal Studio. </section>
+      <aside id="left-panel" class="left-panel">
+        <nav class="navbar navbar-expand-sm navbar-default">
+          <div class="navbar-header">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu">
+              <i class="fa fa-bars"></i>
+            </button>
+            <a class="navbar-brand" href="index?dashboard">
+              site_name  <span class="badge badge-success p-2 font-weight-bold">ADMIN</span>
+            </a>
+            <a class="navbar-brand hidden" href="./"><span class="badge badge-success pt-2 pb-2">A</span></a>
           </div>
-        </div>
-      </div>
+          <div id="main-menu" class="main-menu collapse navbar-collapse">
+          <Sidepanel />
     </div>
+        </nav>
+      </aside>
+
+      <div id="right-panel" class="right-panel">
+
+
+<header id="header" class="header">
+<div class="header-menu"> <Header /> 
+
+<div class="container clearfix">
+<div class="row">
+<div id="languagePanel" class="bg-light col-md-12 p-2 pb-0 mb-0"> 
+	<div class="row">
+	<div class="col-md-6"> 
+	<p class="col-form-label font-weight-normal mb-0 pb-0">Current Selected Language: <strong> currentLanguage </strong></p>
+	</div> 
+	<div class="col-md-6 float-right"> 
+	<div class="form-group row mb-0 pb-0"> 
+		<label class="col-md-2"></label>
+		<label class="col-md-4 col-form-label"> Change Language: </label>
+		<div class="col-md-6">
+		<select id="languageSelect" class="form-control">
+
+		<option data-url="">
+		 title 
+		</option>
+
+		</select>
+		</div>
+	</div>
+	</div>
+	</div>
+</div>
+</div>
+</div>
+
+
+</div>
+</header>
+
+</div>
+
+    </React.Fragment>
+
+
   );
 };
 

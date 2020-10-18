@@ -4,20 +4,49 @@ import "./Header.css";
 import { useSelector } from "react-redux";
 
 const Header = () => {
- // const page = useSelector((state) => state.root.page);
+  // const page = useSelector((state) => state.root.page);
 
   return (
-    <nav className="navbar navbar-expand navbar-light bg-custom-dark topbar mb-4 static-top shadow">
-      <ol className="breadcrumb dark-breadcrumb">
-        {/* <li className="breadcrumb-item"><a href="# ">{page ? page.area : null}</a></li>
-        <li className="breadcrumb-item"><a href="# ">{page ? page.subArea : null}</a></li> */}
-      </ol>
+    <div class="col-sm-5">
 
-      <ul className="navbar-nav ml-auto">
-        <div className="topbar-divider d-none d-sm-block"></div>
-        <HeaderOption />
-      </ul>
-    </nav>
+      <div class="user-area dropdown float-right">
+
+        <button class="btn btn-outline-secondary btn-sm dropdown-toggle text=white" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+
+
+          {/* <img src="admin_images" width="30" height="30" class="rounded-circle text-white" /> */}
+
+
+
+          <img src="admin_images/empty-image.png" width="30" height="30" class="rounded-circle text-white" />
+
+
+
+            &nbsp;  admin_name  &nbsp; <span class="caret"></span>
+
+
+        </button>
+
+
+
+        <div class="user-menu dropdown-menu">
+
+          <a class="nav-link" href="index?dashboard"><i class="fa fa-dashboard"></i> Dashboard</a>
+
+          <a class="nav-link" href="index?user_profile=<?php echo $admin_id; ?>"><i class="fa fa-user"></i> My Profile</a>
+
+          <div class="dropdown-divider"></div>
+
+          <a class="nav-link" href="logout"><i class="fa fa-power-off"></i> Logout</a>
+        </div>
+      </div>
+
+
+    </div>
+
+
+
   );
 };
 

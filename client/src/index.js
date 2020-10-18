@@ -22,7 +22,7 @@ import "./css/Responsive.css"; */
 import { AUTH_USER } from './_actions/types';
 import { ADMIN_USER } from './_actions/admin/types';
 import store from "./store.js";
-
+const $ = window.$;
 
 if (localStorage.token) {
   setToken(localStorage.token);
