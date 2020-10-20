@@ -12,12 +12,12 @@ function Header() {
 
         $(document).ready(function () {
 
-            $(function () {
+            /*$(function () {
                 $('[data-toggle="tooltip"]').tooltip();
             });
             $(function () {
                 $('[data-toggle="popover"]').popover();
-            });
+            });*/
 
             //// Categories Dropdown Code
             $(".top-nav-item").mouseover(function () {
@@ -181,6 +181,10 @@ function Header() {
                     scrollTop: offsetTop
                 }, 850);
                 // e.preventDefault();
+            });
+
+            $(document).on('click', '.dropdown-menu', function(event) {
+                event.stopPropagation();
             });
 
             // Bind to scroll

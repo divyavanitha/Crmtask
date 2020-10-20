@@ -4,9 +4,7 @@ import { Switch, Route } from "react-router";
 
 import Home from "../Home";
 
-import $ from 'jquery';
-
-import "../../../../assets/css/bootstrap.css";
+/* import "../../../../assets/css/bootstrap.css";
 import "../../../../assets/css/custom.css";
 import "../../../../assets/css/customStyle.css";
 import "../../../../assets/css/styles.css";
@@ -19,8 +17,10 @@ import "../../../../assets/css/mainStyle.css";
 import "../../../../assets/css/homepage.css";
 import "../../../../assets/css/msdropdown.css";
 
- import "../../../../assets/js/msdropdown.js";
-/*  import "../../../../assets/js/categoriesProposal.js"; */
+ import "../../../../assets/js/msdropdown.js"; */
+
+/*  import "../../../../assets/js/popper.min.js";
+ import "../../../../assets/js/bootstrap.js"; */
 
 const Base = () => {
 

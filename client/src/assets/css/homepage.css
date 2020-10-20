@@ -1,6 +1,5 @@
 @charset "utf-8";
-.mainHtml .gnav-header,
-.gnav-header {
+.mainHtml .gnav-header, .gnav-header {
     /* border-bottom: 1px solid #E1E3DF; */
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
@@ -68,7 +67,7 @@
 .cat-nav .sub-nav-container {
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
-        border-top: 2px solid #3a6cff;
+    border-top: 2px solid #3a6cff;
 }
 
 .cat-nav .sub-nav-container aside h4 {

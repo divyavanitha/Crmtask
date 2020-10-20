@@ -1,53 +1,42 @@
 import React from "react";
-import HeaderOption from "./HeaderOption";
-import "./Header.css";
 import { useSelector } from "react-redux";
 
 const Header = () => {
-  // const page = useSelector((state) => state.root.page);
+
 
   return (
-    <div class="col-sm-5">
-
-      <div class="user-area dropdown float-right">
-
-        <button class="btn btn-outline-secondary btn-sm dropdown-toggle text=white" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <React.Fragment>
 
 
-
-          {/* <img src="admin_images" width="30" height="30" class="rounded-circle text-white" /> */}
-
-
-
-          <img src="admin_images/empty-image.png" width="30" height="30" class="rounded-circle text-white" />
-
-
-
-            &nbsp;  admin_name  &nbsp; <span class="caret"></span>
-
-
-        </button>
-
-
-
-        <div class="user-menu dropdown-menu">
-
-          <a class="nav-link" href="index?dashboard"><i class="fa fa-dashboard"></i> Dashboard</a>
-
-          <a class="nav-link" href="index?user_profile=<?php echo $admin_id; ?>"><i class="fa fa-user"></i> My Profile</a>
-
-          <div class="dropdown-divider"></div>
-
-          <a class="nav-link" href="logout"><i class="fa fa-power-off"></i> Logout</a>
+      <header id="header" className="header">
+        <div className="header-menu">
+          <div className="col-sm-7">
+          </div>
+          <div className="col-sm-5 pr-sm-0">
+            <div className="user-area dropdown float-right">
+              <button className="btn btn-outline-secondary btn-sm dropdown-toggle text=white" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img src="admin-img.jpg" width="30" height="30" className="rounded-circle text-white" />
+                     &nbsp; Patrice  &nbsp; <span className="caret"></span>
+              </button>
+              <div className="user-menu dropdown-menu">
+                <a className="nav-link" href="index?dashboard"><i className="fa fa-dashboard"></i> Change Password</a>
+                <a className="nav-link" href="index?user_profile=1">
+                  <i className="fa fa-user"></i> My Profile
+                        </a>
+                <div className="dropdown-divider"></div>
+                <a className="nav-link" href="logout"><i className="fa fa-power-off"></i> Logout</a>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </header>
 
 
-    </div>
+    </React.Fragment>
 
 
 
   );
-};
+}
 
 export default Header;

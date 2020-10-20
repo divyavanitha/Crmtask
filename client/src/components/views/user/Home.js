@@ -3,7 +3,6 @@ import { withRouter, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { getMenu } from "../../../_actions/user_actions";
-/* import Sidebar from "../Includes/Sidebar"; */
 import Footer from "./includes/Footer"
 import Gig from "./gigs/Gig"
 

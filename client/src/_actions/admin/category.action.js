@@ -61,8 +61,8 @@ export const addCategory = (user) => dispatch => {
         });
 };
 
-export const updateCategory = (user) => dispatch => {
-    axios
+export const updateCategory = (user) => async dispatch => {
+    await axios
         .patch('/api/admin/category', user)
         .then(res => {
             console.log(res.data);
@@ -81,16 +81,14 @@ export const updateCategory = (user) => dispatch => {
         });
 };
 
-export const deleteCategory = (id) => dispatch => {
-    axios
+export const deleteCategory = (id) => async dispatch => {
+    await axios
         .delete(`/api/admin/category/${id}`)
         .then(res => {
-            console.log(res.data);
             dispatch({
                 type: ADD_NOTIFICATION,
                 payload: { title: res.data.title, message: res.data.message }
             });
-          
         }
         )
         .catch(e => {
