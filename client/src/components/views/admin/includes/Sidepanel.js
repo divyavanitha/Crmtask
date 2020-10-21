@@ -33,40 +33,22 @@ const Sidepanel = () => {
                                 <Link to="/admin/dashboard"> <i className="menu-icon fa fa-dashboard"></i>Dashboard </Link>
                             </li>
 
-                            <li className="menu-item-has-children dropdown">
-                                <a className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i className="menu-icon fa fa fa-gear"></i> Settings </a>
-                                <ul className="sub-menu children dropdown-menu">
-                                    <li><i className="fa fa-arrow-circle-right"></i><Link to="/admin/category/add"> General Settings </Link></li>
-                                    <li><i className="fa fa-arrow-circle-right"></i><Link to="/admin/category"> Payment Settings </Link></li>
-                                </ul>
-                            </li>
-
-                            <li className="menu-item-has-children dropdown">
-                                <a className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i className="menu-icon fa fa fa-file"></i> Pages </a>
-                                <ul className="sub-menu children dropdown-menu">
-                                    <li><i className="fa fa-arrow-circle-right"></i><Link to="/admin/category"> View Pages </Link></li>
-                                    <li><i className="fa fa-arrow-circle-right"></i><Link to="/admin/category/add"> Add Pages </Link></li>
-                                </ul>
-                            </li>
-
                             <li>
-                                <Link to="/admin/dashboard"> <i className="menu-icon fa fa-table"></i>Proposals/Services <span className="badge badge-success">18</span> </Link>
+                                <Link > <i className="menu-icon fa fa-table"></i>Proposals/Services <span className="badge badge-success">18</span> </Link>
                             </li>
 
                             <li className="menu-item-has-children dropdown">
                                 <a className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i className="menu-icon fa fa fa-money"></i> Payouts </a>
                                 <ul className="sub-menu children dropdown-menu">
-                                    <li><i className="fa fa-arrow-circle-right"></i><Link to="/admin/category"> Pending </Link></li>
-                                    <li><i className="fa fa-arrow-circle-right"></i><Link to="/admin/category"> Declined </Link></li>
-                                    <li><i className="fa fa-arrow-circle-right"></i><Link to="/admin/category"> Completed </Link></li>
+                                    <li><i className="fa fa-arrow-circle-right"></i><Link > Pending </Link></li>
+                                    <li><i className="fa fa-arrow-circle-right"></i><Link > Declined </Link></li>
+                                    <li><i className="fa fa-arrow-circle-right"></i><Link > Completed </Link></li>
                                 </ul>
                             </li>
 
                             <li>
-                                <Link to="/admin/dashboard"> <i className="menu-icon fa fa-dashboard"></i> Inbox Messages </Link>
+                                <Link > <i className="menu-icon fa fa-dashboard"></i> Inbox Messages </Link>
                             </li>
 
                             {/* <li className="menu-item-has-children dropdown">
@@ -82,12 +64,12 @@ const Sidepanel = () => {
                                 <a className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i className="menu-icon fa fa fa-star"></i> Reviews </a>
                                 <ul className="sub-menu children dropdown-menu">
-                                    <li><i className="fa fa-arrow-circle-right"></i><Link to="/admin/category"> User Reviews </Link></li>
+                                    <li><i className="fa fa-arrow-circle-right"></i><Link > User Reviews </Link></li>
                                 </ul>
                             </li>
 
                             <li>
-                                <Link to="/admin/dashboard"> <i className="menu-icon fa fa-table"></i>Buyer Requests <span className="badge badge-success">18</span> </Link>
+                                <Link > <i className="menu-icon fa fa-table"></i>Buyer Requests <span className="badge badge-success">18</span> </Link>
                             </li>
 
                             <li>
@@ -119,7 +101,20 @@ const Sidepanel = () => {
                             </li>
 
                             <li>
+                                <Link to="/admin/pages"> <i className="menu-icon fa fa-file"></i>Pages </Link>
+                            </li>
+
+                            <li>
                                 <Link to="/admin/users"> <i className="menu-icon fa fa-users"></i>Users </Link>
+                            </li>
+
+                            <li className="menu-item-has-children dropdown">
+                                <a className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i className="menu-icon fa fa fa-gear"></i> Settings </a>
+                                <ul className="sub-menu children dropdown-menu">
+                                    <li><i className="fa fa-arrow-circle-right"></i><Link to="/admin/category/add"> General Settings </Link></li>
+                                    <li><i className="fa fa-arrow-circle-right"></i><Link to="/admin/category"> Payment Settings </Link></li>
+                                </ul>
                             </li>
 
 

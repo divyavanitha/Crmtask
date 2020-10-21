@@ -222,10 +222,10 @@ function Header() {
                 <header id="gnav-header-inner" className="gnav-header-inner clear apply-nav-height col-group has-svg-icons body-max-width">
                     <div className="col-xs-12">
                         <div id="onePress-logo" className="apply-nav-height onePress-logo-svg onePress-logo-svg-logged-in loggedInLogo">
-                            <a href="">
+                            <Link to="/">
                                 <img className="desktop" src={require('../../../../assets/images/1press-logo.png')} width="150" />
                                 {/* <img className="mobile" src={ require('../../../assets/images/1press-logo.png') } height="25" /> */}
-                            </a>
+                            </Link>
                         </div>
                         <button id="mobilemenu"
                             className="unstyled-button mobile-catnav-trigger apply-nav-height icon-b-1 tablet-catnav-enabled ">
@@ -332,8 +332,8 @@ function Header() {
                                         </div>
                                         <a className="dropdown-item" href="conversations/inbox">
                                             Inbox Messages   </a>
-                                        <a className="dropdown-item" href="tyrone">
-                                            My Profile   </a>
+                                        <Link className="dropdown-item" to="/profile">
+                                            My Profile   </Link>
                                         <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#settings">
                                             Settings   </a>
                                         <div id="settings" className="dropdown-submenu collapse">

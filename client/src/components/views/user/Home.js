@@ -3,14 +3,11 @@ import { withRouter, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { getMenu } from "../../../_actions/user_actions";
-import Footer from "./includes/Footer"
 import Gig from "./gigs/Gig"
 
 
 
 import OwlCarousel from 'react-owl-carousel';
-import Header from './includes/Header';
-import Nav from './includes/Nav';
 
 
 
@@ -30,10 +27,7 @@ function App() {
    return (
 
       <React.Fragment>
-         <Header />
 
-         <Nav />
-      
      
 
          <div className="container mt-3">
@@ -1310,7 +1304,6 @@ function App() {
          </div>
          
 
-      <Footer />
 
       </React.Fragment>
    );

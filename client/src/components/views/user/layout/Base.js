@@ -3,7 +3,14 @@ import React, { Fragment } from "react";
 import { Switch, Route } from "react-router";
 
 import Home from "../Home";
+import Header from '../includes/Header';
+import Nav from '../includes/Nav';
+import Footer from "../includes/Footer";
+import GigDetail from "../gigs/GigDetail";
+import AddGig from "../gigs/AddGig";
+import Profile from "../Profile";
 
+import "../../../../assets/css/custom.css";
 /* import "../../../../assets/css/bootstrap.css";
 import "../../../../assets/css/custom.css";
 import "../../../../assets/css/customStyle.css";
@@ -25,9 +32,20 @@ import "../../../../assets/css/msdropdown.css";
 const Base = () => {
 
     return (
+        <React.Fragment>
+        <Header />
+
+        <Nav />
         <Switch>
             <Route exact={true} path="/" component={Home}></Route>
+            <Route exact={true} path="/gig/post" component={AddGig}></Route>
+            <Route exact={true} path="/gig/:user/:gig" component={GigDetail}></Route>
+            <Route exact={true} path="/profile" component={Profile}></Route>
         </Switch>
+
+        <Footer />
+
+      </React.Fragment>
     );
 };
 
