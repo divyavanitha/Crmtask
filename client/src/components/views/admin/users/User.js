@@ -96,7 +96,7 @@ const User = () => {
             </div>
             <div className="card-body">
               <div className="table-responsive portlet">
-                <table className="table" id="example" class="display">
+                <table className="table" id="example" className="display">
 
 
 

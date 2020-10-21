@@ -24,10 +24,10 @@ const Home = () => {
       <p className="mb-4">Summary and overview of our admin stuff here</p>
 
       <div className="row">
-        <TopCard title="PRODUCT COUNT" text={`${numberItemsCount}`} icon="box" class="primary" />
-        <TopCard title="PRODUCT AMOUNT" text={`${totalProductAmount}`} icon="warehouse" class="danger" />
-        <TopCard title="SUMMARY PRICE" text={`$${totalPrice}`} icon="dollar-sign" class="success" />
-        <TopCard title="SALES" text={totalSales.toString()} icon="donate" class="primary" />
+        <TopCard title="PRODUCT COUNT" text={`${numberItemsCount}`} icon="box" className="primary" />
+        <TopCard title="PRODUCT AMOUNT" text={`${totalProductAmount}`} icon="warehouse" className="danger" />
+        <TopCard title="SUMMARY PRICE" text={`$${totalPrice}`} icon="dollar-sign" className="success" />
+        <TopCard title="SALES" text={totalSales.toString()} icon="donate" className="primary" />
       </div>
 
       <div className="row">

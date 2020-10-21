@@ -61,7 +61,7 @@ const AddUser = (props) => {
                         <h1 className="h3 mb-2 text-gray-800">Users</h1>
                         <p className="mb-4">User List</p>
                         <div className="row">
-                            <Link class="btn btn-primary" style={{ float: "right" }} to="/admin/users">Back</Link>
+                            <Link className="btn btn-primary" style={{ float: "right" }} to="/admin/users">Back</Link>
                         </div>
                         <div className="col-xl-12 col-lg-12">
                             <div className="card shadow mb-4">

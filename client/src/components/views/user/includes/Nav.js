@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { getCategory } from "../../../../_actions/user_actions";
 
-
 function Nav() {
 
     const dispatch = useDispatch();
@@ -31,7 +30,7 @@ function Nav() {
                             data-ui="top-nav-category-list" aria-activedescendant="catnav-primary-link-10855">
                             {category_list && category_list.map((c_list) => (<li key={c_list._id} className="top-nav-item pt-xs-1 pb-xs-1 pl-xs-2 pr-xs-2 display-flex-xs align-items-center text-center"
                                 data-linkable="true" data-ui="top-nav-category-link" data-node-id={c_list._id}>
-                                <a href="categories/graphics-design">
+                                <a href="">
                                     {c_list.name} </a>
                             </li>))}
                            
@@ -40,110 +39,27 @@ function Nav() {
                 </div>
                 <div className="position-absolute col-xs-12 col-centered z-index-4">
                     <div>
-                        <div
+                    {category_list && category_list.map((c_list) => (
+                        <div  key={ `s_${c_list._id}` }
                             className="body-sub-width vertical-align-top sub-nav-container bg-white overflow-hidden bl-xs-1 bb-xs-1 br-xs-1 catnav-mott-control display-none"
-                            data-ui="sub-nav" aria-hidden="true" data-node-id="c-1">
+                            data-ui="sub-nav" aria-hidden="true" data-node-id={c_list._id}>
                             <div className="width-full display-flex-xs">
-                                <ul className="list-unstyled display-inline-block col-xs-3 p-xs-3 pl-xs-5" role="presentation">
-                                    <li>
+                            {c_list.subCategories && (
+                                <ul className="list-unstyled subcategory display-inline-block col-xs-3 p-xs-3 pl-xs-5" role="presentation">
+                                   
+                                {c_list.subCategories.map((subCategories) => (
+                                    <li key={subCategories._id}>
                                         <a className="display-block text-gray text-body-larger pt-xs-1"
                                             href="categories/graphics-design/logo-design">
-                                            Logo Design </a>
+                                            {subCategories.name} </a>
                                     </li>
-                                    <li>
-                                        <a className="display-block text-gray text-body-larger pt-xs-1"
-                                            href="categories/graphics-design/business-cards-amp-stationery">
-                                            Business Cards &amp; Stationery </a>
-                                    </li>
-                                    <li>
-                                        <a className="display-block text-gray text-body-larger pt-xs-1"
-                                            href="categories/graphics-design/illustration">
-                                            Illustration </a>
-                                    </li>
-                                    <li>
-                                        <a className="display-block text-gray text-body-larger pt-xs-1"
-                                            href="categories/graphics-design/cartoons-caricatures">
-                                            Cartoons Caricatures </a>
-                                    </li>
-                                    <li>
-                                        <a className="display-block text-gray text-body-larger pt-xs-1"
-                                            href="categories/graphics-design/flyers-posters">
-                                            Flyers Posters </a>
-                                    </li>
-                                    <li>
-                                        <a className="display-block text-gray text-body-larger pt-xs-1"
-                                            href="categories/graphics-design/book-covers-packaging">
-                                            Book Covers & Packaging </a>
-                                    </li>
-                                    <li>
-                                        <a className="display-block text-gray text-body-larger pt-xs-1"
-                                            href="categories/graphics-design/web-amp-mobile-design">
-                                            Web &amp; Mobile Design </a>
-                                    </li>
-                                    <li>
-                                        <a className="display-block text-gray text-body-larger pt-xs-1"
-                                            href="categories/graphics-design/social-media-design">
-                                            Social Media Design </a>
-                                    </li>
-                                    <li>
-                                        <a className="display-block text-gray text-body-larger pt-xs-1"
-                                            href="categories/graphics-design/banner-ads">
-                                            Banner Ads </a>
-                                    </li>
-                                    <li>
-                                        <a className="display-block text-gray text-body-larger pt-xs-1"
-                                            href="categories/graphics-design/photoshop-editing">
-                                            Photoshop Editing </a>
-                                    </li>
+                                ))}
+                                   
                                 </ul>
-                                <ul className="list-unstyled display-inline-block col-xs-3 p-xs-3 pl-xs-5" role="presentation">
-                                    <li>
-                                        <a className="display-block text-gray text-body-larger pt-xs-1"
-                                            href="categories/graphics-design/3d-2d-models">
-                                            3D & 2D Models </a>
-                                    </li>
-                                    <li>
-                                        <a className="display-block text-gray text-body-larger pt-xs-1"
-                                            href="categories/graphics-design/t-shirts">
-                                            T-Shirts </a>
-                                    </li>
-                                    <li>
-                                        <a className="display-block text-gray text-body-larger pt-xs-1"
-                                            href="categories/graphics-design/presentation-design">
-                                            Presentation Design </a>
-                                    </li>
-                                    <li>
-                                        <a className="display-block text-gray text-body-larger pt-xs-1"
-                                            href="categories/graphics-design/other">
-                                            Other </a>
-                                    </li>
-                                    <li>
-                                        <a className="display-block text-gray text-body-larger pt-xs-1"
-                                            href="categories/graphics-design/%D8%AE%D8%AF%D9%85%D8%A7%D8%AA+%D8%A7%D9%84%D8%AA%D8%B1%D8%AC%D9%85%D8%A9">
-                                            خدمات الترجمة </a>
-                                    </li>
-                                    <li>
-                                        <a className="display-block text-gray text-body-larger pt-xs-1"
-                                            href="categories/graphics-design/hosting-services">
-                                            Hosting Services </a>
-                                    </li>
-                                    <li>
-                                        <a className="display-block text-gray text-body-larger pt-xs-1"
-                                            href="categories/graphics-design/facebook-servic3">
-                                            facebook servic3 </a>
-                                    </li>
-                                    <li>
-                                        <a className="display-block text-gray text-body-larger pt-xs-1"
-                                            href="categories/graphics-design/o8uyoiu">
-                                            o8uyoiu </a>
-                                    </li>
-                                </ul>
-                                <ul className="list-unstyled display-inline-block col-xs-3 p-xs-3 pl-xs-5" role="presentation">
-                                </ul>
-                                <ul className="list-unstyled display-inline-block col-xs-3 p-xs-3 pl-xs-5" role="presentation">
-                                </ul>
+                            )}
                             </div>
                         </div>
+                        ))}
                     </div>
                 </div>
             </div>
@@ -213,8 +129,8 @@ function Nav() {
                                             data-name="Graphics &amp; Design">
                                             <div className="flag">
                                                 <div className="flag-body">Graphics &amp; Design</div>
-                                                <div class='flag-img flag-img-right'>
-                                                    <span class='onePress-icon float-right'>
+                                                <div className='flag-img flag-img-right'>
+                                                    <span className='onePress-icon float-right'>
                                                         <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' aria-hidden='true'
                                                             focusable='false'>
                                                             <path
@@ -229,8 +145,8 @@ function Nav() {
                                             data-name="Digital Marketing">
                                             <div className="flag">
                                                 <div className="flag-body">Digital Marketing</div>
-                                                <div class='flag-img flag-img-right'>
-                                                    <span class='onePress-icon float-right'>
+                                                <div className='flag-img flag-img-right'>
+                                                    <span className='onePress-icon float-right'>
                                                         <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' aria-hidden='true'
                                                             focusable='false'>
                                                             <path
@@ -245,8 +161,8 @@ function Nav() {
                                             data-name="Writing & Translation">
                                             <div className="flag">
                                                 <div className="flag-body">Writing & Translation</div>
-                                                <div class='flag-img flag-img-right'>
-                                                    <span class='onePress-icon float-right'>
+                                                <div className='flag-img flag-img-right'>
+                                                    <span className='onePress-icon float-right'>
                                                         <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' aria-hidden='true'
                                                             focusable='false'>
                                                             <path
@@ -261,8 +177,8 @@ function Nav() {
                                             data-name="Video &amp; Animation">
                                             <div className="flag">
                                                 <div className="flag-body">Video &amp; Animation</div>
-                                                <div class='flag-img flag-img-right'>
-                                                    <span class='onePress-icon float-right'>
+                                                <div className='flag-img flag-img-right'>
+                                                    <span className='onePress-icon float-right'>
                                                         <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' aria-hidden='true'
                                                             focusable='false'>
                                                             <path
@@ -277,8 +193,8 @@ function Nav() {
                                             data-name="Programming &amp; Tech">
                                             <div className="flag">
                                                 <div className="flag-body">Programming &amp; Tech</div>
-                                                <div class='flag-img flag-img-right'>
-                                                    <span class='onePress-icon float-right'>
+                                                <div className='flag-img flag-img-right'>
+                                                    <span className='onePress-icon float-right'>
                                                         <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' aria-hidden='true'
                                                             focusable='false'>
                                                             <path
@@ -293,8 +209,8 @@ function Nav() {
                               ">
                                             <div className="flag">
                                                 <div className="flag-body">Business</div>
-                                                <div class='flag-img flag-img-right'>
-                                                    <span class='onePress-icon float-right'>
+                                                <div className='flag-img flag-img-right'>
+                                                    <span className='onePress-icon float-right'>
                                                         <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' aria-hidden='true'
                                                             focusable='false'>
                                                             <path
@@ -309,8 +225,8 @@ function Nav() {
                               ">
                                             <div className="flag">
                                                 <div className="flag-body">Fun & Lifestyle</div>
-                                                <div class='flag-img flag-img-right'>
-                                                    <span class='onePress-icon float-right'>
+                                                <div className='flag-img flag-img-right'>
+                                                    <span className='onePress-icon float-right'>
                                                         <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' aria-hidden='true'
                                                             focusable='false'>
                                                             <path
@@ -325,8 +241,8 @@ function Nav() {
                                             data-name="Music & Audio">
                                             <div className="flag">
                                                 <div className="flag-body">Music & Audio</div>
-                                                <div class='flag-img flag-img-right'>
-                                                    <span class='onePress-icon float-right'>
+                                                <div className='flag-img flag-img-right'>
+                                                    <span className='onePress-icon float-right'>
                                                         <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' aria-hidden='true'
                                                             focusable='false'>
                                                             <path
@@ -341,8 +257,8 @@ function Nav() {
                                             data-name="Video Tutorials">
                                             <div className="flag">
                                                 <div className="flag-body">Video Tutorials</div>
-                                                <div class='flag-img flag-img-right'>
-                                                    <span class='onePress-icon float-right'>
+                                                <div className='flag-img flag-img-right'>
+                                                    <span className='onePress-icon float-right'>
                                                         <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' aria-hidden='true'
                                                             focusable='false'>
                                                             <path

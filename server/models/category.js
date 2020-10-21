@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 const Joi = require('@hapi/joi');
 const jwt = require('jsonwebtoken');
 
@@ -12,6 +13,7 @@ const categorySchema = mongoose.Schema({
         type: Boolean,
         default: true
     },
+    subCategory: { type: Schema.Types.ObjectId, ref: 'SubCategory' },
     created_at: {
         type: Date,
         default: Date.now
