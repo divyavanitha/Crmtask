@@ -98,7 +98,7 @@ function App() {
                                           <span>
                                              <strong>0.0</strong>
                                        (0)
-                                    </span>
+                                       </span>
                                        </span>
                                     </div>
                                  </div>
@@ -241,8 +241,8 @@ function App() {
                                           <i className="fa fa-star"></i>
                                           <span>
                                              <strong>4.8</strong>
-                                       (22)
-                                    </span>
+                                             (22)
+                                          </span>
                                        </span>
                                     </div>
                                  </div>
@@ -292,7 +292,7 @@ function App() {
                                           <a href="mir_digimarket" className="seller-name">mir_digimarket</a>
                                           <div className="onePress-seller-tooltip">
                                              Level Two
-                                    </div>
+                                          </div>
                                        </div>
                                     </div>
                                     {/* <!--- onePress-seller-info Ends ---> */}
@@ -306,7 +306,7 @@ function App() {
                                           <span>
                                              <strong>4.8</strong>
                                        (22)
-                                    </span>
+                                        </span>
                                        </span>
                                     </div>
                                  </div>
@@ -527,8 +527,7 @@ function App() {
                      <div className="col-md-12">
                         <div className="secTitle">
                            <h2 className="float-left">Featured Proposals/Services</h2>
-                           <button onclick="location.href='featured_proposals'" className="float-right btn btn-success">VIEW
-                  ALL</button>
+                           <button onclick="location.href='featured_proposals'" className="float-right btn btn-success">VIEW ALL</button>
                         </div>
                      </div>
                   </div>
@@ -569,7 +568,7 @@ function App() {
                                     <a href="volarex" className="seller-name">volarex</a>
                                     <div className="onePress-seller-tooltip">
                                        New Seller
-                        </div>
+                                    </div>
                                  </div>
                                  <div className="favoriteIcon">
                                     <i data-id="6" href="#" className="fa fa-heart proposal-favorite" data-toggle="tooltip"
@@ -586,7 +585,7 @@ function App() {
                                     <i className="fa fa-star"></i>
                                     <span>
                                        <strong>4.5</strong> (2)
-                        </span>
+                                    </span>
                                  </span>
                               </div>
                            </div>
@@ -602,356 +601,7 @@ function App() {
                         </div>
                         {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
                      </div>
-                     <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-3 pr-lg-1">
-                        <div className="proposal-card-base mp-proposal-card">
-                           {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
-                           <a href="proposals/thili00traffi/i-will-develop-and-reskin-3d-and-2d-games-in-unit">
-                              <img src={require('../../../assets/images/proposals/game-1.jpg')} className="img-fluid" />
-                           </a>
-                           <div className="proposal-card-caption">
-                              {/* <!--- proposal-card-caption Starts ---> */}
-                              <div className="proposal-seller-info">
-                                 {/* <!--- onePress-seller-info Starts ---> */}
-                                 <span className="fit-avatar s24">
-                                    <img src={require('../../../assets/images/userlisting/img-01.jpg')} className="rounded-circle" width="32" height="32" />
-                                 </span>
-                                 <div className="seller-info-wrapper">
-                                    <a href="thili00traffi" className="seller-name">thili00traffi</a>
-                                    <div className="onePress-seller-tooltip">
-                                       New Seller
-                        </div>
-                                 </div>
-                                 <div className="favoriteIcon">
-                                    <i data-id="7" href="#" className="fa fa-heart proposal-favorite" data-toggle="tooltip"
-                                       data-placement="top" title="Favorite"></i>
-                                 </div>
-                              </div>
-                              {/* <!--- onePress-seller-info Ends ---> */}
-                              <a href="proposals/thili00traffi/i-will-develop-and-reskin-3d-and-2d-games-in-unit"
-                                 className="proposal-link-main js-proposal-card-imp-data">
-                                 <h3>I Will Develop And Reskin 3d And 2d Games In Unity</h3>
-                              </a>
-                              <div className="rating-badges-container">
-                                 <span className="proposal-rating">
-                                    <i className="fa fa-star"></i>
-                                    <span>
-                                       <strong>4.0</strong> (4)
-                        </span>
-                                 </span>
-                              </div>
-                           </div>
-                           {/* <!--- proposal-card-caption Ends ---> */}
-                           <footer className="proposal-card-footer">
-                              {/* <!--- proposal-card-footer Starts ---> */}
-                              <div className="proposal-price">
-                                 <a>
-                                    <small>STARTING AT</small>&#036;20.00 </a>
-                              </div>
-                           </footer>
-                           {/* <!--- proposal-card-footer Ends ---> */}
-                        </div>
-                        {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
-                     </div>
-                     <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-3 pr-lg-1">
-                        <div className="proposal-card-base mp-proposal-card">
-                           {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
-                           <a href="proposals/fixmywebsite/i-will-design-and-code-android-apps">
-                              <img src={require('../../../assets/images/proposals/macbook-pro-92904_1579141538.png')} className="img-fluid" />
-                           </a>
-                           <div className="proposal-card-caption">
-                              {/* <!--- proposal-card-caption Starts ---> */}
-                              <div className="proposal-seller-info">
-                                 {/* <!--- onePress-seller-info Starts ---> */}
-                                 <span className="fit-avatar s24">
-                                    <img src={require('../../../assets/images/userlisting/img-07.jpg')} className="rounded-circle" width="32" height="32" />
-                                 </span>
-                                 <div className="seller-info-wrapper">
-                                    <a href="fixmywebsite" className="seller-name">fixmywebsite</a>
-                                    <div className="onePress-seller-tooltip">
-                                       Top Rated
-                        </div>
-                                 </div>
-                                 <div className="favoriteIcon">
-                                    <i data-id="12" href="#" className="fa fa-heart proposal-favorite" data-toggle="tooltip"
-                                       data-placement="top" title="Favorite"></i>
-                                 </div>
-                              </div>
-                              {/* <!--- onePress-seller-info Ends ---> */}
-                              <a href="proposals/fixmywebsite/i-will-design-and-code-android-apps"
-                                 className="proposal-link-main js-proposal-card-imp-data">
-                                 <h3>I will fix any bug on your website</h3>
-                              </a>
-                              <div className="rating-badges-container">
-                                 <span className="proposal-rating">
-                                    <i className="fa fa-star"></i>
-                                    <span>
-                                       <strong>0.0</strong> (0)
-                        </span>
-                                 </span>
-                              </div>
-                           </div>
-                           {/* <!--- proposal-card-caption Ends ---> */}
-                           <footer className="proposal-card-footer">
-                              {/* <!--- proposal-card-footer Starts ---> */}
-                              <div className="proposal-price">
-                                 <a>
-                                    <small>STARTING AT</small>&#036;10.00 </a>
-                              </div>
-                           </footer>
-                           {/* <!--- proposal-card-footer Ends ---> */}
-                        </div>
-                        {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
-                     </div>
-                     <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-3 pr-lg-1">
-                        <div className="proposal-card-base mp-proposal-card">
-                           {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
-                           <a href="proposals/fixmywebsite/walk-like-an-egyptian">
-                              <img src={require('../../../assets/images/proposals/Adam2_1565532813.png')} className="img-fluid" />
-                           </a>
-                           <div className="proposal-card-caption">
-                              {/* <!--- proposal-card-caption Starts ---> */}
-                              <div className="proposal-seller-info">
-                                 {/* <!--- onePress-seller-info Starts ---> */}
-                                 <span className="fit-avatar s24">
-                                    <img src={require('../../../assets/images/userlisting/img-07.jpg')} className="rounded-circle" width="32" height="32" />
-                                 </span>
-                                 <div className="seller-info-wrapper">
-                                    <a href="fixmywebsite" className="seller-name">fixmywebsite</a>
-                                    <div className="onePress-seller-tooltip">
-                                       Top Rated
-                        </div>
-                                 </div>
-                                 <div className="favoriteIcon">
-                                    <i data-id="106" href="#" className="fa fa-heart proposal-favorite" data-toggle="tooltip"
-                                       data-placement="top" title="Favorite"></i>
-                                 </div>
-                              </div>
-                              {/* <!--- onePress-seller-info Ends ---> */}
-                              <a href="proposals/fixmywebsite/walk-like-an-egyptian"
-                                 className="proposal-link-main js-proposal-card-imp-data">
-                                 <h3>Walk like an Egyptian</h3>
-                              </a>
-                              <div className="rating-badges-container">
-                                 <span className="proposal-rating">
-                                    <i className="fa fa-star"></i>
-                                    <span>
-                                       <strong>5.0</strong> (1)
-                        </span>
-                                 </span>
-                              </div>
-                           </div>
-                           {/* <!--- proposal-card-caption Ends ---> */}
-                           <footer className="proposal-card-footer">
-                              {/* <!--- proposal-card-footer Starts ---> */}
-                              <div className="proposal-price">
-                                 <a>
-                                    <small>STARTING AT</small>&#036;20.00 </a>
-                              </div>
-                           </footer>
-                           {/* <!--- proposal-card-footer Ends ---> */}
-                        </div>
-                        {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
-                     </div>
-                     <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-3 pr-lg-1">
-                        <div className="proposal-card-base mp-proposal-card">
-                           {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
-                           <a href="proposals/Patricia/e-book-on-how-to-be-a-successful-entreprenuer">
-                              <img src={require('../../../assets/images/proposals/fall-3723738_1920_1588260783.png')} className="img-fluid" />
-                           </a>
-                           <div className="proposal-card-caption">
-                              {/* <!--- proposal-card-caption Starts ---> */}
-                              <div className="proposal-seller-info">
-                                 {/* <!--- onePress-seller-info Starts ---> */}
-                                 <span className="fit-avatar s24">
-                                    <img src={require('../../../assets/images/userlisting/img-06.jpg')} className="rounded-circle" width="32" height="32" />
-                                 </span>
-                                 <div className="seller-info-wrapper">
-                                    <a href="Patricia" className="seller-name">Patricia</a>
-                                    <div className="onePress-seller-tooltip">
-                                       Level One
-                        </div>
-                                 </div>
-                                 <div className="favoriteIcon">
-                                    <i data-id="616" href="#" className="fa fa-heart proposal-favorite" data-toggle="tooltip"
-                                       data-placement="top" title="Favorite"></i>
-                                 </div>
-                              </div>
-                              {/* <!--- onePress-seller-info Ends ---> */}
-                              <a href="proposals/Patricia/e-book-on-how-to-be-a-successful-entreprenuer"
-                                 className="proposal-link-main js-proposal-card-imp-data">
-                                 <h3>E-book on how to be a successful entreprenuer </h3>
-                              </a>
-                              <div className="rating-badges-container">
-                                 <span className="proposal-rating">
-                                    <i className="fa fa-star"></i>
-                                    <span>
-                                       <strong>4.3</strong> (6)
-                        </span>
-                                 </span>
-                              </div>
-                           </div>
-                           {/* <!--- proposal-card-caption Ends ---> */}
-                           <footer className="proposal-card-footer">
-                              {/* <!--- proposal-card-footer Starts ---> */}
-                              <div className="proposal-price">
-                                 <a>
-                                    <small>STARTING AT</small>&#036;10.00 </a>
-                              </div>
-                           </footer>
-                           {/* <!--- proposal-card-footer Ends ---> */}
-                        </div>
-                        {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
-                     </div>
-                     <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-3 pr-lg-1">
-                        <div className="proposal-card-base mp-proposal-card">
-                           {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
-                           <a href="proposals/pat/i-will-deliver-20-ios-game-source-code">
-                              <img src={require('../../../assets/images/proposals/mario-1558063_1920_1588266377.png')} className="img-fluid" />
-                           </a>
-                           <div className="proposal-card-caption">
-                              {/* <!--- proposal-card-caption Starts ---> */}
-                              <div className="proposal-seller-info">
-                                 {/* <!--- onePress-seller-info Starts ---> */}
-                                 <span className="fit-avatar s24">
-                                    <img src={require('../../../assets/images/userlisting/img-01.jpg')} className="rounded-circle" width="32" height="32" />
-                                 </span>
-                                 <div className="seller-info-wrapper">
-                                    <a href="pat" className="seller-name">pat</a>
-                                    <div className="onePress-seller-tooltip">
-                                       Top Rated
-                        </div>
-                                 </div>
-                                 <div className="favoriteIcon">
-                                    <i data-id="617" href="#" className="fa fa-heart proposal-favorite" data-toggle="tooltip"
-                                       data-placement="top" title="Favorite"></i>
-                                 </div>
-                              </div>
-                              {/* <!--- onePress-seller-info Ends ---> */}
-                              <a href="proposals/pat/i-will-deliver-20-ios-game-source-code"
-                                 className="proposal-link-main js-proposal-card-imp-data">
-                                 <h3>I will deliver 20 IOS game source code</h3>
-                              </a>
-                              <div className="rating-badges-container">
-                                 <span className="proposal-rating">
-                                    <i className="fa fa-star"></i>
-                                    <span>
-                                       <strong>4.8</strong> (6)
-                        </span>
-                                 </span>
-                              </div>
-                           </div>
-                           {/* <!--- proposal-card-caption Ends ---> */}
-                           <footer className="proposal-card-footer">
-                              {/* <!--- proposal-card-footer Starts ---> */}
-                              <div className="proposal-price">
-                                 <a>
-                                    <small>STARTING AT</small>&#036;15.00 </a>
-                              </div>
-                           </footer>
-                           {/* <!--- proposal-card-footer Ends ---> */}
-                        </div>
-                        {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
-                     </div>
-                     <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-3 pr-lg-1">
-                        <div className="proposal-card-base mp-proposal-card">
-                           {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
-                           <a href="proposals/RayTay90/i-will-sell-2000-inspirational-quotes">
-                              <img src={require('../../../assets/images/proposals/quote-1342706_1280_1588263608.png')} className="img-fluid" />
-                           </a>
-                           <div className="proposal-card-caption">
-                              {/* <!--- proposal-card-caption Starts ---> */}
-                              <div className="proposal-seller-info">
-                                 {/* <!--- onePress-seller-info Starts ---> */}
-                                 <span className="fit-avatar s24">
-                                    <img src={require('../../../assets/images/userlisting/img-04.jpg')} className="rounded-circle" width="32" height="32" />
-                                 </span>
-                                 <div className="seller-info-wrapper">
-                                    <a href="RayTay90" className="seller-name">RayTay90</a>
-                                    <div className="onePress-seller-tooltip">
-                                       Level One
-                        </div>
-                                 </div>
-                                 <div className="favoriteIcon">
-                                    <i data-id="618" href="#" className="fa fa-heart proposal-favorite" data-toggle="tooltip"
-                                       data-placement="top" title="Favorite"></i>
-                                 </div>
-                              </div>
-                              {/* <!--- onePress-seller-info Ends ---> */}
-                              <a href="proposals/RayTay90/i-will-sell-2000-inspirational-quotes"
-                                 className="proposal-link-main js-proposal-card-imp-data">
-                                 <h3>I will sell 2000 Inspirational quotes</h3>
-                              </a>
-                              <div className="rating-badges-container">
-                                 <span className="proposal-rating">
-                                    <i className="fa fa-star"></i>
-                                    <span>
-                                       <strong>4.6</strong> (5)
-                        </span>
-                                 </span>
-                              </div>
-                           </div>
-                           {/* <!--- proposal-card-caption Ends ---> */}
-                           <footer className="proposal-card-footer">
-                              {/* <!--- proposal-card-footer Starts ---> */}
-                              <div className="proposal-price">
-                                 <a>
-                                    <small>STARTING AT</small>&#036;20.00 </a>
-                              </div>
-                           </footer>
-                           {/* <!--- proposal-card-footer Ends ---> */}
-                        </div>
-                        {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
-                     </div>
-                     <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-3 pr-lg-1">
-                        <div className="proposal-card-base mp-proposal-card">
-                           {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
-                           <a href="proposals/pat/i-will-help-with-any-php-programming-task">
-                              <img src={require('../../../assets/images/proposals/Screenshot_20190313-160401[1]_1598983942.png')} className="img-fluid" />
-                           </a>
-                           <div className="proposal-card-caption">
-                              {/* <!--- proposal-card-caption Starts ---> */}
-                              <div className="proposal-seller-info">
-                                 {/* <!--- onePress-seller-info Starts ---> */}
-                                 <span className="fit-avatar s24">
-                                    <img src={require('../../../assets/images/userlisting/img-01.jpg')} className="rounded-circle" width="32" height="32" />
-                                 </span>
-                                 <div className="seller-info-wrapper">
-                                    <a href="pat" className="seller-name">pat</a>
-                                    <div className="onePress-seller-tooltip">
-                                       Top Rated
-                        </div>
-                                 </div>
-                                 <div className="favoriteIcon">
-                                    <i data-id="620" href="#" className="fa fa-heart proposal-favorite" data-toggle="tooltip"
-                                       data-placement="top" title="Favorite"></i>
-                                 </div>
-                              </div>
-                              {/* <!--- onePress-seller-info Ends ---> */}
-                              <a href="proposals/pat/i-will-help-with-any-php-programming-task"
-                                 className="proposal-link-main js-proposal-card-imp-data">
-                                 <h3>I will help with any PHP programming task</h3>
-                              </a>
-                              <div className="rating-badges-container">
-                                 <span className="proposal-rating">
-                                    <i className="fa fa-star"></i>
-                                    <span>
-                                       <strong>5.0</strong> (3)
-                        </span>
-                                 </span>
-                              </div>
-                           </div>
-                           {/* <!--- proposal-card-caption Ends ---> */}
-                           <footer className="proposal-card-footer">
-                              {/* <!--- proposal-card-footer Starts ---> */}
-                              <div className="proposal-price">
-                                 <a>
-                                    <small>STARTING AT</small>&#036;5,222.00 </a>
-                              </div>
-                           </footer>
-                           {/* <!--- proposal-card-footer Ends ---> */}
-                        </div>
-                        {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
-                     </div>
+                     
                   </div>
                   {/* <!-- If You have no gigs, show random gigs on homepage --> */}
                   <div className="row mb-3 mt-3">
@@ -963,204 +613,7 @@ function App() {
                      </div>
                   </div>
                   <div className="row">
-                     <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-3 pr-lg-1">
-                        <div className="proposal-card-base mp-proposal-card">
-                           {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
-                           <a href="proposals/mir_digimarket/i-will-create-a-professional-custom-explainer-video">
-                              <img src={require('../../../assets/images/postImg/img-03.jpg')} className="img-fluid" />
-                           </a>
-                           <div className="proposal-card-caption">
-                              {/* <!--- proposal-card-caption Starts ---> */}
-                              <div className="proposal-seller-info">
-                                 {/* <!--- onePress-seller-info Starts ---> */}
-                                 <span className="fit-avatar s24">
-                                    <img src={require('../../../assets/images/userlisting/img-02.jpg')} className="rounded-circle" width="32" height="32" />
-                                 </span>
-                                 <div className="seller-info-wrapper">
-                                    <a href="mir_digimarket" className="seller-name">mir_digimarket</a>
-                                    <div className="onePress-seller-tooltip">
-                                       Level Two
-                        </div>
-                                 </div>
-                                 <div className="favoriteIcon">
-                                    <i data-id="4" href="#" className="fa fa-heart proposal-favorite" data-toggle="tooltip"
-                                       data-placement="top" title="Favorite"></i>
-                                 </div>
-                              </div>
-                              {/* <!--- onePress-seller-info Ends ---> */}
-                              <a href="proposals/mir_digimarket/i-will-create-a-professional-custom-explainer-video"
-                                 className="proposal-link-main js-proposal-card-imp-data">
-                                 <h3>I Will Create A Professional Custom Explainer Video</h3>
-                              </a>
-                              <div className="rating-badges-container">
-                                 <span className="proposal-rating">
-                                    <i className="fa fa-star"></i>
-                                    <span>
-                                       <strong>4.8</strong> (22)
-                        </span>
-                                 </span>
-                              </div>
-                           </div>
-                           {/* <!--- proposal-card-caption Ends ---> */}
-                           <footer className="proposal-card-footer">
-                              {/* <!--- proposal-card-footer Starts ---> */}
-                              <div className="proposal-price">
-                                 <a>
-                                    <small>STARTING AT</small>&#036;10.00 </a>
-                              </div>
-                           </footer>
-                           {/* <!--- proposal-card-footer Ends ---> */}
-                        </div>
-                        {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
-                     </div>
-                     <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-3 pr-lg-1">
-                        <div className="proposal-card-base mp-proposal-card">
-                           {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
-                           <a href="proposals/fgdfgdfg/criar-site-php">
-                              <img src={require('../../../assets/images/postImg/img-03.jpg')} className="img-fluid" />
-                           </a>
-                           <div className="proposal-card-caption">
-                              {/* <!--- proposal-card-caption Starts ---> */}
-                              <div className="proposal-seller-info">
-                                 {/* <!--- onePress-seller-info Starts ---> */}
-                                 <span className="fit-avatar s24">
-                                    <img src={require('../../../assets/images/userlisting/img-07.jpg')} className="rounded-circle" width="32" height="32" />
-                                 </span>
-                                 <div className="seller-info-wrapper">
-                                    <a href="fgdfgdfg" className="seller-name">fgdfgdfg</a>
-                                    <div className="onePress-seller-tooltip">
-                                       New Seller
-                        </div>
-                                 </div>
-                                 <div className="favoriteIcon">
-                                    <i data-id="426" href="#" className="fa fa-heart proposal-favorite" data-toggle="tooltip"
-                                       data-placement="top" title="Favorite"></i>
-                                 </div>
-                              </div>
-                              {/* <!--- onePress-seller-info Ends ---> */}
-                              <a href="proposals/fgdfgdfg/criar-site-php" className="proposal-link-main js-proposal-card-imp-data">
-                                 <h3>criar site php</h3>
-                              </a>
-                              <div className="rating-badges-container">
-                                 <span className="proposal-rating">
-                                    <i className="fa fa-star"></i>
-                                    <span>
-                                       <strong>0.0</strong> (0)
-                        </span>
-                                 </span>
-                              </div>
-                           </div>
-                           {/* <!--- proposal-card-caption Ends ---> */}
-                           <footer className="proposal-card-footer">
-                              {/* <!--- proposal-card-footer Starts ---> */}
-                              <div className="proposal-price">
-                                 <a>
-                                    <small>STARTING AT</small>&#036;5.00 </a>
-                              </div>
-                           </footer>
-                           {/* <!--- proposal-card-footer Ends ---> */}
-                        </div>
-                        {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
-                     </div>
-                     <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-3 pr-lg-1">
-                        <div className="proposal-card-base mp-proposal-card">
-                           {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
-                           <a href="proposals/minuway/i-will-test-your-website">
-                              <img src={require('../../../assets/images/postImg/img-03.jpg')} className="img-fluid" />
-                           </a>
-                           <div className="proposal-card-caption">
-                              {/* <!--- proposal-card-caption Starts ---> */}
-                              <div className="proposal-seller-info">
-                                 {/* <!--- onePress-seller-info Starts ---> */}
-                                 <span className="fit-avatar s24">
-                                    <img src={require('../../../assets/images/userlisting/img-07.jpg')} className="rounded-circle" width="32" height="32" />
-                                 </span>
-                                 <div className="seller-info-wrapper">
-                                    <a href="minuway" className="seller-name">minuway</a>
-                                    <div className="onePress-seller-tooltip">
-                                       New Seller
-                        </div>
-                                 </div>
-                                 <div className="favoriteIcon">
-                                    <i data-id="610" href="#" className="fa fa-heart proposal-favorite" data-toggle="tooltip"
-                                       data-placement="top" title="Favorite"></i>
-                                 </div>
-                              </div>
-                              {/* <!--- onePress-seller-info Ends ---> */}
-                              <a href="proposals/minuway/i-will-test-your-website"
-                                 className="proposal-link-main js-proposal-card-imp-data">
-                                 <h3>I will test your website</h3>
-                              </a>
-                              <div className="rating-badges-container">
-                                 <span className="proposal-rating">
-                                    <i className="fa fa-star"></i>
-                                    <span>
-                                       <strong>0.0</strong> (0)
-                        </span>
-                                 </span>
-                              </div>
-                           </div>
-                           {/* <!--- proposal-card-caption Ends ---> */}
-                           <footer className="proposal-card-footer">
-                              {/* <!--- proposal-card-footer Starts ---> */}
-                              <div className="proposal-price">
-                                 <a>
-                                    <small>STARTING AT</small>&#036;100.00 </a>
-                              </div>
-                           </footer>
-                           {/* <!--- proposal-card-footer Ends ---> */}
-                        </div>
-                        {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
-                     </div>
-                     <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-3 pr-lg-1">
-                        <div className="proposal-card-base mp-proposal-card">
-                           {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
-                           <a href="">
-                              <img src={require('../../../assets/images/postImg/img-03.jpg')} className="img-fluid" />
-                           </a>
-                           <div className="proposal-card-caption">
-                              {/* <!--- proposal-card-caption Starts ---> */}
-                              <div className="proposal-seller-info">
-                                 {/* <!--- onePress-seller-info Starts ---> */}
-                                 <span className="fit-avatar s24">
-                                    <img src={require('../../../assets/images/userlisting/img-07.jpg')} className="rounded-circle" width="32" height="32" />
-                                 </span>
-                                 <div className="seller-info-wrapper">
-                                    <a href="LBGA" className="seller-name">LBGA</a>
-                                    <div className="onePress-seller-tooltip">
-                                       New Seller
-                        </div>
-                                 </div>
-                                 <div className="favoriteIcon">
-                                    <i data-id="837" href="#" className="fa fa-heart proposal-favorite" data-toggle="tooltip"
-                                       data-placement="top" title="Favorite"></i>
-                                 </div>
-                              </div>
-                              {/* <!--- onePress-seller-info Ends ---> */}
-                              <a href="" className="proposal-link-main js-proposal-card-imp-data">
-                                 <h3>setup and customize your dubsado account</h3>
-                              </a>
-                              <div className="rating-badges-container">
-                                 <span className="proposal-rating">
-                                    <i className="fa fa-star"></i>
-                                    <span>
-                                       <strong>0.0</strong> (0)
-                        </span>
-                                 </span>
-                              </div>
-                           </div>
-                           {/* <!--- proposal-card-caption Ends ---> */}
-                           <footer className="proposal-card-footer">
-                              {/* <!--- proposal-card-footer Starts ---> */}
-                              <div className="proposal-price">
-                                 <a>
-                                    <small>STARTING AT</small>&#036;80.00 </a>
-                              </div>
-                           </footer>
-                           {/* <!--- proposal-card-footer Ends ---> */}
-                        </div>
-                        {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
-                     </div>
+                     
                      <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-3 pr-lg-1">
                         <div className="proposal-card-base mp-proposal-card">
                            {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
@@ -1264,36 +717,7 @@ function App() {
 
                         </script> */}
                                  </tr>
-                                 <tr id="request_tr_348">
-                                    <td>
-                                       <img src={require('../../../assets/images/userlisting/img-01.jpg')} className="request-img rounded-circle" />
-                                       <div className="request-description">
-                                          <h6>Pat</h6>
-                                          <h6 className="text-success">design a logo for us</h6>
-                                          <p className="lead">hi we need a logo </p>
-                                       </div>
-                                    </td>
-                                    <td>0</td>
-                                    <td>5 Days</td>
-                                    <td className="text-success">
-                                       &#036;5.00 <br />
-                                       <button className="btn btn-success btn-sm mt-4 send_button_348">
-                                          Send Offer </button>
-                                    </td>
-                                    {/* <script type="text/javascript">
-                           $(".send_button_348").click(function () {
-                              request_id = "348";
-                              $.ajax({
-                                 method: "POST",
-                                 url: "requests/send_offer_modal",
-                                 data: { request_id: request_id }
-                              }).done(function (data) {
-                                 $(".append-modal").html(data);
-                              });
-                           });
-
-                        </script> */}
-                                 </tr>
+                                
                               </tbody>
                            </table>
                            <center>

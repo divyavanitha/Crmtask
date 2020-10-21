@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-
+import { getSubCategory } from "../../../../_actions/user_actions";
 import $ from 'jquery';
 
 function Header() {
@@ -20,20 +20,34 @@ function Header() {
             });
 
             //// Categories Dropdown Code
-            $(".top-nav-item").mouseover(function () {
+            $(".top-nav-item").on("mouseover", function () {
+                alert();
                 $(".body-sub-width").addClass("display-none");
                 $(".top-nav-item").removeClass("active");
                 var node_id = $(this).data('node-id');
-                $(this).addClass("active");
-                $(".body-sub-width[data-node-id=" + node_id + "]").removeClass("display-none");
+                console.log(node_id);
+                $.ajax({
+                      type: 'GET',
+                      url: "/api/subcategory/"+node_id,
+                      dataType: "json",
+                      success: function(data) { 
+                        console.log('dat', data);
+                        console.log($(".body-sub-width").data("node-id", node_id));
+                        $(this).addClass("active");
+                        $(".body-sub-width[data-node-id=" + node_id + "]").removeClass("display-none");
+
+                    }
+                });
+                
+                
             });
 
-            $(".mainHtml .cat-nav").mouseleave(function () {
+            $(".mainHtml .cat-nav").on("mouseleave", function () {
                 $(".top-nav-item").removeClass("active");
                 $(".body-sub-width").addClass("display-none");
             });
 
-            $('#mobilemenu').click(function () {
+            $('#mobilemenu').on('click', function () {
                 $('html body').css('overflow', 'hidden');
                 $('.cat-mobile').show();
                 $('.mobile-subnav').addClass("display-none");
@@ -53,7 +67,7 @@ function Header() {
                 }
             });
 
-            $(".cat-mobile .mobile-topnav ul li").click(function () {
+            $(".cat-mobile .mobile-topnav ul li").on("click", function () {
                 $(".top-nav-item").removeClass("active");
                 var u_id = $(this).data('uid');
                 var name = $(this).data('name');
@@ -65,7 +79,7 @@ function Header() {
                 $("#mobile-sub-catnav-content-" + u_id + " ul").removeClass("display-none");
             });
 
-            $(".cat-mobile .mobile-catnav-back-btn").click(function () {
+            $(".cat-mobile .mobile-catnav-back-btn").on("click", function () {
                 $('.mobile-subnav').addClass("display-none");
                 $(".mobile-catnav-back-btn").addClass("display-none");
                 $("#mobile-sub-catnav-header-title").text("");
@@ -73,7 +87,7 @@ function Header() {
                 $(".mobile-topnav").removeClass("slideInUp display-none").addClass("slideInLeft slower");
             });
 
-            $('.cat-mobile .overlay-close').click(function () {
+            $('.cat-mobile .overlay-close').on('click', function () {
                 $('.cat-mobile').hide();
                 $('html body').removeAttr('style');
             });
@@ -82,7 +96,7 @@ function Header() {
             /// Mobile Category Menu Code Enye ////
 
             /// Mobile User Menu Code Starts ////
-            $("#usermenu, .bell, .message").click(function () {
+            $("#usermenu, .bell, .message").on("click", function () {
                 if ($(window).width() <= 629) {
                     $('html body').css('overflow', 'hidden');
                     $('.user-mobile').show();
@@ -105,7 +119,7 @@ function Header() {
                 }
             });
 
-            $(".user-mobile .mobile-topnav ul li").click(function () {
+            $(".user-mobile .mobile-topnav ul li").on("click", function () {
                 $(".top-nav-item").removeClass("active");
                 var u_id = $(this).data('uid');
                 var name = $(this).data('name');
@@ -117,7 +131,7 @@ function Header() {
                 $(".user-mobile #mobile-sub-catnav-content-" + u_id + " ul").removeClass("display-none");
             });
 
-            $(".user-mobile .mobile-catnav-back-btn").click(function () {
+            $(".user-mobile .mobile-catnav-back-btn").on("click", function () {
                 var subnav_id = $(this).attr('data-subnav-id');
                 if (subnav_id == "0") {
                     $('.user-mobile .mobile-subnav').addClass("display-none");
@@ -134,7 +148,7 @@ function Header() {
                 }
             });
 
-            $(".user-mobile .mobile-subnav ul li").click(function () {
+            $(".user-mobile .mobile-subnav ul li").on("click", function () {
                 $(".top-nav-item").removeClass("active");
                 var u_id = $(this).data('uid');
                 var name = $(this).data('name');
@@ -148,7 +162,7 @@ function Header() {
                 $(".user-mobile #mobile-tertiary-nav-" + u_id + " ul").removeClass("display-none");
             });
 
-            $('.user-mobile .overlay-close').click(function () {
+            $('.user-mobile .overlay-close').on("click", function () {
                 $('.user-mobile').hide();
                 $('html body').removeAttr('style');
             });
@@ -174,7 +188,7 @@ function Header() {
             // Bind click handler to menu items
 
             // so we can get a fancy scroll animation
-            menuItems.click(function (e) {
+            menuItems.on("click", function (e) {
                 var href = $(this).attr("href"),
                     offsetTop = href === "#" ? 0 : $(href).offset().top - topMenuHeight + 1;
                 $('html, body').stop().animate({
