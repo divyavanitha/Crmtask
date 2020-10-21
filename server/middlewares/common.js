@@ -28,7 +28,7 @@ function auth(req, res, next) {
 }
 
 function upload(destinationPath) {
-console.log('test',destinationPath);
+
     if (!fs.existsSync(destinationPath)){
         fs.mkdirSync(destinationPath, { recursive: true });
     }

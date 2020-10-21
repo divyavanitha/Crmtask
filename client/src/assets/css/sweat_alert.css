@@ -297,24 +297,21 @@ body.swal2-toast-shown .swal2-container.swal2-top {
     transform: translateX(-50%)
 }
 
-body.swal2-toast-shown .swal2-container.swal2-top-end,
-body.swal2-toast-shown .swal2-container.swal2-top-right {
+body.swal2-toast-shown .swal2-container.swal2-top-end, body.swal2-toast-shown .swal2-container.swal2-top-right {
     top: 0;
     right: 0;
     bottom: auto;
     left: auto
 }
 
-body.swal2-toast-shown .swal2-container.swal2-top-left,
-body.swal2-toast-shown .swal2-container.swal2-top-start {
+body.swal2-toast-shown .swal2-container.swal2-top-left, body.swal2-toast-shown .swal2-container.swal2-top-start {
     top: 0;
     right: auto;
     bottom: auto;
     left: 0
 }
 
-body.swal2-toast-shown .swal2-container.swal2-center-left,
-body.swal2-toast-shown .swal2-container.swal2-center-start {
+body.swal2-toast-shown .swal2-container.swal2-center-left, body.swal2-toast-shown .swal2-container.swal2-center-start {
     top: 50%;
     right: auto;
     bottom: auto;
@@ -332,8 +329,7 @@ body.swal2-toast-shown .swal2-container.swal2-center {
     transform: translate(-50%, -50%)
 }
 
-body.swal2-toast-shown .swal2-container.swal2-center-end,
-body.swal2-toast-shown .swal2-container.swal2-center-right {
+body.swal2-toast-shown .swal2-container.swal2-center-end, body.swal2-toast-shown .swal2-container.swal2-center-right {
     top: 50%;
     right: 0;
     bottom: auto;
@@ -342,8 +338,7 @@ body.swal2-toast-shown .swal2-container.swal2-center-right {
     transform: translateY(-50%)
 }
 
-body.swal2-toast-shown .swal2-container.swal2-bottom-left,
-body.swal2-toast-shown .swal2-container.swal2-bottom-start {
+body.swal2-toast-shown .swal2-container.swal2-bottom-left, body.swal2-toast-shown .swal2-container.swal2-bottom-start {
     top: auto;
     right: auto;
     bottom: 0;
@@ -359,8 +354,7 @@ body.swal2-toast-shown .swal2-container.swal2-bottom {
     transform: translateX(-50%)
 }
 
-body.swal2-toast-shown .swal2-container.swal2-bottom-end,
-body.swal2-toast-shown .swal2-container.swal2-bottom-right {
+body.swal2-toast-shown .swal2-container.swal2-bottom-end, body.swal2-toast-shown .swal2-container.swal2-bottom-right {
     top: auto;
     right: 0;
     bottom: 0;
@@ -759,14 +753,12 @@ body.swal2-no-backdrop .swal2-shown.swal2-top {
     transform: translateX(-50%)
 }
 
-body.swal2-no-backdrop .swal2-shown.swal2-top-left,
-body.swal2-no-backdrop .swal2-shown.swal2-top-start {
+body.swal2-no-backdrop .swal2-shown.swal2-top-left, body.swal2-no-backdrop .swal2-shown.swal2-top-start {
     top: 0;
     left: 0
 }
 
-body.swal2-no-backdrop .swal2-shown.swal2-top-end,
-body.swal2-no-backdrop .swal2-shown.swal2-top-right {
+body.swal2-no-backdrop .swal2-shown.swal2-top-end, body.swal2-no-backdrop .swal2-shown.swal2-top-right {
     top: 0;
     right: 0
 }
@@ -778,16 +770,14 @@ body.swal2-no-backdrop .swal2-shown.swal2-center {
     transform: translate(-50%, -50%)
 }
 
-body.swal2-no-backdrop .swal2-shown.swal2-center-left,
-body.swal2-no-backdrop .swal2-shown.swal2-center-start {
+body.swal2-no-backdrop .swal2-shown.swal2-center-left, body.swal2-no-backdrop .swal2-shown.swal2-center-start {
     top: 50%;
     left: 0;
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%)
 }
 
-body.swal2-no-backdrop .swal2-shown.swal2-center-end,
-body.swal2-no-backdrop .swal2-shown.swal2-center-right {
+body.swal2-no-backdrop .swal2-shown.swal2-center-end, body.swal2-no-backdrop .swal2-shown.swal2-center-right {
     top: 50%;
     right: 0;
     -webkit-transform: translateY(-50%);
@@ -801,14 +791,12 @@ body.swal2-no-backdrop .swal2-shown.swal2-bottom {
     transform: translateX(-50%)
 }
 
-body.swal2-no-backdrop .swal2-shown.swal2-bottom-left,
-body.swal2-no-backdrop .swal2-shown.swal2-bottom-start {
+body.swal2-no-backdrop .swal2-shown.swal2-bottom-left, body.swal2-no-backdrop .swal2-shown.swal2-bottom-start {
     bottom: 0;
     left: 0
 }
 
-body.swal2-no-backdrop .swal2-shown.swal2-bottom-end,
-body.swal2-no-backdrop .swal2-shown.swal2-bottom-right {
+body.swal2-no-backdrop .swal2-shown.swal2-bottom-end, body.swal2-no-backdrop .swal2-shown.swal2-bottom-right {
     right: 0;
     bottom: 0
 }
@@ -834,14 +822,12 @@ body.swal2-no-backdrop .swal2-shown.swal2-bottom-right {
     align-items: flex-start
 }
 
-.swal2-container.swal2-top-left,
-.swal2-container.swal2-top-start {
+.swal2-container.swal2-top-left, .swal2-container.swal2-top-start {
     align-items: flex-start;
     justify-content: flex-start
 }
 
-.swal2-container.swal2-top-end,
-.swal2-container.swal2-top-right {
+.swal2-container.swal2-top-end, .swal2-container.swal2-top-right {
     align-items: flex-start;
     justify-content: flex-end
 }
@@ -850,14 +836,12 @@ body.swal2-no-backdrop .swal2-shown.swal2-bottom-right {
     align-items: center
 }
 
-.swal2-container.swal2-center-left,
-.swal2-container.swal2-center-start {
+.swal2-container.swal2-center-left, .swal2-container.swal2-center-start {
     align-items: center;
     justify-content: flex-start
 }
 
-.swal2-container.swal2-center-end,
-.swal2-container.swal2-center-right {
+.swal2-container.swal2-center-end, .swal2-container.swal2-center-right {
     align-items: center;
     justify-content: flex-end
 }
@@ -866,14 +850,12 @@ body.swal2-no-backdrop .swal2-shown.swal2-bottom-right {
     align-items: flex-end
 }
 
-.swal2-container.swal2-bottom-left,
-.swal2-container.swal2-bottom-start {
+.swal2-container.swal2-bottom-left, .swal2-container.swal2-bottom-start {
     align-items: flex-end;
     justify-content: flex-start
 }
 
-.swal2-container.swal2-bottom-end,
-.swal2-container.swal2-bottom-right {
+.swal2-container.swal2-bottom-end, .swal2-container.swal2-bottom-right {
     align-items: flex-end;
     justify-content: flex-end
 }
@@ -897,27 +879,15 @@ body.swal2-no-backdrop .swal2-shown.swal2-bottom-right {
     flex-direction: column
 }
 
-.swal2-container.swal2-grow-column.swal2-bottom,
-.swal2-container.swal2-grow-column.swal2-center,
-.swal2-container.swal2-grow-column.swal2-top {
+.swal2-container.swal2-grow-column.swal2-bottom, .swal2-container.swal2-grow-column.swal2-center, .swal2-container.swal2-grow-column.swal2-top {
     align-items: center
 }
 
-.swal2-container.swal2-grow-column.swal2-bottom-left,
-.swal2-container.swal2-grow-column.swal2-bottom-start,
-.swal2-container.swal2-grow-column.swal2-center-left,
-.swal2-container.swal2-grow-column.swal2-center-start,
-.swal2-container.swal2-grow-column.swal2-top-left,
-.swal2-container.swal2-grow-column.swal2-top-start {
+.swal2-container.swal2-grow-column.swal2-bottom-left, .swal2-container.swal2-grow-column.swal2-bottom-start, .swal2-container.swal2-grow-column.swal2-center-left, .swal2-container.swal2-grow-column.swal2-center-start, .swal2-container.swal2-grow-column.swal2-top-left, .swal2-container.swal2-grow-column.swal2-top-start {
     align-items: flex-start
 }
 
-.swal2-container.swal2-grow-column.swal2-bottom-end,
-.swal2-container.swal2-grow-column.swal2-bottom-right,
-.swal2-container.swal2-grow-column.swal2-center-end,
-.swal2-container.swal2-grow-column.swal2-center-right,
-.swal2-container.swal2-grow-column.swal2-top-end,
-.swal2-container.swal2-grow-column.swal2-top-right {
+.swal2-container.swal2-grow-column.swal2-bottom-end, .swal2-container.swal2-grow-column.swal2-bottom-right, .swal2-container.swal2-grow-column.swal2-center-end, .swal2-container.swal2-grow-column.swal2-center-right, .swal2-container.swal2-grow-column.swal2-top-end, .swal2-container.swal2-grow-column.swal2-top-right {
     align-items: flex-end
 }
 
@@ -932,8 +902,7 @@ body.swal2-no-backdrop .swal2-shown.swal2-bottom-right {
     margin: auto
 }
 
-@media all and (-ms-high-contrast:none),
-(-ms-high-contrast:active) {
+@media all and (-ms-high-contrast:none), (-ms-high-contrast:active) {
     .swal2-container .swal2-modal {
         margin: 0 !important
     }
@@ -1128,12 +1097,7 @@ body.swal2-no-backdrop .swal2-shown.swal2-bottom-right {
     color: #f27474
 }
 
-.swal2-popup>.swal2-checkbox,
-.swal2-popup>.swal2-file,
-.swal2-popup>.swal2-input,
-.swal2-popup>.swal2-radio,
-.swal2-popup>.swal2-select,
-.swal2-popup>.swal2-textarea {
+.swal2-popup>.swal2-checkbox, .swal2-popup>.swal2-file, .swal2-popup>.swal2-input, .swal2-popup>.swal2-radio, .swal2-popup>.swal2-select, .swal2-popup>.swal2-textarea {
     display: none
 }
 
@@ -1152,18 +1116,11 @@ body.swal2-no-backdrop .swal2-shown.swal2-bottom-right {
     text-align: center
 }
 
-.swal2-popup .swal2-checkbox,
-.swal2-popup .swal2-file,
-.swal2-popup .swal2-input,
-.swal2-popup .swal2-radio,
-.swal2-popup .swal2-select,
-.swal2-popup .swal2-textarea {
+.swal2-popup .swal2-checkbox, .swal2-popup .swal2-file, .swal2-popup .swal2-input, .swal2-popup .swal2-radio, .swal2-popup .swal2-select, .swal2-popup .swal2-textarea {
     margin: 1em auto
 }
 
-.swal2-popup .swal2-file,
-.swal2-popup .swal2-input,
-.swal2-popup .swal2-textarea {
+.swal2-popup .swal2-file, .swal2-popup .swal2-input, .swal2-popup .swal2-textarea {
     width: 100%;
     transition: border-color .3s, box-shadow .3s;
     border: 1px solid #d9d9d9;
@@ -1173,42 +1130,30 @@ body.swal2-no-backdrop .swal2-shown.swal2-bottom-right {
     box-sizing: border-box
 }
 
-.swal2-popup .swal2-file.swal2-inputerror,
-.swal2-popup .swal2-input.swal2-inputerror,
-.swal2-popup .swal2-textarea.swal2-inputerror {
+.swal2-popup .swal2-file.swal2-inputerror, .swal2-popup .swal2-input.swal2-inputerror, .swal2-popup .swal2-textarea.swal2-inputerror {
     border-color: #f27474 !important;
     box-shadow: 0 0 2px #f27474 !important
 }
 
-.swal2-popup .swal2-file:focus,
-.swal2-popup .swal2-input:focus,
-.swal2-popup .swal2-textarea:focus {
+.swal2-popup .swal2-file:focus, .swal2-popup .swal2-input:focus, .swal2-popup .swal2-textarea:focus {
     border: 1px solid #b4dbed;
     outline: 0;
     box-shadow: 0 0 3px #c4e6f5
 }
 
-.swal2-popup .swal2-file::-webkit-input-placeholder,
-.swal2-popup .swal2-input::-webkit-input-placeholder,
-.swal2-popup .swal2-textarea::-webkit-input-placeholder {
+.swal2-popup .swal2-file::-webkit-input-placeholder, .swal2-popup .swal2-input::-webkit-input-placeholder, .swal2-popup .swal2-textarea::-webkit-input-placeholder {
     color: #ccc
 }
 
-.swal2-popup .swal2-file:-ms-input-placeholder,
-.swal2-popup .swal2-input:-ms-input-placeholder,
-.swal2-popup .swal2-textarea:-ms-input-placeholder {
+.swal2-popup .swal2-file:-ms-input-placeholder, .swal2-popup .swal2-input:-ms-input-placeholder, .swal2-popup .swal2-textarea:-ms-input-placeholder {
     color: #ccc
 }
 
-.swal2-popup .swal2-file::-ms-input-placeholder,
-.swal2-popup .swal2-input::-ms-input-placeholder,
-.swal2-popup .swal2-textarea::-ms-input-placeholder {
+.swal2-popup .swal2-file::-ms-input-placeholder, .swal2-popup .swal2-input::-ms-input-placeholder, .swal2-popup .swal2-textarea::-ms-input-placeholder {
     color: #ccc
 }
 
-.swal2-popup .swal2-file::placeholder,
-.swal2-popup .swal2-input::placeholder,
-.swal2-popup .swal2-textarea::placeholder {
+.swal2-popup .swal2-file::placeholder, .swal2-popup .swal2-input::placeholder, .swal2-popup .swal2-textarea::placeholder {
     color: #ccc
 }
 
@@ -1222,8 +1167,7 @@ body.swal2-no-backdrop .swal2-shown.swal2-bottom-right {
     text-align: center
 }
 
-.swal2-popup .swal2-range input,
-.swal2-popup .swal2-range output {
+.swal2-popup .swal2-range input, .swal2-popup .swal2-range output {
     height: 2.625em;
     margin: 1em auto;
     padding: 0;
@@ -1257,20 +1201,17 @@ body.swal2-no-backdrop .swal2-shown.swal2-bottom-right {
     font-size: 1.125em
 }
 
-.swal2-popup .swal2-checkbox,
-.swal2-popup .swal2-radio {
+.swal2-popup .swal2-checkbox, .swal2-popup .swal2-radio {
     align-items: center;
     justify-content: center
 }
 
-.swal2-popup .swal2-checkbox label,
-.swal2-popup .swal2-radio label {
+.swal2-popup .swal2-checkbox label, .swal2-popup .swal2-radio label {
     margin: 0 .6em;
     font-size: 1.125em
 }
 
-.swal2-popup .swal2-checkbox input,
-.swal2-popup .swal2-radio input {
+.swal2-popup .swal2-checkbox input, .swal2-popup .swal2-radio input {
     margin: 0 .4em
 }
 
@@ -1311,8 +1252,7 @@ body.swal2-no-backdrop .swal2-shown.swal2-bottom-right {
     }
 }
 
-@media all and (-ms-high-contrast:none),
-(-ms-high-contrast:active) {
+@media all and (-ms-high-contrast:none), (-ms-high-contrast:active) {
     .swal2-range input {
         width: 100% !important
     }

@@ -9,20 +9,14 @@ import { Provider } from 'react-redux';
 import setToken from './components/utils/set_token';
 import jwt_decode from 'jwt-decode';
 
-import "popper.js/dist/popper.js";
-import "jquery/dist/jquery.js";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.min.js";
-import "animate.css/animate.css";
-import "font-awesome/css/font-awesome.min.css";
-
-/* import "./css/App.css";
-import "./css/Responsive.css"; */
-
 import { AUTH_USER } from './_actions/types';
 import { ADMIN_USER } from './_actions/admin/types';
 import store from "./store.js";
-const $ = window.$;
+
+import "popper.js/dist/popper.js";
+import "jquery/dist/jquery.js";
+import "bootstrap/dist/js/bootstrap.min.js";
+
 
 if (localStorage.token) {
   setToken(localStorage.token);

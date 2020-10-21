@@ -3,7 +3,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 
-function App() {
+function Gig() {
 
 
     return (
@@ -13,9 +13,9 @@ function App() {
             
                 <div className="proposal-card-base mp-proposal-card">
                     {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
-                    <a href="proposals/mir_digimarket/i-will-create-a-professional-custom-explainer-video">
+                    <Link to="/gig/abc/:gig">
                         <img src={require('../../../../assets/images/postImg/img-03.jpg')} className="img-fluid" />
-                    </a>
+                    </Link>
                     <div className="proposal-card-caption">
                         {/* <!--- proposal-card-caption Starts ---> */}
                         <div className="proposal-seller-info">
@@ -35,10 +35,9 @@ function App() {
                             </div>
                         </div>
                         {/* <!--- onePress-seller-info Ends ---> */}
-                        <a href="proposals/mir_digimarket/i-will-create-a-professional-custom-explainer-video"
-                            className="proposal-link-main js-proposal-card-imp-data">
+                        <Link to="/gig/abc/gig" className="proposal-link-main js-proposal-card-imp-data">
                             <h3>I Will Create A Professional Custom Explainer Video</h3>
-                        </a>
+                        </Link>
                         <div className="rating-badges-container">
                             <span className="proposal-rating">
                                 <i className="fa fa-star"></i>
@@ -66,4 +65,4 @@ function App() {
     );
 }
 
-export default App;
+export default Gig;
