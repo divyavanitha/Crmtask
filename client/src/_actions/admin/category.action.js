@@ -2,7 +2,7 @@ import axios from "axios";
 import setAuthToken from "../../components/utils/set_admin_token";
 import jwt_decode from "jwt-decode";
 
-import { GET_CATEGORIES, FIND_CATEGORY, ADD_NOTIFICATION, DELETE_CATEGORY } from "./types";
+import { GET_CATEGORIES, FIND_CATEGORY, ADD_NOTIFICATION } from "./types";
 
 export const getCategories = () => dispatch => {
     axios
@@ -96,5 +96,25 @@ export const deleteCategory = (id) => async dispatch => {
                 type: ADD_NOTIFICATION,
                 payload: { title: e.response.data.title, message: e.response.data.error.message }
             });
+        });
+}; 
+
+
+export const changeCategoryStatus = (id, status) => async dispatch => {
+    await axios
+        .get(`/api/admin/category/changestatus/${id}/${status}`)
+        .then(res => {
+            dispatch({
+                type: ADD_NOTIFICATION,
+                payload: { title: res.data.title, message: res.data.message }
+            });
+        }
+        )
+        .catch(e => {
+            dispatch({
+                type: ADD_NOTIFICATION,
+                payload: { title: e.response.data.title, message: e.response.data.error.message }
+            });
+            throw e;
         });
 }; 

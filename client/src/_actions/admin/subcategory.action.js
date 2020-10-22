@@ -100,3 +100,22 @@ export const deleteSubCategory = (id) => async dispatch => {
             });
         });
 }; 
+
+export const changeSubCategoryStatus = (id, status) => async dispatch => {
+    await axios
+        .get(`/api/admin/subcategory/changestatus/${id}/${status}`)
+        .then(res => {
+            dispatch({
+                type: ADD_NOTIFICATION,
+                payload: { title: res.data.title, message: res.data.message }
+            });
+        }
+        )
+        .catch(e => {
+            dispatch({
+                type: ADD_NOTIFICATION,
+                payload: { title: e.response.data.title, message: e.response.data.error.message }
+            });
+            throw e;
+        });
+}; 

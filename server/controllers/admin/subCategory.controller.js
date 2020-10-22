@@ -155,3 +155,27 @@ exports.listSubCategorybyid = async (req, res) => {
     }
 
 }
+
+exports.changeStatus = async (req, res) => {
+    try {
+        const subcategory = {
+                status: req.params.status,
+        }
+
+        let subcategories = await db._update(SubCategory, { _id: req.params.id }, subcategory);
+
+        const response = helper.response({ message: res.__('updated') });
+        return res.status(response.statusCode).json(response);
+        
+    }
+    catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                res.status(422).send(err.errors[i].message);
+            }
+        } else {
+            res.status(422).send(err);
+        }
+    }
+
+};

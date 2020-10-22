@@ -674,7 +674,7 @@ exports.listcategory = async (req, res) => {
             { "$project": { name: 1 } },
             {
                 "$lookup": {
-                    "from": "subCategories",
+                    "from": "subcategories",
                     "let": { "id": "$_id" },
                     "pipeline": [
                         {

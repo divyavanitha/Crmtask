@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { withRouter, Link, useHistory } from "react-router-dom";
 import Popup from "reactjs-popup";
 import { addNotification } from "../../../../_actions/admin/notifications.action";
-import { deleteSubCategory } from "../../../../_actions/admin/subcategory.action";
+import { deleteSubCategory, changeSubCategoryStatus } from "../../../../_actions/admin/subcategory.action";
 
 import $ from 'jquery';
 import 'datatables.net';
@@ -93,14 +93,7 @@ const SubCategory = () => {
         {
           "data": function (data, type, row) {
 
-            if (data.status == 1) {
-              var status = "Active";
-            } else {
-              var status = "In-Active";
-            }
-
-
-            return status;
+            return  "<label class='switch'><input "+ ((data.status == 1) ? "checked" :  "" ) +" type='checkbox' class='status_enable' value='true' data-id='"+data._id+"' data-value='"+ ((data.status == 1) ? "1" :  "0" ) +"'> <span class='slider round'></span></label>";
 
 
           }
@@ -121,6 +114,25 @@ const SubCategory = () => {
         }
 
       ]
+    });
+
+    $('body').on('change', '.status_enable', function() {
+
+        var id = $(this).data('id');
+        var value = 0;
+        var fail_status = true;
+
+        if($(this).is(":checked")){
+           value = 1; 
+           fail_status = false;
+        }
+       
+          console.log(id, value);
+
+          dispatch(changeSubCategoryStatus(id, value)).catch(err => {
+              $(this).find('.status_enable').prop('checked', fail_status);
+          })
+
     });
 
   }, []);

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { withRouter, Link, useHistory } from "react-router-dom";
 import Popup from "reactjs-popup";
 import { addNotification } from "../../../../_actions/admin/notifications.action";
-import { getCategories, deleteCategory } from "../../../../_actions/admin/category.action";
+import { getCategories, deleteCategory, changeCategoryStatus } from "../../../../_actions/admin/category.action";
 
 import $ from 'jquery';
 import 'datatables.net';
@@ -85,17 +85,8 @@ const Category = () => {
         { "data": "name" },
         {
           "data": function (data, type, row) {
-
-            if (data.status == 1) {
-              var status = "Active";
-            } else {
-              var status = "In-Active";
-            }
-
-
-            return status;
-
-
+            console.log(data.status);
+            return  "<label class='switch'><input "+ ((data.status == 1) ? "checked" :  "" ) +" type='checkbox' class='status_enable' value='true' data-id='"+data._id+"' data-value='"+ ((data.status == 1) ? "1" :  "0" ) +"'> <span class='slider round'></span></label>";
           }
         },
         {
@@ -114,6 +105,25 @@ const Category = () => {
         }
 
       ]
+    });
+
+    $('body').on('change', '.status_enable', function() {
+
+        var id = $(this).data('id');
+        var value = 0;
+        var fail_status = true;
+
+        if($(this).is(":checked")){
+           value = 1; 
+           fail_status = false;
+        }
+       
+          console.log(id, value);
+
+          dispatch(changeCategoryStatus(id, value)).catch(err => {
+              $(this).find('.status_enable').prop('checked', fail_status);
+          })
+
     });
 
   }, []);
@@ -196,6 +206,27 @@ const Category = () => {
         </div>
 
       </div>
+
+      <div className="modal status-modal" tabindex="-1" role="basic" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">Confirm Changes</h4>
+            </div>
+            <div className="modal-body p-2">
+            Are you sure want to change Status?
+                  </div>
+            <div className="modal-footer">
+              <button type="button" className="btn default" data-dismiss="modal">Close</button>
+              <button type="button"className="btn btn-danger status-modal-btn">Change</button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+
 
     </Fragment >
   );

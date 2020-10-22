@@ -51,6 +51,9 @@ router.delete('/category/:id', function(req, res){
 router.get('/get/category/:id', function(req, res){
   categoryController.listcategorybyid(req, res);
 });
+router.get('/category/changestatus/:id/:status', function(req, res){
+  categoryController.changeStatus(req, res);
+});
 
 
 router.get('/subcategory', (req, res) => {
@@ -68,6 +71,10 @@ router.delete('/subcategory/:id', function(req, res){
 router.get('/get/subcategory/:id', function(req, res){
   subcategoryController.listSubCategorybyid(req, res);
 });
+router.get('/subcategory/changestatus/:id/:status', function(req, res){
+  subcategoryController.changeStatus(req, res);
+});
+
 
 router.get('/skill', (req, res) => {
   skillController.listSkill(req, res);
