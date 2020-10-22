@@ -520,7 +520,7 @@ function App() {
                      <div className="col-md-12">
                         <div className="secTitle">
                            <h2 className="float-left">Featured Proposals/Services</h2>
-                           <button onclick="location.href='featured_proposals'" className="float-right btn btn-success">VIEW ALL</button>
+                           <button className="float-right btn btn-success">VIEW ALL</button>
                         </div>
                      </div>
                   </div>
@@ -539,7 +539,7 @@ function App() {
                      <div className="col-md-12">
                         <div className="secTitle">
                            <h2 className="float-left">Top Proposals/Services</h2>
-                           <button onclick="location.href='top_proposals'" className="float-right btn btn-success">VIEW ALL</button>
+                           <button className="float-right btn btn-success">VIEW ALL</button>
                         </div>
                      </div>
                   </div>
@@ -601,7 +601,7 @@ function App() {
                      <div className="col-md-12">
                         <div className="secTitle">
                            <h2 className="pl-0 pr-0 ml-0 mr-0 float-left">Random Proposals/Services</h2>
-                           <button onclick="location.href='random_proposals'" className="float-right btn btn-success">VIEW ALL</button>
+                           <button className="float-right btn btn-success">VIEW ALL</button>
                         </div>
                      </div>
                   </div>
