@@ -10,6 +10,7 @@ import subcategories from './admin/subcategory.reducer';
 import skills from './admin/skill.reducer';
 import deliverytimes from './admin/deliverytime.reducer';
 import languages from './admin/language.reducer';
+import coupons from './admin/coupon.reducer';
 import notifications from './admin/notification.reducer';
 
 const rootReducer = combineReducers({
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
     skills,
     deliverytimes,
     languages,
+    coupons,
     gig
 
 });

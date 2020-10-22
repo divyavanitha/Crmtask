@@ -102,7 +102,7 @@ const Category = () => {
           "data": function (data, type, row) {
             var button = `<a href="javascript:;" data-id=` + data._id + ` class="btn btn-danger delete">
              <i class="fa fa-trash text-white" ></i>
-           </a> &nbsp;
+           </a>
              <a href="javascript:;" data-id=`+ data._id + ` class="btn btn-success edit">
              <i class="fa fa-pencil text-white"></i>
            </a>`;

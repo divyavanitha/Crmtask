@@ -60,8 +60,8 @@ export const addDeliveryTime = (user) => dispatch => {
         });
 };
 
-export const updateDeliveryTime = (user) => dispatch => {
-    axios
+export const updateDeliveryTime = (user) => async dispatch => {
+    await axios
         .patch('/api/admin/delivery/time', user)
         .then(res => {
             console.log(res.data);
@@ -80,8 +80,8 @@ export const updateDeliveryTime = (user) => dispatch => {
         });
 };
 
-export const deleteDeliveryTime = (id) => dispatch => {
-    axios
+export const deleteDeliveryTime = (id) => async dispatch => {
+   await axios
         .delete(`/api/admin/delivery/time/${id}`)
         .then(res => {
             console.log(res.data);

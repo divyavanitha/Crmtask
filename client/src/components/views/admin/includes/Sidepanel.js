@@ -93,7 +93,7 @@ const Sidepanel = () => {
                             </li>
 
                             <li>
-                                <Link to="/admin/promocodes"> <i className="menu-icon fa fa-gift"></i>Promocodes</Link>
+                                <Link to="/admin/promocode"> <i className="menu-icon fa fa-gift"></i>Promocodes</Link>
                             </li>
 
                             <li>

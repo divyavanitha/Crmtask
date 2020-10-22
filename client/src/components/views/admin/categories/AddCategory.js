@@ -123,7 +123,7 @@ const AddCategory = (props) => {
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"></label>
                                                     <div className="col-md-6">
-                                                        <button type="submit" className="btn btn-success">Save</button>
+                                                        {params.id ? <button type="submit" className="btn btn-success">Update</button> :<button type="submit" className="btn btn-success">Save</button>}
                                                         <Link className="btn btn-danger" to="/admin/category">Cancel</Link>
                                                     </div>
                                                 </div>

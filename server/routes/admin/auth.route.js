@@ -119,4 +119,21 @@ router.get('/get/language/:id', function(req, res){
   languageController.listLanguagebyid(req, res);
 });
 
+
+router.get('/coupon', (req, res) => {
+  couponController.listCoupon(req, res);
+});
+router.post('/coupon', function(req, res){
+  couponController.createCoupon(req, res);
+});
+router.patch('/coupon', function(req, res){
+  couponController.updateCoupon(req, res);
+});
+router.delete('/coupon/:id', function(req, res){
+  couponController.deleteCoupon(req, res);
+});
+router.get('/get/coupon/:id', function(req, res){
+  couponController.listCouponbyid(req, res);
+});
+
 module.exports = router;

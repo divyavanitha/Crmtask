@@ -60,8 +60,8 @@ export const addSkill = (user) => dispatch => {
         });
 };
 
-export const updateSkill = (user) => dispatch => {
-    axios
+export const updateSkill = (user) => async dispatch => {
+    await axios
         .patch('/api/admin/skill', user)
         .then(res => {
             console.log(res.data);
@@ -80,8 +80,8 @@ export const updateSkill = (user) => dispatch => {
         });
 };
 
-export const deleteSkill = (id) => dispatch => {
-    axios
+export const deleteSkill = (id) => async dispatch => {
+    await axios
         .delete(`/api/admin/skill/${id}`)
         .then(res => {
             console.log(res.data);

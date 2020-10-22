@@ -60,8 +60,8 @@ export const addLanguage = (user) => dispatch => {
         });
 };
 
-export const updateLanguage = (user) => dispatch => {
-    axios
+export const updateLanguage = (user) => async dispatch => {
+    await axios
         .patch('/api/admin/language', user)
         .then(res => {
             console.log(res.data);
@@ -80,8 +80,8 @@ export const updateLanguage = (user) => dispatch => {
         });
 };
 
-export const deleteLanguage = (id) => dispatch => {
-    axios
+export const deleteLanguage = (id) => async dispatch => {
+   await axios
         .delete(`/api/admin/language/${id}`)
         .then(res => {
             console.log(res.data);

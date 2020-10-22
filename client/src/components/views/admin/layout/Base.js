@@ -21,6 +21,8 @@ import AddLanguage from "../languages/AddLanguage";
 import Language from "../languages/Language";
 import AddSkill from "../skills/AddSkill";
 import Skill from "../skills/Skill";
+import AddCoupon from "../coupons/AddCoupon";
+import Coupon from "../coupons/Coupon";
 import Dashboard from "../Dashboard";
 
 
@@ -58,24 +60,10 @@ const Base = () => {
           <Route path="/admin/skill/add" component={AddSkill}></Route>
           <Route path="/admin/skill/:id/edit" component={AddSkill}></Route>
           <Route path="/admin/skill" component={Skill}></Route>
+          <Route path="/admin/promocode/add" component={AddCoupon}></Route>
+          <Route path="/admin/promocode/:id/edit" component={AddCoupon}></Route>
+          <Route path="/admin/promocode" component={Coupon}></Route>
 
-          {/* <Route path="/admin/subcategory/add" component={AddSubCategory}></Route>
-              <Route path="/admin/subcategory/:id/edit" component={AddSubCategory}></Route>
-              <Route path="/admin/subcategory" component={SubCategory}></Route>
-
-              <Route path="/admin/language/add" component={AddLanguage}></Route>
-              <Route path="/admin/language/:id/edit" component={AddLanguage}></Route>
-              <Route path="/admin/language" component={Language}></Route>
-              <Route path="/admin/delivery/time/add" component={AddDeliveryTime}></Route>
-              <Route path="/admin/delivery/time/:id/edit" component={AddDeliveryTime}></Route>
-              <Route path="/admin/delivery/time" component={DeliveryTime}></Route>
-              <Route path="/admin/skill/add" component={AddSkill}></Route>
-              <Route path="/admin/skill/:id/edit" component={AddSkill}></Route>
-              <Route path="/admin/skill" component={Skill}></Route>
-             
-
-              <Route path="/admin/users/add" component={AddUser}></Route>
-              <Route path="/admin/users" component={User}></Route> */}
         </Switch>
 
       </div>

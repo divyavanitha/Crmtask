@@ -1,6 +1,8 @@
 const { User } = require('../models/user');
 const { SubCategory } = require('../models/SubCategory');
 const { Category } = require('../models/category');
+const { DeliveryTime } = require('../models/DeliveryTime');
+const { Coupon } = require('../models/Coupon');
 var helper = require('../services/helper.js');
 var db = require('../services/model.js');
 const Joi = require('@hapi/joi');
@@ -329,6 +331,91 @@ exports.listbycategoryToSubCategory = async (req, res) => {
         console.log(err);
     }
 }
+
+exports.listDeliveryTime = async (req, res) => {
+    try {
+
+        let deliveryTime = await db._get(DeliveryTime);
+        const data = { deliveryTime };
+
+        const response = helper.response({ data });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.listCoupon = async (req, res) => {
+
+    try {
+        
+        let coupons = await db._get(Coupon);
+
+        const data = { coupons };
+
+        const response = helper.response({ data });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.createCoupon = async (req, res) => {
+
+    const schema = Joi.object().options({ abortEarly: false }).keys({
+        code: Joi.string().required().label("Promocode"),
+        percentage: Joi.string().required().label("Percentage"),
+        maxAmount: Joi.string().required().label("Maximum Amount"),
+        description: Joi.string().required().label("Description"),
+        expiration: Joi.string().required().label("Expiration"),
+        sellerId: Joi.string().required().label("Seller Id")
+        
+    }).unknown(true);
+
+    const { error } = schema.validate(req.body);
+
+    let errorMessage = {};
+
+    if (error) {
+        error.details.forEach(err => {
+            errorMessage[err.context.key] = (err.message).replace(/"/g, "")
+        })
+    }
+
+    const response = helper.response({ status: 422, error:errorMessage });
+
+    if (error) return res.status(response.statusCode).json(response);
+
+    try {
+        const coupon = {
+            code: req.body.code,
+            percentage: req.body.percentage,
+            maxAmount: req.body.maxAmount,
+            description: req.body.description,
+            expiration: req.body.expiration,
+            sellerId: req.user._id, 
+        }
+
+        let coupons = await db._store(Coupon, coupon);
+
+        const response = helper.response({ message: res.__('inserted') });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                return res.status(422).json(err.errors[i].message);
+            }
+        } else {
+            return res.status(422).json(err);
+        }
+    }
+
+};
 
 exports.findprofile = async (req, res) => {
     const errors = {};

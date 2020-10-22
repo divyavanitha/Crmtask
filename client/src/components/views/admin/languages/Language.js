@@ -14,7 +14,7 @@ import 'datatables.net-buttons-bs4';
 //import 'jszip';
 import 'datatables.net-buttons';
 
-const Skill = () => {
+const Language = () => {
   const dispatch = useDispatch();
   let history = useHistory();
 
@@ -23,21 +23,26 @@ const Skill = () => {
 
     $('body').on('click', '.edit', function (e) {
       e.preventDefault();
-      console.log($(this).data('id'));
-      history.push('/admin/language/'+$(this).data('id')+'/edit')
+      history.push('/admin/language/' + $(this).data('id') + '/edit')
     });
 
     $('body').on('click', '.delete', function (e) {
       e.preventDefault();
       const sid = $(this).data('id');
-      $('.delete-modal').modal("show");
+      console.log($(this).closest('tr'));
+       $('.delete-modal').modal("show");
       $(".delete-modal-btn")
-      .off()
-      .on("click", function() {
-           dispatch(deleteLanguage(sid))
-           $('.delete-modal').modal("hide");
-      });
-     
+        .off()
+        .on("click", function () {
+         dispatch(deleteLanguage(sid)).then(res => { 
+           
+          $('#datatable').DataTable().row( $(this).closest('tr') ).remove().draw();
+          $('.delete-modal').modal("hide");
+
+          })
+          
+         // 
+        }); 
     });
 
 
@@ -78,7 +83,6 @@ const Skill = () => {
           }
         },
         { "data": "name" },
-       
         {
           "data": function (data, type, row) {
 
@@ -96,10 +100,12 @@ const Skill = () => {
         },
         {
           "data": function (data, type, row) {
-
-            //console.log('data', data._id);
-            var button = `<a href="javascript:;" data-id=`+data._id+` class="btn btn-success edit"><i class="fa fa-edit"></i></a> 
-            <a href="javascript:;" data-id=`+data._id+` class="btn btn-danger delete"><i class="fa fa-remove"></i></a>`;
+            var button = `<a href="javascript:;" data-id=` + data._id + ` class="btn btn-danger delete">
+             <i class="fa fa-trash text-white" ></i>
+           </a>
+             <a href="javascript:;" data-id=`+ data._id + ` class="btn btn-success edit">
+             <i class="fa fa-pencil text-white"></i>
+           </a>`;
 
             return button;
 
@@ -120,89 +126,79 @@ const Skill = () => {
 
   return (
     <Fragment>
-      <h1 className="h3 mb-2 text-gray-800">Languages</h1>
-      <p className="mb-4">language List</p>
-      <div className="row">
-        <Link className="btn btn-primary" style={{ float: "right" }} to="/admin/language/add">Add Language</Link>
 
-      </div>
-      <div className="row">
-        <div className="col-xl-12 col-lg-12">
-          <div className="card shadow mb-4">
-            <div className="card-header py-3">
-              <h6 className="m-0 font-weight-bold text-green">Language List</h6>
-              <div className="header-buttons">
-              </div>
-            </div>
-            <div className="card-body">
-              <div className="table-responsive">
-                <table className="table table-bordered table-striped" id="datatable">
 
-                  <thead>
-                    <tr>
-                      <th>Id</th>
-                      <th>Name</th>
-                      <th>Status</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
 
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
 
-      </div>
 
-      <div className="modal delete-modal" tabindex="-1" role="basic" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-                <div className="modal-dialog">
-                  <div className="modal-content">
-                    <div className="modal-header">
-                      <h4 className="modal-title">Confirm Delete</h4>
-                    </div>
-                    <div className="modal-body p-2">
-                    Are you sure want to delete?
-                                        </div>
-                    <div className="modal-footer">
-                      <button type="button" className="btn default" data-dismiss="modal">Close</button>
-                      <button type="button" data-value="1" className="btn btn-danger delete-modal-btn">Delete</button>
-                    </div>
-                  </div>
-                  
+
+
+      <div className="container">
+        <div className="breadcrumbs">
+          <div className="row">
+            <div className="col-sm-4">
+              <div className="page-header float-left">
+                <div className="page-title">
+                  <h1><i className="menu-icon fa fa-cubes"></i> Languages </h1>
                 </div>
-               
               </div>
-
-      <Popup
-        className="popup-modal"
-        open={popup}
-        onClose={() => setPopup(false)}
-        closeOnDocumentClick
-      >
-        <div className="popup-modal">
-          <div className="popup-title">
-            Are you sure?
-          </div>
-          <div className="popup-content">
-            <button type="button"
-              className="btn btn-danger remove-button"
-              onClick={() => {
-                setPopup(false);
-              }}>Remove
-              </button> &nbsp;
-              <button type="button"
-              className="btn btn-default"
-              onClick={() => {
-                setPopup(false);
-              }}>Cancel
-              </button>
+            </div>
+            <div className="col-sm-8">
+              <div className="page-header float-right">
+                <div className="page-title">
+                  <ol className="breadcrumb text-right">
+                    <li className="active"><Link className="btn btn-info" to="/admin/language/add" >Add Language</Link></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </Popup>
+        <div className="row">
+          <div className="col-lg-12">
+            <div className="">
+              <div className="">
+                <div className="table-responsive box-table tableContent">
+                  <table className="table table-striped" id="datatable">
+                    <thead>
+                      <tr>
+                        <th>#Id</th>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div className="modal delete-modal" tabIndex="-1" role="basic" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">Confirm Delete</h4>
+            </div>
+            <div className="modal-body p-2">
+              Are you sure want to delete?
+                                        </div>
+            <div className="modal-footer">
+              <button type="button" className="btn default" data-dismiss="modal">Close</button>
+              <button type="button" data-value="1" className="btn btn-danger delete-modal-btn">Delete</button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
 
     </Fragment >
   );
 };
 
-export default Skill;
+export default Language;

@@ -78,8 +78,15 @@ router.get('/subcategory/:id', (req, res) => {
   profilecontroller.listbycategoryToSubCategory(req, res);
 });
 
-router.get('/delivery/time', (req, res) => {
-  deliveryTimeController.listDeliveryTime(req, res);
+router.get('/delivery/time', middleware.user, (req, res) => {
+  profilecontroller.listDeliveryTime(req, res);
+});
+
+router.get('/coupon', middleware.user, (req, res) => {
+  profilecontroller.listCoupon(req, res);
+});
+router.post('/coupon', middleware.user, function(req, res){
+  profilecontroller.createCoupon(req, res);
 });
 
 router.get('/page', (req, res) => {
@@ -95,18 +102,8 @@ router.delete('/page/:id', function(req, res){
   pageController.deletepage(req, res);
 });
 
-router.get('/coupon', (req, res) => {
-  couponController.listCoupon(req, res);
-});
-router.post('/coupon', function(req, res){
-  couponController.createCoupon(req, res);
-});
-router.patch('/coupon', function(req, res){
-  couponController.updateCoupon(req, res);
-});
-router.delete('/coupon/:id', function(req, res){
-  couponController.deleteCoupon(req, res);
-});
+
+
 
 
 router.get('/package', (req, res) => {
