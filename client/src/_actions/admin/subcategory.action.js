@@ -40,81 +40,48 @@ export const getSubCategorybyId = (id) => dispatch => {
         );
 };
 
-export const addSubCategory = (user) => dispatch => {
-    axios
-        .post('/api/admin/subcategory', user)
-        .then(res => {
-            console.log(res.data);
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: res.data.title, message: res.data.message }
-            });
-          
-        }
-        )
-        .catch(e => {
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: e.response.data.title, message: e.response.data.error.message }
-            });
-        });
+export const addSubCategory = (user) => async dispatch => {
+    try {
+        let response = await axios.post('/api/admin/subcategory', user);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        return e.response.data;
+    }
 };
 
 export const updateSubCategory = (user) => async dispatch => {
-    await axios
-        .patch('/api/admin/subcategory', user)
-        .then(res => {
-            console.log(res.data);
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: res.data.title, message: res.data.message }
-            });
-        
-        }
-        )
-        .catch(e => {
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: e.response.data.title, message: e.response.data.error.message }
-            });
-        });
+    try {
+        let response = await axios.patch('/api/admin/subcategory', user);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        return e.response.data;
+    }
 };
 
 export const deleteSubCategory = (id) => async dispatch => {
-    await axios
-        .delete(`/api/admin/subcategory/${id}`)
-        .then(res => {
-            console.log(res.data);
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: res.data.title, message: res.data.message }
-            });
-          
-        }
-        )
-        .catch(e => {
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: e.response.data.title, message: e.response.data.error.message }
-            });
-        });
+    try {
+        let response = await axios.delete(`/api/admin/subcategory/${id}`);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        return e.response.data;
+    }
 }; 
 
 export const changeSubCategoryStatus = (id, status) => async dispatch => {
-    await axios
-        .get(`/api/admin/subcategory/changestatus/${id}/${status}`)
-        .then(res => {
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: res.data.title, message: res.data.message }
-            });
-        }
-        )
-        .catch(e => {
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: e.response.data.title, message: e.response.data.error.message }
-            });
-            throw e;
-        });
+    try {
+        let response = await axios.get(`/api/admin/subcategory/changestatus/${id}/${status}`);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        return e.response.data;
+    }
 }; 

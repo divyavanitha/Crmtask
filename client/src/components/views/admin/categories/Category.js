@@ -1,7 +1,7 @@
 import React, { Fragment, Dispatch, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-import { useToasts } from 'react-toast-notifications'
+import { useToasts } from 'react-toast-notifications';
 import { deleteCategory, changeCategoryStatus } from "../../../../_actions/admin/category.action";
 
 import $ from 'jquery';
@@ -35,7 +35,7 @@ const Category = () => {
         .off()
         .on("click", function () {
           dispatch(deleteCategory(sid)).then(res => {
-            addToast(res.message, { appearance: 'success', autoDismiss: true, })
+            addToast(res.message, { appearance: res.status, autoDismiss: true, })
             $('#datatable').DataTable().row($(this).closest('tr')).remove().draw(false);
             $('.delete-modal').modal("hide");
 

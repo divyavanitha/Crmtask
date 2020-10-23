@@ -1,6 +1,7 @@
 import React, { Fragment, Dispatch, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { withRouter, Link, useHistory } from "react-router-dom";
+import { useToasts } from 'react-toast-notifications';
 import Popup from "reactjs-popup";
 import { addNotification } from "../../../../_actions/admin/notifications.action";
 import { deleteSubCategory, changeSubCategoryStatus } from "../../../../_actions/admin/subcategory.action";
@@ -15,6 +16,7 @@ import 'datatables.net-buttons-bs4';
 import 'datatables.net-buttons';
 
 const SubCategory = () => {
+  const { addToast } = useToasts()
   const dispatch = useDispatch();
   let history = useHistory();
 
@@ -36,7 +38,7 @@ const SubCategory = () => {
         .on("click", function () {
           console.log(sid);
          dispatch(deleteSubCategory(sid)).then(res => { 
-           
+           addToast(res.message, { appearance: res.status, autoDismiss: true, })
           $('#datatable').DataTable().row( $(this).closest('tr') ).remove().draw();
           $('.delete-modal').modal("hide");
 
@@ -129,8 +131,9 @@ const SubCategory = () => {
        
           console.log(id, value);
 
-          dispatch(changeSubCategoryStatus(id, value)).catch(err => {
-              $(this).find('.status_enable').prop('checked', fail_status);
+          dispatch(changeSubCategoryStatus(id, value)).catch(res => {
+               addToast(res.message, { appearance: res.status, autoDismiss: true, })
+                if (res.statusCode != 200) $(this).prop('checked', fail_status);
           })
 
     });
