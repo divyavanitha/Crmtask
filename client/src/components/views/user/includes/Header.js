@@ -21,7 +21,7 @@ function Header() {
 
             //// Categories Dropdown Code
             $(".top-nav-item").on("mouseover", function () {
-                alert();
+                //alert();
                 $(".body-sub-width").addClass("display-none");
                 $(".top-nav-item").removeClass("active");
                 var node_id = $(this).data('node-id');

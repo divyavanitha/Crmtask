@@ -4275,6 +4275,9 @@ table.dataTable thead th.sorting_desc:after {
 .editable-table td:focus {
     outline: 0;
 }
+.form-group a.btn-outline {
+    border-width: 1px;
+}
 
 
 

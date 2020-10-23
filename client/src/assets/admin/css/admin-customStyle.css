@@ -31,14 +31,26 @@
 
  .right-panel .breadcrumbs {
      width: 100%;
-     border-bottom: 1px solid #ddd;
+     /* border-bottom: 1px solid #ddd; */
      margin-bottom: 20px;
  }
 
  label.control-label {
-     font-size: 14px;
+     /* font-size: 14px;
      text-align: right;
-     color: #767676;
+     color: #767676; */
+     font-size: 14px;
+    text-align: right;
+    color: #767676;
+    display: flex;
+    text-align: right;
+    justify-content: flex-end;
+    padding: 15px 0 0 0;
+    /* align-items: center;
+    display: flex;
+    justify-content: flex-end;
+    margin: 0;
+    height: 100%; */
  }
 
  .navbar .navbar-nav li>a .menu-icon {
@@ -63,3 +75,149 @@
      padding-left: 25px;
      padding-right: 25px;
  }
+
+ .box-block {
+    padding: 20px 25px 25px;
+}
+ .box h5 {
+    color: #2A397D;
+    font-size: 16px;
+    font-weight: normal;
+    margin-bottom: 20px !important;
+    /* margin-top: 5px; */
+    position: relative;
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    margin-top: 25px;
+    font-weight: 500;
+}
+
+.box h5:first-child {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 5px;
+}
+.box .addMoreBtn .txt > span.amIcon:first-child {
+    margin-left: 0;
+    margin-right: 5px;
+}
+
+.addFormBox {
+    border-top: 1px dashed #eee;
+    padding: 20px 0 0 0;
+}
+
+.form-group {}
+
+.box .form-group {
+    margin-bottom: 0;
+}
+
+.form-group~.form-group {
+    margin-top: 20px;
+}
+
+.box .form-group .row+.row {
+    margin-top: 20px;
+}
+
+.form-group label {
+    font-size: 13px;
+    color: #212529;
+    padding-top: 15px;
+    padding-bottom: 8px;
+    margin-bottom: 0;
+}
+
+.form-group label span.req {
+    color: #EC2828;
+}
+
+.form-group label.col-form-label {}
+.box .rightBtn-Group {
+    float: right;
+    position: absolute;
+    right: 0;
+}
+
+.box .addMoreBtn {
+    font-size: 12px;
+    font-weight: normal;
+    display: inline-block;
+    border: 1px solid #2A397D;
+    padding: 10px 15px;
+    border-radius: 2px;
+    position: relative;
+    background: #fff;
+    color: #2A397D;
+    cursor: pointer;
+    -webkit-transition: all .25s linear 0s;
+    -moz-transition: all .25s linear 0s;
+    -ms-transition: all .25s linear 0s;
+    -o-transition: all .25s linear 0s;
+    transition: all .25s linear 0s;
+}
+
+.box .rightBtn-Group .addMoreBtn+.addMoreBtn {
+    margin-left: 7px;
+}
+
+.box .addMoreBtn .amIcon {
+    margin-left: 5px;
+}
+
+.box .addMoreBtn:hover {
+    color: #C3CCF6;
+    /* background: #18295d; */
+}
+
+.box .addMoreBtn .txt {
+    position: relative;
+}
+
+.box .addMoreBtn:before {
+    content: "";
+    display: flex;
+    width: 0%;
+    height: 100%;
+    background: #18295d;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 0;
+    -webkit-transition: all .25s linear 0s;
+    -moz-transition: all .25s linear 0s;
+    -ms-transition: all .25s linear 0s;
+    -o-transition: all .25s linear 0s;
+    transition: all .25s linear 0s;
+    -webkit-transform: translate(-50%, -51%);
+    -moz-transform: translate(-50%, -51%);
+    -ms-transform: translate(-50%, -51%);
+    -o-transform: translate(-50%, -51%);
+    transform: translate(-50%, -51%);
+}
+
+.box .addMoreBtn:hover:before {
+    width: 100%;
+    height: 100%;
+}
+
+.form-group a.btn.btn-outline {
+    border: 1px solid #ccc;
+    color: #999;
+}
+
+.dataTables_wrapper > .row div.dataTables_filter label {
+    font-size: 0;
+    padding-left: 50px;
+}
+table.dataTable td, table.dataTable th {
+    padding: 15px 10px;
+    font-size: 13px;
+}
+.tableContent table.table tbody tr td .actionBtn{}
+.tableContent table.table tbody tr td .actionBtn i{
+    font-size: 16px;
+}
