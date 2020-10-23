@@ -26,7 +26,6 @@ export const getCouponbyId = (id) => dispatch => {
     axios
         .get(`/api/admin/get/coupon/${id}`)
         .then(res => {
-            console.log('cat', res.data);
             dispatch({
                 type: FIND_COUPON,
                 payload: res.data
