@@ -87,7 +87,12 @@ const Coupon = () => {
         { "data": "code" },
         { "data": "percentage" },
         { "data": "maxAmount" },
-        { "data": "expiration" },
+        { "data": "expiration","render": function (data) {
+                  var date = new Date(data);
+                var month = date.getMonth() + 1;
+                
+               return   date.getDate()+ "/" + (month.toString().length > 1 ? month : "0" + month) + "/" + date.getFullYear();
+        }},
         {
           "data": function (data, type, row) {
 

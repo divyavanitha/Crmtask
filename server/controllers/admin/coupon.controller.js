@@ -17,7 +17,6 @@ exports.createCoupon = async (req, res) => {
         code: Joi.string().required().label("Promocode"),
         percentage: Joi.string().required().label("Percentage"),
         maxAmount: Joi.string().required().label("Maximum Amount"),
-        description: Joi.string().required().label("Description"),
         expiration: Joi.string().required().label("Expiration")
         
     }).unknown(true);
@@ -70,7 +69,6 @@ exports.updateCoupon = async (req, res) => {
         code: Joi.string().required().label("Promocode"),
         percentage: Joi.string().required().label("Percentage"),
         maxAmount: Joi.string().required().label("Maximum Amount"),
-        description: Joi.string().required().label("Description"),
         expiration: Joi.string().required().label("Expiration")
     }).unknown(true);
 

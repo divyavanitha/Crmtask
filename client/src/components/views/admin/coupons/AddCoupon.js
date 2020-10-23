@@ -11,29 +11,35 @@ import { addNotification } from "../../../../_actions/admin/notifications.action
 
 const AddCategory = (props) => {
     const dispatch = useDispatch();
+    const [description, setDescription] = useState("");
     //console.log('param',props.match.params.id);
     
   let history = useHistory();
     const params = useParams();
     useEffect(() => {
-         $("#percentage").on('keyup', function(){
+         $("body").on('keyup', "#percentage", function(){
             var per=$(this).val()||0;
             var max=$("#maxAmount").val()||0;
-            $("#description").val(per+'% off, Max discount is '+max);
+            //var description = $("#description").val(per+'% off, Max discount is '+max);
+            setDescription(per+'% off, Max discount is '+max);
         });
 
-        $("#maxAmount").on('keyup', function(){
+        $("body").on('keyup', "#maxAmount", function(){
             var max=$(this).val()||0;
             var per=$("#percentage").val()||0;
-            $("#description").val(per+'% off, Max discount is '+max);
+            //var description = $("#description").val(per+'% off, Max discount is '+max);
+            setDescription(per+'% off, Max discount is '+max);
         });
         // Update the document title using the browser API
+
+
 
         dispatch(getCouponbyId(params.id))
 
     }, [params.id]);
     const coupon = useSelector(state => state.coupons && state.coupons.coupon && state.coupons.coupon.responseData.coupon);
     console.log('cats', coupon);
+    console.log('desc', description);
 
     return (
 
@@ -46,7 +52,7 @@ const AddCategory = (props) => {
                 percentage: coupon ? coupon.percentage : '',
                 maxAmount: coupon ? coupon.maxAmount : '',
                 expiration: coupon ? coupon.expiration : '',
-                description: coupon ? coupon.description : ''
+                description: coupon ? coupon.description : description
 
             }
             }
@@ -62,7 +68,7 @@ const AddCategory = (props) => {
                     .required('Expiration is required')
             })}
             onSubmit={(values, { setSubmitting }) => {
-
+console.log('values', values);
                 let data = {
                     id: values.id,
                     code: values.code,
@@ -161,7 +167,7 @@ const AddCategory = (props) => {
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Description : </label>
                                                     <div className="col-md-6">
-                                                        <Field component="textarea" rows="2" id="description" name="description" value={values.description} onChange={handleChange} maxLength={100}  className={'form-control' + (errors.description && touched.description ? ' is-invalid' : '')}  />
+                                                        <Field component="textarea" rows="2" id="description" value={values.description} name="description"  onChange={handleChange} maxLength={100}  className={'form-control' + (errors.description && touched.description ? ' is-invalid' : '')}  />
                                                         <ErrorMessage name="description" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
