@@ -40,62 +40,48 @@ export const getLanguagebyId = (id) => dispatch => {
         );
 };
 
-export const addLanguage = (user) => dispatch => {
-    axios
-        .post('/api/admin/language', user)
-        .then(res => {
-            console.log(res.data);
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: res.data.title, message: res.data.message }
-            });
-          
-        }
-        )
-        .catch(e => {
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: e.response.data.title, message: e.response.data.error.message }
-            });
-        });
+export const addLanguage = (user) => async dispatch => {
+    try {
+        let response = await axios.post('/api/admin/language', user);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        return e.response.data;
+    }
 };
 
 export const updateLanguage = (user) => async dispatch => {
-    await axios
-        .patch('/api/admin/language', user)
-        .then(res => {
-            console.log(res.data);
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: res.data.title, message: res.data.message }
-            });
-        
-        }
-        )
-        .catch(e => {
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: e.response.data.title, message: e.response.data.error.message }
-            });
-        });
+    try {
+        let response = await axios.patch('/api/admin/language', user);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        return e.response.data;
+    }
 };
 
 export const deleteLanguage = (id) => async dispatch => {
-   await axios
-        .delete(`/api/admin/language/${id}`)
-        .then(res => {
-            console.log(res.data);
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: res.data.title, message: res.data.message }
-            });
-          
-        }
-        )
-        .catch(e => {
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: e.response.data.title, message: e.response.data.error.message }
-            });
-        });
+    try {
+    let response = await axios.delete(`/api/admin/language/${id}`);
+    response.data.status = 'success';
+    return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        return e.response.data;
+    }
+}; 
+
+export const changeLanguageStatus = (id, status) => async dispatch => {
+    try {
+        let response = await axios.get(`/api/admin/language/changestatus/${id}/${status}`);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        return e.response.data;
+    }
 }; 

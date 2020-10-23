@@ -1,8 +1,8 @@
 import React, { Fragment, Dispatch, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { withRouter, Link, useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useToasts } from 'react-toast-notifications';
-import { deleteLanguage, changeLanguageStatus } from "../../../../_actions/admin/language.action";
+import { deleteSlide, changeSlideStatus } from "../../../../_actions/admin/slide.action";
 
 import $ from 'jquery';
 import 'datatables.net';
@@ -12,10 +12,12 @@ import 'pdfmake/build/vfs_fonts.js';
 import 'datatables.net-buttons-bs4';
 //import 'jszip';
 import 'datatables.net-buttons';
+import "react-datepicker/dist/react-datepicker.css";
 
-const Language = () => {
-  const { addToast } = useToasts()
+
+const Coupon = () => {
   const dispatch = useDispatch();
+  const { addToast } = useToasts()
   let history = useHistory();
 
   useEffect(() => {
@@ -23,7 +25,7 @@ const Language = () => {
 
     $('body').on('click', '.edit', function (e) {
       e.preventDefault();
-      history.push('/admin/language/' + $(this).data('id') + '/edit')
+      history.push('/admin/slide/' + $(this).data('id') + '/edit')
     });
 
     $('body').on('click', '.delete', function (e) {
@@ -34,7 +36,7 @@ const Language = () => {
       $(".delete-modal-btn")
         .off()
         .on("click", function () {
-         dispatch(deleteLanguage(sid)).then(res => { 
+         dispatch(deleteSlide(sid)).then(res => { 
            addToast(res.message, { appearance: res.status, autoDismiss: true, })
           $('#datatable').DataTable().row( $(this).closest('tr') ).remove().draw();
           $('.delete-modal').modal("hide");
@@ -52,7 +54,7 @@ const Language = () => {
       "processing": true,
       "serverSide": true,
       "ajax": {
-        "url": '/api/admin/language',
+        "url": '/api/admin/slide',
         "type": "GET",
         data: function (data) {
 
@@ -68,11 +70,11 @@ const Language = () => {
 
           var data = JSON.parse(response);
           var json = {};
+
           json.recordsTotal = data.responseData.total;
           json.recordsFiltered = data.responseData.total;
-
-          json.data = data.responseData.data.languages;
-           console.log(json);
+          json.data = data.responseData.data.coupons;
+          console.log(json);
           return JSON.stringify(json); // return JSON string
         }
       },
@@ -82,13 +84,13 @@ const Language = () => {
             return meta.row + meta.settings._iDisplayStart + 1;
           }
         },
-        { "data": "name" },
+        { "data": "title" },
+        { "data": "category" },
+        { "data": "layoutPhoto" },
         {
           "data": function (data, type, row) {
 
             return  "<label class='switch'><input "+ ((data.status == 1) ? "checked" :  "" ) +" type='checkbox' class='status_enable' value='true' data-id='"+data._id+"' data-value='"+ ((data.status == 1) ? "1" :  "0" ) +"'> <span class='slider round'></span></label>";
-
-
           }
         },
         {
@@ -122,7 +124,7 @@ const Language = () => {
        
           console.log(id, value);
 
-          dispatch(changeLanguageStatus(id, value)).then(res => {
+          dispatch(changeSlideStatus(id, value)).then(res => {
                addToast(res.message, { appearance: res.status, autoDismiss: true, })
                 if (res.statusCode != 200) $(this).prop('checked', fail_status);
           })
@@ -132,14 +134,9 @@ const Language = () => {
   }, []);
 
 
+
   return (
     <Fragment>
-
-
-
-
-
-
 
       <div className="container">
         <div className="breadcrumbs">
@@ -147,7 +144,7 @@ const Language = () => {
             <div className="col-sm-4">
               <div className="page-header float-left">
                 <div className="page-title">
-                  <h1><i className="menu-icon fa fa-cubes"></i> Languages </h1>
+                  <h1><i className="menu-icon fa fa-cubes"></i> Slides </h1>
                 </div>
               </div>
             </div>
@@ -155,7 +152,7 @@ const Language = () => {
               <div className="page-header float-right">
                 <div className="page-title">
                   <ol className="breadcrumb text-right">
-                    <li className="active"><Link className="btn btn-info" to="/admin/language/add" >Add Language</Link></li>
+                    <li className="active"><Link className="btn btn-info" to="/admin/slide/add" >Add Slide</Link></li>
                   </ol>
                 </div>
               </div>
@@ -171,7 +168,9 @@ const Language = () => {
                     <thead>
                       <tr>
                         <th>#Id</th>
-                        <th>Name</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Image</th>
                         <th>Status</th>
                         <th>Action</th>
                       </tr>
@@ -209,4 +208,4 @@ const Language = () => {
   );
 };
 
-export default Language;
+export default Coupon;

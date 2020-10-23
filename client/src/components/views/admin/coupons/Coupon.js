@@ -1,9 +1,8 @@
 import React, { Fragment, Dispatch, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { withRouter, Link, useHistory } from "react-router-dom";
-import Popup from "reactjs-popup";
-import { addNotification } from "../../../../_actions/admin/notifications.action";
-import { deleteCoupon } from "../../../../_actions/admin/coupon.action";
+import { Link, useHistory } from "react-router-dom";
+import { useToasts } from 'react-toast-notifications';
+import { deleteCoupon, changeCouponStatus } from "../../../../_actions/admin/coupon.action";
 
 import $ from 'jquery';
 import 'datatables.net';
@@ -18,6 +17,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const Coupon = () => {
   const dispatch = useDispatch();
+  const { addToast } = useToasts()
   let history = useHistory();
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const Coupon = () => {
         .off()
         .on("click", function () {
          dispatch(deleteCoupon(sid)).then(res => { 
-           
+           addToast(res.message, { appearance: res.status, autoDismiss: true, })
           $('#datatable').DataTable().row( $(this).closest('tr') ).remove().draw();
           $('.delete-modal').modal("hide");
 
@@ -96,16 +96,7 @@ const Coupon = () => {
         {
           "data": function (data, type, row) {
 
-            if (data.status == 1) {
-              var status = "Active";
-            } else {
-              var status = "In-Active";
-            }
-
-
-            return status;
-
-
+            return  "<label class='switch'><input "+ ((data.status == 1) ? "checked" :  "" ) +" type='checkbox' class='status_enable' value='true' data-id='"+data._id+"' data-value='"+ ((data.status == 1) ? "1" :  "0" ) +"'> <span class='slider round'></span></label>";
           }
         },
         {
@@ -126,11 +117,27 @@ const Coupon = () => {
       ]
     });
 
+    $('body').on('change', '.status_enable', function() {
+
+        var id = $(this).data('id');
+        var value = 0;
+        var fail_status = true;
+
+        if($(this).is(":checked")){
+           value = 1; 
+           fail_status = false;
+        }
+       
+          console.log(id, value);
+
+          dispatch(changeCouponStatus(id, value)).then(res => {
+               addToast(res.message, { appearance: res.status, autoDismiss: true, })
+                if (res.statusCode != 200) $(this).prop('checked', fail_status);
+          })
+
+    });
+
   }, []);
-
-  const [popup, setPopup] = useState(false);
-
-
 
 
 

@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { withRouter, Link, useHistory } from "react-router-dom";
 import { useToasts } from 'react-toast-notifications';
 import Popup from "reactjs-popup";
-import { addNotification } from "../../../../_actions/admin/notifications.action";
 import { deleteSubCategory, changeSubCategoryStatus } from "../../../../_actions/admin/subcategory.action";
 
 import $ from 'jquery';
@@ -131,7 +130,7 @@ const SubCategory = () => {
        
           console.log(id, value);
 
-          dispatch(changeSubCategoryStatus(id, value)).catch(res => {
+          dispatch(changeSubCategoryStatus(id, value)).then(res => {
                addToast(res.message, { appearance: res.status, autoDismiss: true, })
                 if (res.statusCode != 200) $(this).prop('checked', fail_status);
           })
@@ -139,11 +138,6 @@ const SubCategory = () => {
     });
 
   }, []);
-
-  const [popup, setPopup] = useState(false);
-
-
-
 
 
   return (

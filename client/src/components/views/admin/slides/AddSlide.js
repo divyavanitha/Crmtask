@@ -7,7 +7,8 @@ import { useToasts } from 'react-toast-notifications'
 import * as Yup from 'yup';
 import $ from 'jquery';
 
-import { addCoupon, getCouponbyId, updateCoupon } from "../../../../_actions/admin/coupon.action";
+import { addSlide, getSlidebyId, updateSlide } from "../../../../_actions/admin/slide.action";
+import { getCategories } from "../../../../_actions/admin/category.action";
 
 const AddCategory = (props) => {
     const { addToast } = useToasts()
@@ -18,27 +19,14 @@ const AddCategory = (props) => {
   let history = useHistory();
     const params = useParams();
     useEffect(() => {
-         /*$("body").on('keyup', "#percentage", function(){
-            var per=$(this).val()||0;
-            var max=$("#maxAmount").val()||0;
-            //var description = $("#description").val(per+'% off, Max discount is '+max);
-            setDescription(per+'% off, Max discount is '+max);
-        });
 
-        $("body").on('keyup', "#maxAmount", function(){
-            var max=$(this).val()||0;
-            var per=$("#percentage").val()||0;
-            //var description = $("#description").val(per+'% off, Max discount is '+max);
-            setDescription(per+'% off, Max discount is '+max);
-        });*/
-        // Update the document title using the browser API
-
-
-
-        dispatch(getCouponbyId(params.id))
+        dispatch(getCategories());
+        dispatch(getSlidebyId(params.id))
 
     }, [params.id]);
-    const coupon = useSelector(state => state.coupons && state.coupons.coupon && state.coupons.coupon.responseData.coupon);
+    const slide = useSelector(state => state.slides && state.slides.slide && state.slides.slide.responseData.slide);
+    const categories = useSelector(state => state.categories && state.categories.categories.responseData && state.categories.categories.responseData.data.categories);
+    console.log(categories);
 
     return (
 
@@ -46,44 +34,38 @@ const AddCategory = (props) => {
 
             enableReinitialize
             initialValues={{
-                id: coupon ? coupon._id : '',
-                code: coupon ? coupon.code : '',
-                percentage: coupon ? coupon.percentage : '',
-                maxAmount: coupon ? coupon.maxAmount : '',
-                expiration: coupon ? coupon.expiration : '',
-                description: coupon ? coupon.description : ''
+                id: slide ? slide._id : '',
+                title: slide ? slide.title : '',
+                layoutPhoto: slide ? slide.layoutPhoto : '',
+                category: slide ? slide.category : ''
 
             }
             }
 
             validationSchema={Yup.object().shape({
-                code: Yup.string()
-                    .required('Promocode is required'),
-                percentage: Yup.string()
-                    .required('Percentage is required'),
-                maxAmount: Yup.string()
-                    .required('Maximum Amount is required'),
-                expiration: Yup.string()
-                    .required('Expiration is required')
+                title: Yup.string()
+                    .required('Title is required'),
+                layoutPhoto: Yup.string()
+                    .required('Slide Photo is required'),
+                category: Yup.string()
+                    .required('Category is required')
             })}
             onSubmit={(values, { setSubmitting }) => {
 console.log('values', values);
                 let data = {
                     id: values.id,
-                    code: values.code,
-                    percentage: values.percentage,
-                    maxAmount: values.maxAmount,
-                    expiration: values.expiration,
-                    description: values.description
+                    title: values.title,
+                    layoutPhoto: values.layoutPhoto,
+                    category: values.category
                 };
 
                 if (params.id) {
-                    dispatch(updateCoupon(data)).then(res => { 
+                    dispatch(updateSlide(data)).then(res => { 
                         addToast(res.message, { appearance: res.status, autoDismiss: true, })
-                        history.push('/admin/promocode/')
+                        history.push('/admin/slide/')
                     })
                 } else {
-                    dispatch(addCoupon(data)).then(res => {
+                    dispatch(addSlide(data)).then(res => {
                         addToast(res.message, { appearance: res.status, autoDismiss: true, })
                     })
                 }
@@ -93,6 +75,7 @@ console.log('values', values);
             {props => {
                 const {
                     values,
+                    setFieldValue,
                     touched,
                     errors,
                     dirty,
@@ -113,7 +96,7 @@ console.log('values', values);
                                     <div className="col-sm-4">
                                         <div className="page-header float-left">
                                             <div className="page-title">
-                                                <h1><i className="menu-icon fa fa-cubes"></i> Promocodes / {params.id ? "Edit Promocode" : "Add Promocode"} </h1>
+                                                <h1><i className="menu-icon fa fa-cubes"></i> Slides / {params.id ? "Edit Slide" : "Add Slide"} </h1>
                                             </div>
                                         </div>
                                     </div>
@@ -121,7 +104,7 @@ console.log('values', values);
                                     <div className="page-header float-right">
                                         <div className="page-title">
                                         <ol className="breadcrumb text-right">
-                                            <li className="active"><Link className="btn btn-info" to="/admin/promocode" >Back</Link></li>
+                                            <li className="active"><Link className="btn btn-info" to="/admin/slide" >Back</Link></li>
                                         </ol>
                                         </div>
                                     </div>
@@ -133,46 +116,38 @@ console.log('values', values);
                                 <div className="col-lg-12">
                                     <div className="card">
                                         <div className="card-header">
-                                            <h4 className="h4">{params.id ? "Edit Promocode" : "Add Promocode"}</h4>
+                                            <h4 className="h4">{params.id ? "Edit Slide" : "Add Slide"}</h4>
                                         </div>
                                         <div className="card-body">
                                             <form onSubmit={handleSubmit} encType="multipart/form-data">
                                                 <div className="form-group row">
-                                                    <label className="col-md-4 control-label"> Promocode : </label>
+                                                    <label className="col-md-4 control-label"> Title : </label>
                                                     <div className="col-md-6">
-                                                        <Field type="text" id="code" name="code" value={values.code} onChange={handleChange} maxLength={100} placeholder="Promocode"  className={'form-control' + (errors.code && touched.code ? ' is-invalid' : '')}  />
-                                                        <ErrorMessage name="code" component="div" className="invalid-feedback" />
+                                                        <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title"  className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')}  />
+                                                        <ErrorMessage name="title" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
                                                 <div className="form-group row">
-                                                    <label className="col-md-4 control-label"> Percentage : </label>
+                                                    <label className="col-md-4 control-label"> Category : </label>
                                                     <div className="col-md-6">
-                                                        <Field type="text" id="percentage" name="percentage" value={values.percentage} onChange={handleChange} maxLength={100} placeholder="Percentage"  className={'form-control' + (errors.percentage && touched.percentage ? ' is-invalid' : '')}  />
-                                                        <ErrorMessage name="percentage" component="div" className="invalid-feedback" />
-                                                    </div>
-                                                </div>
-                                                <div className="form-group row">
-                                                    <label className="col-md-4 control-label"> Maximum Amount : </label>
-                                                    <div className="col-md-6">
-                                                        <Field type="text" id="maxAmount" name="maxAmount" value={values.maxAmount} onChange={handleChange} maxLength={100} placeholder="Maximum Amount"  className={'form-control' + (errors.maxAmount && touched.maxAmount ? ' is-invalid' : '')}  />
-                                                        <ErrorMessage name="maxAmount" component="div" className="invalid-feedback" />
-                                                    </div>
-                                                </div>
-                                                <div className="form-group row">
-                                                    <label className="col-md-4 control-label"> Expiration : </label>
-                                                    <div className="col-md-6">
-                                                        <DatePicker id="expiration" name="expiration" value={values.expiration} onChange={handleChange} className={'form-control' + (errors.expiration && touched.expiration ? ' is-invalid' : '')}  />
-                                                        <ErrorMessage name="expiration" component="div" className="invalid-feedback" />
-                                                    </div>
-                                                </div>
+                                                        <Field as="select" id="category" name="category" onChange={handleChange} className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} >
+                                                        <option value="">Select Catagory</option>
 
-                                                <div className="form-group row">
-                                                    <label className="col-md-4 control-label"> Description : </label>
-                                                    <div className="col-md-6">
-                                                        <Field component="textarea" rows="2" id="description" value={values.description} name="description"  onChange={handleChange} maxLength={100}  className={'form-control' + (errors.description && touched.description ? ' is-invalid' : '')}  />
-                                                        <ErrorMessage name="description" component="div" className="invalid-feedback" />
+                                                        {categories && categories.map((c_list) => (<option key={c_list._id} value={c_list._id} onChange={handleChange}>{c_list.name}</option>))}
+
+                                                        </Field>
+                                                        <ErrorMessage name="category" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
+                                                <div className="form-group row">
+                                                    <label className="col-md-4 control-label"> Image : </label>
+                                                    <div className="col-md-6">
+                                                        <Field id="file" name="file" type="file" value={values.layoutPhoto} onChange={(event) => {setFieldValue("file", event.currentTarget.files[0]);}} className={'form-control' + (errors.layoutPhoto && touched.layoutPhoto ? ' is-invalid' : '')}  />
+                                                        
+                                                        <ErrorMessage name="layoutPhoto" component="div" className="invalid-feedback" />
+                                                    </div>
+                                                </div>
+                                                
                                                 {/* <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Status : </label>
                                                     <div className="col-md-6">

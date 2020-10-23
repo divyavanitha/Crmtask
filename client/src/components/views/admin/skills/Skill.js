@@ -1,9 +1,8 @@
 import React, { Fragment, Dispatch, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { withRouter, Link, useHistory } from "react-router-dom";
-import Popup from "reactjs-popup";
-import { addNotification } from "../../../../_actions/admin/notifications.action";
-import { deleteSkill } from "../../../../_actions/admin/skill.action";
+import { useToasts } from 'react-toast-notifications';
+import { deleteSkill, changeSkillStatus } from "../../../../_actions/admin/skill.action";
 
 import $ from 'jquery';
 import 'datatables.net';
@@ -15,6 +14,7 @@ import 'datatables.net-buttons-bs4';
 import 'datatables.net-buttons';
 
 const Skill = () => {
+  const { addToast } = useToasts()
   const dispatch = useDispatch();
   let history = useHistory();
 
@@ -35,7 +35,7 @@ const Skill = () => {
         .off()
         .on("click", function () {
          dispatch(deleteSkill(sid)).then(res => { 
-           
+           addToast(res.message, { appearance: res.status, autoDismiss: true, })
           $('#datatable').DataTable().row( $(this).closest('tr') ).remove().draw();
           $('.delete-modal').modal("hide");
 
@@ -85,18 +85,9 @@ const Skill = () => {
         },
         { "data": "name" },
         {
-          "data": function (data, type, row) {
+           "data": function (data, type, row) {
 
-            if (data.status == 1) {
-              var status = "Active";
-            } else {
-              var status = "In-Active";
-            }
-
-
-            return status;
-
-
+            return  "<label class='switch'><input "+ ((data.status == 1) ? "checked" :  "" ) +" type='checkbox' class='status_enable' value='true' data-id='"+data._id+"' data-value='"+ ((data.status == 1) ? "1" :  "0" ) +"'> <span class='slider round'></span></label>";
           }
         },
         {
@@ -117,12 +108,27 @@ const Skill = () => {
       ]
     });
 
+    $('body').on('change', '.status_enable', function() {
+
+        var id = $(this).data('id');
+        var value = 0;
+        var fail_status = true;
+
+        if($(this).is(":checked")){
+           value = 1; 
+           fail_status = false;
+        }
+       
+          console.log(id, value);
+
+          dispatch(changeSkillStatus(id, value)).then(res => {
+               addToast(res.message, { appearance: res.status, autoDismiss: true, })
+                if (res.statusCode != 200) $(this).prop('checked', fail_status);
+          })
+
+    });
+
   }, []);
-
-  const [popup, setPopup] = useState(false);
-
-
-
 
 
   return (

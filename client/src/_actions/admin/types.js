@@ -16,3 +16,5 @@ export const GET_LANGUAGES = 'ADMIN_LANGUAGES';
 export const FIND_LANGUAGE = 'ADMIN_LANGUAGE';
 export const GET_COUPONS = 'ADMIN_COUPONS';
 export const FIND_COUPON = 'ADMIN_COUPON';
+export const GET_SLIDES = 'ADMIN_SLIDES';
+export const FIND_SLIDE = 'ADMIN_SLIDE';

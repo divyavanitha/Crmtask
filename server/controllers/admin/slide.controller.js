@@ -3,17 +3,19 @@ const { Admin, validate } = require('../../models/admin');
 
 const mongoose = require('mongoose');
 const Joi = require('@hapi/joi');
-const { Skill } = require('../../models/skill');
+const { Slide } = require('../../models/Slide');
 const _ = require('lodash');
-var db = require('../../services/model.js');
-var helper = require('../../services/helper');
+const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
 dotenv.config({ path: __dirname + '/../../.env' });
+var db = require('../../services/model.js');
+var helper = require('../../services/helper');
 
-exports.createSkill = async (req, res) => {
+exports.createSlide = async (req, res) => {
 
     const schema = Joi.object().options({ abortEarly: false }).keys({
-        name: Joi.string().required().label("Name")
+        title: Joi.string().required().label("Title"),
+        category: Joi.string().required().label("Category")
         
     }).unknown(true);
 
@@ -32,11 +34,12 @@ exports.createSkill = async (req, res) => {
     if (error) return res.status(response.statusCode).json(response);
 
     try {
-        const skill = {
-            name: req.body.name  
+        const slide = {
+            title: req.body.title,
+            category: req.body.category
         }
-
-        let sub = await db._store(Skill, skill);
+         slide.layoutPhoto = req.protocol+ '://' +req.get('host')+"/images/slide/"+(req.files.layoutPhoto[0].filename);
+        let slides = await db._store(Slide, slide);
 
         const response = helper.response({ message: res.__('inserted') });
         return res.status(response.statusCode).json(response);
@@ -53,11 +56,13 @@ exports.createSkill = async (req, res) => {
 
 };
 
-exports.updateSkill = async (req, res) => {
+
+exports.updateSlide = async (req, res) => {
 
     const schema = Joi.object().options({ abortEarly: false }).keys({
-        name: Joi.string().required().label("Name"),
-        id: Joi.string().required().label("Skill Id")
+        title: Joi.string().required().label("Title"),
+        category: Joi.string().required().label("Category"),
+        id: Joi.string().required().label("Slide Id")
     }).unknown(true);
 
     const { error } = schema.validate(req.body);
@@ -75,11 +80,12 @@ exports.updateSkill = async (req, res) => {
     if (error) return res.status(response.statusCode).json(response);
 
     try {
-        const skill = {
-            name: req.body.name 
+        const slide = {
+            title: req.body.title,
+            category: req.body.category
         }
-
-        let sub = await db._update(Skill, { _id: req.body.id }, skill);
+        slide.layoutPhoto = req.protocol+ '://' +req.get('host')+"/images/slide/"+(req.files.layoutPhoto[0].filename);
+        let slides = await db._update(Slide, { _id: req.body.id }, slide);
 
         const response = helper.response({ message: res.__('updated') });
         return res.status(response.statusCode).json(response);
@@ -95,12 +101,13 @@ exports.updateSkill = async (req, res) => {
     }
 }
 
-exports.deleteSkill = async (req, res) => {
-    try {
-        await db._delete(Skill, {"_id":req.params.id});
+exports.deleteSlide = async (req, res) => {
+   try {
+        await db._delete(Slide, {"_id":req.params.id});
 
         const response = helper.response({ message: res.__('deleted') });
         return res.status(response.statusCode).json(response);
+        
     }
     catch (err) {
         if (err[0] != undefined) {
@@ -113,8 +120,9 @@ exports.deleteSkill = async (req, res) => {
     }
 
 };
-exports.listSkill = async (req, res) => {
-     try {
+exports.listSlide = async (req, res) => {
+
+    try {
 
         if(!req.query.length) req.query.length = 10;
         else req.query.length = parseInt(req.query.length);
@@ -122,10 +130,10 @@ exports.listSkill = async (req, res) => {
         else req.query.page = parseInt(req.query.page);
 
         let skip = (req.query.page * req.query.length) - req.query.length;
-
-        let skills = await db._get(Skill, null, null, {limit: req.query.length, skip: skip});
-        let count = await db._count(Skill);
-        const data = { skills };
+        
+        let slides = await db._get(Slide, null, null, {limit: req.query.length, skip: skip});
+        let count = await db._count(Slide);
+        const data = { slides };
 
         const response = helper.response({ data: helper.paginate(req, data, count) });
         return res.status(response.statusCode).json(response);
@@ -135,12 +143,13 @@ exports.listSkill = async (req, res) => {
     }
 
 }
-exports.listSkillbyid = async (req, res) => {
+
+exports.listSlidebyid = async (req, res) => {
     try {
 
-        let skill = await db._find(Skill, {_id:req.params.id});
+        let slide = await db._find(Slide, {_id:req.params.id});
 
-        const data = { skill };
+        const data = { slide };
 
         const response = helper.response({ data: data });
 
@@ -154,11 +163,11 @@ exports.listSkillbyid = async (req, res) => {
 
 exports.changeStatus = async (req, res) => {
     try {
-        const skill = {
+        const slide = {
                 status: req.params.status,
         }
 
-        let skills = await db._update(Skill, { _id: req.params.id }, skill);
+        let slides = await db._update(Slide, { _id: req.params.id }, slide);
 
         const response = helper.response({ message: res.__('updated') });
         return res.status(response.statusCode).json(response);

@@ -10,7 +10,6 @@ import "../../../../assets/admin/css/style.css";
 import "../../../../assets/admin/css/admin-style.css";
 import "../../../../assets/admin/css/admin-customStyle.css";
 
-import Notification from "../common/Notification";
 import Header from "../includes/Header";
 import Sidepanel from "../includes/Sidepanel";
 import AddCategory from "../categories/AddCategory";
@@ -25,6 +24,8 @@ import AddSkill from "../skills/AddSkill";
 import Skill from "../skills/Skill";
 import AddCoupon from "../coupons/AddCoupon";
 import Coupon from "../coupons/Coupon";
+import AddSlide from "../slides/AddSlide";
+import Slide from "../slides/Slide";
 import Dashboard from "../Dashboard";
 
 
@@ -34,8 +35,6 @@ const Base = () => {
     <ToastProvider>
     <div style={{ display: 'table', width: '100%' }}>
       <section className="clearfix admin_footer">Copyright onePress 2020. All Rights Reserved</section>
-
-      <Notification />
       <Sidepanel />
 
       <div className="clearfix"></div>
@@ -66,6 +65,9 @@ const Base = () => {
           <Route path="/admin/promocode/add" component={AddCoupon}></Route>
           <Route path="/admin/promocode/:id/edit" component={AddCoupon}></Route>
           <Route path="/admin/promocode" component={Coupon}></Route>
+          <Route path="/admin/slide/add" component={AddSlide}></Route>
+          <Route path="/admin/slide/:id/edit" component={AddSlide}></Route>
+          <Route path="/admin/slide" component={Slide}></Route>
 
         </Switch>
 

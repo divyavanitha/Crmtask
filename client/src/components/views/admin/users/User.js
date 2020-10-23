@@ -1,15 +1,14 @@
 import React, { Fragment, Dispatch, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import Popup from "reactjs-popup";
-import { addNotification } from "../../../../_actions/admin/notifications.action";
+
 
 import "datatables.net/js/jquery.dataTables.min.js"
 import $ from 'jquery'
 
 const User = () => {
   const dispatch = useDispatch();
-  const [popup, setPopup] = useState(false);
+  
   const products = [{
     id: 1, name: "Chocolate", description: "This is Chocolate and it is Sweet",
     amount: 10, price: 4, hasExpiryDate: true, category: "Sweet"
@@ -122,7 +121,7 @@ const User = () => {
                           <td>{product.category}</td>
                           <td>{product.amount}</td>
                           <td>{product.price}</td>
-                          <td><button className="btn btn-success" onClick={() => { setPopup(true) }}><i className="fa fa-edit"></i></button><button className="btn btn-danger" onClick={() => { setPopup(true) }}><i className="fa fa-remove"></i></button></td>
+                          <td><button className="btn btn-success" ><i className="fa fa-edit"></i></button><button className="btn btn-danger"><i className="fa fa-remove"></i></button></td>
                         </tr>);
                     })}
                   </tbody>
@@ -139,26 +138,6 @@ const User = () => {
 
       </div>
 
-      <Popup
-        className="popup-modal"
-        open={popup}
-        onClose={() => setPopup(false)}
-        closeOnDocumentClick
-      >
-        <div className="popup-modal">
-          <div className="popup-title">
-            Are you sure?
-          </div>
-          <div className="popup-content">
-            <button type="button"
-              className="btn btn-danger"
-              onClick={() => {
-                setPopup(false);
-              }}>Remove
-              </button>
-          </div>
-        </div>
-      </Popup>
 
     </Fragment >
   );

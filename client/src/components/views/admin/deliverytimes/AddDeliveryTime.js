@@ -1,15 +1,16 @@
 import React, { Fragment, useState, FormEvent, Dispatch, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useHistory  } from "react-router-dom";
+import { useToasts } from 'react-toast-notifications'
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 
 import { addDeliveryTime, getDeliveryTimebyId, updateDeliveryTime } from "../../../../_actions/admin/deliverytime.action";
-import { addNotification } from "../../../../_actions/admin/notifications.action";
 
 const AddDeliveryTime = (props) => {
     const dispatch = useDispatch();
+    const { addToast } = useToasts()
     //console.log('param',props.match.params.id);
     
   let history = useHistory();
@@ -48,10 +49,13 @@ const AddDeliveryTime = (props) => {
 
                 if (params.id) {
                     dispatch(updateDeliveryTime(data)).then(res => { 
+                        addToast(res.message, { appearance: res.status, autoDismiss: true, })
                         history.push('/admin/delivery/time')
                     })
                 } else {
-                    dispatch(addDeliveryTime(data));
+                    dispatch(addDeliveryTime(data)).then(res => {
+                        addToast(res.message, { appearance: res.status, autoDismiss: true, })
+                    })
                 }
                 setSubmitting(false);
             }}>

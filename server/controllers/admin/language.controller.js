@@ -151,3 +151,27 @@ exports.listLanguagebyid = async (req, res) => {
     }
 
 }
+
+exports.changeStatus = async (req, res) => {
+    try {
+        const language = {
+                status: req.params.status,
+        }
+
+        let languages = await db._update(Language, { _id: req.params.id }, language);
+
+        const response = helper.response({ message: res.__('updated') });
+        return res.status(response.statusCode).json(response);
+        
+    }
+    catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                res.status(422).send(err.errors[i].message);
+            }
+        } else {
+            res.status(422).send(err);
+        }
+    }
+
+};

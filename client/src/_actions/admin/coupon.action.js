@@ -40,60 +40,48 @@ export const getCouponbyId = (id) => dispatch => {
         );
 };
 
-export const addCoupon = (user) => dispatch => {
-    axios
-        .post('/api/admin/coupon', user)
-        .then(res => {
-            console.log(res.data);
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: res.data.title, message: res.data.message }
-            });
-          
-        }
-        )
-        .catch(e => {
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: e.response.data.title, message: e.response.data.error.message }
-            });
-        });
+export const addCoupon = (user) => async dispatch => {
+    try {
+        let response = await axios.post('/api/admin/coupon', user);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        return e.response.data;
+    }
 };
 
 export const updateCoupon = (user) => async dispatch => {
-    await axios
-        .patch('/api/admin/coupon', user)
-        .then(res => {
-            console.log(res.data);
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: res.data.title, message: res.data.message }
-            });
-        
-        }
-        )
-        .catch(e => {
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: e.response.data.title, message: e.response.data.error.message }
-            });
-        });
+    try {
+        let response = await axios.patch('/api/admin/coupon', user);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        return e.response.data;
+    }
 };
 
 export const deleteCoupon = (id) => async dispatch => {
-    await axios
-        .delete(`/api/admin/coupon/${id}`)
-        .then(res => {
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: res.data.title, message: res.data.message }
-            });
-        }
-        )
-        .catch(e => {
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: e.response.data.title, message: e.response.data.error.message }
-            });
-        });
-}; 
+    try {
+        let response = await axios.delete(`/api/admin/coupon/${id}`);
+        response.data.status = 'success';
+    return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        return e.response.data;
+    }
+};
+
+export const changeCouponStatus = (id, status) => async dispatch => {
+    try {
+        let response = await axios.get(`/api/admin/coupon/changestatus/${id}/${status}`);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        return e.response.data;
+    }
+};  

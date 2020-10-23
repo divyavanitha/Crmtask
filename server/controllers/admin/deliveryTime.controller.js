@@ -152,5 +152,28 @@ exports.listDeliveryTimebyid = async (req, res) => {
         console.log(err);
     }
 
-
 }
+
+exports.changeStatus = async (req, res) => {
+    try {
+        const delivery_time = {
+                status: req.params.status,
+        }
+
+        let delivery_times = await db._update(DeliveryTime, { _id: req.params.id }, delivery_time);
+
+        const response = helper.response({ message: res.__('updated') });
+        return res.status(response.statusCode).json(response);
+        
+    }
+    catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                res.status(422).send(err.errors[i].message);
+            }
+        } else {
+            res.status(422).send(err);
+        }
+    }
+
+};

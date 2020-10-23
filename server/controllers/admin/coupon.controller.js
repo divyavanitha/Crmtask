@@ -171,3 +171,27 @@ exports.listCouponbyid = async (req, res) => {
     }
 
 }
+
+exports.changeStatus = async (req, res) => {
+    try {
+        const coupon = {
+                status: req.params.status,
+        }
+
+        let coupons = await db._update(Coupon, { _id: req.params.id }, coupon);
+
+        const response = helper.response({ message: res.__('updated') });
+        return res.status(response.statusCode).json(response);
+        
+    }
+    catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                res.status(422).send(err.errors[i].message);
+            }
+        } else {
+            res.status(422).send(err);
+        }
+    }
+
+};

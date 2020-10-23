@@ -4,9 +4,6 @@ import { Link } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-
-import { addNotification } from "../../../../_actions/admin/notifications.action";
-
 const AddUser = (props) => {
     const dispatch = useDispatch();
 

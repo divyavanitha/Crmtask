@@ -40,62 +40,48 @@ export const getDeliveryTimebyId = (id) => dispatch => {
         );
 };
 
-export const addDeliveryTime = (user) => dispatch => {
-    axios
-        .post('/api/admin/delivery/time', user)
-        .then(res => {
-            console.log(res.data);
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: res.data.title, message: res.data.message }
-            });
-          
-        }
-        )
-        .catch(e => {
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: e.response.data.title, message: e.response.data.error.message }
-            });
-        });
+export const addDeliveryTime = (user) => async dispatch => {
+    try {
+        let response = await axios.post('/api/admin/delivery/time', user);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        return e.response.data;
+    }
 };
 
 export const updateDeliveryTime = (user) => async dispatch => {
-    await axios
-        .patch('/api/admin/delivery/time', user)
-        .then(res => {
-            console.log(res.data);
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: res.data.title, message: res.data.message }
-            });
-        
-        }
-        )
-        .catch(e => {
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: e.response.data.title, message: e.response.data.error.message }
-            });
-        });
+    try {
+        let response = await axios.patch('/api/admin/delivery/time', user);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        return e.response.data;
+    }
 };
 
 export const deleteDeliveryTime = (id) => async dispatch => {
-   await axios
-        .delete(`/api/admin/delivery/time/${id}`)
-        .then(res => {
-            console.log(res.data);
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: res.data.title, message: res.data.message }
-            });
-          
-        }
-        )
-        .catch(e => {
-            dispatch({
-                type: ADD_NOTIFICATION,
-                payload: { title: e.response.data.title, message: e.response.data.error.message }
-            });
-        });
+    try {
+        let response = await axios.delete(`/api/admin/delivery/time/${id}`);
+        response.data.status = 'success';
+    return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        return e.response.data;
+    }
+}; 
+
+export const changeDeliveryTimeStatus = (id, status) => async dispatch => {
+    try {
+        let response = await axios.get(`/api/admin/delivery/time/changestatus/${id}/${status}`);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        return e.response.data;
+    }
 }; 
