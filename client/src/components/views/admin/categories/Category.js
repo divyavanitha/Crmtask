@@ -48,6 +48,24 @@ const Category = () => {
 
 
     $('#datatable').DataTable({
+      language: {
+        searchPlaceholder: "Search"
+      },
+      fnDrawCallback: function ( oSettings ){
+            if(oSettings.fnRecordsTotal() <= 10){     
+               $('.dataTables_length').hide();
+               $('.dataTables_paginate').hide();
+               $('.dataTables_filter').hide();
+               $('.dataTables_wrapper').addClass('noFilters');
+            } else {
+               $('.dataTables_length').show();
+               $('.dataTables_paginate').show(); 
+               $('.dataTables_filter').show();
+               $('.dataTables_wrapper.noFilters').removeClass('noFilters');
+            }
+      },
+      "bLengthChange": false,
+      "info": false,
       "processing": true,
       "serverSide": true,
       "ajax": {
@@ -90,11 +108,11 @@ const Category = () => {
         },
         {
           "data": function (data, type, row) {
-            var button = `<a href="javascript:;" data-id=` + data._id + ` class="btn btn-danger delete">
-             <i class="fa fa-trash text-white" ></i>
+            var button = `<a href="javascript:;" data-id=` + data._id + ` class="actionBtn delete">
+             <i class="fa fa-trash" ></i>
            </a>
-             <a href="javascript:;" data-id=`+ data._id + ` class="btn btn-success edit">
-             <i class="fa fa-pencil text-white"></i>
+             <a href="javascript:;" data-id=`+ data._id + ` class="actionBtn edit">
+             <i class="fa fa-pencil-square-o"></i>
            </a>`;
 
             return button;
@@ -132,19 +150,10 @@ const Category = () => {
       <div className="container">
         <div className="breadcrumbs">
           <div className="row">
-            <div className="col-sm-4">
+            <div className="col-sm-12">
               <div className="page-header float-left">
                 <div className="page-title">
                   <h1><i className="menu-icon fa fa-cubes"></i> Categories </h1>
-                </div>
-              </div>
-            </div>
-            <div className="col-sm-8">
-              <div className="page-header float-right">
-                <div className="page-title">
-                  <ol className="breadcrumb text-right">
-                    <li className="active"><Link className="btn btn-info" to="/admin/category/add" >Add Category</Link></li>
-                  </ol>
                 </div>
               </div>
             </div>
@@ -152,9 +161,14 @@ const Category = () => {
         </div>
         <div className="row">
           <div className="col-lg-12">
-            <div className="">
+            <div className="box box-block bg-white">
+                <h5 className="mb-1">Categories 
+                <div className="rightBtn-Group">
+                    <Link className="addMoreBtn" to="/admin/category/add" ><span className="txt text-capitalize"> Add New <span className="amIcon"><i className="fa fa-plus"></i></span></span></Link>
+                </div>
+                </h5>
               <div className="">
-                <div className="table-responsive box-table tableContent">
+                <div className="tableContent">
                   <table className="table table-striped" id="datatable">
                     <thead>
                       <tr>

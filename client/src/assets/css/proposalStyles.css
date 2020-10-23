@@ -40,7 +40,10 @@
 .breadcrumbs a:last-child:after{
   content: "";
 }
-
+.breadcrumbs a.btn:after{
+  content: "";
+  display: none;
+}
 .details .proposal-info h3 {
   margin-bottom:5px;
   margin-top:5px;

@@ -76,35 +76,32 @@ const AddCategory = (props) => {
                         <div className="container">
                             <div className="breadcrumbs">
                                 <div className="row">
-                                    <div className="col-sm-4">
+                                    <div className="col-sm-12">
                                         <div className="page-header float-left">
                                             <div className="page-title">
                                                 <h1><i className="menu-icon fa fa-cubes"></i> Categories / {params.id ? "Edit Category" : "Add Category"} </h1>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="col-sm-8">
-                                        <div className="page-header float-right">
-                                            <div className="page-title">
-                                                <ol className="breadcrumb text-right">
-                                                    <li className="active"><Link className="btn btn-info" to="/admin/category" >Back</Link></li>
-                                                </ol>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-lg-12">
-                                    <div className="card">
-                                        <div className="card-header">
-                                            <h4 className="h4">{params.id ? "Edit Category" : "Add Category"}</h4>
-                                        </div>
-                                        <div className="card-body">
+                                <div className="box box-block bg-white">
+                                    <h5 className="mb-1">{params.id ? "Edit Category" : "Add Category"} 
+                                    <div className="rightBtn-Group">
+                                        <Link className="addMoreBtn" to="/admin/category" ><span className="txt text-capitalize"><span className="amIcon"><i className="fa fa-arrow-left"></i></span> Back</span></Link>
+                                    </div>
+                                    </h5>
+
+                                        
+                                        <div className="addFormBox">
                                             <form onSubmit={handleSubmit} encType="multipart/form-data">
                                                 <div className="form-group row">
-                                                    <label className="col-md-4 control-label"> Title : </label>
+                                                    <div className="col-md-4">
+                                                        <label className="control-label"> Title : </label>
+                                                    </div>
+                                                    
                                                     <div className="col-md-6">
                                                         <Field type="text" id="name" name="name" value={values.name} onChange={handleChange} maxLength={100} placeholder="Name" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="name" component="div" className="invalid-feedback" />
@@ -112,17 +109,20 @@ const AddCategory = (props) => {
                                                 </div>
                                                 
                                                 <div className="form-group row">
-                                                    <label className="col-md-4 control-label"></label>
+                                                    <div className="col-md-4">
+                                                        <label className="control-label"></label>
+                                                    </div>
                                                     <div className="col-md-6">
-                                                        {params.id ? <button type="submit" className="btn btn-success">Update</button> : <button type="submit" className="btn btn-success">Save</button>}
-                                                        <Link className="btn btn-danger" to="/admin/category">Cancel</Link>
+                                                        {params.id ? <button type="submit" className="btn btn-success mr-3">Update</button> : <button type="submit" className="btn btn-success mr-3">Save</button>}
+                                                        <Link className="btn btn-outline" to="/admin/category">Cancel</Link>
                                                     </div>
                                                 </div>
                                             </form>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+
+                                </div>
                         </div>
                     </Fragment>
                 );
