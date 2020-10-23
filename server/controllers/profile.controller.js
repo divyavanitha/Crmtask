@@ -1,6 +1,8 @@
 const { User } = require('../models/user');
 const { SubCategory } = require('../models/SubCategory');
 const { Category } = require('../models/category');
+const { DeliveryTime } = require('../models/DeliveryTime');
+const { Coupon } = require('../models/Coupon');
 var helper = require('../services/helper.js');
 var db = require('../services/model.js');
 const Joi = require('@hapi/joi');
@@ -13,7 +15,7 @@ exports.getProfile = async (req, res) => {
     const errors = {};
     try {
 
-        var user = await db._get(User, {_id: req.user._id});
+        var user = await db._get(User, { _id: req.user._id });
         const data = { user };
         const response = helper.response({ data });
         return res.status(response.statusCode).json(response);
@@ -51,7 +53,7 @@ exports.updateProfile = async (req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const response = helper.response({ status: 422, error: errorMessage });
 
     if (error) return res.status(response.statusCode).json(response);
 
@@ -67,11 +69,11 @@ exports.updateProfile = async (req, res) => {
             headline: req.body.headline,
             description: req.body.description,
         }
-//console.log(JSON.stringify(req.files));
-        
-            user.profilePhoto = req.protocol+ '://' +req.get('host')+"/images/user/"+(req.files['profile_photo'][0].filename);
-            user.coverPhoto = req.protocol+ '://' +req.get('host')+"/images/user/"+(req.files['cover_photo'][0].filename);
-      
+        //console.log(JSON.stringify(req.files));
+
+        user.profilePhoto = req.protocol + '://' + req.get('host') + "/images/user/" + (req.files['profile_photo'][0].filename);
+        user.coverPhoto = req.protocol + '://' + req.get('host') + "/images/user/" + (req.files['cover_photo'][0].filename);
+
 
         let users = await db._update(User, { _id: req.body.id }, user);
 
@@ -89,7 +91,7 @@ exports.updateProfile = async (req, res) => {
     }
 }
 
-exports.updateLanguage = async(req, res) => {
+exports.updateLanguage = async (req, res) => {
     const schema = Joi.object().options({ abortEarly: false }).keys({
         id: Joi.string().required().label("User Id"),
         language_id: Joi.array().required().label("Language Id"),
@@ -107,7 +109,7 @@ exports.updateLanguage = async(req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const response = helper.response({ status: 422, error: errorMessage });
 
     if (error) return res.status(response.statusCode).json(response);
 
@@ -117,7 +119,7 @@ exports.updateLanguage = async(req, res) => {
 
         let language = [];
 
-        for(let i in req.body.language_id) {
+        for (let i in req.body.language_id) {
             let lang = {
                 language: req.body.language_id[i],
                 level: req.body.level[i]
@@ -125,7 +127,7 @@ exports.updateLanguage = async(req, res) => {
             language.push(lang);
         }
 
-        if(language.length > 0) user.language = language;
+        if (language.length > 0) user.language = language;
 
         let users = await db._update(User, { _id: req.body.id }, user);
 
@@ -143,7 +145,7 @@ exports.updateLanguage = async(req, res) => {
     }
 }
 
-exports.updateSkill = async(req, res) => {
+exports.updateSkill = async (req, res) => {
     const schema = Joi.object().options({ abortEarly: false }).keys({
         id: Joi.string().required().label("User Id"),
         skill_id: Joi.array().required().label("Skill Id"),
@@ -161,7 +163,7 @@ exports.updateSkill = async(req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const response = helper.response({ status: 422, error: errorMessage });
 
     if (error) return res.status(response.statusCode).json(response);
 
@@ -171,7 +173,7 @@ exports.updateSkill = async(req, res) => {
 
         let skills = [];
 
-        for(let i in req.body.skill_id) {
+        for (let i in req.body.skill_id) {
             let skill = {
                 skill: req.body.skill_id[i],
                 level: req.body.level[i]
@@ -179,7 +181,7 @@ exports.updateSkill = async(req, res) => {
             skills.push(skill);
         }
 
-        if(skills.length > 0) user.skill = skills;
+        if (skills.length > 0) user.skill = skills;
 
         let users = await db._update(User, { _id: req.body.id }, user);
 
@@ -197,7 +199,7 @@ exports.updateSkill = async(req, res) => {
     }
 }
 
-exports.updateEducation = async(req, res) => {
+exports.updateEducation = async (req, res) => {
     const schema = Joi.object().options({ abortEarly: false }).keys({
         id: Joi.string().required().label("User Id"),
         country_id: Joi.array().required().label("Country Id"),
@@ -218,7 +220,7 @@ exports.updateEducation = async(req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const response = helper.response({ status: 422, error: errorMessage });
 
     if (error) return res.status(response.statusCode).json(response);
 
@@ -228,7 +230,7 @@ exports.updateEducation = async(req, res) => {
 
         let education = [];
 
-        for(let i in req.body.country_id) {
+        for (let i in req.body.country_id) {
             let edu = {
                 country: req.body.country_id[i],
                 institute: req.body.institute[i],
@@ -239,7 +241,7 @@ exports.updateEducation = async(req, res) => {
             education.push(edu);
         }
 
-        if(education.length > 0) user.education = education;
+        if (education.length > 0) user.education = education;
 
         let users = await db._update(User, { _id: req.body.id }, user);
 
@@ -257,7 +259,7 @@ exports.updateEducation = async(req, res) => {
     }
 }
 
-exports.updateCertification = async(req, res) => {
+exports.updateCertification = async (req, res) => {
     const schema = Joi.object().options({ abortEarly: false }).keys({
         id: Joi.string().required().label("User Id"),
         certifier: Joi.array().required().label("Certifier"),
@@ -276,7 +278,7 @@ exports.updateCertification = async(req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const response = helper.response({ status: 422, error: errorMessage });
 
     if (error) return res.status(response.statusCode).json(response);
 
@@ -286,7 +288,7 @@ exports.updateCertification = async(req, res) => {
 
         let certification = [];
 
-        for(let i in req.body.name) {
+        for (let i in req.body.name) {
             let certify = {
                 certifier: req.body.certifier[i],
                 name: req.body.name[i],
@@ -295,7 +297,7 @@ exports.updateCertification = async(req, res) => {
             certification.push(certify);
         }
 
-        if(certification.length > 0) user.certification = certification;
+        if (certification.length > 0) user.certification = certification;
 
         let users = await db._update(User, { _id: req.body.id }, user);
 
@@ -329,6 +331,91 @@ exports.listbycategoryToSubCategory = async (req, res) => {
         console.log(err);
     }
 }
+
+exports.listDeliveryTime = async (req, res) => {
+    try {
+
+        let deliveryTime = await db._get(DeliveryTime);
+        const data = { deliveryTime };
+
+        const response = helper.response({ data });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.listCoupon = async (req, res) => {
+
+    try {
+        
+        let coupons = await db._get(Coupon);
+
+        const data = { coupons };
+
+        const response = helper.response({ data });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.createCoupon = async (req, res) => {
+
+    const schema = Joi.object().options({ abortEarly: false }).keys({
+        code: Joi.string().required().label("Promocode"),
+        percentage: Joi.string().required().label("Percentage"),
+        maxAmount: Joi.string().required().label("Maximum Amount"),
+        description: Joi.string().required().label("Description"),
+        expiration: Joi.string().required().label("Expiration"),
+        sellerId: Joi.string().required().label("Seller Id")
+        
+    }).unknown(true);
+
+    const { error } = schema.validate(req.body);
+
+    let errorMessage = {};
+
+    if (error) {
+        error.details.forEach(err => {
+            errorMessage[err.context.key] = (err.message).replace(/"/g, "")
+        })
+    }
+
+    const response = helper.response({ status: 422, error:errorMessage });
+
+    if (error) return res.status(response.statusCode).json(response);
+
+    try {
+        const coupon = {
+            code: req.body.code,
+            percentage: req.body.percentage,
+            maxAmount: req.body.maxAmount,
+            description: req.body.description,
+            expiration: req.body.expiration,
+            sellerId: req.user._id, 
+        }
+
+        let coupons = await db._store(Coupon, coupon);
+
+        const response = helper.response({ message: res.__('inserted') });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                return res.status(422).json(err.errors[i].message);
+            }
+        } else {
+            return res.status(422).json(err);
+        }
+    }
+
+};
 
 exports.findprofile = async (req, res) => {
     const errors = {};
@@ -580,7 +667,45 @@ exports.deleteprofile = async (req, res) => {
 exports.listcategory = async (req, res) => {
     try {
 
-        let categories = await db._get(Category);
+
+        const categories = await Category.aggregate([
+
+            { "$match": { status: true } },
+            { "$project": { name: 1 } },
+            {
+                "$lookup": {
+                    "from": "subcategories",
+                    "let": { "id": "$_id" },
+                    "pipeline": [
+                        {
+
+                            "$match": {
+                                "$expr": {
+                                    "$and": [
+                                        { "$eq": ["$status", true] },
+                                        {
+                                            "$eq": [
+                                                "$$id",
+                                                "$category"
+                                            ]
+                                        }]
+                                }
+
+                            },
+
+                        },
+                        {
+                            "$project": {
+                                "name": 1
+                            }
+                        }
+                    ],
+                    "as": "subCategories"
+                }
+            },
+            { $match: { "subCategories": { $ne: [] } } }
+        ])
+
         const data = { categories };
 
         const response = helper.response({ data });

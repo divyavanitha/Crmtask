@@ -20,25 +20,13 @@ function Header() {
             });*/
 
             //// Categories Dropdown Code
-            $(".top-nav-item").on("mouseover", function () {
-                //alert();
+            $("body").on("mouseover", ".top-nav-item", function () {
                 $(".body-sub-width").addClass("display-none");
                 $(".top-nav-item").removeClass("active");
                 var node_id = $(this).data('node-id');
-                console.log(node_id);
-                $.ajax({
-                      type: 'GET',
-                      url: "/api/subcategory/"+node_id,
-                      dataType: "json",
-                      success: function(data) { 
-                        console.log('dat', data);
-                        console.log($(".body-sub-width").data("node-id", node_id));
-                        $(this).addClass("active");
-                        $(".body-sub-width[data-node-id=" + node_id + "]").removeClass("display-none");
+                $(this).addClass("active");
+                $(".body-sub-width[data-node-id=" + node_id + "]").removeClass("display-none");
 
-                    }
-                });
-                
                 
             });
 

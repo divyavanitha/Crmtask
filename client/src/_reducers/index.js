@@ -10,20 +10,20 @@ import subcategories from './admin/subcategory.reducer';
 import skills from './admin/skill.reducer';
 import deliverytimes from './admin/deliverytime.reducer';
 import languages from './admin/language.reducer';
-import notifications from './admin/notification.reducer';
+import coupons from './admin/coupon.reducer';
 
 const rootReducer = combineReducers({
     user,
     postjob,
     profile,
     admin,
-    notifications,
     menu,
     categories,
     subcategories,
     skills,
     deliverytimes,
     languages,
+    coupons,
     gig
 
 });

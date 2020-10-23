@@ -18,8 +18,7 @@ exports.createCoupon = async (req, res) => {
         percentage: Joi.string().required().label("Percentage"),
         maxAmount: Joi.string().required().label("Maximum Amount"),
         description: Joi.string().required().label("Description"),
-        expiration: Joi.string().required().label("Expiration"),
-        sellerId: Joi.string().required().label("Seller Id")
+        expiration: Joi.string().required().label("Expiration")
         
     }).unknown(true);
 
@@ -72,8 +71,7 @@ exports.updateCoupon = async (req, res) => {
         percentage: Joi.string().required().label("Percentage"),
         maxAmount: Joi.string().required().label("Maximum Amount"),
         description: Joi.string().required().label("Description"),
-        expiration: Joi.string().required().label("Expiration"),
-        sellerId: Joi.string().required().label("Seller Id")
+        expiration: Joi.string().required().label("Expiration")
     }).unknown(true);
 
     const { error } = schema.validate(req.body);
@@ -139,11 +137,18 @@ exports.listCoupon = async (req, res) => {
 
     try {
 
-        let coupons = await db._get(Coupon);
+        if(!req.query.length) req.query.length = 10;
+        else req.query.length = parseInt(req.query.length);
+        if(!req.query.page) req.query.page = 1;
+        else req.query.page = parseInt(req.query.page);
 
+        let skip = (req.query.page * req.query.length) - req.query.length;
+        
+        let coupons = await db._get(Coupon, null, null, {limit: req.query.length, skip: skip});
+        let count = await db._count(Coupon);
         const data = { coupons };
 
-        const response = helper.response({ data });
+        const response = helper.response({ data: helper.paginate(req, data, count) });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -151,26 +156,20 @@ exports.listCoupon = async (req, res) => {
     }
 
 }
+
 exports.listCouponbyid = async (req, res) => {
     try {
-    const errors = {};
-    Coupon.findOne({id: req.params.id})
-    .then(coupon => {
-        if (!coupon) {
-            errors.noCoupon = 'There are no coupon';
-            return res.status(404).json(errors);
-        }
 
-        res.json({coupon});
-    })
-    }    catch (err) {
-        if (err[0] != undefined) {
-            for (i in err.errors) {
-                res.status(422).send(err.errors[i].message);
-            }
-        } else {
-            res.status(422).send(err);
-        }
+        let coupon = await db._find(Coupon, {_id:req.params.id});
+
+        const data = { coupon };
+
+        const response = helper.response({ data: data });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
     }
 
 }

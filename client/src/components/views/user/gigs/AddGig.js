@@ -240,8 +240,8 @@ function AddGig() {
                    <textarea name="message" placeholder="Message" rows="4" className="form-control"></textarea>
                 </div>
                 <div className="alert alert-info">
-                   <p class='mb-1'>Accepted Files: jpeg, jpg, gif, png, tif, avi, mpeg, mpg, mov, rm, 3gp, flv, mp4, zip, rar, mp3, wav, docx, csv, xls, pptx, pdf, txt</p>
-                   <p class='mb-0'>Max Upload Size: 100mb</p>
+                   <p className='mb-1'>Accepted Files: jpeg, jpg, gif, png, tif, avi, mpeg, mpg, mov, rm, 3gp, flv, mp4, zip, rar, mp3, wav, docx, csv, xls, pptx, pdf, txt</p>
+                   <p className='mb-0'>Max Upload Size: 100mb</p>
                 </div>
                 <div className="form-group float-left">
                    <input type="file" id="deliveryFile" name="file" className="mb-3" />

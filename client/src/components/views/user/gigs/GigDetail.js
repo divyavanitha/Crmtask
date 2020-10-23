@@ -12,29 +12,29 @@ function GigDetail() {
         <React.Fragment>
 
 
-            <div class="mp-gig-top-nav">
+            <div className="mp-gig-top-nav">
                 <nav>
-                    <ul class="container text-center" id="mainNav">
-                        <li class="selected">
-                            <a href="#introduction" class="gig-page-nav-link">Introduction</a>
+                    <ul className="container text-center" id="mainNav">
+                        <li className="selected">
+                            <a href="#introduction" className="gig-page-nav-link">Introduction</a>
                         </li>
                         <li>
-                            <a href="#details" class="gig-page-nav-link">Proposal Details</a>
+                            <a href="#details" className="gig-page-nav-link">Proposal Details</a>
                         </li>
                         <li>
-                            <a href="#reviews" class="gig-page-nav-link">Reviews</a>
+                            <a href="#reviews" className="gig-page-nav-link">Reviews</a>
                         </li>
                         <li>
-                            <a href="#related" class="gig-page-nav-link">Related Proposals</a>
+                            <a href="#related" className="gig-page-nav-link">Related Proposals</a>
                         </li>
-                        <li class="btns d-none float-right">
-                            <button class="order-now btn btn-secondary">
-                                Order Now (&#036;<span class='total-price'>10.00</span>)
+                        <li className="btns d-none float-right">
+                            <button className="order-now btn btn-secondary">
+                                Order Now (&#036;<span className='total-price'>10.00</span>)
             </button>
                         </li>
-                        <li class="btns d-none float-right">
-                            <button class="add-to-cart btn btn-secondary">
-                                <i class="fa fa-shopping-cart"></i>
+                        <li className="btns d-none float-right">
+                            <button className="add-to-cart btn btn-secondary">
+                                <i className="fa fa-shopping-cart"></i>
                Add To Cart
             </button>
                         </li>
@@ -42,91 +42,91 @@ function GigDetail() {
                 </nav>
             </div>
 
-            <div class="container mt-5" id="introduction">
+            <div className="container mt-5" id="introduction">
                 {/* <!-- Container starts --> */}
-                <div class="row">
-                    <div class="col-lg-8 col-md-7 mb-3">
+                <div className="row">
+                    <div className="col-lg-8 col-md-7 mb-3">
                         {/* <!--- col-lg-8 col-md-7 mb-3 Starts ---> */}
-                        <div class="wt-projectdetail-holder">
-                            <div class="card rounded-0 mb-4 border-0 bg-none">
-                                <div class="card-body details pt-0">
-                                    <div class="proposal-info ">
+                        <div className="wt-projectdetail-holder">
+                            <div className="card rounded-0 mb-4 border-0 bg-none">
+                                <div className="card-body details pt-0">
+                                    <div className="proposal-info ">
                                         <h3>I Will Create A Professional Custom Explainer Video</h3>
                                         <hr />
-                                        <nav class="breadcrumbs h-text-truncate mb-2">
+                                        <nav className="breadcrumbs h-text-truncate mb-2">
                                             <a href="../../">Home</a>
                                             <a href="../../categories/video-animation"> Video &amp; Animation </a>
                                             <a href="../../categories/video-animation/whiteboard-explainer-videos">
                                                 Whiteboard & Explainer Videos          </a>
                                         </nav>
-                                        <img class='mb-1' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='mb-1' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='mb-1' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='mb-1' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='mb-1' src={ require('../../../../assets/images/user_rate_blank.png')} />         <span class="text-muted span"> (22) &nbsp;309 Order(s) In Queue.</span>
-                                        <div class="sharethis-inline-share-buttons  st-right  st-inline-share-buttons st-animated" style={{marginTop: "-36px"}} id="st-1"><div class="st-btn st-first" data-network="whatsapp" style={{display: "inline-block"}}>
+                                        <img className='mb-1' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='mb-1' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='mb-1' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='mb-1' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='mb-1' src={ require('../../../../assets/images/user_rate_blank.png')} />         <span className="text-muted span"> (22) &nbsp;309 Order(s) In Queue.</span>
+                                        <div className="sharethis-inline-share-buttons  st-right  st-inline-share-buttons st-animated" style={{marginTop: "-36px"}} id="st-1"><div className="st-btn st-first" data-network="whatsapp" style={{display: "inline-block"}}>
                                             <img alt="whatsapp sharing button" src="https://platform-cdn.sharethis.com/img/whatsapp.svg" />
 
-                                        </div><div class="st-btn" data-network="facebook" style={{display: "inline-block"}}>
+                                        </div><div className="st-btn" data-network="facebook" style={{display: "inline-block"}}>
                                                 <img alt="facebook sharing button" src="https://platform-cdn.sharethis.com/img/facebook.svg" />
 
-                                            </div><div class="st-btn" data-network="twitter" style={{display: "inline-block"}}>
+                                            </div><div className="st-btn" data-network="twitter" style={{display: "inline-block"}}>
                                                 <img alt="twitter sharing button" src="https://platform-cdn.sharethis.com/img/twitter.svg" />
 
-                                            </div><div class="st-btn" data-network="linkedin" style={{display: "inline-block"}}>
+                                            </div><div className="st-btn" data-network="linkedin" style={{display: "inline-block"}}>
                                                 <img alt="linkedin sharing button" src="https://platform-cdn.sharethis.com/img/linkedin.svg" />
 
-                                            </div><div class="st-btn" data-network="pinterest" style={{display: "inline-block"}}>
+                                            </div><div className="st-btn" data-network="pinterest" style={{display: "inline-block"}}>
                                                 <img alt="pinterest sharing button" src="https://platform-cdn.sharethis.com/img/pinterest.svg" />
 
-                                            </div><div class="st-btn st-last" data-network="sharethis" style={{display: "inline-block"}}>
+                                            </div><div className="st-btn st-last" data-network="sharethis" style={{display: "inline-block"}}>
                                                 <img alt="sharethis sharing button" src="https://platform-cdn.sharethis.com/img/sharethis.svg" />
 
                                             </div></div>
                                     </div>
 
-                                    <div id="myCarousel" class="carousel slide">
-                                        <ol class="carousel-indicators">
-                                            <li data-target="#myCarousel" data-slide-to="1" class='active'></li>
+                                    <div id="myCarousel" className="carousel slide">
+                                        <ol className="carousel-indicators">
+                                            <li data-target="#myCarousel" data-slide-to="1" className='active'></li>
                                             <li data-target="#myCarousel" data-slide-to="2"></li>
                                             <li data-target="#myCarousel" data-slide-to="3"></li>
                                         </ol>
-                                        <div class="carousel-inner">
-                                            <div class="carousel-item active">
-                                                <img class="d-block w-100" src="https://www.gigtodo.com/proposals/proposal_files/videosales-1.png" />
-                                                <div data-action="img-1" class="slide-fullscreen">Full Screen</div>
+                                        <div className="carousel-inner">
+                                            <div className="carousel-item active">
+                                                <img className="d-block w-100" src="https://www.gigtodo.com/proposals/proposal_files/videosales-1.png" />
+                                                <div data-action="img-1" className="slide-fullscreen">Full Screen</div>
                                             </div>
-                                            <div class="carousel-item">
-                                                <img class="d-block w-100" src="https://www.gigtodo.com/proposals/proposal_files/videosales-2.jpg" />
-                                                <div data-action="img-2" class="slide-fullscreen">Full Screen</div>
+                                            <div className="carousel-item">
+                                                <img className="d-block w-100" src="https://www.gigtodo.com/proposals/proposal_files/videosales-2.jpg" />
+                                                <div data-action="img-2" className="slide-fullscreen">Full Screen</div>
                                             </div>
-                                            <div class="carousel-item">
+                                            <div className="carousel-item">
                                                 {/* <!-- carousel-item Starts --> */}
-                                                <img class="d-block w-100" src="https://www.gigtodo.com/proposals/proposal_files/videosales-3.jpg" />
-                                                <div data-action="img-3" class="slide-fullscreen">Full Screen</div>
+                                                <img className="d-block w-100" src="https://www.gigtodo.com/proposals/proposal_files/videosales-3.jpg" />
+                                                <div data-action="img-3" className="slide-fullscreen">Full Screen</div>
                                             </div>
                                             {/* <!-- carousel-item Ends --> */}
                                         </div>
-                                        <a class="carousel-control-prev slide-nav slide-right" href="#myCarousel" data-slide="prev">
-                                            {/* <!--<span class="carousel-control-prev-icon carousel-icon"></span>--> */}
-                                            <i class="fa fa-angle-left"></i>
+                                        <a className="carousel-control-prev slide-nav slide-right" href="#myCarousel" data-slide="prev">
+                                            {/* <!--<span className="carousel-control-prev-icon carousel-icon"></span>--> */}
+                                            <i className="fa fa-angle-left"></i>
                                         </a>
-                                        <a class="carousel-control-next slide-nav slide-left" href="#myCarousel" data-slide="next">
-                                            {/* <!--<span class="carousel-control-next-icon carousel-icon"></span>--> */}
-                                            <i class="fa fa-angle-right"></i>
+                                        <a className="carousel-control-next slide-nav slide-left" href="#myCarousel" data-slide="next">
+                                            {/* <!--<span className="carousel-control-next-icon carousel-icon"></span>--> */}
+                                            <i className="fa fa-angle-right"></i>
                                         </a>
                                     </div>
-                                    <div class="card mb-0 rounded-0 border-0">
+                                    <div className="card mb-0 rounded-0 border-0">
                                         {/* <!-- card Starts --> */}
-                                        <div class="card-body proposal-slider pb-0 pt-2 pl-0">
+                                        <div className="card-body proposal-slider pb-0 pt-2 pl-0">
                                             {/* <!-- card-body Starts --> */}
-                                            <div class="owl-carousel owl-theme">
+                                            <div className="owl-carousel owl-theme">
                                                 {/* <!--- owl-carousel owl-theme Starts ---> */}
-                                                <div class="item active" data-position="0">
+                                                <div className="item active" data-position="0">
                                                     <a><img src="https://www.gigtodo.com/proposals/proposal_files/videosales-1.png" alt="videosales-1.png" /></a>
                                                 </div>
-                                                <div class="item" data-position="1">
+                                                <div className="item" data-position="1">
                                                     <a>
                                                         <img src="https://www.gigtodo.com/proposals/proposal_files/videosales-2.jpg" alt="videosales-2.jpg" />
                                                     </a>
                                                 </div>
-                                                <div class="item" data-position="2">
+                                                <div className="item" data-position="2">
                                                     <a>
                                                         <img src="https://www.gigtodo.com/proposals/proposal_files/videosales-3.jpg" alt="videosales-3.jpg" />
                                                     </a>
@@ -140,139 +140,139 @@ function GigDetail() {
 
                                 </div>
                             </div>
-                            <div class="card rounded-0 mb-1 " id="details">
-                                <div class="card-header">
+                            <div className="card rounded-0 mb-1 " id="details">
+                                <div className="card-header">
                                     <h4>About This Gig</h4>
                                 </div>
-                                <div class="card-body proposal-desc">
+                                <div className="card-body proposal-desc">
                                     <p>Let's Work Together To Create The Perfect Explainer/Sales/Whiteboard Video for your business</p>
                                     <p>Whether it's a simple whiteboard animation to explain a product or service, or a sales kinetic typography lyric video, this gig have you covered!</p>
                                     <p>The prices listed are per 30,60,90 seconds.</p>
                                     <p>Bringing your idea to life with world-class custom animation at a most affordable price.</p>
                                 </div>
                             </div>
-                            <div class="card proposal-reviews rounded-0 mb-5" id="reviews">
-                                <div class="card-header">
-                                    <h4 class="mb-0 ">
-                                        <div class="float-left">
-                                            <span class="mr-2"> 22 Reviews </span>
-                                            <img class='mb-2' src={ require('../../../../assets/images/user_rate_full_big.png')} />  <img class='mb-2' src={ require('../../../../assets/images/user_rate_full_big.png')} />  <img class='mb-2' src={ require('../../../../assets/images/user_rate_full_big.png')} />  <img class='mb-2' src={ require('../../../../assets/images/user_rate_full_big.png')} />  <img class='mb-2' src={ require('../../../../assets/images/user_rate_blank_big.png')} />  <span class="text-muted ml-2"> 4.8 </span>
+                            <div className="card proposal-reviews rounded-0 mb-5" id="reviews">
+                                <div className="card-header">
+                                    <h4 className="mb-0 ">
+                                        <div className="float-left">
+                                            <span className="mr-2"> 22 Reviews </span>
+                                            <img className='mb-2' src={ require('../../../../assets/images/user_rate_full_big.png')} />  <img className='mb-2' src={ require('../../../../assets/images/user_rate_full_big.png')} />  <img className='mb-2' src={ require('../../../../assets/images/user_rate_full_big.png')} />  <img className='mb-2' src={ require('../../../../assets/images/user_rate_full_big.png')} />  <img className='mb-2' src={ require('../../../../assets/images/user_rate_blank_big.png')} />  <span className="text-muted ml-2"> 4.8 </span>
                                         </div>
-                                        <div class="float-right">
-                                            <button id="dropdown-button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                                        <div className="float-right">
+                                            <button id="dropdown-button" className="btn btn-success dropdown-toggle" data-toggle="dropdown">
                                                 Most Recent        </button>
-                                            <ul class="dropdown-menu proposalDropdown" style={{width: "auto !important"}}>
-                                                <li class="dropdown-item active all">Most Recent</li>
-                                                <li class="dropdown-item good">Positive Reviews</li>
-                                                <li class="dropdown-item bad">Negative Reviews</li>
+                                            <ul className="dropdown-menu proposalDropdown" style={{width: "auto !important"}}>
+                                                <li className="dropdown-item active all">Most Recent</li>
+                                                <li className="dropdown-item good">Positive Reviews</li>
+                                                <li className="dropdown-item bad">Negative Reviews</li>
                                             </ul>
                                         </div>
                                     </h4>
                                 </div>
-                                <div class="card-body ">
-                                    <article id="all" class="proposal-reviews">
-                                        <ul class="reviews-list">
-                                            <li class="star-rating-row">
+                                <div className="card-body ">
+                                    <article id="all" className="proposal-reviews">
+                                        <ul className="reviews-list">
+                                            <li className="star-rating-row">
                                                 {/* <!-- star-rating-row Starts --> */}
-                                                <span class="user-picture" >
+                                                <span className="user-picture" >
                                                     {/* <!-- user-picture Starts --> */}
                                                     <img src={ require('../../../../assets/images/userlisting/img-02.jpg')}  width="60" height="60" />
                                                 </span>
                                                 {/* <!-- user-picture Ends --> */}
                                                 <h4>
                                                     {/* <!-- h4 Starts --> */}
-                                                    <a class="text-success" href="#" class="mr-1"> fixmywebsite </a>
-                                                    <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />
+                                                    <a className="text-success" href="#" className="mr-1"> fixmywebsite </a>
+                                                    <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />
                                                 </h4>
                                                 {/* <!-- h4 Ends --> */}
-                                                <div class="msg-body">
+                                                <div className="msg-body">
                                                     {/* <!-- msg-body Starts --> */}
                                                 </div>
                                                 {/* <!-- msg-body Ends --> */}
-                                                <span class="rating-date"> Aug 17 2020 </span>
+                                                <span className="rating-date"> Aug 17 2020 </span>
                                             </li>
                                             {/* <!-- star-rating-row Ends --> */}
-                                            <li class="star-rating-row">
+                                            <li className="star-rating-row">
                                                 {/* <!-- star-rating-row Starts --> */}
-                                                <span class="user-picture" >
+                                                <span className="user-picture" >
                                                     {/* <!-- user-picture Starts --> */}
                                                     <img src={ require('../../../../assets/images/userlisting/img-02.jpg')}  width="60" height="60" />
                                                 </span>
                                                 {/* <!-- user-picture Ends --> */}
                                                 <h4>
                                                     {/* <!-- h4 Starts --> */}
-                                                    <a class="text-success" href="#" class="mr-1"> fixmywebsite </a>
-                                                    <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />
+                                                    <a className="text-success" href="#" className="mr-1"> fixmywebsite </a>
+                                                    <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />
                                                 </h4>
                                                 {/* <!-- h4 Ends --> */}
-                                                <div class="msg-body">
+                                                <div className="msg-body">
                                                     {/* <!-- msg-body Starts --> */}
                              çok begendim mükemmel
                           </div>
                                                 {/* <!-- msg-body Ends --> */}
-                                                <span class="rating-date"> Aug 15 2020 </span>
+                                                <span className="rating-date"> Aug 15 2020 </span>
                                             </li>
                                             {/* <!-- star-rating-row Ends --> */}
-                                            <li class="star-rating-row">
+                                            <li className="star-rating-row">
                                                 {/* <!-- star-rating-row Starts --> */}
-                                                <span class="user-picture" >
+                                                <span className="user-picture" >
                                                     {/* <!-- user-picture Starts --> */}
                                                     <img src={ require('../../../../assets/images/userlisting/img-02.jpg')}  width="60" height="60" />
                                                 </span>
                                                 {/* <!-- user-picture Ends --> */}
                                                 <h4>
                                                     {/* <!-- h4 Starts --> */}
-                                                    <a class="text-success" href="#" class="mr-1"> fixmywebsite </a>
-                                                    <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />
+                                                    <a className="text-success" href="#" className="mr-1"> fixmywebsite </a>
+                                                    <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />
                                                 </h4>
                                                 {/* <!-- h4 Ends --> */}
-                                                <div class="msg-body">
+                                                <div className="msg-body">
                                                     {/* <!-- msg-body Starts --> */}
                              gret, thanks
                           </div>
                                                 {/* <!-- msg-body Ends --> */}
-                                                <span class="rating-date"> Jun 21 2020 </span>
+                                                <span className="rating-date"> Jun 21 2020 </span>
                                             </li>
                                             {/* <!-- star-rating-row Ends --> */}
-                                            <li class="star-rating-row">
+                                            <li className="star-rating-row">
                                                 {/* <!-- star-rating-row Starts --> */}
-                                                <span class="user-picture" >
+                                                <span className="user-picture" >
                                                     {/* <!-- user-picture Starts --> */}
                                                     <img src={ require('../../../../assets/images/userlisting/img-01.jpg')}  width="60" height="60" />
                                                 </span>
                                                 {/* <!-- user-picture Ends --> */}
                                                 <h4>
                                                     {/* <!-- h4 Starts --> */}
-                                                    <a class="text-success" href="#" class="mr-1"> volarex </a>
-                                                    <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />
+                                                    <a className="text-success" href="#" className="mr-1"> volarex </a>
+                                                    <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />
                                                 </h4>
                                                 {/* <!-- h4 Ends --> */}
-                                                <div class="msg-body">
+                                                <div className="msg-body">
                                                     {/* <!-- msg-body Starts --> */}
                                                 </div>
                                                 {/* <!-- msg-body Ends --> */}
-                                                <span class="rating-date"> Jun 04 2020 </span>
+                                                <span className="rating-date"> Jun 04 2020 </span>
                                             </li>
                                             {/* <!-- star-rating-row Ends --> */}
-                                            <li class="star-rating-row">
+                                            <li className="star-rating-row">
                                                 {/* <!-- star-rating-row Starts --> */}
-                                                <span class="user-picture" >
+                                                <span className="user-picture" >
                                                     {/* <!-- user-picture Starts --> */}
                                                     <img src={ require('../../../../assets/images/userlisting/img-06.jpg')}  width="60" height="60" />
                                                 </span>
                                                 {/* <!-- user-picture Ends --> */}
                                                 <h4>
                                                     {/* <!-- h4 Starts --> */}
-                                                    <a class="text-success" href="#" class="mr-1"> shoail </a>
-                                                    <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img class='rating' src={ require('../../../../assets/images/user_rate_full.png')} />
+                                                    <a className="text-success" href="#" className="mr-1"> shoail </a>
+                                                    <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />
                                                 </h4>
                                                 {/* <!-- h4 Ends --> */}
-                                                <div class="msg-body">
+                                                <div className="msg-body">
                                                     {/* <!-- msg-body Starts --> */}
                              shit
                           </div>
                                                 {/* <!-- msg-body Ends --> */}
-                                                <span class="rating-date"> May 29 2020 </span>
+                                                <span className="rating-date"> May 29 2020 </span>
                                             </li>
                                             {/* <!-- star-rating-row Ends --> */}
 
@@ -284,38 +284,38 @@ function GigDetail() {
 
                                 </div>
                             </div>
-                            <div class="proposal-tags-container mt-2 ">
+                            <div className="proposal-tags-container mt-2 ">
                                 {/* <!--- proposal-tags-container Starts ---> */}
-                                <div class="proposal-tag mb-3" ><a href="../../tags/explainer-video"><span>explainer video</span></a></div>
-                                <div class="proposal-tag mb-3" ><a href="../../tags/-whiteboard-animation"><span> whiteboard animation</span></a></div>
-                                <div class="proposal-tag mb-3" ><a href="../../tags/-sales-video"><span> sales video</span></a></div>
-                                <div class="proposal-tag mb-3" ><a href="../../tags/-Animated-video"><span> Animated video</span></a></div>
-                                <div class="proposal-tag mb-3" ><a href="../../tags/-video-marketing"><span> video marketing</span></a></div>
-                                <div class="proposal-tag mb-3" ><a href="../../tags/-video"><span> video</span></a></div>
+                                <div className="proposal-tag mb-3" ><a href="../../tags/explainer-video"><span>explainer video</span></a></div>
+                                <div className="proposal-tag mb-3" ><a href="../../tags/-whiteboard-animation"><span> whiteboard animation</span></a></div>
+                                <div className="proposal-tag mb-3" ><a href="../../tags/-sales-video"><span> sales video</span></a></div>
+                                <div className="proposal-tag mb-3" ><a href="../../tags/-Animated-video"><span> Animated video</span></a></div>
+                                <div className="proposal-tag mb-3" ><a href="../../tags/-video-marketing"><span> video marketing</span></a></div>
+                                <div className="proposal-tag mb-3" ><a href="../../tags/-video"><span> video</span></a></div>
                             </div>
                             {/* <!--- proposal-tags-container Ends ---> */}
                         </div>
 
                     </div>
                     {/* <!--- col-lg-8 col-md-7 mb-3 Ends ---> */}
-                    <div class="col-lg-4 col-md-5 proposal-sidebar">
+                    <div className="col-lg-4 col-md-5 proposal-sidebar">
                         {/* <!-- Col starts --> */}
-                        <div class="card mb-5">
-                            <div class="card-body order-box tab-content">
+                        <div className="card mb-5">
+                            <div className="card-body order-box tab-content">
                                 {/* <!--- card-body Starts ---> */}
-                                <div class="purchase-form">
+                                <div className="purchase-form">
                                     <form action="../../checkout" id="checkoutForm" method="post">
                                         <input type="hidden" name="proposal_id" value="4" />
                                         <input type="hidden" name="proposal_qty" value="1" />
-                                        <div class="header">
-                                            <span class="text ">
-                                                <span class="dropdown" tabindex="0" data-toggle="popover" data-placement="bottom" data-html="true" data-content="<div class='card border-0'>
-                              <div class='card-body pb-3'>
-                              <h5 class='font-weight-normal mb-3'><strong>How it works</strong> <span class='badge badge-success badge-sm'>SITE RULE</span> </h5>
-                              <div class='price'>
-                              <b class='currency'>&#036;<span>10</span></b>
+                                        <div className="header">
+                                            <span className="text ">
+                                                <span className="dropdown" tabindex="0" data-toggle="popover" data-placement="bottom" data-html="true" data-content="<div className='card border-0'>
+                              <div className='card-body pb-3'>
+                              <h5 className='font-weight-normal mb-3'><strong>How it works</strong> <span className='badge badge-success badge-sm'>SITE RULE</span> </h5>
+                              <div className='price'>
+                              <b className='currency'>&#036;<span>10</span></b>
                               </div>
-                              <p class='h6 line-height-full'>This is the base price. Unless you agree otherwise with seller, the delivered work will be as detailed on this page. Ordering extras may extend the delivery time.</p>
+                              <p className='h6 line-height-full'>This is the base price. Unless you agree otherwise with seller, the delivered work will be as detailed on this page. Ordering extras may extend the delivery time.</p>
                               </div>
                               </div>
                               <script>
@@ -323,97 +323,97 @@ function GigDetail() {
                               $('.popover').css({ 'max-width' : order_box.width() + 'px', left : '155px' });
                               </script>
                               ">Order Details</span>
-                                                <a href="#" class="secure ml-2">
+                                                <a href="#" className="secure ml-2">
 
                                                 </a>
-                                                <a href="#" id="favorite_4" class="favorite ml-2">
-                                                    <i class="fa fa-heart dil1" data-toggle="tooltip" data-placement="top" title="Favorites"></i>
+                                                <a href="#" id="favorite_4" className="favorite ml-2">
+                                                    <i className="fa fa-heart dil1" data-toggle="tooltip" data-placement="top" title="Favorites"></i>
                                                 </a>
                                             </span>
-                                            <div class="price ">
-                                                <b class="currency">
-                                                    &#036;<span class='total-price'>10.00</span>      </b>
+                                            <div className="price ">
+                                                <b className="currency">
+                                                    &#036;<span className='total-price'>10.00</span>      </b>
                                                 <br />
-                                                <span class="total-price-num d-none">10</span>
+                                                <span className="total-price-num d-none">10</span>
                                             </div>
                                         </div>
-                                        <hr class="mt-0" />
-                                            <div class="row">
-                                                <div class="col-12 ml-2 p-2">
-                                                    <h6 class="mb-0 ">
-                                                        <i class="fa fa-clock-o"></i> 1 Day Delivery
+                                        <hr className="mt-0" />
+                                            <div className="row">
+                                                <div className="col-12 ml-2 p-2">
+                                                    <h6 className="mb-0 ">
+                                                        <i className="fa fa-clock-o"></i> 1 Day Delivery
                               &nbsp;&nbsp;
-                              <span class="float-right mr-4">
-                                                            <i class="fa fa-refresh"></i>
+                              <span className="float-right mr-4">
+                                                            <i className="fa fa-refresh"></i>
                               Revisions
                               </span>
                                                     </h6>
                                                 </div>
                                             </div>
                                             <hr />
-                                            <li class="basket-item mb-4">
-                                                <span class="item "><span class="name"><span>Quantity:</span></span></span>
-                                                <div class="quantity-control ">
-                                                    <div class="increase ">
+                                            <li className="basket-item mb-4">
+                                                <span className="item "><span className="name"><span>Quantity:</span></span></span>
+                                                <div className="quantity-control ">
+                                                    <div className="increase ">
 <button>+</button>
                                                     </div>
-                                                    <span class="quantity ">1</span>
-                                                    <div class="decrease ">
+                                                    <span className="quantity ">1</span>
+                                                    <div className="decrease ">
                                                     <button>-</button>
                                                     </div>
                                                 </div>
-                                                {/* <!-- &#036;<span class="total-price">10</span>.00 --> */}
+                                                {/* <!-- &#036;<span className="total-price">10</span>.00 --> */}
                                             </li>
-                                            <button type="submit" name="add_cart" value="1" class="btn btn-order primary mb-3">
-                                                <i class="fa fa-shopping-cart"></i> &nbsp;<strong>Add to Cart</strong>
+                                            <button type="submit" name="add_cart" value="1" className="btn btn-order primary mb-3">
+                                                <i className="fa fa-shopping-cart"></i> &nbsp;<strong>Add to Cart</strong>
                                             </button>
-                                            <button type="submit" name="add_order" value="1" class="btn btn-order">
-                                                {/* <!-- <strong>Order Now (&#036;<span class="total-price">10</span>)</strong> --> */}
-                                                <strong>Order Now (&#036;<span class='total-price'>10.00</span>)</strong>
+                                            <button type="submit" name="add_order" value="1" className="btn btn-order">
+                                                {/* <!-- <strong>Order Now (&#036;<span className="total-price">10</span>)</strong> --> */}
+                                                <strong>Order Now (&#036;<span className='total-price'>10.00</span>)</strong>
                                             </button>
                   </form>
                </div>
                                 </div>
                                 {/* <!--- card-body Ends ---> */}
                             </div>
-                            <div class="card seller-bio mb-3 rounded-0">
-                                <div class="card-body ">
-                                    <center class="mb-4">
-                                        <img src={ require('../../../../assets/images/userlisting/img-06.jpg')}  width="100" class="rounded-circle" />
+                            <div className="card seller-bio mb-3 rounded-0">
+                                <div className="card-body ">
+                                    <center className="mb-4">
+                                        <img src={ require('../../../../assets/images/userlisting/img-06.jpg')}  width="100" className="rounded-circle" />
                                     </center>
-                                    <h3 class="text-center h3">
-                                        <a class="text-success" href="../../mir_digimarket" >
-                                            Mir_digimarket  </a> <span class="divider"> </span> <span class="text-muted">Level Two</span>
+                                    <h3 className="text-center h3">
+                                        <a className="text-success" href="../../mir_digimarket" >
+                                            Mir_digimarket  </a> <span className="divider"> </span> <span className="text-muted">Level Two</span>
                                     </h3>
-                                    <a href="../../conversations/message?seller_id=2" class="btn btn-lg btn-block btn-success rounded-0">Message me</a>
+                                    <a href="../../conversations/message?seller_id=2" className="btn btn-lg btn-block btn-success rounded-0">Message me</a>
                                     <hr />
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <p class="text-muted"><i class="fa fa-check pr-1"></i> From</p>
+                                    <div className="row">
+                                        <div className="col-md-6">
+                                            <p className="text-muted"><i className="fa fa-check pr-1"></i> From</p>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div className="col-md-6">
                                             <p> Ecuador</p>
                                         </div>
-                                        <div class="col-md-6">
-                                            <p class="text-muted"><i class="fa fa-check pr-1"></i>  Speaks</p>
+                                        <div className="col-md-6">
+                                            <p className="text-muted"><i className="fa fa-check pr-1"></i>  Speaks</p>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div className="col-md-6">
                                             <p>
                                                 <span>English </span>
                                             </p>
                                         </div>
-                                        <div class="col-md-6">
-                                            <p class="text-muted"><i class="fa fa-check pr-1"></i>  Positive Reviews</p>
-                                            <p class="text-muted"><i class="fa fa-check pr-1"></i> Recent Delivery</p>
+                                        <div className="col-md-6">
+                                            <p className="text-muted"><i className="fa fa-check pr-1"></i>  Positive Reviews</p>
+                                            <p className="text-muted"><i className="fa fa-check pr-1"></i> Recent Delivery</p>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div className="col-md-6">
                                             <p> 7% </p>
                                             <p> July 31, 2020 </p>
                                         </div>
                                     </div>
                                     <hr />
-                                    <p class="text-left "> It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here. </p>
-                                    <a href="../../mir_digimarket" class="text-success"> Read More </a>
+                                    <p className="text-left "> It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here. </p>
+                                    <a href="../../mir_digimarket" className="text-success"> Read More </a>
                                 </div>
                             </div>
 

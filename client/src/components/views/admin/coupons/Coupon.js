@@ -1,7 +1,7 @@
 import React, { Fragment, Dispatch, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { withRouter, Link, useHistory } from "react-router-dom";
-import { deleteSubCategory, changeSubCategoryStatus } from "../../../../_actions/admin/subcategory.action";
+import { Link, useHistory } from "react-router-dom";
+import { deleteCoupon } from "../../../../_actions/admin/coupon.action";
 
 import $ from 'jquery';
 import 'datatables.net';
@@ -11,8 +11,10 @@ import 'pdfmake/build/vfs_fonts.js';
 import 'datatables.net-buttons-bs4';
 //import 'jszip';
 import 'datatables.net-buttons';
+import "react-datepicker/dist/react-datepicker.css";
 
-const SubCategory = () => {
+
+const Coupon = () => {
   const dispatch = useDispatch();
   let history = useHistory();
 
@@ -21,7 +23,7 @@ const SubCategory = () => {
 
     $('body').on('click', '.edit', function (e) {
       e.preventDefault();
-      history.push('/admin/subcategory/' + $(this).data('id') + '/edit')
+      history.push('/admin/promocode/' + $(this).data('id') + '/edit')
     });
 
     $('body').on('click', '.delete', function (e) {
@@ -32,8 +34,7 @@ const SubCategory = () => {
       $(".delete-modal-btn")
         .off()
         .on("click", function () {
-          console.log(sid);
-         dispatch(deleteSubCategory(sid)).then(res => { 
+         dispatch(deleteCoupon(sid)).then(res => { 
            
           $('#datatable').DataTable().row( $(this).closest('tr') ).remove().draw();
           $('.delete-modal').modal("hide");
@@ -51,7 +52,7 @@ const SubCategory = () => {
       "processing": true,
       "serverSide": true,
       "ajax": {
-        "url": '/api/admin/subcategory',
+        "url": '/api/admin/coupon',
         "type": "GET",
         data: function (data) {
 
@@ -66,13 +67,12 @@ const SubCategory = () => {
         dataFilter: function (response) {
 
           var data = JSON.parse(response);
-
           var json = {};
+
           json.recordsTotal = data.responseData.total;
           json.recordsFiltered = data.responseData.total;
-
-          json.data = data.responseData.data.subcategories;
-           console.log(json);
+          json.data = data.responseData.data.coupons;
+          console.log(json);
           return JSON.stringify(json); // return JSON string
         }
       },
@@ -82,16 +82,21 @@ const SubCategory = () => {
             return meta.row + meta.settings._iDisplayStart + 1;
           }
         },
-        { "data": "name" },
-        {
-          "data": "category", render: function (data, type, row, meta) {
-             return data.name;
-          }
-        },
+        { "data": "code" },
+        { "data": "percentage" },
+        { "data": "maxAmount" },
+        { "data": "expiration" },
         {
           "data": function (data, type, row) {
 
-            return  "<label class='switch'><input "+ ((data.status == 1) ? "checked" :  "" ) +" type='checkbox' class='status_enable' value='true' data-id='"+data._id+"' data-value='"+ ((data.status == 1) ? "1" :  "0" ) +"'> <span class='slider round'></span></label>";
+            if (data.status == 1) {
+              var status = "Active";
+            } else {
+              var status = "In-Active";
+            }
+
+
+            return status;
 
 
           }
@@ -100,7 +105,7 @@ const SubCategory = () => {
           "data": function (data, type, row) {
             var button = `<a href="javascript:;" data-id=` + data._id + ` class="btn btn-danger delete">
              <i class="fa fa-trash text-white" ></i>
-           </a> 
+           </a>
              <a href="javascript:;" data-id=`+ data._id + ` class="btn btn-success edit">
              <i class="fa fa-pencil text-white"></i>
            </a>`;
@@ -114,26 +119,8 @@ const SubCategory = () => {
       ]
     });
 
-    $('body').on('change', '.status_enable', function() {
-
-        var id = $(this).data('id');
-        var value = 0;
-        var fail_status = true;
-
-        if($(this).is(":checked")){
-           value = 1; 
-           fail_status = false;
-        }
-       
-          console.log(id, value);
-
-          dispatch(changeSubCategoryStatus(id, value)).catch(err => {
-              $(this).find('.status_enable').prop('checked', fail_status);
-          })
-
-    });
-
   }, []);
+
 
 
   return (
@@ -151,7 +138,7 @@ const SubCategory = () => {
             <div className="col-sm-4">
               <div className="page-header float-left">
                 <div className="page-title">
-                  <h1><i className="menu-icon fa fa-cubes"></i> SubCategories </h1>
+                  <h1><i className="menu-icon fa fa-cubes"></i> Promocodes </h1>
                 </div>
               </div>
             </div>
@@ -159,7 +146,7 @@ const SubCategory = () => {
               <div className="page-header float-right">
                 <div className="page-title">
                   <ol className="breadcrumb text-right">
-                    <li className="active"><Link className="btn btn-info" to="/admin/subcategory/add" >Add SubCategory</Link></li>
+                    <li className="active"><Link className="btn btn-info" to="/admin/promocode/add" >Add Promocode</Link></li>
                   </ol>
                 </div>
               </div>
@@ -174,9 +161,11 @@ const SubCategory = () => {
                   <table className="table table-striped" id="datatable">
                     <thead>
                       <tr>
-                       <th>Id</th>
-                        <th>Name</th>
-                        <th>Category</th>
+                        <th>#Id</th>
+                        <th>Promocode</th>
+                        <th>Percentage</th>
+                        <th>Maximum Amount</th>
+                        <th>Expiration</th>
                         <th>Status</th>
                         <th>Action</th>
                       </tr>
@@ -214,4 +203,4 @@ const SubCategory = () => {
   );
 };
 
-export default SubCategory;
+export default Coupon;

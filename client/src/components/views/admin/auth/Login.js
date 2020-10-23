@@ -4,7 +4,6 @@ import { Redirect, withRouter, useHistory } from "react-router-dom";
 import { login } from "../../../../_actions/admin/auth.action";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import Notifications from "../common/Notification";
 
 const Login = (props) => {
     const dispatch = useDispatch();
@@ -46,7 +45,7 @@ const Login = (props) => {
 
                 return (
                     <div className="container">
-                        <Notifications />
+
                         <div className="row justify-content-center">
                             <div className="col-xl-5 col-lg-5">
                                 <div className="card o-hidden border-0 shadow-lg my-5">

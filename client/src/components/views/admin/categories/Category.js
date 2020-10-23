@@ -1,9 +1,8 @@
 import React, { Fragment, Dispatch, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { withRouter, Link, useHistory } from "react-router-dom";
-import Popup from "reactjs-popup";
-import { addNotification } from "../../../../_actions/admin/notifications.action";
-import { getCategories, deleteCategory } from "../../../../_actions/admin/category.action";
+import { Link, useHistory } from "react-router-dom";
+import { useToasts } from 'react-toast-notifications'
+import { deleteCategory, changeCategoryStatus } from "../../../../_actions/admin/category.action";
 
 import $ from 'jquery';
 import 'datatables.net';
@@ -15,6 +14,7 @@ import 'datatables.net-buttons-bs4';
 import 'datatables.net-buttons';
 
 const Category = () => {
+  const { addToast } = useToasts()
   const dispatch = useDispatch();
   let history = useHistory();
 
@@ -30,19 +30,18 @@ const Category = () => {
       e.preventDefault();
       const sid = $(this).data('id');
       console.log($(this).closest('tr'));
-       $('.delete-modal').modal("show");
+      $('.delete-modal').modal("show");
       $(".delete-modal-btn")
         .off()
         .on("click", function () {
-         dispatch(deleteCategory(sid)).then(res => { 
-           
-          $('#datatable').DataTable().row( $(this).closest('tr') ).remove().draw();
-          $('.delete-modal').modal("hide");
+          dispatch(deleteCategory(sid)).then(res => {
+            addToast(res.message, { appearance: res.status, autoDismiss: true, })
+            $('#datatable').DataTable().row($(this).closest('tr')).remove().draw(false);
+            $('.delete-modal').modal("hide");
 
           })
-          
-         // 
-        }); 
+
+        });
     });
 
 
@@ -103,24 +102,15 @@ const Category = () => {
         { "data": "name" },
         {
           "data": function (data, type, row) {
-
-            if (data.status == 1) {
-              var status = "Active";
-            } else {
-              var status = "In-Active";
-            }
-
-
-            return status;
-
-
+            console.log(data.status);
+            return "<label class='switch'><input " + ((data.status == 1) ? "checked" : "") + " type='checkbox' class='status_enable' value='true' data-id='" + data._id + "' data-value='" + ((data.status == 1) ? "1" : "0") + "'> <span class='slider round'></span></label>";
           }
         },
         {
           "data": function (data, type, row) {
             var button = `<a href="javascript:;" data-id=` + data._id + ` class="actionBtn delete">
              <i class="fa fa-trash" ></i>
-           </a> &nbsp;
+           </a>
              <a href="javascript:;" data-id=`+ data._id + ` class="actionBtn edit">
              <i class="fa fa-pencil-square-o"></i>
            </a>`;
@@ -134,22 +124,28 @@ const Category = () => {
       ]
     });
 
+    $('body').on('change', '.status_enable', function () {
+
+      var id = $(this).data('id');
+      var value = 0;
+      var fail_status = true;
+
+      if ($(this).is(":checked")) {
+        value = 1;
+        fail_status = false;
+      }
+
+      dispatch(changeCategoryStatus(id, value)).then(res => {
+
+        addToast(res.message, { appearance: res.status, autoDismiss: true, })
+        if (res.statusCode != 200) $(this).prop('checked', fail_status);
+      })
+    });
+
   }, []);
-
-  const [popup, setPopup] = useState(false);
-
-
-
-
 
   return (
     <Fragment>
-
-
-
-
-
-
 
       <div className="container">
         <div className="breadcrumbs">
@@ -198,9 +194,7 @@ const Category = () => {
             <div className="modal-header">
               <h4 className="modal-title">Confirm Delete</h4>
             </div>
-            <div className="modal-body p-2">
-              Are you sure want to delete?
-                                        </div>
+            <div className="modal-body p-2"> Are you sure want to delete? </div>
             <div className="modal-footer">
               <button type="button" className="btn default" data-dismiss="modal">Close</button>
               <button type="button" data-value="1" className="btn btn-danger delete-modal-btn">Delete</button>
@@ -210,7 +204,7 @@ const Category = () => {
         </div>
 
       </div>
-
+      
     </Fragment >
   );
 };

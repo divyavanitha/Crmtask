@@ -26,7 +26,6 @@ export const getSubCategorybyId = (id) => dispatch => {
     axios
         .get(`/api/admin/get/subcategory/${id}`)
         .then(res => {
-            console.log('cat', res.data);
             dispatch({
                 type: FIND_SUB_CATEGORY,
                 payload: res.data
@@ -61,8 +60,8 @@ export const addSubCategory = (user) => dispatch => {
         });
 };
 
-export const updateSubCategory = (user) => dispatch => {
-    axios
+export const updateSubCategory = (user) => async dispatch => {
+    await axios
         .patch('/api/admin/subcategory', user)
         .then(res => {
             console.log(res.data);
@@ -81,8 +80,8 @@ export const updateSubCategory = (user) => dispatch => {
         });
 };
 
-export const deleteSubCategory = (id) => dispatch => {
-    axios
+export const deleteSubCategory = (id) => async dispatch => {
+    await axios
         .delete(`/api/admin/subcategory/${id}`)
         .then(res => {
             console.log(res.data);
@@ -98,5 +97,24 @@ export const deleteSubCategory = (id) => dispatch => {
                 type: ADD_NOTIFICATION,
                 payload: { title: e.response.data.title, message: e.response.data.error.message }
             });
+        });
+}; 
+
+export const changeSubCategoryStatus = (id, status) => async dispatch => {
+    await axios
+        .get(`/api/admin/subcategory/changestatus/${id}/${status}`)
+        .then(res => {
+            dispatch({
+                type: ADD_NOTIFICATION,
+                payload: { title: res.data.title, message: res.data.message }
+            });
+        }
+        )
+        .catch(e => {
+            dispatch({
+                type: ADD_NOTIFICATION,
+                payload: { title: e.response.data.title, message: e.response.data.error.message }
+            });
+            throw e;
         });
 }; 

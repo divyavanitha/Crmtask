@@ -2,47 +2,47 @@ import axios from "axios";
 import setAuthToken from "../../components/utils/set_admin_token";
 import jwt_decode from "jwt-decode";
 
-import { GET_SKILLS, FIND_SKILL, ADD_NOTIFICATION } from "./types";
+import { GET_COUPONS, FIND_COUPON, ADD_NOTIFICATION } from "./types";
 
-export const getSkills = () => dispatch => {
+export const getCoupons = () => dispatch => {
     axios
-        .get('/api/admin/skill')
+        .get('/api/admin/coupon')
         .then(res => {
             dispatch({
-                type: GET_SKILLS,
+                type: GET_COUPONS,
                 payload: res.data
             })
         }
         )
         .catch(e =>
             dispatch({
-                type: GET_SKILLS,
+                type: GET_COUPONS,
                 payload: null
             })
         );
 };
 
-export const getSkillbyId = (id) => dispatch => {
+export const getCouponbyId = (id) => dispatch => {
     axios
-        .get(`/api/admin/get/skill/${id}`)
+        .get(`/api/admin/get/coupon/${id}`)
         .then(res => {
             dispatch({
-                type: FIND_SKILL,
+                type: FIND_COUPON,
                 payload: res.data
             })
         }
         )
         .catch(e =>
             dispatch({
-                type: FIND_SKILL,
+                type: FIND_COUPON,
                 payload: null
             })
         );
 };
 
-export const addSkill = (user) => dispatch => {
+export const addCoupon = (user) => dispatch => {
     axios
-        .post('/api/admin/skill', user)
+        .post('/api/admin/coupon', user)
         .then(res => {
             console.log(res.data);
             dispatch({
@@ -60,9 +60,9 @@ export const addSkill = (user) => dispatch => {
         });
 };
 
-export const updateSkill = (user) => async dispatch => {
+export const updateCoupon = (user) => async dispatch => {
     await axios
-        .patch('/api/admin/skill', user)
+        .patch('/api/admin/coupon', user)
         .then(res => {
             console.log(res.data);
             dispatch({
@@ -80,16 +80,14 @@ export const updateSkill = (user) => async dispatch => {
         });
 };
 
-export const deleteSkill = (id) => async dispatch => {
+export const deleteCoupon = (id) => async dispatch => {
     await axios
-        .delete(`/api/admin/skill/${id}`)
+        .delete(`/api/admin/coupon/${id}`)
         .then(res => {
-            console.log(res.data);
             dispatch({
                 type: ADD_NOTIFICATION,
                 payload: { title: res.data.title, message: res.data.message }
             });
-          
         }
         )
         .catch(e => {

@@ -51,6 +51,9 @@ router.delete('/category/:id', function(req, res){
 router.get('/get/category/:id', function(req, res){
   categoryController.listcategorybyid(req, res);
 });
+router.get('/category/changestatus/:id/:status', function(req, res){
+  categoryController.changeStatus(req, res);
+});
 
 
 router.get('/subcategory', (req, res) => {
@@ -68,6 +71,10 @@ router.delete('/subcategory/:id', function(req, res){
 router.get('/get/subcategory/:id', function(req, res){
   subcategoryController.listSubCategorybyid(req, res);
 });
+router.get('/subcategory/changestatus/:id/:status', function(req, res){
+  subcategoryController.changeStatus(req, res);
+});
+
 
 router.get('/skill', (req, res) => {
   skillController.listSkill(req, res);
@@ -117,6 +124,23 @@ router.delete('/language/:id', function(req, res){
 });
 router.get('/get/language/:id', function(req, res){
   languageController.listLanguagebyid(req, res);
+});
+
+
+router.get('/coupon', (req, res) => {
+  couponController.listCoupon(req, res);
+});
+router.post('/coupon', function(req, res){
+  couponController.createCoupon(req, res);
+});
+router.patch('/coupon', function(req, res){
+  couponController.updateCoupon(req, res);
+});
+router.delete('/coupon/:id', function(req, res){
+  couponController.deleteCoupon(req, res);
+});
+router.get('/get/coupon/:id', function(req, res){
+  couponController.listCouponbyid(req, res);
 });
 
 module.exports = router;

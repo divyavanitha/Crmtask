@@ -217,7 +217,42 @@ table.dataTable td, table.dataTable th {
     padding: 15px 10px;
     font-size: 13px;
 }
-.tableContent table.table tbody tr td .actionBtn{}
+.tableContent table.table tbody tr td .actionBtn{
+    margin-right: 10px;
+}
 .tableContent table.table tbody tr td .actionBtn i{
-    font-size: 16px;
+    font-size: 18px;
+    line-height: 0;
+}
+.tableContent table.table tbody tr td .actionBtn i.fa.fa-pencil-square-o {
+    position: relative;
+    top: 1px;
+}
+.tableContent table.table tbody tr td{}
+.tableContent table.table tbody tr td input:checked+.slider{}
+.tableContent table.table tbody tr td .slider{ border-radius: 50px;}
+.tableContent table.table tbody tr td .slider:before{ border-radius: 50px; bottom: 4px;}
+.tableContent table.table tbody tr td input[type=checkbox]+.slider:after{
+    content: "";
+    display: inline-block;
+    border-radius: 50%;
+    font-family: fontawesome;
+    font-size: 10px;
+    align-items: center;
+    justify-content: center;
+    color: #3a6cff;
+    margin-top: 0px;
+    position: absolute;
+    /* right: 8px; */
+    top: 4px;
+    transition: .4s;
+}
+.tableContent table.table tbody tr td input:checked+.slider {
+    background-color: #3a6cff;
+}
+
+.tableContent table.table tbody tr td input[type=checkbox]:checked+.slider:after {
+    left: 6px;
+    transform: translateX(30px);
+    content: "\f00c";
 }

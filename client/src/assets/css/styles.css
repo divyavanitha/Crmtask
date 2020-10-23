@@ -23,6 +23,10 @@ html {
 	z-index: -1;
 }
 
+.react-datepicker__input-container input {
+	width: 563px !important;
+}
+
 #un-button.un-left.css3 {
 	left: -46px;
 	top: 65%;

@@ -24,11 +24,11 @@ const couponSchema = mongoose.Schema({
         required: true
     },
     sellerId:{
-        type: String,
-        required: true
+        type: String
     },
     status:{
-        type: Boolean
+        type: Boolean,
+        default: true
     },
     created_at: {
         type: Date,
