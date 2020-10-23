@@ -17,7 +17,6 @@ function Nav() {
 
     const category = useSelector(state => state.user.category);
     const category_list = category && category.responseData.categories;
-    console.log('cat',category_list);
 
     return (
 

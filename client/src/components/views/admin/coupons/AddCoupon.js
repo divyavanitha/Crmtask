@@ -33,7 +33,6 @@ const AddCategory = (props) => {
 
     }, [params.id]);
     const coupon = useSelector(state => state.coupons && state.coupons.coupon && state.coupons.coupon.responseData.coupon);
-    console.log('cats', coupon);
 
     return (
 

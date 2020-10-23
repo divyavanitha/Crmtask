@@ -1,4 +1,5 @@
 import React, { useState, FormEvent, Dispatch } from "react";
+import { ToastProvider } from 'react-toast-notifications'
 import { Switch, Route } from "react-router";
 
 import "../../../../assets/css/bootstrap.css";
@@ -9,6 +10,7 @@ import "../../../../assets/admin/css/style.css";
 import "../../../../assets/admin/css/admin-style.css";
 import "../../../../assets/admin/css/admin-customStyle.css";
 
+import Notification from "../common/Notification";
 import Header from "../includes/Header";
 import Sidepanel from "../includes/Sidepanel";
 import AddCategory from "../categories/AddCategory";
@@ -29,10 +31,11 @@ import Dashboard from "../Dashboard";
 const Base = () => {
 
   return (
+    <ToastProvider>
     <div style={{ display: 'table', width: '100%' }}>
       <section className="clearfix admin_footer">Copyright onePress 2020. All Rights Reserved</section>
 
-
+      <Notification />
       <Sidepanel />
 
       <div className="clearfix"></div>
@@ -68,7 +71,7 @@ const Base = () => {
 
       </div>
     </div>
-
+    </ToastProvider>
 
   );
 };

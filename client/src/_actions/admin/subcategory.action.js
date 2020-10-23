@@ -26,7 +26,6 @@ export const getSubCategorybyId = (id) => dispatch => {
     axios
         .get(`/api/admin/get/subcategory/${id}`)
         .then(res => {
-            console.log('cat', res.data);
             dispatch({
                 type: FIND_SUB_CATEGORY,
                 payload: res.data

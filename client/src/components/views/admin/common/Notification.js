@@ -1,9 +1,13 @@
 import React, { Dispatch } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeNotification } from "../../../../_actions/admin/notifications.action";
+import { useToasts } from 'react-toast-notifications'
+import './Notification.css'
 
-const Notifications = () => {
+const Notification = () => {
   const dispatch = useDispatch();
+    const { addToast } = useToasts()
+    
   const notifications = useSelector((state) =>
     state.notifications.notifications);
 
@@ -15,7 +19,7 @@ const Notifications = () => {
     return (
       <div className="toast" key={`notification_${notification.id}`}>
         <div className="toast-header">
-          <i className="fas fa-fw fa-bell"></i>
+          <i className="fa fa-bell"></i>
           <strong className="mr-auto">{notification.title}</strong>
           <small>{notification.date.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' })}</small>
           <button type="button"
@@ -40,4 +44,4 @@ const Notifications = () => {
   );
 };
 
-export default Notifications;
+export default Notification;
