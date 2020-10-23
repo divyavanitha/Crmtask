@@ -6,7 +6,6 @@ import * as Yup from 'yup';
 
 
 import { addSkill, getSkillbyId, updateSkill } from "../../../../_actions/admin/skill.action";
-import { addNotification } from "../../../../_actions/admin/notifications.action";
 
 const AddDeliveryTime = (props) => {
     const dispatch = useDispatch();

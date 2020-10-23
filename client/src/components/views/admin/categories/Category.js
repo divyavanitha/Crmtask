@@ -35,7 +35,7 @@ const Category = () => {
         .off()
         .on("click", function () {
           dispatch(deleteCategory(sid)).then(res => {
-            addToast(res.message, { appearance: 'success', autoDismiss: true, })
+            addToast(res.message, { appearance: res.status, autoDismiss: true, })
             $('#datatable').DataTable().row($(this).closest('tr')).remove().draw(false);
             $('.delete-modal').modal("hide");
 

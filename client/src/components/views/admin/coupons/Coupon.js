@@ -1,8 +1,6 @@
 import React, { Fragment, Dispatch, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { withRouter, Link, useHistory } from "react-router-dom";
-import Popup from "reactjs-popup";
-import { addNotification } from "../../../../_actions/admin/notifications.action";
+import { Link, useHistory } from "react-router-dom";
 import { deleteCoupon } from "../../../../_actions/admin/coupon.action";
 
 import $ from 'jquery';
@@ -122,10 +120,6 @@ const Coupon = () => {
     });
 
   }, []);
-
-  const [popup, setPopup] = useState(false);
-
-
 
 
 

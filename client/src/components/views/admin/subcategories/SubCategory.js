@@ -1,8 +1,6 @@
 import React, { Fragment, Dispatch, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { withRouter, Link, useHistory } from "react-router-dom";
-import Popup from "reactjs-popup";
-import { addNotification } from "../../../../_actions/admin/notifications.action";
 import { deleteSubCategory, changeSubCategoryStatus } from "../../../../_actions/admin/subcategory.action";
 
 import $ from 'jquery';
@@ -136,11 +134,6 @@ const SubCategory = () => {
     });
 
   }, []);
-
-  const [popup, setPopup] = useState(false);
-
-
-
 
 
   return (

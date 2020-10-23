@@ -7,7 +7,6 @@ import * as Yup from 'yup';
 
 import { addSubCategory, getSubCategorybyId, updateSubCategory } from "../../../../_actions/admin/subcategory.action";
 import { getCategories } from "../../../../_actions/admin/category.action";
-import { addNotification } from "../../../../_actions/admin/notifications.action";
 
 const AddSubCategory = (props) => {
     const dispatch = useDispatch();

@@ -6,7 +6,6 @@ import * as Yup from 'yup';
 
 
 import { addLanguage, getLanguagebyId, updateLanguage } from "../../../../_actions/admin/language.action";
-import { addNotification } from "../../../../_actions/admin/notifications.action";
 
 const AddLanguage = (props) => {
     const dispatch = useDispatch();

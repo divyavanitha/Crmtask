@@ -42,6 +42,7 @@ export const addCategory = (user) => async dispatch => {
         return response.data;
     } catch(e) {
         e.response.data.status = 'error';
+        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };
@@ -53,6 +54,7 @@ export const updateCategory = (user) => async dispatch => {
         return response.data;
     } catch(e) {
         e.response.data.status = 'error';
+        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };

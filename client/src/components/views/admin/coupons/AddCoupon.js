@@ -7,7 +7,6 @@ import * as Yup from 'yup';
 import $ from 'jquery';
 
 import { addCoupon, getCouponbyId, updateCoupon } from "../../../../_actions/admin/coupon.action";
-import { addNotification } from "../../../../_actions/admin/notifications.action";
 
 const AddCategory = (props) => {
     const dispatch = useDispatch();

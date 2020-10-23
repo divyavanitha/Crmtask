@@ -1,8 +1,6 @@
 import React, { Fragment, Dispatch, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { withRouter, Link, useHistory } from "react-router-dom";
-import Popup from "reactjs-popup";
-import { addNotification } from "../../../../_actions/admin/notifications.action";
 import { deleteLanguage } from "../../../../_actions/admin/language.action";
 
 import $ from 'jquery';
@@ -117,11 +115,6 @@ const Language = () => {
     });
 
   }, []);
-
-  const [popup, setPopup] = useState(false);
-
-
-
 
 
   return (

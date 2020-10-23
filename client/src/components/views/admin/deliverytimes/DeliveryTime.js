@@ -1,8 +1,6 @@
 import React, { Fragment, Dispatch, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { withRouter, Link, useHistory } from "react-router-dom";
-import Popup from "reactjs-popup";
-import { addNotification } from "../../../../_actions/admin/notifications.action";
 import { deleteDeliveryTime } from "../../../../_actions/admin/deliverytime.action";
 
 import $ from 'jquery';
@@ -118,11 +116,6 @@ const DeliveryTime = () => {
     });
 
   }, []);
-
-  const [popup, setPopup] = useState(false);
-
-
-
 
 
   return (

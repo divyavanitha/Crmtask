@@ -1,8 +1,6 @@
 import React, { Fragment, Dispatch, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { withRouter, Link, useHistory } from "react-router-dom";
-import Popup from "reactjs-popup";
-import { addNotification } from "../../../../_actions/admin/notifications.action";
 import { deleteSkill } from "../../../../_actions/admin/skill.action";
 
 import $ from 'jquery';
@@ -118,11 +116,6 @@ const Skill = () => {
     });
 
   }, []);
-
-  const [popup, setPopup] = useState(false);
-
-
-
 
 
   return (
