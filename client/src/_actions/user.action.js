@@ -9,8 +9,10 @@ import {
     GET_ALLPOSTJOB,
     GET_MENUS,
     GET_CATEGORY,
-    GET_SUBCATEGORY
-    // SET_CURRENT_USER 
+    GET_SUBCATEGORY,
+    GET_SLIDES,
+    GET_GIGS,
+    FIND_GIG
 } from './types';
 
 export const login = (data) => async dispatch => {
@@ -145,3 +147,43 @@ export const getSubCategory = (id) => async dispatch => {
 
     //return subcategory.data;
 }
+
+export const getSlide = (data) => async dispatch => {
+
+    let slide = await axios.get("/api/slide", data);
+
+    dispatch({
+        type: GET_SLIDES,
+        payload: slide.data
+    });
+
+};
+
+export const getGigWithoutAuth = (data) => async dispatch => {
+
+    let gig = await axios.get("/api/list/gigs", data);
+
+    dispatch({
+        type: GET_GIGS,
+        payload: gig.data
+    });
+
+};
+
+export const getGigbyId = (id) => dispatch => {
+    axios
+        .get(`/api/get/gig/details/${id}`)
+        .then(res => {
+            dispatch({
+                type: FIND_GIG,
+                payload: res.data
+            })
+        }
+        )
+        .catch(e =>
+            dispatch({
+                type: FIND_GIG,
+                payload: null
+            })
+        );
+};

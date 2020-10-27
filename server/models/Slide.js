@@ -9,8 +9,7 @@ const slideSchema = mongoose.Schema({
         required: true
     },
     description:{
-        type: String,
-        required: true
+        type: String
     },
     layoutPhoto: {
         type: String,

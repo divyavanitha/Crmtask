@@ -3,6 +3,7 @@ const { SubCategory } = require('../models/SubCategory');
 const { Category } = require('../models/category');
 const { DeliveryTime } = require('../models/DeliveryTime');
 const { Coupon } = require('../models/Coupon');
+const { Slide } = require('../models/Slide');
 var helper = require('../services/helper.js');
 var db = require('../services/model.js');
 const Joi = require('@hapi/joi');
@@ -417,6 +418,24 @@ exports.createCoupon = async (req, res) => {
 
 };
 
+exports.listSlide = async (req, res) => {
+
+    try {
+        
+        let slides = await db._get(Slide);
+
+        const data = { slides };
+
+        const response = helper.response({ data });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+
 exports.findprofile = async (req, res) => {
     const errors = {};
 
@@ -431,74 +450,6 @@ exports.findprofile = async (req, res) => {
         })
         .catch(err => res.status(404).json(err));
 }
-
-/* exports.createprofile = async (req, res) => {
-    //  const { errors, isValid } = validateProfileInput(req.body);
-
-    const { error } = validate(req.body);
-    const errors = {};
-    if (error) {
-        for (let err of error.details) {
-            errors[err.path[0]] = (err.message).replace(/"/g, "");
-        }
-    }
-    if (error) return res.status(422).json(errors);
-
-    // Get fields
-    const profileFields = {};
-    profileFields.user = req.user._id;
-
-    // if (req.body.handle) profileFields.handle = req.body.handle;
-    if (req.body.company) profileFields.company = req.body.company;
-    if (req.body.website) profileFields.website = req.body.website;
-    if (req.body.bio) profileFields.bio = req.body.bio;
-    if (req.body.address) profileFields.bio = req.body.address;
-    //if (req.body.location) profileFields.location = req.body.location;
-    //  if (req.body.status) profileFields.status = req.body.status;
-    // if (req.body.From) profileFields.From = req.body.From;
-
-    if (req.body.githubusername)
-        profileFields.githubusername = req.body.githubusername;
-    // Skills - Spilt into array
-    if (req.body.experience) {
-
-    }
-    if (typeof req.body.skills !== 'undefined') {
-        profileFields.skills = req.body.skills.toString().split(',');
-        console.log(profileFields.skills);
-    }
-    // Social
-    profileFields.social = {};
-    if (req.body.youtube) profileFields.social.youtube = req.body.youtube;
-    if (req.body.twitter) profileFields.social.twitter = req.body.twitter;
-    if (req.body.facebook) profileFields.social.facebook = req.body.facebook;
-    if (req.body.linkedin) profileFields.social.linkedin = req.body.linkedin;
-    if (req.body.instagram) profileFields.social.instagram = req.body.instagram;
-    console.log(profileFields.user);
-    Profile.findOne({ user: req.user.id }).then(profile => {
-        if (profile) {
-            // Update
-            Profile.findOneAndUpdate(
-                { user: req.user.id },
-                { $set: profileFields },
-                { new: true }
-            ).then(profile => res.json(profile));
-        } else {
-            // Create
-
-            // Check if handle exists
-            // Profile.save.then(profile => {
-            // if (profile) {
-            //     errors.handle = 'That handle already exists';
-            //     res.status(400).json(errors);
-            // }
-
-            // Save Profile
-            new Profile(profileFields).save().then(profile => res.json(profile));
-            // });
-        }
-    });
-} */
 
 exports.getallprofile = async (req, res) => {
     const errors = {};

@@ -38,4 +38,10 @@ export const GET_USERS = 'GET_USERS';
 
 export const GET_MENUS = 'GET_MENUS';
 
+export const GET_SLIDES = 'GET_SLIDES';
+
+export const GET_GIGS = 'GET_GIGS';
+
+export const FIND_GIG = 'FIND_GIG';
+
 export const SITE = 'SITE';

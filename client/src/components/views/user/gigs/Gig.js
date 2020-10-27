@@ -2,32 +2,42 @@ import React, { Fragment, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
+import { getGigWithoutAuth } from "../../../../_actions/user.action";
 
 function Gig() {
 
+    const dispatch = useDispatch();
+
+   useEffect(() => {
+      
+      dispatch(getGigWithoutAuth())
+   }, []);
+    const gig = useSelector((state) => state.user && state.user.gig && state.user.gig.responseData && state.user.gig.responseData.gigs);
+    //console.log('gig',gig);
 
     return (
 
         <Fragment>
-
             
-                <div className="proposal-card-base mp-proposal-card">
+                {gig && gig.map((list) => (<div key={list._id} className="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-3 pr-lg-1">
+                    <div className="proposal-card-base mp-proposal-card">
+                    {console.log(list)}
                     {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
-                    <Link to="/gig/abc/:gig">
-                        <img src={require('../../../../assets/images/postImg/img-03.jpg')} className="img-fluid" />
+                    <Link to={"/gig/"+list.user.firstName+"/"+list._id}>
+                        <img src={list.photo[0].photo} className="img-fluid" />
                     </Link>
                     <div className="proposal-card-caption">
                         {/* <!--- proposal-card-caption Starts ---> */}
                         <div className="proposal-seller-info">
                             {/* <!--- onePress-seller-info Starts ---> */}
                             <span className="fit-avatar s24">
-                                <img src={require('../../../../assets/images/userlisting/img-02.jpg')} className="rounded-circle" width="32" height="32" />
+                                <img src={list.user.profilePhoto} className="rounded-circle" width="32" height="32" />
                             </span>
                             <div className="seller-info-wrapper">
-                                <a href="mir_digimarket" className="seller-name">mir_digimarket</a>
+                                <a href={list.user.firstName} className="seller-name">{list.user.firstName} {list.user.lastName}</a>
                                 <div className="onePress-seller-tooltip">
                                     Level Two
-                        </div>
+                                </div>
                             </div>
                             <div className="favoriteIcon">
                                 <i data-id="4" href="#" className="fa fa-heart proposal-favorite" data-toggle="tooltip"
@@ -36,13 +46,13 @@ function Gig() {
                         </div>
                         {/* <!--- onePress-seller-info Ends ---> */}
                         <Link to="/gig/abc/gig" className="proposal-link-main js-proposal-card-imp-data">
-                            <h3>I Will Create A Professional Custom Explainer Video</h3>
+                            <h3>{list.title}</h3>
                         </Link>
                         <div className="rating-badges-container">
                             <span className="proposal-rating">
                                 <i className="fa fa-star"></i>
                                 <span>
-                                    <strong>4.8</strong> (22)
+                                    <strong>{list.user.rating}</strong> (22)
                         </span>
                             </span>
                         </div>
@@ -52,11 +62,12 @@ function Gig() {
                         {/* <!--- proposal-card-footer Starts ---> */}
                         <div className="proposal-price">
                             <a>
-                                <small>STARTING AT</small>&#036;10.00 </a>
+                                <small>STARTING AT</small>&#036;{list.pricing[0].price} </a>
                         </div>
                     </footer>
                     {/* <!--- proposal-card-footer Ends ---> */}
                 </div>
+                </div>))}
                 {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
             
 
