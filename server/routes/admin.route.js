@@ -1,27 +1,21 @@
 var express = require('express');
-
-// const auth = require("../middlewares/auth");
-
-// const passport = require('passport');
-// require('../config/passport')(passport)
-const adminauth = require("../../middlewares/adminauth")
-const middleware = require("../../middlewares/common")
-const dotenv = require('dotenv');
-dotenv.config();
 var router = express.Router();
 const path = require("path");
 
-const adminController = require('../../controllers/admin/admin.controller');
-const pageController = require('../../controllers/admin/page.controller');
-const couponController = require('../../controllers/admin/coupon.controller');
-const deliveryTimeController = require('../../controllers/admin/deliveryTime.controller');
-const categoryController = require('../../controllers/admin/category.controller');
-const subcategoryController = require('../../controllers/admin/subCategory.controller');
-const packageController = require('../../controllers/admin/package.controller');
-const menuController = require('../../controllers/admin/menu.controller');
-const skillController = require('../../controllers/admin/skill.controller');
-const languageController = require('../../controllers/admin/language.controller');
-const slideController = require('../../controllers/admin/slide.controller');
+const middleware = require("../middlewares/common");
+
+const adminController = require('../controllers/admin/admin.controller');
+const settingController = require('../controllers/admin/settings.controller');
+const pageController = require('../controllers/admin/page.controller');
+const couponController = require('../controllers/admin/coupon.controller');
+const deliveryTimeController = require('../controllers/admin/deliveryTime.controller');
+const categoryController = require('../controllers/admin/category.controller');
+const subcategoryController = require('../controllers/admin/subCategory.controller');
+const packageController = require('../controllers/admin/package.controller');
+const menuController = require('../controllers/admin/menu.controller');
+const skillController = require('../controllers/admin/skill.controller');
+const languageController = require('../controllers/admin/language.controller');
+const slideController = require('../controllers/admin/slide.controller');
 
 router.post('/login',  async (req, res) => {
     await adminController.adminAuth(req, res);
@@ -31,12 +25,13 @@ router.post('/register', async (req, res) => {
     await adminController.adminAuthRegister(req.body, "admin", res);
 });
 
-
-router.get('/user', adminauth, adminController.getAllUser);
-router.post('/user', adminauth, function(req, res){
-  adminController.addUser(req, res);
+router.get('/user', [middleware.admin], (req, res) => {
+  adminController.getAllUser(req, res);
 });
 
+router.post('/user', [middleware.admin], (req, res) => {
+  adminController.addUser(req, res);
+});
 
 router.get('/category', (req, res) => {
   categoryController.listcategory(req, res);
@@ -93,10 +88,6 @@ router.delete('/skill/:id', function(req, res){
 router.get('/get/skill/:id', function(req, res){
   skillController.listSkillbyid(req, res);
 });
-router.get('/skill/changestatus/:id/:status', function(req, res){
-  skillController.changeStatus(req, res);
-});
-
 
 
 router.get('/delivery/time', (req, res) => {
@@ -113,9 +104,6 @@ router.delete('/delivery/time/:id', function(req, res){
 });
 router.get('/get/delivery/time/:id', function(req, res){
   deliveryTimeController.listDeliveryTimebyid(req, res);
-});
-router.get('/delivery/time/changestatus/:id/:status', function(req, res){
-  deliveryTimeController.changeStatus(req, res);
 });
 
 
@@ -134,9 +122,6 @@ router.delete('/language/:id', function(req, res){
 router.get('/get/language/:id', function(req, res){
   languageController.listLanguagebyid(req, res);
 });
-router.get('/language/changestatus/:id/:status', function(req, res){
-  languageController.changeStatus(req, res);
-});
 
 
 router.get('/coupon', (req, res) => {
@@ -153,9 +138,6 @@ router.delete('/coupon/:id', function(req, res){
 });
 router.get('/get/coupon/:id', function(req, res){
   couponController.listCouponbyid(req, res);
-});
-router.get('/coupon/changestatus/:id/:status', function(req, res){
-  couponController.changeStatus(req, res);
 });
 
 router.get('/slide', (req, res) => {
@@ -175,6 +157,10 @@ router.get('/get/slide/:id', function(req, res){
 });
 router.get('/slide/changestatus/:id/:status', function(req, res){
   slideController.changeStatus(req, res);
+});
+
+router.post('/settings/general', [middleware.admin, middleware.upload( path.join(__dirname, '../storage/images/common/') ).fields([{ name: 'logo', maxCount: 1 }, { name: 'favicon', maxCount: 1 }]) ],  (req, res) => {
+  settingController.general(req, res);
 });
 
 

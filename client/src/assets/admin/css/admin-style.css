@@ -3047,3 +3047,19 @@ header .form-inline .search-form.close {
 .btn-outline-secondary:not([disabled]):not(.disabled).active, .btn-outline-secondary:not([disabled]):not(.disabled):active, .show>.btn-outline-secondary.dropdown-toggle {
   color: #fff !important;
 }
+
+.tab-container {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+}
+
+.tab-container .tab-item {
+  text-align:center;
+  padding: 20px 5px 5px;
+}
+
+.tab-container .tab-item.active {
+  font-weight: bold;
+  border-bottom: 5px solid #3A6CFF;
+}

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { getMenu } from "../../../_actions/user_actions";
+import { getMenu } from "../../../_actions/user.action";
 import Gig from "./gigs/Gig"
 
 
@@ -14,11 +14,10 @@ import OwlCarousel from 'react-owl-carousel';
 function App() {
 
    const dispatch = useDispatch();
-   useEffect(() => {
-      dispatch(getMenu());
+   let auth = useSelector((state) => state.user);
 
+   useEffect(() => {
    }, []);
-   const user = useSelector((state) => state.user);
 
    const menu = useSelector((state) => state.menu);
    const result = menu && menu.menu.responseData && menu.menu.responseData.menus;
@@ -26,10 +25,7 @@ function App() {
 
    return (
 
-      <React.Fragment>
-
-     
-
+      <Fragment>
          <div className="container mt-3">
             {/* <!-- Container starts --> */}
             <div className="row">
@@ -41,7 +37,7 @@ function App() {
                         <center>
                            <img src={require('../../../assets/images/img-03.jpg')} className="img-fluid rounded-circle mb-3" />
                         </center>
-                        <h5>Welcome, <span className="text-success">Tyrone</span> </h5>
+                        <h5>Welcome <span className="text-success">{ auth.user && auth.user.firstName  }</span> </h5>
                         <hr />
                         <p>Sell your services to millions of people all over the world.</p>
                         <button className="btn get_btn mt-0">Post A Request</button>
@@ -729,7 +725,7 @@ function App() {
          
 
 
-      </React.Fragment>
+      </Fragment>
    );
 }
 

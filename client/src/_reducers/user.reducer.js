@@ -1,40 +1,35 @@
 import {
-    LOGIN_USER,
-    REGISTER_USER,
     AUTH_USER,
     LOGOUT_USER,
     GET_ALLPOSTJOB,
-     GET_CATEGORY,
-     GET_SUBCATEGORY
+    GET_CATEGORY,
+    GET_SUBCATEGORY
 } from '../_actions/types';
 
+let initialState = {
+    isAuthenticated: false,
+    user: {}
+}
 
-
-const userReducer = (state = {}, action) => {
+const userReducer = (state = initialState, action) => {
 
     switch (action.type) {
-        case LOGIN_USER:
-            return {
-                ...state,
-                isAuthenticated: (action.payload !== "") ? true : false,
-                user: action.payload
-            };
-        case REGISTER_USER:
-            return {
-                ...state,
-                isAuthenticated: (action.payload !== "") ? true : false,
-                user: action.payload
-            };
         case AUTH_USER:
             return {
                 ...state,
                 isAuthenticated: (action.payload !== "") ? true : false,
                 user: action.payload
             };
+        case LOGOUT_USER:
+            return {
+                ...state,
+                isAuthenticated: (action.payload !== "") ? true : false,
+                user: {}
+            }
         case GET_CATEGORY:
-        return { ...state, category: action.payload  }
+            return { ...state, category: action.payload }
         case GET_SUBCATEGORY:
-        return { ...state, subcategory: action.payload  }
+            return { ...state, subcategory: action.payload }
         case LOGOUT_USER:
             return { ...state }
         case GET_ALLPOSTJOB:

@@ -1,9 +1,10 @@
 import { combineReducers } from 'redux';
-import user from './user_reducer';
+import user from './user.reducer';
 import postjob from './postjob_reducer';
 import profile from './profile_reducer';
 import menu from './menu_reducer';
 import gig from './gigs_reducer';
+import settings from './site.reducer';
 import admin from './admin/auth.reducer';
 import categories from './admin/category.reducer';
 import subcategories from './admin/subcategory.reducer';
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
     postjob,
     profile,
     admin,
+    settings,
     menu,
     categories,
     subcategories,

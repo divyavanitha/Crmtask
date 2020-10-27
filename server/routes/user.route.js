@@ -2,11 +2,10 @@ var express = require('express');
 var router = express.Router();
 const path = require("path");
 
-
 const middleware = require("../middlewares/common")
 
-
 const authController = require('../controllers/auth.controller');
+const homeController = require('../controllers/home.controller');
 const profilecontroller = require('../controllers/profile.controller');
 const pageController = require('../controllers/admin/page.controller');
 const couponController = require('../controllers/admin/coupon.controller');
@@ -29,6 +28,11 @@ router.post('/register', (req, res) => {
 router.get('/countries', (req, res) => {
   authController.country(req, res);
 });
+
+router.get('/settings', (req, res) => {
+  homeController.settings(req, res);
+});
+
 
 router.get('/states', (req, res) => {
   authController.state(req, res);
@@ -150,7 +154,7 @@ router.post('/gig/requirement', middleware.user, function(req, res){
   gigController.updateRequirement(req, res);
 });
 router.post('/gig/upload', [middleware.user, middleware.upload( path.join(__dirname, '../storage/images/gig/') ).fields([{ name: 'photo[]', maxCount: 4 }]) ], (req, res) => {
-gigController.updateImage(req, res);
+  gigController.updateImage(req, res);
 });
 router.post('/gig/confirm', middleware.user, function(req, res){
   gigController.updateConfirm(req, res);

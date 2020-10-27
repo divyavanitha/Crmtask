@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
@@ -8,7 +8,7 @@ function Gig() {
 
     return (
 
-        <React.Fragment>
+        <Fragment>
 
             
                 <div className="proposal-card-base mp-proposal-card">
@@ -61,7 +61,7 @@ function Gig() {
             
 
 
-        </React.Fragment>
+        </Fragment>
     );
 }
 

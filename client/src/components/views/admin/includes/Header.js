@@ -1,4 +1,4 @@
-import React, { useState, Dispatch } from "react";
+import React, { Fragment, useState, Dispatch } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../../_actions/admin/auth.action";
 
@@ -10,7 +10,7 @@ const Header = () => {
 
 
   return (
-    <React.Fragment>
+    <Fragment>
 
 
       <header id="header" className="header">
@@ -37,7 +37,7 @@ const Header = () => {
       </header>
 
 
-    </React.Fragment>
+    </Fragment>
 
 
 

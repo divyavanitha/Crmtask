@@ -1,5 +1,3 @@
-export const LOGIN_USER = 'login_user';
-export const REGISTER_USER = 'register_user';
 export const AUTH_USER = 'auth_user';
 export const LOGOUT_USER = 'logout_user';
 export const RESET_PASSWORD = 'reset_password';
@@ -39,3 +37,5 @@ export const AFTER_POST_MESSAGE = 'after_post_message';
 export const GET_USERS = 'GET_USERS';
 
 export const GET_MENUS = 'GET_MENUS';
+
+export const SITE = 'SITE';

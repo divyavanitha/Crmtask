@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
@@ -7,18 +7,23 @@ import { useEffect } from 'react';
 function Footer() {
 
 
+    let settings = useSelector((state) => state.settings);
+
+    let site = settings.settings && settings.settings.site;
+
+
     return (
 
-        <React.Fragment>
+        <Fragment>
 
             <footer className="footer">
                 <div className="container">
                     <div className="row">
                         <div className="col-md-6 col-12">
                             <div className="footerAbout">
-                                <div className="footerLogo"><a href=""><img src={require('../../../../assets/images/1press-logo.png')} /></a></div>
+                                <div className="footerLogo"><a href=""><img src={site && site.logo} /></a></div>
                                 <p className="f-abt-desc">
-                                    Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Proin bibendum tellus ac felis posuere aliquet. Curabitur ut sodales sapien.
+                                {site && site.description}
                      </p>
                                 <div className="collapse show" id="collapsefindusOn">
                                     <ul className="list-inline social_icon">
@@ -59,10 +64,10 @@ function Footer() {
                 <br />
             </footer>
             <section className="post_footer">
-                @ Copyright onePress 2020. All Rights Reserved
+                {site && site.copyright}
       </section>
 
-        </React.Fragment>
+        </Fragment>
     );
 }
 

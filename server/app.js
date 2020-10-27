@@ -22,7 +22,7 @@ i18n.configure({
 
 //imported routes and others
 const user = require('./routes/user.route');
-const admin = require('./routes/admin/auth.route');
+const admin = require('./routes/admin.route');
 
 const app = express();
 
@@ -54,98 +54,6 @@ mongoose.connect(process.env.DATABASE, { useNewUrlParser: true, useFindAndModify
 
 app.use('/api', user);
 app.use('/api/admin', admin);
-
-//const setup = require('./setup');
-/* const users = require('./routes/users');
-const profile = require('./routes/profile');
-const gigs = require('./routes/gigs.route');
-const postjob = require('./routes/postjob.route')
-const upload=require('./routes/upload.route')
-const transulated=require('./routes/multi.route')
-const timezone=require('./routes/time.route') */
-
-
-//const admin=require('./routes/admin/auth')
-
-//const { Chat } = require("./models/chat");
-
-//const chat=require('./routes/chat.route')
-
-
-
-//app.use(morgan('combined', { stream: logger.stream }));
-/* 
-
-
-
-
-
-
-mongoose.connect(process.env.DATABASE, { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true, useCreateIndex: true })
-    .then(() => console.log('Connected to MongoDb...'))
-    .catch((e) => console.log('Connection Failure...', e)); */
-
-/* app.use(cors());
-
-app.use('/api', auth);
-app.use('/api/users', users);
-app.use('/api/setup', setup);
-//app.use('/api/profile', profile);
-app.use('/api/gigs', gigs); 
-app.use('/api/postjob', postjob);
-app.use('/api/trans',transulated)
-
-app.use('/uploads', express.static(path.join(__dirname,'/server/uploads')));
-app.use('/api/uploads', upload);
-
-app.use('/api/timezone',timezone);
-
-app.use('/api/admin',admin); */
-
-// //transulate
-// translate('Ik spreek Engels', {to: 'en'}).then(res => {
-//     console.log(res.text);
-//     // res.json({transulated:data.text})
-    
-//     //=> I speak English
-//     console.log(res.from.language.iso);
-//     //=> nl
-// }).catch(err => {
-//     console.error(err);
-
-// })
-/*  app.use('/api/chat', chat);
-
- io.of('/api/chat/message').on("connection", socket => {
-
-    socket.on("Input Chat Message", msg => {
-     console.log("Socig");
-      connect.then(db => {
-        try {
-            let chat = new Chat({ message: msg.chatMessage, sender:req.body.user, type: msg.type })
-  
-            chat.save((err, doc) => {
-              console.log(doc)
-              if(err) return res.json({ success: false, err })
-  
-              Chat.find({ "_id": doc._id })
-              .populate("sender")
-              .exec((err, doc)=> {
-  
-                  return io.emit("Output Chat Message", doc);
-              })
-            })
-        } catch (error) {
-          console.error(error);
-        }
-      })
-     })
-  
-  }) */
-
-
-
-
   
 app.use('/', express.static(path.join(__dirname,'/storage')));
 
@@ -157,10 +65,6 @@ if (process.env.NODE_ENV === "production") {
         res.sendFile(path.resolve(__dirname, "../client", "build", "index.html"));
     });
 }
-
-/*server.listen(process.env.PORT, () => {
-    console.log(`Server running on port: ${process.env.PORT}`);
-});*/
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

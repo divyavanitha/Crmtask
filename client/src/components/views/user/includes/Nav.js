@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { getCategory } from "../../../../_actions/user_actions";
+import { getCategory } from "../../../../_actions/user.action";
 
 function Nav() {
 
     const dispatch = useDispatch();
+
+    let settings = useSelector((state) => state.settings);
+
+    let site = settings.settings && settings.settings.site;
 
     useEffect(() => {
 
@@ -20,7 +24,7 @@ function Nav() {
 
     return (
 
-        <React.Fragment>
+        <Fragment>
 
             <div data-ui="cat-nav" id="desktop-category-nav" className="ui-toolkit cat-nav ">
                 <div className="bg-transparent-homepage-experiment hide-xs hide-sm hide-md">
@@ -75,7 +79,7 @@ function Nav() {
                             <div className="bg-white display-flex-md show-md pt-md-3 pl-md-2 pb-md-3">
                                 <div className="flex-md-5 pl-md-0">
                                     <a role="button" href="">
-                                        <img src={require('../../../../assets/images/1press-logo.png')} width="158" />
+                                        <img src={site && site.logo} width="158" />
                                     </a>
                                 </div>
                                 <div className="flex-md-1 pr-md-2">
@@ -1077,7 +1081,7 @@ function Nav() {
             </div>
 
 
-        </React.Fragment>
+        </Fragment>
     );
 }
 

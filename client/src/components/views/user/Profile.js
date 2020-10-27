@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { getMenu } from "../../../_actions/user_actions";
+import { getMenu } from "../../../_actions/user.action";
 import Gig from "./gigs/Gig"
 
 
@@ -17,7 +17,7 @@ function Profile() {
 
    return (
 
-      <React.Fragment>
+      <Fragment>
 
 <div className="container mt-5 mb-5 myProfileContainer" id="myProfile">
   
@@ -2976,7 +2976,7 @@ function Profile() {
   
 
 
-      </React.Fragment>
+      </Fragment>
    );
 }
 

@@ -277,7 +277,6 @@ exports.updateImage = async(req, res) => {
 
         let photos = [];
 
-console.log(req.files['photo[]']);
         for(i in req.files['photo[]']) {
 
             let image = {
@@ -330,7 +329,6 @@ exports.updateConfirm = async(req, res) => {
 
         var gig = await Gig.findById(req.body.id);
 
-console.log(gig);
         let gigs = await db._update(Gig, { _id: req.body.id }, gig);
 //console.log(gigs);
 

@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import React, { Fragment, useState } from 'react';
+import { withRouter, Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { getSubCategory } from "../../../../_actions/user_actions";
+import { logout } from "../../../../_actions/user.action";
 import $ from 'jquery';
+import Login from '../auth/Login';
+import Register from '../auth/Register';
+import ForgotPassword from '../auth/ForgotPassword';
 
 function Header() {
+    const dispatch = useDispatch();
+    const auth = useSelector((state) => state.user);
 
     useEffect(() => {
-
 
         $(document).ready(function () {
 
@@ -27,7 +31,7 @@ function Header() {
                 $(this).addClass("active");
                 $(".body-sub-width[data-node-id=" + node_id + "]").removeClass("display-none");
 
-                
+
             });
 
             $(".mainHtml .cat-nav").on("mouseleave", function () {
@@ -185,7 +189,7 @@ function Header() {
                 // e.preventDefault();
             });
 
-            $(document).on('click', '.dropdown-menu', function(event) {
+            $(document).on('click', '.dropdown-menu', function (event) {
                 event.stopPropagation();
             });
 
@@ -219,7 +223,7 @@ function Header() {
 
     return (
 
-        <React.Fragment>
+        <Fragment>
             <div id="gnav-header" className="gnav-header global-nav clear gnav-3">
                 <header id="gnav-header-inner" className="gnav-header-inner clear apply-nav-height col-group has-svg-icons body-max-width">
                     <div className="col-xs-12">
@@ -238,13 +242,13 @@ function Header() {
                                 </span>
                             </div>
                         </button>
-                        <div className="catnav-search-bar search-browse-wrapper with-catnav">
+                        {/* <div className="catnav-search-bar search-browse-wrapper with-catnav">
                             <div className="search-browse-inner">
                                 <form id="gnav-search" className="search-nav expanded-search apply-nav-height" method="post">
                                     <div className="gnav-search-inner clearable">
                                         <label htmlFor="search-query" className="screen-reader-only">Search for items</label>
                                         <div className="search-input-wrapper text-field-wrapper">
-                                            <input id="search-query" className="rounded" name="search_query" placeholder="Find Services" value="" autoComplete="off" />
+                                            <input id="search-query" className="rounded" name="search_query" placeholder="Find Services"  autoComplete="off" />
                                         </div>
                                         <div className="search-button-wrapper hide">
                                             <button className="btn btn-primary" name="search" type="submit" value="Search">
@@ -254,15 +258,30 @@ function Header() {
                                     <ul className="search-bar-panel d-none"></ul>
                                 </form>
                             </div>
-                        </div>
-                        <ul className="account-nav apply-nav-height">
-                            <li className="logged-in-link d-none d-sm-block d-md-block d-lg-block">
-                                <a className="menuItem" href="" title="Blog">
-                                    <span className="onePress-icon nav-icon onePress-icon-relative">
-                                        <i className="fa fa-rss fa-lg" style={{ fontSize: "1.4em" }}></i>
-                                    </span>
-                                </a>
+                        </div> */}
+
+
+                        {auth.isAuthenticated == false &&
+                            (<ul className="account-nav apply-nav-height"><li className="register-link">
+                                <a href="#" data-toggle="modal" data-target="#register-modal">
+                                    Become a Seller
+                     </a>
                             </li>
+                                <li className="register-link">
+                                    <a href="#" data-toggle="modal" data-target="#login-modal">Sign In</a>
+                                </li>
+                                <li className="sign-in-link mr-lg-0 mr-3">
+                                    <a href="#" className="btn btn_join" style={{ color: "white" }} data-toggle="modal" data-target="#register-modal">
+                                        Join Now
+                     </a></li></ul>)
+                        }
+                        {auth.isAuthenticated && (<ul className="account-nav apply-nav-height"><li className="logged-in-link d-none d-sm-block d-md-block d-lg-block">
+                            <a className="menuItem" href="" title="Blog">
+                                <span className="onePress-icon nav-icon onePress-icon-relative">
+                                    <i className="fa fa-rss fa-lg" style={{ fontSize: "1.4em" }}></i>
+                                </span>
+                            </a>
+                        </li>
                             <li className="logged-in-link">
                                 <a className="menuItem" href="cart" title="Cart">
                                     <span className="onePress-icon nav-icon onePress-icon-relative">
@@ -276,10 +295,10 @@ function Header() {
                                     <a href="#" id="usermenu" className="user dropdown-toggle menuItem" style={{ marginTop: "17px" }}
                                         data-toggle="dropdown">
                                         <img src={require('../../../../assets/images/userlisting/img-03.jpg')} width="27" height="27" className="rounded-circle" />
-                                        <span className="name">tyrone</span>
+                                        <span className="name">{ auth.user && auth.user.firstName  }</span>
                                     </a>
 
-                                    <div className="dropdown-menu" style={{ minWidth:'200px', width:'auto!important', zIndex:'2000' }} >
+                                    <div className="dropdown-menu" style={{ minWidth: '200px', width: 'auto!important', zIndex: '2000' }} >
                                         <a className="dropdown-item" href="dashboard">
                                             Dashboard   </a>
                                         <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#selling">
@@ -345,21 +364,26 @@ function Header() {
                                                 Account Settings      </a>
                                         </div>
                                         <div className="dropdown-divider"></div>
-                                        <a className="dropdown-item" href="logout">
+                                        <a onClick={ () => dispatch(logout()) } className="dropdown-item">
                                             Logout   </a>
                                     </div>
 
                                 </div>
-                            </li>
+                            </li></ul>)}
 
-                        </ul>
+
                     </div>
                 </header>
             </div>
             <div className="clearfix"></div>
 
+            <Login />
+            <Register />
+            <ForgotPassword />
 
-        </React.Fragment>
+
+
+        </Fragment>
     );
 }
 

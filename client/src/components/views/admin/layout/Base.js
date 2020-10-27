@@ -20,13 +20,20 @@ import AddSubCategory from "../subcategories/AddSubCategory";
 import SubCategory from "../subcategories/SubCategory";
 import AddLanguage from "../languages/AddLanguage";
 import Language from "../languages/Language";
-import AddSkill from "../skills/AddSkill";
-import Skill from "../skills/Skill";
 import AddCoupon from "../coupons/AddCoupon";
+import AddSkill from "../skills/AddSkill";
+import General from "../settings/General";
+import Skill from "../skills/Skill";
 import Coupon from "../coupons/Coupon";
 import AddSlide from "../slides/AddSlide";
 import Slide from "../slides/Slide";
 import Dashboard from "../Dashboard";
+import Profile from "../settings/Profile";
+import Social from "../settings/Social";
+import Sms from "../settings/Sms";
+import Mail from "../settings/Mail";
+import Push from "../settings/Push";
+import Payment from "../settings/Payment";
 
 
 const Base = () => {
@@ -68,6 +75,13 @@ const Base = () => {
           <Route path="/admin/slide/add" component={AddSlide}></Route>
           <Route path="/admin/slide/:id/edit" component={AddSlide}></Route>
           <Route path="/admin/slide" component={Slide}></Route>
+          <Route path="/admin/settings/general" component={General}></Route>
+          <Route path="/admin/settings/profile/links" component={Profile}></Route>
+          <Route path="/admin/settings/social/links" component={Social}></Route>
+          <Route path="/admin/settings/sms" component={Sms}></Route>
+          <Route path="/admin/settings/mail" component={Mail}></Route>
+          <Route path="/admin/settings/push" component={Push}></Route>
+          <Route path="/admin/settings/payment" component={Payment}></Route>
 
         </Switch>
 

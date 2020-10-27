@@ -1,6 +1,7 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 
 import { Switch, Route } from "react-router";
+import { useSelector, useDispatch } from 'react-redux';
 
 import Home from "../Home";
 import Header from '../includes/Header';
@@ -9,6 +10,7 @@ import Footer from "../includes/Footer";
 import GigDetail from "../gigs/GigDetail";
 import AddGig from "../gigs/AddGig";
 import Profile from "../Profile";
+import { site } from "../../../../_actions/setting.action";
 
 import "../../../../assets/css/custom.css";
 /* import "../../../../assets/css/bootstrap.css";
@@ -31,8 +33,14 @@ import "../../../../assets/css/msdropdown.css";
 
 const Base = () => {
 
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(site())
+     }, []);
+
     return (
-        <React.Fragment>
+        <Fragment>
         <Header />
 
         <Nav />
@@ -45,7 +53,7 @@ const Base = () => {
 
         <Footer />
 
-      </React.Fragment>
+      </Fragment>
     );
 };
 

@@ -204,7 +204,7 @@
     height: 100%;
 }
 
-.form-group a.btn.btn-outline {
+.form-group a.btn.btn-outline, .form-group button.btn.btn-outline {
     border: 1px solid #ccc;
     color: #999;
 }
@@ -230,8 +230,8 @@ table.dataTable td, table.dataTable th {
 }
 .tableContent table.table tbody tr td{}
 .tableContent table.table tbody tr td input:checked+.slider{}
-.tableContent table.table tbody tr td .slider{ border-radius: 50px;}
-.tableContent table.table tbody tr td .slider:before{ border-radius: 50px; bottom: 4px;}
+.tableContent table.table tbody tr td .slider, .slider{ border-radius: 50px;}
+.tableContent table.table tbody tr td .slider:before, .slider:before{ border-radius: 50px; bottom: 4px;}
 .tableContent table.table tbody tr td input[type=checkbox]+.slider:after{
     content: "";
     display: inline-block;
@@ -247,12 +247,12 @@ table.dataTable td, table.dataTable th {
     top: 4px;
     transition: .4s;
 }
-.tableContent table.table tbody tr td input:checked+.slider {
+.tableContent table.table tbody tr td input:checked+.slider, input:checked+.slider {
     background-color: #3a6cff;
 }
 
-.tableContent table.table tbody tr td input[type=checkbox]:checked+.slider:after {
+/* .tableContent table.table tbody tr td input[type=checkbox]:checked+.slider:after {
     left: 6px;
     transform: translateX(30px);
     content: "\f00c";
-}
+} */

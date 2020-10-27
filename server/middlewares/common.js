@@ -27,6 +27,30 @@ function auth(req, res, next) {
     }
 }
 
+function admin(req, res, next) {
+    let token = req.header("Authorization");
+    if (token && token.startsWith('Bearer ')) {
+        // Remove Bearer from string
+        token = token.slice(7, token.length);
+    }
+    if (!token) return res.status(401).json({ msg: 'Access Denied' });
+
+    try {
+        const decoded = jwt.verify(token, process.env.SECRET_KEY);
+        req.admin = decoded;
+
+        next();
+    } catch (e) {
+        return res.status(401).json({
+            "statusCode": 401,
+            "title": "Unauthorised",
+            "message": "Unauthorised",
+            "data": {},
+            "error": {}
+        });
+    }
+}
+
 function upload(destinationPath) {
 
     if (!fs.existsSync(destinationPath)){
@@ -50,5 +74,6 @@ function upload(destinationPath) {
 
 module.exports = {
     upload: upload,
-    user: auth
+    user: auth,
+    admin: admin
 };

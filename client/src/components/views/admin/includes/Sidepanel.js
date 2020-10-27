@@ -108,13 +108,8 @@ const Sidepanel = () => {
                                 <Link to="/admin/users"> <i className="menu-icon fa fa-users"></i>Users </Link>
                             </li>
 
-                            <li className="menu-item-has-children dropdown">
-                                <a className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i className="menu-icon fa fa fa-gear"></i> Settings </a>
-                                <ul className="sub-menu children dropdown-menu">
-                                    <li><i className="fa fa-arrow-circle-right"></i><Link to="/admin/category/add"> General Settings </Link></li>
-                                    <li><i className="fa fa-arrow-circle-right"></i><Link to="/admin/category"> Payment Settings </Link></li>
-                                </ul>
+                            <li>
+                                <Link to="/admin/settings/general"> <i className="menu-icon fa fa-gear"></i>Settings </Link>
                             </li>
 
 

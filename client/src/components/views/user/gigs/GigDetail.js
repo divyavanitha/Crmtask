@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
@@ -9,7 +9,7 @@ function GigDetail() {
 
     return (
 
-        <React.Fragment>
+        <Fragment>
 
 
             <div className="mp-gig-top-nav">
@@ -424,7 +424,7 @@ function GigDetail() {
             
 
 
-        </React.Fragment>
+        </Fragment>
     );
 }
 
