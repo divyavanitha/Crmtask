@@ -13,7 +13,7 @@ const gigSchema = mongoose.Schema({
         default: 1,
         unique: true
     },
-    userId: { type: Schema.Types.ObjectId, ref: 'user' },
+    user: { type: Schema.Types.ObjectId, ref: 'users' },
     title: {
         type: String,
         required: true,
@@ -21,6 +21,7 @@ const gigSchema = mongoose.Schema({
         maxlength: 80,
         unique: true
     },
+    description: { type: String },
     subCategoryId : {
         type: String,
         required: true,
@@ -42,7 +43,6 @@ const gigSchema = mongoose.Schema({
         price: { type: Number }
     }],
     faq: [{
-        description: { type: String },
         question: { type: String },
         answer: { type: String }
     }],

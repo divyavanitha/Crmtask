@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { getMenu } from "../../../_actions/user.action";
+import { getMenu, getSlide, getGigWithoutAuth } from "../../../_actions/user.action";
 import Gig from "./gigs/Gig"
 
 
@@ -17,11 +17,16 @@ function App() {
    let auth = useSelector((state) => state.user);
 
    useEffect(() => {
+      dispatch(getMenu())
+      dispatch(getSlide())
+      dispatch(getGigWithoutAuth())
    }, []);
 
    const menu = useSelector((state) => state.menu);
    const result = menu && menu.menu.responseData && menu.menu.responseData.menus;
-
+   const slide = useSelector((state) => state.user && state.user.slide && state.user.slide.responseData && state.user.slide.responseData.slides);
+   const gig = useSelector((state) => state.user && state.user.gig && state.user.gig.responseData && state.user.gig.responseData.gigs);
+   //console.log('gig',gig);
 
    return (
 
@@ -494,18 +499,11 @@ function App() {
 
                      <OwlCarousel className="carousel-inner" loop dots={true} autoplay={true} items={1} >
 
-                        <div className="carousel-item active"><a><img className="img-fluid" src={require('../../../assets/images/bannerimg/banner.jpg')} /></a>
+                        {slide && slide.map((list) => (<div key={list._id} className="carousel-item active"><a><img className="img-fluid" src={list.layoutPhoto} /></a>
                            <div className="carousel-caption d-lg-block d-md-block d-none " >
-                              <h3>Maecenas hendrerit fermentum pulvinar</h3>
-                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eget fermentum orci. Nulla sit amet
-           suscipit justo, sit amet dapibus dui.</p></div>
-                        </div>
-                        <div className="carousel-item active"><a><img className="img-fluid" src={require('../../../assets/images/bannerimg/banner-img.jpg')} /></a>
-                           <div className="carousel-caption d-lg-block d-md-block d-none " >
-                              <h3>Maecenas hendrerit fermentum pulvinar</h3>
-                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eget fermentum orci. Nulla sit amet
-           suscipit justo, sit amet dapibus dui.</p></div>
-                        </div>
+                              <h3>{list.title}</h3>
+                              <p>{list.description}</p></div>
+                        </div>))}
 
                      </OwlCarousel>
 
@@ -524,12 +522,8 @@ function App() {
 
 
 
-                  <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-3 pr-lg-1"> <Gig /> </div>
-  
-                     
-        
-                 
-                  </div>
+                   <Gig /> </div>
+
                   {/* <!-- If You have no gigs, show random gigs on homepage --> */}
                   <div className="row mb-3 mt-3">
                      <div className="col-md-12">

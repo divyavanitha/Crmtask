@@ -3,7 +3,10 @@ import {
     LOGOUT_USER,
     GET_ALLPOSTJOB,
     GET_CATEGORY,
-    GET_SUBCATEGORY
+    GET_SUBCATEGORY,
+    GET_SLIDES,
+    GET_GIGS,
+    FIND_GIG
 } from '../_actions/types';
 
 let initialState = {
@@ -30,6 +33,12 @@ const userReducer = (state = initialState, action) => {
             return { ...state, category: action.payload }
         case GET_SUBCATEGORY:
             return { ...state, subcategory: action.payload }
+        case GET_SLIDES:
+            return { ...state, slide: action.payload }
+        case GET_GIGS:
+            return { ...state, gig: action.payload }
+        case FIND_GIG:
+            return { ...state, gig_details: action.payload }
         case LOGOUT_USER:
             return { ...state }
         case GET_ALLPOSTJOB:
