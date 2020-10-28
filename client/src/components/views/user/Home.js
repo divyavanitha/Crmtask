@@ -56,7 +56,52 @@ function App() {
                         {/* <!-- The slideshow --> */}
                         <div className="carousel-inner " role="listbox">
                            <div className="carousel-item active">
-                           <Gig />
+                           <div className="proposal-card-base mp-proposal-card">
+                                 {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
+                                 <a href="proposals/Timiex/i-will-design-a-professional-wordpress-website-for-your-business">
+                                    <img src={require('../../../assets/images/proposals/website-design-logo-png_1590561828.png')}
+                                       className="img-fluid" />
+                                 </a>
+                                 <div className="proposal-card-caption">
+                                    {/* <!--- proposal-card-caption Starts ---> */}
+                                    <div className="proposal-seller-info">
+                                       {/* <!--- onePress-seller-info Starts ---> */}
+                                       <span className="fit-avatar s24">
+                                          <img src={require('../../../assets/images/userlisting/img-02.jpg')} className="rounded-circle" width="32"
+                                             height="32" />
+                                       </span>
+                                       <div className="seller-info-wrapper">
+                                          <a href="Timiex" className="seller-name">Timiex</a>
+                                          <div className="onePress-seller-tooltip">
+                                             New Seller
+                                    </div>
+                                       </div>
+                                    </div>
+                                    {/* <!--- onePress-seller-info Ends ---> */}
+                                    <a href="proposals/Timiex/i-will-design-a-professional-wordpress-website-for-your-business"
+                                       className="proposal-link-main">
+                                       <h3>I will design a professional WordPress website for your business </h3>
+                                    </a>
+                                    <div className="rating-badges-container">
+                                       <span className="proposal-rating">
+                                          <i className="fa fa-star"></i>
+                                          <span>
+                                             <strong>0.0</strong>
+                                       (0)
+                                       </span>
+                                       </span>
+                                    </div>
+                                 </div>
+                                 {/* <!--- proposal-card-caption Ends ---> */}
+                                 <footer className="proposal-card-footer">
+                                    {/* <!--- proposal-card-footer Starts ---> */}
+                                    <div className="proposal-price">
+                                       <a className="js-proposal-card-imp-data">
+                                          <small>Starting At</small>&#036;35.00 </a>
+                                    </div>
+                                 </footer>
+                                 {/* <!--- proposal-card-footer Ends ---> */}
+                              </div>
                               {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
                            </div>
                            <div className="carousel-item ">
