@@ -7,7 +7,7 @@ import {
 export const site = () => async dispatch => {
 
     try {
-        const response = await axios.get(`api/settings`);
+        const response = await axios.get(`/api/settings`);
 
         dispatch({
             type: SITE,

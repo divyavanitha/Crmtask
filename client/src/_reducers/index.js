@@ -5,6 +5,7 @@ import profile from './profile_reducer';
 import menu from './menu_reducer';
 import gig from './gigs_reducer';
 import settings from './site.reducer';
+import adminsettings from './admin/settings.reducer';
 import admin from './admin/auth.reducer';
 import categories from './admin/category.reducer';
 import subcategories from './admin/subcategory.reducer';
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
     postjob,
     profile,
     admin,
+    adminsettings,
     settings,
     menu,
     categories,

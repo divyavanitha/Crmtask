@@ -1,4 +1,5 @@
 var multer = require('multer');
+var path = require('path');
 var fs = require('fs');
 const jwt = require('jsonwebtoken');
 
@@ -59,12 +60,29 @@ function upload(destinationPath) {
     
     var storage = multer.diskStorage({
         destination: function (req, file, cb) {
-              //console.log(file);
             cb(null, destinationPath);
         },
         filename: function (req, file, cb) {
-            //console.log(file);
             cb(null, Date.now().toString() + '_' + file.originalname);
+        }
+    });
+
+    var uploaded = multer({ storage: storage });
+    return uploaded;
+}
+
+function uploadAs(destinationPath) {
+
+    if (!fs.existsSync(destinationPath)){
+        fs.mkdirSync(destinationPath, { recursive: true });
+    }
+    
+    var storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, destinationPath);
+        },
+        filename: function (req, file, cb) {
+            cb(null, file.fieldname + path.extname(file.originalname));
         }
     });
 
@@ -74,6 +92,7 @@ function upload(destinationPath) {
 
 module.exports = {
     upload: upload,
+    uploadAs: uploadAs,
     user: auth,
     admin: admin
 };

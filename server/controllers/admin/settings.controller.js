@@ -10,7 +10,30 @@ var helper = require('../../services/helper');
 const dotenv = require('dotenv');
 dotenv.config({ path: __dirname + '/../../.env' });
 
-exports.general = async (req, res) => {
+exports.getSetting = async (req, res) => {
+
+    try {
+
+        let settings = await db._find(Setting, {}, {createdAt: 0, updatedAt: 0 });
+
+        const data = settings;
+
+        const response = helper.response({ data });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                return res.status(422).json(err.errors[i].message);
+            }
+        } else {
+            return res.status(422).json(err);
+        }
+    }
+
+}
+
+exports.updateGeneral = async (req, res) => {
     
     const schema = Joi.object().options({ abortEarly: false }).keys({
         title: Joi.string().required().label("Title"),
@@ -45,8 +68,8 @@ exports.general = async (req, res) => {
 
         var setting = await Setting.findOne();
 
-        if(req.files['logo']) setting.site.logo = req.protocol+ '://' +req.get('host')+"/images/common/logo.png";
-        if(req.files['favicon']) setting.site.favicon = req.protocol+ '://' +req.get('host')+"/images/common/favicon.png";
+        if(req.files['logo']) setting.site.logo = req.protocol+ '://' +req.get('host')+"/images/common/" + req.files['logo'][0].filename;
+        if(req.files['favicon']) setting.site.favicon = req.protocol+ '://' +req.get('host')+"/images/common/" + req.files['favicon'][0].filename;
 
         setting.site.title =  req.body.title,
         setting.site.description =  req.body.description,
@@ -54,7 +77,7 @@ exports.general = async (req, res) => {
         setting.site.email =  req.body.email,
         setting.site.copyright =  req.body.copyright
 
-        const site = await Setting.update({}, setting, { new: true })
+        const site = await Setting.updateOne({}, setting, { new: true })
 
         const response = helper.response({ message: res.__('updated') });
         return res.status(response.statusCode).json(response);

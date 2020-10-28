@@ -56,6 +56,7 @@ app.use('/api', user);
 app.use('/api/admin', admin);
   
 app.use('/', express.static(path.join(__dirname,'/storage')));
+app.use('/public', express.static(path.join(__dirname,'/public')));
 
 if (process.env.NODE_ENV === "production") {
 

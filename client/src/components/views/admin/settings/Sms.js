@@ -109,9 +109,9 @@ const Sms = (props) => {
                                         <div style={{ padding: '0px' }} className="card-header">
                                             <div className="tab-container">
                                                 <Link to="/admin/settings/general" className="tab-item">General</Link>
-                                                <Link to="/admin/settings/profile/links" className="tab-item">Profile Links</Link>
+                                                <Link to="/admin/settings/profile/links" className="tab-item">Social Links</Link>
                                                 <Link to="/admin/settings/push" className="tab-item">Push Notification</Link>
-                                                <Link to="/admin/settings/social/links" className="tab-item">Social Links</Link>
+                                                <Link to="/admin/settings/social/links" className="tab-item">Social Config</Link>
                                                 <Link to="/admin/settings/sms" className="tab-item active">SMS Config</Link>
                                                 <Link to="/admin/settings/mail" className="tab-item">Mail Settings</Link>
                                                 <Link to="/admin/settings/payment" className="tab-item">Payment Config</Link>

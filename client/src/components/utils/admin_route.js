@@ -6,7 +6,6 @@ import Login from "../../components/views/admin/auth/Login";
 
 const AdminRoute = ({ children, ...rest }) => {
     const admin = useSelector((state) => state.admin);
-    console.log(children);
     return (
         <Route
             {...rest}

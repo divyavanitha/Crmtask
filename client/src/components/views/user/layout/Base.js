@@ -2,6 +2,7 @@ import React, { Fragment, useEffect } from "react";
 
 import { Switch, Route } from "react-router";
 import { useSelector, useDispatch } from 'react-redux';
+import { Helmet } from "react-helmet";
 
 import Home from "../Home";
 import Header from '../includes/Header';
@@ -10,7 +11,6 @@ import Footer from "../includes/Footer";
 import GigDetail from "../gigs/GigDetail";
 import AddGig from "../gigs/AddGig";
 import Profile from "../Profile";
-import { site } from "../../../../_actions/setting.action";
 
 import "../../../../assets/css/custom.css";
 /* import "../../../../assets/css/bootstrap.css";
@@ -33,27 +33,30 @@ import "../../../../assets/css/msdropdown.css";
 
 const Base = () => {
 
-    const dispatch = useDispatch();
+    let settings = useSelector((state) => state.settings);
 
-    useEffect(() => {
-        dispatch(site())
-     }, []);
+    let site = settings.settings && settings.settings.site;
 
     return (
         <Fragment>
-        <Header />
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>{site && site.title}</title>
+                <link rel="icon" href={site && site.favicon} />
+            </Helmet>
+            <Header />
 
-        <Nav />
-        <Switch>
-            <Route exact={true} path="/" component={Home}></Route>
-            <Route exact={true} path="/gig/post" component={AddGig}></Route>
-            <Route exact={true} path="/gig/:user/:gig" component={GigDetail}></Route>
-            <Route exact={true} path="/profile" component={Profile}></Route>
-        </Switch>
+            <Nav />
+            <Switch>
+                <Route exact={true} path="/" component={Home}></Route>
+                <Route exact={true} path="/gig/post" component={AddGig}></Route>
+                <Route exact={true} path="/gig/:user/:gig" component={GigDetail}></Route>
+                <Route exact={true} path="/profile" component={Profile}></Route>
+            </Switch>
 
-        <Footer />
+            <Footer />
 
-      </Fragment>
+        </Fragment>
     );
 };
 

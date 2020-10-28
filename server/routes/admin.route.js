@@ -159,8 +159,12 @@ router.get('/slide/changestatus/:id/:status', function(req, res){
   slideController.changeStatus(req, res);
 });
 
-router.post('/settings/general', [middleware.admin, middleware.upload( path.join(__dirname, '../storage/images/common/') ).fields([{ name: 'logo', maxCount: 1 }, { name: 'favicon', maxCount: 1 }]) ],  (req, res) => {
-  settingController.general(req, res);
+router.get('/settings', (req, res) => {
+  settingController.getSetting(req, res);
+});
+
+router.post('/settings/general', [middleware.admin, middleware.uploadAs( path.join(__dirname, '../storage/images/common/') ).fields([{ name: 'logo', maxCount: 1 }, { name: 'favicon', maxCount: 1 }]) ],  (req, res) => {
+  settingController.updateGeneral(req, res);
 });
 
 
