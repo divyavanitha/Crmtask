@@ -656,7 +656,12 @@ header hr {
 	z-index: 10;
 	color: #fff;
 	text-align: center;
-	top: 54%;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	   -moz-transform: translateY(-50%);
+	    -ms-transform: translateY(-50%);
+	     -o-transform: translateY(-50%);
+	        transform: translateY(-50%);
 }
 
 #demo1 .carousel-item img:not(.srch2), #demo1 .carousel-item video {
@@ -689,20 +694,20 @@ header hr {
 @media only screen and (min-width: 768px) {
 	#demo1 .carousel-caption h1 {
 		position: relative;
-		top: -110px;
+		/* top: -110px; */
 	}
 	#demo1 .carousel-caption {}
 	#demo1 .carousel-caption h5 {
 		position: relative;
-		top: -100px;
+		/* top: -100px; */
 	}
 	.main .form-control {
 		position: relative;
-		top: -100px;
+		/* top: -100px; */
 	}
 	.move-icon-up {
 		position: relative;
-		top: -100px;
+		/* top: -100px; */
 	}
 }
 
@@ -1641,7 +1646,7 @@ top: 5px;
 	-ms-flex: 0 1 auto;
 	flex: 0 1 auto;
 	width: 12px;
-	height: 20px;
+	height: 16px;
 	margin-right: 5px;
 	margin-left: 3px;
 	text-indent: -999px;

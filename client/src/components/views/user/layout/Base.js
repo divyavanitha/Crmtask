@@ -10,6 +10,7 @@ import Footer from "../includes/Footer";
 import GigDetail from "../gigs/GigDetail";
 import AddGig from "../gigs/AddGig";
 import Profile from "../Profile";
+import Landing from "../Landing";
 import { site } from "../../../../_actions/setting.action";
 
 import "../../../../assets/css/custom.css";
@@ -49,6 +50,7 @@ const Base = () => {
             <Route exact={true} path="/gig/post" component={AddGig}></Route>
             <Route exact={true} path="/gig/:user/:gig" component={GigDetail}></Route>
             <Route exact={true} path="/profile" component={Profile}></Route>
+            <Route exact={true} path="/Landing" component={Landing}></Route>
         </Switch>
 
         <Footer />

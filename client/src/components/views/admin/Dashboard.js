@@ -20,41 +20,62 @@ const Home = () => {
 
   return (
     <Fragment>
-      <h1 className="h3 mb-2 text-gray-800">Dashboard</h1>
-      <p className="mb-4">Summary and overview of our admin stuff here</p>
+      <div className="container">
+      <div class="breadcrumbs">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="page-header">
+              <div class="page-title">
+                <h1><i class="menu-icon fa fa-cubes"></i> Dashboard <span>(Summary and overview of our admin stuff here)</span> </h1>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {/* <h1 className="h3 mb-2 text-gray-800">Dashboard</h1> */}
+      {/* <p className="mb-4">Summary and overview of our admin stuff here</p> */}
 
       <div className="row">
-        <TopCard title="PRODUCT COUNT" text={`${numberItemsCount}`} icon="box" className="primary" />
-        <TopCard title="PRODUCT AMOUNT" text={`${totalProductAmount}`} icon="warehouse" className="danger" />
-        <TopCard title="SUMMARY PRICE" text={`$${totalPrice}`} icon="dollar-sign" className="success" />
-        <TopCard title="SALES" text={totalSales.toString()} icon="donate" className="primary" />
+        <div className="col-lg-12">
+          <div className="box box-block bg-white">
+
+            <div className="overallStatus">
+              <div className="row">
+                  <TopCard title="PRODUCT COUNT" text={`${numberItemsCount}`} icon="bar-chart" className="primary" />
+                  <TopCard title="PRODUCT AMOUNT" text={`${totalProductAmount}`} icon="money" className="danger" />
+                  <TopCard title="SUMMARY PRICE" text={`$${totalPrice}`} icon="bar-chart" className="success" />
+                  <TopCard title="SALES" text={totalSales.toString()} icon="bar-chart" className="primary" />
+              </div>
+            </div>
+            <div className="productListContainer">
+            <div className="row">
+              <div className="col-xl-6 col-lg-6 pr-2">
+                <div className="card mb-4">
+                  <div className="card-header">
+                    <h5 className="">Product list</h5>
+                  </div>
+                  <div className="card-body">
+                  {/*  <ProductList /> */}
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-6 col-lg-6 pl-2">
+                <div className="card mb-4">
+                  <div className="card-header">
+                    <h5 className="">Order list</h5>
+                  </div>
+                  <div className="card-body">
+                  {/*  <OrderList /> */}
+                  </div>
+                </div>
+              </div>
+              </div>
+          </div>
+          </div>
+        </div>
       </div>
 
-      <div className="row">
-
-        <div className="col-xl-6 col-lg-6">
-          <div className="card shadow mb-4">
-            <div className="card-header py-3">
-              <h6 className="m-0 font-weight-bold text-green">Product list</h6>
-            </div>
-            <div className="card-body">
-             {/*  <ProductList /> */}
-            </div>
-          </div>
-
-        </div>
-
-        <div className="col-xl-6 col-lg-6">
-          <div className="card shadow mb-4">
-            <div className="card-header py-3">
-              <h6 className="m-0 font-weight-bold text-green">Order list</h6>
-            </div>
-            <div className="card-body">
-             {/*  <OrderList /> */}
-            </div>
-          </div>
-        </div>
-
+      
       </div>
 
     </Fragment>

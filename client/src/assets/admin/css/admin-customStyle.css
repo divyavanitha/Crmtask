@@ -244,15 +244,20 @@ table.dataTable td, table.dataTable th {
     margin-top: 0px;
     position: absolute;
     /* right: 8px; */
-    top: 4px;
+    top: 6px;
     transition: .4s;
 }
+/* .tableContent table.table tbody tr td input[type=checkbox]:checked+.slider:after, input[type=checkbox]:checked+.slider:after{
+    background-color: #3a6cff;
+    content: "\f00c";
+
+} */
 .tableContent table.table tbody tr td input:checked+.slider, input:checked+.slider {
     background-color: #3a6cff;
 }
 
-/* .tableContent table.table tbody tr td input[type=checkbox]:checked+.slider:after {
+.tableContent table.table tbody tr td input[type=checkbox]:checked+.slider:after {
     left: 6px;
     transform: translateX(30px);
     content: "\f00c";
-} */
+}
