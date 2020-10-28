@@ -1,15 +1,21 @@
 import React, { Suspense } from 'react';
 import { Route, Switch } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
 
 import AdminLogin from './views/admin/auth/Login';
 import Admin from './views/admin/layout/Base';
 import User from './views/user/layout/Base';
 import AdminRoute from './utils/admin_route';
 import AdminAuthRoute from './utils/admin_auth_route';
+import { site } from "../_actions/setting.action";
 
 
 
 function App() {
+
+  const dispatch = useDispatch();
+
+  dispatch(site());
 
   return (
     <Suspense fallback={(<div>Loading...</div>)}>

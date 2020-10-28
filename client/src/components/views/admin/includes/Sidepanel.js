@@ -1,7 +1,12 @@
 import React, { Fragment, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const Sidepanel = () => {
+
+    let settings = useSelector((state) => state.settings);
+
+    let site = settings.settings && settings.settings.site;
 
     let [leftMenuVisibility, setLeftMenuVisibility] = useState(false);
 
@@ -23,7 +28,7 @@ const Sidepanel = () => {
                             <i className="fa fa-bars"></i>
                         </button>
                         <a className="navbar-brand" href="index?dashboard">
-                            <img className="desktop" src={require('../../../../assets/images/1press-logo.png')} width="150" />
+                            <img className="desktop" src={site && site.logo} width="150" />
                         </a>
                         <a className="navbar-brand hidden" href="./"><span className="badge badge-success pt-2 pb-2">A</span></a>
                     </div>

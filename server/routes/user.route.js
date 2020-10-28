@@ -8,14 +8,11 @@ const authController = require('../controllers/auth.controller');
 const homeController = require('../controllers/home.controller');
 const profilecontroller = require('../controllers/profile.controller');
 const pageController = require('../controllers/admin/page.controller');
-const couponController = require('../controllers/admin/coupon.controller');
-const deliveryTimeController = require('../controllers/admin/deliveryTime.controller');
-const categoryController = require('../controllers/admin/category.controller');
-const subcategoryController = require('../controllers/admin/subCategory.controller');
 const packageController = require('../controllers/admin/package.controller');
 const menuController = require('../controllers/admin/menu.controller');
 const gigController = require('../controllers/gigs.controller');
 const orderController = require('../controllers/order.controller');
+
 
 router.post('/login', (req, res) => {
   authController.login(req, res);
@@ -82,16 +79,24 @@ router.get('/subcategory/:id', (req, res) => {
   profilecontroller.listbycategoryToSubCategory(req, res);
 });
 
-router.get('/delivery/time', middleware.user, (req, res) => {
+router.get('/delivery/time', (req, res) => {
   profilecontroller.listDeliveryTime(req, res);
 });
 
-router.get('/coupon', middleware.user, (req, res) => {
+router.get('/coupon', (req, res) => {
   profilecontroller.listCoupon(req, res);
 });
-router.post('/coupon', middleware.user, function(req, res){
+
+router.post('/coupon', function(req, res){
   profilecontroller.createCoupon(req, res);
 });
+
+router.get('/slide', (req, res) => {
+  profilecontroller.listSlide(req, res);
+});
+
+
+
 
 router.get('/page', (req, res) => {
   pageController.listpage(req, res);
@@ -138,6 +143,12 @@ router.delete('/menu/:id', function(req, res){
 });
 
 /*Gig*/
+router.get('/list/gigs', (req, res) => {
+  gigController.withoutAuthgigs(req, res);
+});
+router.get('/get/gig/details/:id', (req, res) => {
+  gigController.getGigDetails(req, res);
+});
 router.get('/gigs', middleware.user, (req, res) => {
   gigController.listgigs(req, res);
 });

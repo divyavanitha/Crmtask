@@ -12,6 +12,10 @@ function Header() {
     const dispatch = useDispatch();
     const auth = useSelector((state) => state.user);
 
+    let settings = useSelector((state) => state.settings);
+
+    let site = settings.settings && settings.settings.site;
+
     useEffect(() => {
 
         $(document).ready(function () {
@@ -229,8 +233,8 @@ function Header() {
                     <div className="col-xs-12">
                         <div id="onePress-logo" className="apply-nav-height onePress-logo-svg onePress-logo-svg-logged-in loggedInLogo">
                             <Link to="/">
-                                <img className="desktop" src={require('../../../../assets/images/1press-logo.png')} width="150" />
-                                {/* <img className="mobile" src={ require('../../../assets/images/1press-logo.png') } height="25" /> */}
+                                <img className="desktop" src={site && site.logo} width="150" />
+                                {/* <img className="mobile" src={site && site.logo} height="25" /> */}
                             </Link>
                         </div>
                         <button id="mobilemenu"

@@ -36,7 +36,8 @@ exports.createSlide = async (req, res) => {
     try {
         const slide = {
             title: req.body.title,
-            category: req.body.category
+            category: req.body.category,
+            description: req.body.description
         }
          slide.layoutPhoto = req.protocol+ '://' +req.get('host')+"/images/slide/"+(req.files.layoutPhoto[0].filename);
         let slides = await db._store(Slide, slide);

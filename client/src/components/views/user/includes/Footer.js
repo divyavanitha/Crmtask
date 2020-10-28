@@ -11,7 +11,12 @@ function Footer() {
 
     let site = settings.settings && settings.settings.site;
 
+    let appLink = settings.settings && settings.settings.appLink;
 
+    let socialLink = settings.settings && settings.settings.socialLink;
+
+console.log(appLink)
+console.log(socialLink)
     return (
 
         <Fragment>
@@ -27,14 +32,14 @@ function Footer() {
                      </p>
                                 <div className="collapse show" id="collapsefindusOn">
                                     <ul className="list-inline social_icon">
-                                        <li className="list-inline-item"><a href="#"><i className="fa fa-google-plus-official"></i></a></li>
+                                    {socialLink && socialLink.map((social) => (social.status == 1  && (<li className="list-inline-item"><a href={social.url} target="_blank"><img src={social.picture} className="pic" /></a></li>) ) )}
+                                        {/* <li className="list-inline-item"><a href="#"><i className="fa fa-google-plus-official"></i></a></li>
                                         <li className="list-inline-item"><a href="#"><i className="fa fa-twitter"></i></a></li>
                                         <li className="list-inline-item"><a href="#"><i className="fa fa-facebook"></i></a></li>
                                         <li className="list-inline-item"><a href="#"><i className="fa fa-linkedin"></i></a></li>
-                                        <li className="list-inline-item"><a href="#"><i className="fa fa-pinterest"></i></a></li>
+                                        <li className="list-inline-item"><a href="#"><i className="fa fa-pinterest"></i></a></li> */}
                                     </ul>
-                                    <img src={require('../../../../assets/images/google.png')} className="pic" />
-                                    <img src={require('../../../../assets/images/app.png')} className="pic1" />
+                                    {appLink && appLink.map((app) => (app.status == 1  && (<a href={app.url} target="_blank"><img src={app.picture} className="pic" /></a>) ) )}
                                 </div>
                             </div>
                         </div>

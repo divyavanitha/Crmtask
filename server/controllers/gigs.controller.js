@@ -7,10 +7,43 @@ const Joi = require('@hapi/joi');
 const _ = require('lodash');
 
 
+exports.withoutAuthgigs = async (req, res) => {
+    try {
+
+        let gigs = await db._get(Gig, {}, {}, {populate: "user"});
+
+        const data = { gigs };
+
+        const response = helper.response({ data });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.getGigDetails = async (req, res) => {
+    try {
+
+        let gig = await db._find(Gig, {"_id":req.params.id});
+
+        const data = { gig };
+
+        const response = helper.response({ data: data });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
 exports.listgigs = async (req, res) => {
     try {
 
-        let gigs = await db._get(Gig);
+        let gigs = await db._get(Gig, { _id: req.user._id });
 
         const data = { gigs };
 
@@ -55,14 +88,14 @@ exports.creategigs = async (req, res) => {
         if(lastGig !== null){
             var gigg = {
                 id: (lastGig.id +1),
-                userId: req.user._id,
+                user: req.user._id,
                 title: req.body.title,
                 subCategoryId: req.body.sub_category_id,
                 tags: req.body.tags
             } 
         }else{
             var gigg = {
-                userId: req.user._id,
+                user: req.user._id,
                 title: req.body.title,
                 subCategoryId: req.body.sub_category_id,
                 tags: req.body.tags
@@ -178,15 +211,13 @@ exports.updateFaq = async(req, res) => {
         for(let i in req.body.question) {
             let faq = {
                 question: req.body.question[i],
-                answer: req.body.answer[i],
-                description: req.body.description[i],
-               
+                answer: req.body.answer[i] 
             }
             faqs.push(faq);
         }
 
         if(faqs.length > 0) gig.faq = faqs;
-
+        gig.description = req.body.description;
         let gigs = await db._update(Gig, { _id: req.body.id }, gig);
 
         const response = helper.response({ message: res.__('updated'), data: gigs });
@@ -280,7 +311,7 @@ exports.updateImage = async(req, res) => {
         for(i in req.files['photo[]']) {
 
             let image = {
-                photo: req.protocol+ '://' +req.get('host')+"/images/user/"+(req.files['photo[]'][i].filename),
+                photo: req.protocol+ '://' +req.get('host')+"/images/gig/"+(req.files['photo[]'][i].filename),
                
             }
             photos.push(image);

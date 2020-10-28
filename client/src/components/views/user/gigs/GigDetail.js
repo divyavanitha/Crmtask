@@ -1,11 +1,24 @@
 import React, { Fragment, useState } from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter, useParams, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import "./Gig.css";
+import { getGigbyId } from "../../../../_actions/user.action";
+
+import OwlCarousel from 'react-owl-carousel';
+
 
 function GigDetail() {
 
+    const dispatch = useDispatch();
+    const params = useParams();
+
+   useEffect(() => {
+      
+      dispatch(getGigbyId(params.gig))
+   }, [params.gig]);
+    const gig = useSelector((state) => state.user && state.user.gig_details && state.user.gig_details.responseData && state.user.gig_details.responseData.gig);
+    console.log('gig',gig);
 
     return (
 
@@ -51,7 +64,7 @@ function GigDetail() {
                             <div className="card rounded-0 mb-4 border-0 bg-none">
                                 <div className="card-body details pt-0">
                                     <div className="proposal-info ">
-                                        <h3>I Will Create A Professional Custom Explainer Video</h3>
+                                        <h3>{gig && gig.title}</h3>
                                         <hr />
                                         <nav className="breadcrumbs h-text-truncate mb-2">
                                             <a href="../../">Home</a>
@@ -82,35 +95,15 @@ function GigDetail() {
                                     </div>
 
                                     <div id="myCarousel" className="carousel slide">
-                                        <ol className="carousel-indicators">
-                                            <li data-target="#myCarousel" data-slide-to="1" className='active'></li>
-                                            <li data-target="#myCarousel" data-slide-to="2"></li>
-                                            <li data-target="#myCarousel" data-slide-to="3"></li>
-                                        </ol>
-                                        <div className="carousel-inner">
-                                            <div className="carousel-item active">
-                                                <img className="d-block w-100" src="https://www.gigtodo.com/proposals/proposal_files/videosales-1.png" />
-                                                <div data-action="img-1" className="slide-fullscreen">Full Screen</div>
-                                            </div>
-                                            <div className="carousel-item">
-                                                <img className="d-block w-100" src="https://www.gigtodo.com/proposals/proposal_files/videosales-2.jpg" />
-                                                <div data-action="img-2" className="slide-fullscreen">Full Screen</div>
-                                            </div>
-                                            <div className="carousel-item">
-                                                {/* <!-- carousel-item Starts --> */}
-                                                <img className="d-block w-100" src="https://www.gigtodo.com/proposals/proposal_files/videosales-3.jpg" />
-                                                <div data-action="img-3" className="slide-fullscreen">Full Screen</div>
-                                            </div>
-                                            {/* <!-- carousel-item Ends --> */}
-                                        </div>
-                                        <a className="carousel-control-prev slide-nav slide-right" href="#myCarousel" data-slide="prev">
-                                            {/* <!--<span className="carousel-control-prev-icon carousel-icon"></span>--> */}
-                                            <i className="fa fa-angle-left"></i>
-                                        </a>
-                                        <a className="carousel-control-next slide-nav slide-left" href="#myCarousel" data-slide="next">
-                                            {/* <!--<span className="carousel-control-next-icon carousel-icon"></span>--> */}
-                                            <i className="fa fa-angle-right"></i>
-                                        </a>
+                                       
+                                        <OwlCarousel className="carousel-inner" loop dots={true} autoplay={true} items={1} >
+                                            
+                                            {gig && gig.photo.map((list) => (<div className="row"><div className="carousel-item active"><a><img className="img-fluid d-block w-100" src={list.photo} alt="videosales-1.png" /></a>
+                                               
+                                                  
+                                            </div></div>))}
+
+                                         </OwlCarousel>
                                     </div>
                                     <div className="card mb-0 rounded-0 border-0">
                                         {/* <!-- card Starts --> */}
@@ -145,10 +138,8 @@ function GigDetail() {
                                     <h4>About This Gig</h4>
                                 </div>
                                 <div className="card-body proposal-desc">
-                                    <p>Let's Work Together To Create The Perfect Explainer/Sales/Whiteboard Video for your business</p>
-                                    <p>Whether it's a simple whiteboard animation to explain a product or service, or a sales kinetic typography lyric video, this gig have you covered!</p>
-                                    <p>The prices listed are per 30,60,90 seconds.</p>
-                                    <p>Bringing your idea to life with world-class custom animation at a most affordable price.</p>
+                                    <p>{gig && gig.description}</p>
+                                    
                                 </div>
                             </div>
                             <div className="card proposal-reviews rounded-0 mb-5" id="reviews">

@@ -41,6 +41,68 @@ const settingSchema = mongoose.Schema({
             default: false
         }
     },
+    appLink: [{
+        name: {
+            type: String,
+            required: true,
+            trim: true,
+            minlength: 1
+        },
+        url: {
+            type: String,
+            default: false
+        }
+    }],
+   socialLink: [{
+        name: {
+            type: String,
+            required: true,
+            trim: true,
+            minlength: 1
+        },
+        url: {
+            type: String,
+            default: false
+        }
+    }],
+    social: {
+        status: {
+            type: Boolean,
+            default: false
+        },
+        facebookAppId: {
+            type: String,
+            required: true,
+            trim: true,
+            minlength: 1
+        },
+        facebookAppSecret: {
+            type: String,
+            required: true,
+            trim: true,
+            minlength: 1
+        },
+        facebookRedirect: {
+            type: String,
+            default: false
+        },
+        googleClientId: {
+            type: String,
+            required: true,
+            trim: true,
+            minlength: 1
+        },
+        googleClientSecret: {
+            type: String,
+            required: true,
+            trim: true,
+            minlength: 1
+        },
+        googleRedirect: {
+            type: String,
+            default: false
+        }
+    },
     createdAt: {
         type: Date,
         default: Date.now

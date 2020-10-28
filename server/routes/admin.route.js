@@ -141,26 +141,30 @@ router.get('/get/coupon/:id', function(req, res){
 });
 
 router.get('/slide', (req, res) => {
-  slideController.listCoupon(req, res);
+  slideController.listSlide(req, res);
 });
 router.post('/slide', [middleware.upload( path.join(__dirname, '../storage/images/slide/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], function(req, res){
-  slideController.createCoupon(req, res);
+  slideController.createSlide(req, res);
 });
 router.patch('/slide', [middleware.upload( path.join(__dirname, '../storage/images/slide/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], function(req, res){
-  slideController.updateCoupon(req, res);
+  slideController.updateSlide(req, res);
 });
 router.delete('/slide/:id', function(req, res){
-  slideController.deleteCoupon(req, res);
+  slideController.deleteSlide(req, res);
 });
 router.get('/get/slide/:id', function(req, res){
-  slideController.listCouponbyid(req, res);
+  slideController.listSlidebyid(req, res);
 });
 router.get('/slide/changestatus/:id/:status', function(req, res){
   slideController.changeStatus(req, res);
 });
 
-router.post('/settings/general', [middleware.admin, middleware.upload( path.join(__dirname, '../storage/images/common/') ).fields([{ name: 'logo', maxCount: 1 }, { name: 'favicon', maxCount: 1 }]) ],  (req, res) => {
-  settingController.general(req, res);
+router.get('/settings', (req, res) => {
+  settingController.getSetting(req, res);
+});
+
+router.post('/settings/general', [middleware.admin, middleware.uploadAs( path.join(__dirname, '../storage/images/common/') ).fields([{ name: 'logo', maxCount: 1 }, { name: 'favicon', maxCount: 1 }]) ],  (req, res) => {
+  settingController.updateGeneral(req, res);
 });
 
 
