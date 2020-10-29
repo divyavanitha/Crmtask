@@ -36,7 +36,7 @@ const AddCategory = (props) => {
                 name: Yup.string()
                     .required('Title is required')
             })}
-            onSubmit={(values, { setSubmitting }) => {
+            onSubmit={(values, { setSubmitting, resetForm }) => {
 
                 let data = {
                     id: values.id,
@@ -53,6 +53,7 @@ const AddCategory = (props) => {
                         addToast(res.message, { appearance: res.status, autoDismiss: true, })
                     })
                 }
+                resetForm();
                 setSubmitting(false);
             }}>
 
@@ -114,7 +115,7 @@ const AddCategory = (props) => {
                                                     </div>
                                                     <div className="col-md-6">
                                                         {params.id ? <button type="submit" className="btn btn-success mr-3">Update</button> : <button type="submit" className="btn btn-success mr-3">Save</button>}
-                                                        <Link className="btn btn-outline" to="/admin/category">Cancel</Link>
+                                                        {params.id ? <Link className="btn btn-outline" to="/admin/category">Cancel</Link> : <button onClick={handleReset} className="btn btn-outline mr-3">Reset</button>}
                                                     </div>
                                                 </div>
                                             </form>
