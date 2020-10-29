@@ -74,11 +74,20 @@ exports.deletePackage = async (req, res) => {
 exports.listPackage = async (req, res) => {
     try {
 
-        let packages = await db._get(Package);
+        if(!req.query.length) req.query.length = 10;
+        else req.query.length = parseInt(req.query.length);
+        if(!req.query.page) req.query.page = 1;
+        else req.query.page = parseInt(req.query.page);
+
+        let skip = (req.query.page * req.query.length) - req.query.length;
+
+        let packages = await db._get(Package, null, null, {limit: req.query.length, skip: skip});
+
+        let count = await db._count(Package);
 
         const data = { packages };
 
-        const response = helper.response({ data });
+        const response = helper.response({ data: helper.paginate(req, data, count) });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -130,17 +139,34 @@ exports.updatePackage = async (req, res) => {
 }
 exports.listPackagebyid = async (req, res) => {
     try {
-    const errors = {};
-    Category.findOne({id: req.params.id})
-    .then(category => {
-        if (!category) {
-            errors.noCategory = 'There are no Category';
-            return res.status(404).json(errors);
+
+        let package = await db._find(Package, {_id:req.params.id});
+
+        const data = { package };
+
+        const response = helper.response({ data: data });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.changeStatus = async (req, res) => {
+    try {
+        const package = {
+                status: req.params.status,
         }
 
-        res.json({category});
-    })
-    }    catch (err) {
+        let packages = await db._update(Package, { _id: req.params.id }, package);
+
+        const response = helper.response({ message: res.__('updated') });
+        return res.status(response.statusCode).json(response);
+        
+    }
+    catch (err) {
         if (err[0] != undefined) {
             for (i in err.errors) {
                 res.status(422).send(err.errors[i].message);
@@ -150,4 +176,4 @@ exports.listPackagebyid = async (req, res) => {
         }
     }
 
-}
+};

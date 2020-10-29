@@ -10,7 +10,7 @@ import $ from 'jquery';
 import { addSlide, getSlidebyId, updateSlide } from "../../../../_actions/admin/slide.action";
 import { getCategories } from "../../../../_actions/admin/category.action";
 
-const AddCategory = (props) => {
+const AddSlide = (props) => {
     const { addToast } = useToasts()
     const dispatch = useDispatch();
     const [description, setDescription] = useState("");
@@ -37,7 +37,8 @@ const AddCategory = (props) => {
                 id: slide ? slide._id : '',
                 title: slide ? slide.title : '',
                 layoutPhoto: slide ? slide.layoutPhoto : '',
-                category: slide ? slide.category : ''
+                category: slide ? slide.category : '',
+                description: slide ? slide.description : ''
 
             }
             }
@@ -50,14 +51,21 @@ const AddCategory = (props) => {
                 category: Yup.string()
                     .required('Category is required')
             })}
-            onSubmit={(values, { setSubmitting }) => {
+            onSubmit={(values, { setSubmitting, resetForm }) => {
 console.log('values', values);
-                let data = {
+                /*let data = {
                     id: values.id,
                     title: values.title,
                     layoutPhoto: values.layoutPhoto,
                     category: values.category
-                };
+                };*/
+
+                const data = new FormData();
+                data.append( "id", values.id );
+                data.append( "title", values.title );
+                data.append( "category", values.category );
+                data.append( "description", values.description );
+                data.append( "layoutPhoto", values.layoutPhoto );
 
                 if (params.id) {
                     dispatch(updateSlide(data)).then(res => { 
@@ -69,6 +77,7 @@ console.log('values', values);
                         addToast(res.message, { appearance: res.status, autoDismiss: true, })
                     })
                 }
+                resetForm();
                 setSubmitting(false);
             }}>
 
@@ -147,9 +156,17 @@ console.log('values', values);
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Image : </label>
                                                     <div className="col-md-6">
-                                                        <Field id="file" name="file" type="file" value={values.layoutPhoto} onChange={(event) => {setFieldValue("file", event.currentTarget.files[0]);}} className={'form-control' + (errors.layoutPhoto && touched.layoutPhoto ? ' is-invalid' : '')}  />
-                                                        
-                                                        <ErrorMessage name="layoutPhoto" component="div" className="invalid-feedback" />
+                                                         <input type="file" name="layoutPhoto" onChange={(e) => { setFieldValue("layoutPhoto", e.currentTarget.files[0]) }} className={'form-control' + (errors.layoutPhoto && touched.layoutPhoto ? ' is-invalid' : '')} />
+
+                                                         {params.id ? <img id="target" src={values.layoutPhoto ? values.layoutPhoto : ""} /> : ""}
+                                                    </div>
+                                                </div>
+
+                                                <div className="form-group row">
+                                                    <label className="col-md-4 control-label"> Description : </label>
+                                                    <div className="col-md-6">
+                                                        <Field component="textarea" rows="2" id="description" value={values.description} name="description"  onChange={handleChange} maxLength={100}  className={'form-control' + (errors.description && touched.description ? ' is-invalid' : '')}  />
+                                                        <ErrorMessage name="description" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
                                                 
@@ -165,8 +182,8 @@ console.log('values', values);
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"></label>
                                                     <div className="col-md-6">
-                                                        {params.id ? <button type="submit" className="btn btn-success mr-3">Update</button> :<button type="submit" className="btn btn-success mr-3">Save</button>}
-                                                        <Link className="btn btn-outline" to="/admin/category">Cancel</Link>
+                                                        {params.id ? <button type="submit" className="btn btn-success mr-3">Update</button> : <button type="submit" className="btn btn-success mr-3">Save</button>}
+                                                        {params.id ? <Link className="btn btn-outline" to="/admin/slide">Cancel</Link> : <button onClick={handleReset} className="btn btn-outline mr-3">Reset</button>}
                                                     </div>
                                                 </div>
                                             </form>
@@ -182,4 +199,4 @@ console.log('values', values);
     );
 };
 
-export default AddCategory;
+export default AddSlide;

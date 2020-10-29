@@ -22,11 +22,7 @@ const gigSchema = mongoose.Schema({
         unique: true
     },
     description: { type: String },
-    subCategoryId : {
-        type: String,
-        required: true,
-        trim: true
-    },
+    subCategory : { type: Schema.Types.ObjectId, ref: 'SubCategory' },
     tags: {
         type: String,
         required: true,
@@ -40,7 +36,8 @@ const gigSchema = mongoose.Schema({
         name: { type: String },
         description: { type: String },
         revisions: { type: String },
-        price: { type: Number }
+        price: { type: Number },
+        delivery_time_id: { type: Schema.Types.ObjectId, ref: 'DeliveryTime' },
     }],
     faq: [{
         question: { type: String },

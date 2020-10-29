@@ -14,6 +14,8 @@ import deliverytimes from './admin/deliverytime.reducer';
 import languages from './admin/language.reducer';
 import coupons from './admin/coupon.reducer';
 import slides from './admin/slide.reducer';
+import menus from './admin/menu.reducer';
+import packages from './admin/package.reducer';
 
 const rootReducer = combineReducers({
     user,
@@ -30,6 +32,8 @@ const rootReducer = combineReducers({
     languages,
     coupons,
     slides,
+    menus,
+    packages,
     gig
 
 });

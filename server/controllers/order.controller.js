@@ -27,7 +27,8 @@ exports.addcart = async (req, res) => {
 
      const schema = Joi.object().options({ abortEarly: false }).keys({
         gig_id: Joi.string().required().label("Gig Id"),
-        quantity: Joi.number().required().label("Quantity")
+        quantity: Joi.number().required().label("Quantity"),
+        price: Joi.number().required().label("Price")
 
     }).unknown(true);
 
@@ -92,6 +93,9 @@ exports.checkout = async (req, res) => {
         coupon_id: Joi.string().required().label("Coupon Id"),
         wallet: Joi.string().required().label("wallet"),
         payment_mode: Joi.string().required().label("Payment Mode"),
+        gig_id: Joi.string().required().label("Gig Id"),
+        quantity: Joi.number().required().label("Quantity"),
+        total: Joi.number().required().label("total")
 
     }).unknown(true);
 
@@ -112,9 +116,13 @@ exports.checkout = async (req, res) => {
     try {
 
             var order = {
-                couponId: req.body.coupon_id,
+                coupon: req.body.coupon_id,
                 wallet: req.body.wallet,
-                payment_mode: req.body.payment_mode
+                payment_mode: req.body.payment_mode,
+                user: req.user._id,
+                gig: req.body.gig_id,
+                quantity: req.body.quantity,
+                total: req.body.total
             }
 
         let orders= await db._store(Order, order);

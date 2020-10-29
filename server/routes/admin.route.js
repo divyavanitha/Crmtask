@@ -144,9 +144,11 @@ router.get('/slide', (req, res) => {
   slideController.listSlide(req, res);
 });
 router.post('/slide', [middleware.upload( path.join(__dirname, '../storage/images/slide/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], function(req, res){
+  console.log(req.files);
   slideController.createSlide(req, res);
 });
 router.patch('/slide', [middleware.upload( path.join(__dirname, '../storage/images/slide/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], function(req, res){
+  console.log(req.files);
   slideController.updateSlide(req, res);
 });
 router.delete('/slide/:id', function(req, res){
@@ -157,6 +159,44 @@ router.get('/get/slide/:id', function(req, res){
 });
 router.get('/slide/changestatus/:id/:status', function(req, res){
   slideController.changeStatus(req, res);
+});
+
+router.get('/menu', (req, res) => {
+  menuController.listMenu(req, res);
+});
+router.post('/menu', [middleware.upload( path.join(__dirname, '../storage/images/menu/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], function(req, res){
+  menuController.createMenu(req, res);
+});
+router.patch('/menu', [middleware.upload( path.join(__dirname, '../storage/images/menu/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], function(req, res){
+  menuController.updateMenu(req, res);
+});
+router.delete('/menu/:id', function(req, res){
+  menuController.deleteMenu(req, res);
+});
+router.get('/get/menu/:id', function(req, res){
+  menuController.listMenubyid(req, res);
+});
+router.get('/menu/changestatus/:id/:status', function(req, res){
+  menuController.changeStatus(req, res);
+});
+
+router.get('/package', (req, res) => {
+  packageController.listPackage(req, res);
+});
+router.post('/package', function(req, res){
+  packageController.createPackage(req, res);
+});
+router.patch('/package', function(req, res){
+  packageController.updatePackage(req, res);
+});
+router.delete('/package/:id', function(req, res){
+  packageController.deletePackage(req, res);
+});
+router.get('/get/package/:id', function(req, res){
+  packageController.listPackagebyid(req, res);
+});
+router.get('/package/changestatus/:id/:status', function(req, res){
+  packageController.changeStatus(req, res);
 });
 
 router.get('/settings', (req, res) => {

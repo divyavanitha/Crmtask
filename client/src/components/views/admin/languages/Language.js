@@ -111,11 +111,11 @@ const Language = () => {
         },
         {
           "data": function (data, type, row) {
-            var button = `<a href="javascript:;" data-id=` + data._id + ` class="btn btn-danger delete">
-             <i class="fa fa-trash text-white" ></i>
+            var button = `<a href="javascript:;" data-id=` + data._id + ` class="actionBtn delete">
+             <i class="fa fa-trash" ></i>
            </a>
-             <a href="javascript:;" data-id=`+ data._id + ` class="btn btn-success edit">
-             <i class="fa fa-pencil text-white"></i>
+             <a href="javascript:;" data-id=`+ data._id + ` class="actionBtn edit">
+             <i class="fa fa-pencil-square-o"></i>
            </a>`;
 
             return button;

@@ -39,7 +39,7 @@ exports.createSlide = async (req, res) => {
             category: req.body.category,
             description: req.body.description
         }
-         slide.layoutPhoto = req.protocol+ '://' +req.get('host')+"/images/slide/"+(req.files.layoutPhoto[0].filename);
+        if(req.files['layoutPhoto']) slide.layoutPhoto = req.protocol+ '://' +req.get('host')+"/images/slide/"+(req.files.layoutPhoto[0].filename);
         let slides = await db._store(Slide, slide);
 
         const response = helper.response({ message: res.__('inserted') });
@@ -83,9 +83,10 @@ exports.updateSlide = async (req, res) => {
     try {
         const slide = {
             title: req.body.title,
-            category: req.body.category
+            category: req.body.category,
+            description: req.body.description
         }
-        slide.layoutPhoto = req.protocol+ '://' +req.get('host')+"/images/slide/"+(req.files.layoutPhoto[0].filename);
+        if(req.files['layoutPhoto']) slide.layoutPhoto = req.protocol+ '://' +req.get('host')+"/images/slide/"+(req.files.layoutPhoto[0].filename);
         let slides = await db._update(Slide, { _id: req.body.id }, slide);
 
         const response = helper.response({ message: res.__('updated') });
@@ -132,7 +133,7 @@ exports.listSlide = async (req, res) => {
 
         let skip = (req.query.page * req.query.length) - req.query.length;
         
-        let slides = await db._get(Slide, null, null, {limit: req.query.length, skip: skip});
+        let slides = await db._get(Slide, null, null, {limit: req.query.length, skip: skip, populate: "category"});
         let count = await db._count(Slide);
         const data = { slides };
 

@@ -106,6 +106,14 @@ const Sidepanel = () => {
                             </li>
 
                             <li>
+                                <Link to="/admin/menu"> <i className="menu-icon fa fa-picture-o"></i>Menus </Link>
+                            </li>
+
+                            <li>
+                                <Link to="/admin/package"> <i className="menu-icon fa fa-file"></i>Packages </Link>
+                            </li>
+
+                            <li>
                                 <Link to="/admin/pages"> <i className="menu-icon fa fa-file"></i>Pages </Link>
                             </li>
 

@@ -7,9 +7,22 @@ const Schema = mongoose.Schema;
 /* A common gotcha for beginners is that the unique option for schemas is not a validator.
 It's a convenient helper for building MongoDB unique indexes. */
 const orderSchema = mongoose.Schema({
-    couponId: {
+    coupon: {
         type: Schema.Types.ObjectId,
         ref: 'Coupon'
+    },
+    user: { type: Schema.Types.ObjectId, ref: 'users' },
+    gig : {
+        type: Schema.Types.ObjectId,
+        ref: 'gigs'
+    },
+    total: {
+        type: Number,
+        required: true
+    },
+    quantity: {
+        type: Number,
+        required: true
     },
     wallet: {
         type: Boolean, 

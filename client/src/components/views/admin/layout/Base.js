@@ -29,6 +29,10 @@ import Skill from "../skills/Skill";
 import Coupon from "../coupons/Coupon";
 import AddSlide from "../slides/AddSlide";
 import Slide from "../slides/Slide";
+import AddMenu from "../menus/AddMenu";
+import Menu from "../menus/Menu";
+import AddPackage from "../packages/AddPackage";
+import Package from "../packages/Package";
 import Dashboard from "../Dashboard";
 import Profile from "../settings/Profile";
 import Social from "../settings/Social";
@@ -86,6 +90,12 @@ const Base = () => {
             <Route path="/admin/slide/add" component={AddSlide}></Route>
             <Route path="/admin/slide/:id/edit" component={AddSlide}></Route>
             <Route path="/admin/slide" component={Slide}></Route>
+            <Route path="/admin/menu/add" component={AddMenu}></Route>
+            <Route path="/admin/menu/:id/edit" component={AddMenu}></Route>
+            <Route path="/admin/menu" component={Menu}></Route>
+            <Route path="/admin/package/add" component={AddPackage}></Route>
+            <Route path="/admin/package/:id/edit" component={AddPackage}></Route>
+            <Route path="/admin/package" component={Package}></Route>
             <Route path="/admin/settings/general" component={General}></Route>
             <Route path="/admin/settings/profile/links" component={Profile}></Route>
             <Route path="/admin/settings/social/links" component={Social}></Route>

@@ -40,7 +40,7 @@ exports.createMenu = async (req, res) => {
             category: req.body.category,   
         }
 
-        menu.layoutPhoto = req.protocol+ '://' +req.get('host')+"/images/menu/"+(req.files.layoutPhoto[0].filename);
+        if(req.files['layoutPhoto']) menu.layoutPhoto = req.protocol+ '://' +req.get('host')+"/images/menu/"+(req.files.layoutPhoto[0].filename);
 
         let lay = await db._store(Menu, menu);
 
@@ -88,7 +88,7 @@ exports.updateMenu = async (req, res) => {
             subTitle: req.body.subTitle,
             category: req.body.category,   
         }
-        menu.layoutPhoto = req.protocol+ '://' +req.get('host')+"/images/menu/"+(req.files.layoutPhoto[0].filename);
+        if(req.files['layoutPhoto']) menu.layoutPhoto = req.protocol+ '://' +req.get('host')+"/images/menu/"+(req.files.layoutPhoto[0].filename);
 
         let lay = await db._update(Menu, { _id: req.body.id }, menu);
 
@@ -127,10 +127,18 @@ exports.deleteMenu = async (req, res) => {
 };
 exports.listMenu = async (req, res) => {
      try {
-        let menus = await db._get(Menu, {}, {}, {populate: "category"});
+
+        if(!req.query.length) req.query.length = 10;
+        else req.query.length = parseInt(req.query.length);
+        if(!req.query.page) req.query.page = 1;
+        else req.query.page = parseInt(req.query.page);
+
+        let skip = (req.query.page * req.query.length) - req.query.length;
+        let menus = await db._get(Menu, null, null, {limit: req.query.length, skip: skip, populate: "category"});
+        let count = await db._count(Menu);
         const data = { menus };
 
-        const response = helper.response({ data });
+        const response = helper.response({ data: helper.paginate(req, data, count) });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -138,19 +146,36 @@ exports.listMenu = async (req, res) => {
     }
 
 }
-exports.listSubCategorybyid = async (req, res) => {
+exports.listMenubyid = async (req, res) => {
     try {
-    const errors = {};
-    SubCategory.findOne({id: req.params.id})
-    .then(subcategory => {
-        if (!subcategory) {
-            errors.noSubCategory = 'There are no SubCategory';
-            return res.status(404).json(errors);
+
+        let menu = await db._find(Menu, {_id:req.params.id});
+
+        const data = { menu };
+
+        const response = helper.response({ data: data });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.changeStatus = async (req, res) => {
+    try {
+        const menu = {
+                status: req.params.status,
         }
 
-        res.json({subcategory});
-    })
-    }    catch (err) {
+        let menus = await db._update(Menu, { _id: req.params.id }, menu);
+
+        const response = helper.response({ message: res.__('updated') });
+        return res.status(response.statusCode).json(response);
+        
+    }
+    catch (err) {
         if (err[0] != undefined) {
             for (i in err.errors) {
                 res.status(422).send(err.errors[i].message);
@@ -160,4 +185,4 @@ exports.listSubCategorybyid = async (req, res) => {
         }
     }
 
-}
+};

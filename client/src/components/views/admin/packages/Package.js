@@ -1,8 +1,8 @@
 import React, { Fragment, Dispatch, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { withRouter, Link, useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useToasts } from 'react-toast-notifications';
-import { deleteDeliveryTime, changeDeliveryTimeStatus } from "../../../../_actions/admin/deliverytime.action";
+import { deletePackage, changePackageStatus } from "../../../../_actions/admin/package.action";
 
 import $ from 'jquery';
 import 'datatables.net';
@@ -13,7 +13,7 @@ import 'datatables.net-buttons-bs4';
 //import 'jszip';
 import 'datatables.net-buttons';
 
-const DeliveryTime = () => {
+const Package = () => {
   const { addToast } = useToasts()
   const dispatch = useDispatch();
   let history = useHistory();
@@ -23,26 +23,25 @@ const DeliveryTime = () => {
 
     $('body').on('click', '.edit', function (e) {
       e.preventDefault();
-      history.push('/admin/delivery/time/' + $(this).data('id') + '/edit')
+      history.push('/admin/package/' + $(this).data('id') + '/edit')
     });
 
     $('body').on('click', '.delete', function (e) {
       e.preventDefault();
       const sid = $(this).data('id');
       console.log($(this).closest('tr'));
-       $('.delete-modal').modal("show");
+      $('.delete-modal').modal("show");
       $(".delete-modal-btn")
         .off()
         .on("click", function () {
-         dispatch(deleteDeliveryTime(sid)).then(res => { 
-           addToast(res.message, { appearance: res.status, autoDismiss: true, })
-          $('#datatable').DataTable().row( $(this).closest('tr') ).remove().draw();
-          $('.delete-modal').modal("hide");
+          dispatch(deletePackage(sid)).then(res => {
+            addToast(res.message, { appearance: res.status, autoDismiss: true, })
+            $('#datatable').DataTable().row($(this).closest('tr')).remove().draw(false);
+            $('.delete-modal').modal("hide");
 
           })
-          
-         // 
-        }); 
+
+        });
     });
 
 
@@ -70,7 +69,7 @@ const DeliveryTime = () => {
       "processing": true,
       "serverSide": true,
       "ajax": {
-        "url": '/api/admin/delivery/time',
+        "url": '/api/admin/package',
         "type": "GET",
         data: function (data) {
 
@@ -85,13 +84,12 @@ const DeliveryTime = () => {
         dataFilter: function (response) {
 
           var data = JSON.parse(response);
-          console.log(data);
           var json = {};
+
           json.recordsTotal = data.responseData.total;
           json.recordsFiltered = data.responseData.total;
-
-          json.data = data.responseData.data.deliveryTime;
-           console.log(json);
+          json.data = data.responseData.data.packages;
+          console.log(json);
           return JSON.stringify(json); // return JSON string
         }
       },
@@ -104,8 +102,8 @@ const DeliveryTime = () => {
         { "data": "name" },
         {
           "data": function (data, type, row) {
-
-            return  "<label class='switch'><input "+ ((data.status == 1) ? "checked" :  "" ) +" type='checkbox' class='status_enable' value='true' data-id='"+data._id+"' data-value='"+ ((data.status == 1) ? "1" :  "0" ) +"'> <span class='slider round'></span></label>";
+            console.log(data.status);
+            return "<label class='switch'><input " + ((data.status == 1) ? "checked" : "") + " type='checkbox' class='status_enable' value='true' data-id='" + data._id + "' data-value='" + ((data.status == 1) ? "1" : "0") + "'> <span class='slider round'></span></label>";
           }
         },
         {
@@ -126,28 +124,25 @@ const DeliveryTime = () => {
       ]
     });
 
-    $('body').on('change', '.status_enable', function() {
+    $('body').on('change', '.status_enable', function () {
 
-        var id = $(this).data('id');
-        var value = 0;
-        var fail_status = true;
+      var id = $(this).data('id');
+      var value = 0;
+      var fail_status = true;
 
-        if($(this).is(":checked")){
-           value = 1; 
-           fail_status = false;
-        }
-       
-          console.log(id, value);
+      if ($(this).is(":checked")) {
+        value = 1;
+        fail_status = false;
+      }
 
-          dispatch(changeDeliveryTimeStatus(id, value)).then(res => {
-               addToast(res.message, { appearance: res.status, autoDismiss: true, })
-                if (res.statusCode != 200) $(this).prop('checked', fail_status);
-          })
+      dispatch(changePackageStatus(id, value)).then(res => {
 
+        addToast(res.message, { appearance: res.status, autoDismiss: true, })
+        if (res.statusCode != 200) $(this).prop('checked', fail_status);
+      })
     });
 
   }, []);
-
 
   return (
     <Fragment>
@@ -158,29 +153,20 @@ const DeliveryTime = () => {
             <div className="col-sm-12">
               <div className="page-header">
                 <div className="page-title">
-                  <h1><i className="menu-icon fa fa-cubes"></i> Delivery Times </h1>
+                  <h1><i className="menu-icon fa fa-cubes"></i> Packages </h1>
                 </div>
               </div>
             </div>
-            {/* <div className="col-sm-8">
-              <div className="page-header float-right">
-                <div className="page-title">
-                  <ol className="breadcrumb text-right">
-                    <li className="active"><Link className="btn btn-info" to="/admin/delivery/time/add" >Add Delivery Time</Link></li>
-                  </ol>
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
         <div className="row">
           <div className="col-lg-12">
             <div className="box box-block bg-white">
-              <h5 className="mb-1">Delivery Times 
+                <h5 className="mb-1">Packages 
                 <div className="rightBtn-Group">
-                    <Link className="addMoreBtn" to="/admin/delivery/time/add" ><span className="txt text-capitalize"> Add New <span className="amIcon"><i className="fa fa-plus"></i></span></span></Link>
+                    <Link className="addMoreBtn" to="/admin/package/add" ><span className="txt text-capitalize"> Add New <span className="amIcon"><i className="fa fa-plus"></i></span></span></Link>
                 </div>
-              </h5>
+                </h5>
               <div className="">
                 <div className="tableContent">
                   <table className="table table-striped" id="datatable">
@@ -208,9 +194,7 @@ const DeliveryTime = () => {
             <div className="modal-header">
               <h4 className="modal-title">Confirm Delete</h4>
             </div>
-            <div className="modal-body p-2">
-              Are you sure want to delete?
-                                        </div>
+            <div className="modal-body p-2"> Are you sure want to delete? </div>
             <div className="modal-footer">
               <button type="button" className="btn default" data-dismiss="modal">Close</button>
               <button type="button" data-value="1" className="btn btn-danger delete-modal-btn">Delete</button>
@@ -220,9 +204,9 @@ const DeliveryTime = () => {
         </div>
 
       </div>
-
+      
     </Fragment >
   );
 };
 
-export default DeliveryTime;
+export default Package;

@@ -1,8 +1,8 @@
 import React, { Fragment, Dispatch, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { withRouter, Link, useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useToasts } from 'react-toast-notifications';
-import { deleteDeliveryTime, changeDeliveryTimeStatus } from "../../../../_actions/admin/deliverytime.action";
+import { deleteMenu, changeMenuStatus } from "../../../../_actions/admin/menu.action";
 
 import $ from 'jquery';
 import 'datatables.net';
@@ -12,10 +12,12 @@ import 'pdfmake/build/vfs_fonts.js';
 import 'datatables.net-buttons-bs4';
 //import 'jszip';
 import 'datatables.net-buttons';
+import "react-datepicker/dist/react-datepicker.css";
 
-const DeliveryTime = () => {
-  const { addToast } = useToasts()
+
+const Menu = () => {
   const dispatch = useDispatch();
+  const { addToast } = useToasts()
   let history = useHistory();
 
   useEffect(() => {
@@ -23,7 +25,7 @@ const DeliveryTime = () => {
 
     $('body').on('click', '.edit', function (e) {
       e.preventDefault();
-      history.push('/admin/delivery/time/' + $(this).data('id') + '/edit')
+      history.push('/admin/menu/' + $(this).data('id') + '/edit')
     });
 
     $('body').on('click', '.delete', function (e) {
@@ -34,7 +36,7 @@ const DeliveryTime = () => {
       $(".delete-modal-btn")
         .off()
         .on("click", function () {
-         dispatch(deleteDeliveryTime(sid)).then(res => { 
+         dispatch(deleteMenu(sid)).then(res => { 
            addToast(res.message, { appearance: res.status, autoDismiss: true, })
           $('#datatable').DataTable().row( $(this).closest('tr') ).remove().draw();
           $('.delete-modal').modal("hide");
@@ -70,7 +72,7 @@ const DeliveryTime = () => {
       "processing": true,
       "serverSide": true,
       "ajax": {
-        "url": '/api/admin/delivery/time',
+        "url": '/api/admin/menu',
         "type": "GET",
         data: function (data) {
 
@@ -85,13 +87,12 @@ const DeliveryTime = () => {
         dataFilter: function (response) {
 
           var data = JSON.parse(response);
-          console.log(data);
           var json = {};
+
           json.recordsTotal = data.responseData.total;
           json.recordsFiltered = data.responseData.total;
-
-          json.data = data.responseData.data.deliveryTime;
-           console.log(json);
+          json.data = data.responseData.data.menus;
+          console.log(json);
           return JSON.stringify(json); // return JSON string
         }
       },
@@ -101,7 +102,24 @@ const DeliveryTime = () => {
             return meta.row + meta.settings._iDisplayStart + 1;
           }
         },
-        { "data": "name" },
+        { "data": "title" },
+        { "data": "subTitle" },
+        { "data": "category", render: function (data, type, row) {
+                if(data){
+                    return data.name;
+                }else{
+                    return "<h6>NA</h6>"
+                }
+            }
+        },
+        { "data": "layoutPhoto", render: function (data, type, row) {
+                if(data){
+                    return "<img src='"+data+"' style='height: 50px; width: 50px;'>";
+                }else{
+                    return "<h6>NA</h6>"
+                }
+            }
+        },
         {
           "data": function (data, type, row) {
 
@@ -139,7 +157,7 @@ const DeliveryTime = () => {
        
           console.log(id, value);
 
-          dispatch(changeDeliveryTimeStatus(id, value)).then(res => {
+          dispatch(changeMenuStatus(id, value)).then(res => {
                addToast(res.message, { appearance: res.status, autoDismiss: true, })
                 if (res.statusCode != 200) $(this).prop('checked', fail_status);
           })
@@ -147,6 +165,7 @@ const DeliveryTime = () => {
     });
 
   }, []);
+
 
 
   return (
@@ -158,7 +177,7 @@ const DeliveryTime = () => {
             <div className="col-sm-12">
               <div className="page-header">
                 <div className="page-title">
-                  <h1><i className="menu-icon fa fa-cubes"></i> Delivery Times </h1>
+                  <h1><i className="menu-icon fa fa-cubes"></i> Menus </h1>
                 </div>
               </div>
             </div>
@@ -166,7 +185,7 @@ const DeliveryTime = () => {
               <div className="page-header float-right">
                 <div className="page-title">
                   <ol className="breadcrumb text-right">
-                    <li className="active"><Link className="btn btn-info" to="/admin/delivery/time/add" >Add Delivery Time</Link></li>
+                    <li className="active"><Link className="btn btn-info" to="/admin/menu/add" >Add Menu</Link></li>
                   </ol>
                 </div>
               </div>
@@ -176,9 +195,9 @@ const DeliveryTime = () => {
         <div className="row">
           <div className="col-lg-12">
             <div className="box box-block bg-white">
-              <h5 className="mb-1">Delivery Times 
+              <h5 className="mb-1">Slides 
                 <div className="rightBtn-Group">
-                    <Link className="addMoreBtn" to="/admin/delivery/time/add" ><span className="txt text-capitalize"> Add New <span className="amIcon"><i className="fa fa-plus"></i></span></span></Link>
+                    <Link className="addMoreBtn" to="/admin/menu/add" ><span className="txt text-capitalize"> Add New <span className="amIcon"><i className="fa fa-plus"></i></span></span></Link>
                 </div>
               </h5>
               <div className="">
@@ -187,7 +206,10 @@ const DeliveryTime = () => {
                     <thead>
                       <tr>
                         <th>#Id</th>
-                        <th>Name</th>
+                        <th>Title</th>
+                        <th>Sub Title</th>
+                        <th>Category</th>
+                        <th>Image</th>
                         <th>Status</th>
                         <th>Action</th>
                       </tr>
@@ -225,4 +247,4 @@ const DeliveryTime = () => {
   );
 };
 
-export default DeliveryTime;
+export default Menu;
