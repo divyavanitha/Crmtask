@@ -49,6 +49,24 @@ const DeliveryTime = () => {
 
 
     $('#datatable').DataTable({
+      language: {
+        searchPlaceholder: "Search"
+      },
+      fnDrawCallback: function ( oSettings ){
+            if(oSettings.fnRecordsTotal() <= 10){     
+               $('.dataTables_length').hide();
+               $('.dataTables_paginate').hide();
+               $('.dataTables_filter').hide();
+               $('.dataTables_wrapper').addClass('noFilters');
+            } else {
+               $('.dataTables_length').show();
+               $('.dataTables_paginate').show(); 
+               $('.dataTables_filter').show();
+               $('.dataTables_wrapper.noFilters').removeClass('noFilters');
+            }
+      },
+      "bLengthChange": false,
+      "info": false,
       "processing": true,
       "serverSide": true,
       "ajax": {
@@ -137,14 +155,14 @@ const DeliveryTime = () => {
       <div className="container">
         <div className="breadcrumbs">
           <div className="row">
-            <div className="col-sm-4">
-              <div className="page-header float-left">
+            <div className="col-sm-12">
+              <div className="page-header">
                 <div className="page-title">
                   <h1><i className="menu-icon fa fa-cubes"></i> Delivery Times </h1>
                 </div>
               </div>
             </div>
-            <div className="col-sm-8">
+            {/* <div className="col-sm-8">
               <div className="page-header float-right">
                 <div className="page-title">
                   <ol className="breadcrumb text-right">
@@ -152,14 +170,19 @@ const DeliveryTime = () => {
                   </ol>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="row">
           <div className="col-lg-12">
-            <div className="">
+            <div className="box box-block bg-white">
+              <h5 className="mb-1">Delivery Times 
+                <div className="rightBtn-Group">
+                    <Link className="addMoreBtn" to="/admin/delivery/time/add" ><span className="txt text-capitalize"> Add New <span className="amIcon"><i className="fa fa-plus"></i></span></span></Link>
+                </div>
+              </h5>
               <div className="">
-                <div className="table-responsive box-table tableContent">
+                <div className="tableContent">
                   <table className="table table-striped" id="datatable">
                     <thead>
                       <tr>

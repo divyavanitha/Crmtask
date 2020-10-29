@@ -80,14 +80,14 @@ const AddDeliveryTime = (props) => {
                         <div className="container">
                             <div className="breadcrumbs">
                                 <div className="row">
-                                    <div className="col-sm-4">
-                                        <div className="page-header float-left">
+                                    <div className="col-sm-12">
+                                        <div className="page-header">
                                             <div className="page-title">
                                                 <h1><i className="menu-icon fa fa-cubes"></i> Delivery Times / {params.id ? "Edit Delivery Time" : "Add Delivery Time"} </h1>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="col-sm-8">
+                                    {/* <div className="col-sm-8">
                                     <div className="page-header float-right">
                                         <div className="page-title">
                                         <ol className="breadcrumb text-right">
@@ -95,17 +95,22 @@ const AddDeliveryTime = (props) => {
                                         </ol>
                                         </div>
                                     </div>
-                                    </div>
+                                    </div> */}
 
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-lg-12">
-                                    <div className="card">
-                                        <div className="card-header">
+                                    <div className="box box-block bg-white">
+                                    <h5 className="mb-1">{params.id ? "Edit Delivery Time" : "Add Delivery Time"} 
+                                    <div className="rightBtn-Group">
+                                        <Link className="addMoreBtn" to="/admin/delivery/time" ><span className="txt text-capitalize"><span className="amIcon"><i className="fa fa-arrow-left"></i></span> Back</span></Link>
+                                    </div>
+                                    </h5>
+                                        {/* <div className="card-header">
                                             <h4 className="h4">{params.id ? "Edit Delivery Time" : "Add Delivery Time"}</h4>
-                                        </div>
-                                        <div className="card-body">
+                                        </div> */}
+                                        <div className="addFormBox">
                                             <form onSubmit={handleSubmit} encType="multipart/form-data">
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Name : </label>
@@ -126,8 +131,8 @@ const AddDeliveryTime = (props) => {
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"></label>
                                                     <div className="col-md-6">
-                                                        {params.id ? <button type="submit" className="btn btn-success">Update</button> :<button type="submit" className="btn btn-success">Save</button>}
-                                                        <Link className="btn btn-danger" to="/admin/delivery/time">Cancel</Link>
+                                                        {params.id ? <button type="submit" className="btn btn-success mr-3">Update</button> :<button type="submit" className="btn btn-success mr-3">Save</button>}
+                                                        <Link className="btn btn-outline" to="/admin/delivery/time">Cancel</Link>
                                                     </div>
                                                 </div>
                                             </form>

@@ -79,8 +79,8 @@ const Profile = (props) => {
                         <div className="container">
                             <div className="breadcrumbs">
                                 <div className="row">
-                                    <div className="col-sm-4">
-                                        <div className="page-header float-left">
+                                    <div className="col-sm-12">
+                                        <div className="page-header">
                                             <div className="page-title">
                                                 <h1><i className="menu-icon fa fa-gear"></i> Settings / Profile Links </h1>
                                             </div>
@@ -92,8 +92,8 @@ const Profile = (props) => {
                             <div className="row">
                                 <div className="col-lg-12">
 
-                                    <div className="card">
-                                        <div style={{ padding: '0px' }} className="card-header">
+                                    <div className="box box-block bg-white">
+                                        <div style={{ padding: '0px' }} className="">
                                             <div className="tab-container">
                                                 <Link to="/admin/settings/general" className="tab-item">General</Link>
                                                 <Link to="/admin/settings/profile/links" className="tab-item active">Social Links</Link>
@@ -104,7 +104,7 @@ const Profile = (props) => {
                                                 <Link to="/admin/settings/payment" className="tab-item">Payment Config</Link>
                                             </div>
                                         </div>
-                                        <div className="card-body">
+                                        <div className="addFormBox">
                                             <form onSubmit={handleSubmit} encType="multipart/form-data">
 
 

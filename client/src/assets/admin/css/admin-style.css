@@ -1580,6 +1580,11 @@ body.open .navbar .navbar-brand.hidden {
   padding: 15px 0;
 }
 
+.right-panel .page-header h1 span{
+  color: #777777;
+  font-size: 12px;
+}
+
 .right-panel .page-header .breadcrumb {
   margin: 0px;
   padding: 13.5px 0;
@@ -2856,6 +2861,48 @@ header .form-inline .search-form.close {
   border-color: #272c33;
   color: #fff;
 }
+
+
+/* new added */
+
+.overallStatus {}
+
+.overallStatus .card-header h5 {
+    margin: 0 !important;
+    padding: 0;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+.overallStatus .row {
+  padding: 0 13px;
+}
+
+.overallStatus .row div[class*=col-]{
+  padding: 0 5px;
+}
+
+.overallStatus{}
+.overallStatus .card{
+
+}
+
+.productListContainer{}
+
+.productListContainer .card-header h5 {
+  margin: 0 !important;
+  padding: 0;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.no-gutters>.col, .no-gutters>[class*="col-"] {
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+}
+
+
 
 @media (max-width: 1368px) {
   .content {
