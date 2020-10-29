@@ -26,7 +26,8 @@ exports.withoutAuthgigs = async (req, res) => {
 exports.getGigDetails = async (req, res) => {
     try {
 
-        let gig = await db._find(Gig, {"_id":req.params.id});
+        //let gig = //await db._find(Gig, {_id:req.params.id}, {}, {populate: "user"});
+        let gig = await db._find(Gig, {_id:req.params.id}, {} );
 
         const data = { gig };
 

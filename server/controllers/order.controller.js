@@ -48,8 +48,10 @@ exports.addcart = async (req, res) => {
     try {
 
             var cart = {
-                gigId: req.body.gig_id,
-                quantity: req.body.quantity
+                user: req.user._id,
+                gig: req.body.gig_id,
+                quantity: req.body.quantity,
+                price: req.body.price
             }
 
         let carts= await db._store(Cart, cart);

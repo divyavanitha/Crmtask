@@ -54,17 +54,18 @@ exports.updateProfile = async (req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error: errorMessage });
+    /*const response = helper.response({ status: 422, error: errorMessage });
 
     if (error) return res.status(response.statusCode).json(response);
 
-    try {
+    try {*/
         const user = {
             firstName: req.body.first_name,
             lastName: req.body.last_name,
             email: req.body.email,
             mobile: req.body.mobile,
             city: req.body.city,
+            country: req.body.country,
             profilePhoto: req.body.profile_photo,
             coverPhoto: req.body.cover_photo,
             headline: req.body.headline,
@@ -74,14 +75,12 @@ exports.updateProfile = async (req, res) => {
 
         user.profilePhoto = req.protocol + '://' + req.get('host') + "/images/user/" + (req.files['profile_photo'][0].filename);
         user.coverPhoto = req.protocol + '://' + req.get('host') + "/images/user/" + (req.files['cover_photo'][0].filename);
-
-
-        let users = await db._update(User, { _id: req.body.id }, user);
-
+        let users = await db._update(User, { _id: req.user._id }, user);
+console.log(users);
         const response = helper.response({ message: res.__('updated') });
         return res.status(response.statusCode).json(response);
 
-    } catch (err) {
+    /*} catch (err) {
         if (err[0] != undefined) {
             for (i in err.errors) {
                 return res.status(422).json(err.errors[i].message);
@@ -89,7 +88,7 @@ exports.updateProfile = async (req, res) => {
         } else {
             return res.status(422).json(err);
         }
-    }
+    }*/
 }
 
 exports.updateLanguage = async (req, res) => {

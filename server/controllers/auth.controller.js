@@ -175,6 +175,7 @@ exports.register = async (req, res) => {
         //})
 
     } catch (err) {
+        console.log(err);
         if (err[0] != undefined) {
             for (i in err.errors) {
                 const response = helper.response({ status: 422, error : err.errors[i].message });

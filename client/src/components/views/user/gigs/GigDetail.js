@@ -295,25 +295,25 @@ function GigDetail() {
                             <div className="card-body order-box tab-content">
                                 {/* <!--- card-body Starts ---> */}
                                 <div className="purchase-form">
-                                    <form action="../../checkout" id="checkoutForm" method="post">
+                                    <form encType="multipart/form-data">
                                         <input type="hidden" name="proposal_id" value="4" />
                                         <input type="hidden" name="proposal_qty" value="1" />
                                         <div className="header">
                                             <span className="text ">
-                                                <span className="dropdown" tabindex="0" data-toggle="popover" data-placement="bottom" data-html="true" data-content="<div className='card border-0'>
-                              <div className='card-body pb-3'>
-                              <h5 className='font-weight-normal mb-3'><strong>How it works</strong> <span className='badge badge-success badge-sm'>SITE RULE</span> </h5>
-                              <div className='price'>
-                              <b className='currency'>&#036;<span>10</span></b>
-                              </div>
-                              <p className='h6 line-height-full'>This is the base price. Unless you agree otherwise with seller, the delivered work will be as detailed on this page. Ordering extras may extend the delivery time.</p>
-                              </div>
-                              </div>
-                              <script>
-                              var order_box = $('.order-box');
-                              $('.popover').css({ 'max-width' : order_box.width() + 'px', left : '155px' });
-                              </script>
-                              ">Order Details</span>
+                                            <span className="dropdown" tabindex="0" data-toggle="popover" data-placement="bottom" data-html="true" data-content="<div className='card border-0'>
+                                          <div className='card-body pb-3'>
+                                          <h5 className='font-weight-normal mb-3'><strong>How it works</strong> <span className='badge badge-success badge-sm'>SITE RULE</span> </h5>
+                                          <div className='price'>
+                                            <b className='currency'>&#036;<span>10</span></b>
+                                          </div>
+                                          <p className='h6 line-height-full'>This is the base price. Unless you agree otherwise with seller, the delivered work will be as detailed on this page. Ordering extras may extend the delivery time.</p>
+                                          </div>
+                                          </div>
+                                          <script>
+                                          var order_box = $('.order-box');
+                                          $('.popover').css({ 'max-width' : order_box.width() + 'px', left : '155px' });
+                                          </script>
+                                          ">Order Details</span>
                                                 <a href="#" className="secure ml-2">
 
                                                 </a>
@@ -333,11 +333,11 @@ function GigDetail() {
                                                 <div className="col-12 ml-2 p-2">
                                                     <h6 className="mb-0 ">
                                                         <i className="fa fa-clock-o"></i> 1 Day Delivery
-                              &nbsp;&nbsp;
-                              <span className="float-right mr-4">
+                                                        &nbsp;&nbsp;
+                                                        <span className="float-right mr-4">
                                                             <i className="fa fa-refresh"></i>
-                              Revisions
-                              </span>
+                                                            Revisions
+                                                        </span>
                                                     </h6>
                                                 </div>
                                             </div>
@@ -346,7 +346,7 @@ function GigDetail() {
                                                 <span className="item "><span className="name"><span>Quantity:</span></span></span>
                                                 <div className="quantity-control ">
                                                     <div className="increase ">
-<button>+</button>
+                                                    <button>+</button>
                                                     </div>
                                                     <span className="quantity ">1</span>
                                                     <div className="decrease ">
@@ -362,8 +362,8 @@ function GigDetail() {
                                                 {/* <!-- <strong>Order Now (&#036;<span className="total-price">10</span>)</strong> --> */}
                                                 <strong>Order Now (&#036;<span className='total-price'>10.00</span>)</strong>
                                             </button>
-                  </form>
-               </div>
+                                          </form>
+                                       </div>
                                 </div>
                                 {/* <!--- card-body Ends ---> */}
                             </div>
@@ -373,8 +373,8 @@ function GigDetail() {
                                         <img src={ require('../../../../assets/images/userlisting/img-06.jpg')}  width="100" className="rounded-circle" />
                                     </center>
                                     <h3 className="text-center h3">
-                                        <a className="text-success" href="../../mir_digimarket" >
-                                            Mir_digimarket  </a> <span className="divider"> </span> <span className="text-muted">Level Two</span>
+                                        <a className="text-success" href={gig && gig.user.firstName} >
+                                            {gig && gig.user.firstName} {gig && gig.user.lastName}  </a> <span className="divider"> </span> <span className="text-muted">Level Two</span>
                                     </h3>
                                     <a href="../../conversations/message?seller_id=2" className="btn btn-lg btn-block btn-success rounded-0">Message me</a>
                                     <hr />
