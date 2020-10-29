@@ -26,7 +26,7 @@ const AddSubCategory = (props) => {
     }, [params.id]);
     const subcategory = useSelector(state => state.subcategories && state.subcategories.subcategory && state.subcategories.subcategory.responseData.sub_category);
     const categories = useSelector(state => state.categories && state.categories.categories.responseData && state.categories.categories.responseData.data.categories);
-console.log('sub', categories);
+
     return (
 
         <Formik
@@ -46,7 +46,7 @@ console.log('sub', categories);
                 category: Yup.string()
                     .required('Category is required')
             })}
-            onSubmit={(values, { setSubmitting }) => {
+            onSubmit={(values, { setSubmitting, resetForm  }) => {
 
                 let data = {
                     id: values.id,
@@ -64,6 +64,7 @@ console.log('sub', categories);
                         addToast(res.message, { appearance: res.status, autoDismiss: true, })
                     })
                 }
+                resetForm();
                 setSubmitting(false);
             }}>
 
@@ -149,7 +150,7 @@ console.log('sub', categories);
                                                     <label className="col-md-4 control-label"></label>
                                                     <div className="col-md-6">
                                                         {params.id ? <button type="submit" className="btn btn-success mr-3">Update</button> :<button type="submit" className="btn btn-success mr-3">Save</button>}
-                                                        <Link className="btn btn-outline" to="/admin/subcategory">Cancel</Link>
+                                                        {params.id ? <Link className="btn btn-outline" to="/admin/subcategory">Cancel</Link> : <button onClick={handleReset} className="btn btn-outline mr-3">Reset</button>}
                                                     </div>
                                                 </div>
                                             </form>

@@ -72,8 +72,8 @@ exports.updateProfile = async (req, res) => {
         }
         //console.log(JSON.stringify(req.files));
 
-        user.profilePhoto = req.protocol + '://' + req.get('host') + "/images/user/" + (req.files['profile_photo'][0].filename);
-        user.coverPhoto = req.protocol + '://' + req.get('host') + "/images/user/" + (req.files['cover_photo'][0].filename);
+        if(req.files['profile_photo']) user.profilePhoto = req.protocol + '://' + req.get('host') + "/images/user/" + (req.files['profile_photo'][0].filename);
+        if(req.files['cover_photo']) user.coverPhoto = req.protocol + '://' + req.get('host') + "/images/user/" + (req.files['cover_photo'][0].filename);
 
 
         let users = await db._update(User, { _id: req.body.id }, user);
@@ -81,7 +81,7 @@ exports.updateProfile = async (req, res) => {
         const response = helper.response({ message: res.__('updated') });
         return res.status(response.statusCode).json(response);
 
-    } catch (err) {
+     } catch (err) {
         if (err[0] != undefined) {
             for (i in err.errors) {
                 return res.status(422).json(err.errors[i].message);
@@ -89,7 +89,7 @@ exports.updateProfile = async (req, res) => {
         } else {
             return res.status(422).json(err);
         }
-    }
+    } 
 }
 
 exports.updateLanguage = async (req, res) => {
