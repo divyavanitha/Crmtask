@@ -21,7 +21,7 @@ exports.login = async (req, res) => {
         const schema = Joi.object().options({ abortEarly: false }).keys({
             email: Joi.string().required().label("Email"),
             password: Joi.string().required().min(6).label("Password")
-        });
+        }).unknown(true);
 
         const { error } = schema.validate(req.body);
         const errors = { };
@@ -38,6 +38,10 @@ exports.login = async (req, res) => {
 
         const validPassword = await bcrypt.compare(req.body.password, user.password);
         if (!validPassword) res.status(422).json( helper.response(  { status: 422, message: 'Invalid credentials' }   ));
+
+        user.deviceType = req.body.device_type;
+        user.deviceToken = req.body.device_token;
+        const result = await user.save();
 
         let payload = _.pick(user, ['_id', 'firstName', 'lastName', 'email', 'mobile']);
 
@@ -74,7 +78,7 @@ exports.register = async (req, res) => {
             mobile: Joi.number().min(10).integer().required().label("Mobile"),
             password: Joi.string().required().min(6).label("Password"),
             confirm_password: Joi.any().equal(Joi.ref('password')).required().label("Confirm Password")
-        });
+        }).unknown(true);
 
         const { error } = schema.validate(req.body);
         const errors = { };
@@ -98,6 +102,8 @@ exports.register = async (req, res) => {
             email: req.body.email,
             mobile: req.body.mobile,
             password: req.body.password,
+            deviceType: req.body.device_type,
+            deviceToken: req.body.device_token,
             referralId: Math.random().toString(36).slice(2)
         })
 
@@ -176,6 +182,103 @@ exports.register = async (req, res) => {
 
     } catch (err) {
         console.log(err);
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                const response = helper.response({ status: 422, error : err.errors[i].message });
+                return res.status(response.statusCode).json(response);
+            }
+        } else {
+            let message = null;
+            let errors = { };
+            if(err._message) message = err._message;
+            if(err.errors) {
+                for (let key in err.errors) {
+                    if (Object.keys(err.errors[key]).length > 0) {
+                        let removePath = (err.errors[key].properties.message).replace(/Path /g, "");
+                        errors[err.errors[key].properties.path] = (removePath).replace(/`/g, "");
+                    }
+               }
+            }
+            
+            const response = helper.response({ status: 422, message: message, error : errors });
+            return res.status(response.statusCode).json(response);
+        }
+    }
+};
+
+exports.social = async (req, res) => {
+   
+    try {
+        const schema = Joi.object().options({ abortEarly: false }).keys({
+            social_unique_id: Joi.string().label("Social Unique ID"),
+            first_name: Joi.string().label("First Name"),
+            last_name: Joi.string().label("Last Name"),
+            email: Joi.string().email().label("Email"),
+            mobile: Joi.number().min(10).integer().label("Mobile"),
+        }).unknown(true);
+
+        const { error } = schema.validate(req.body);
+        const errors = { };
+        if (error) {
+            for (let err of error.details) {
+                errors[err.path[0]] = (err.message).replace(/"/g, "");
+            }
+        }
+
+        if (error) return res.status(422).json( helper.response(  { status: 422, error : errors }   ));
+
+        let socialUniqueId = await User.findOne({ socialUniqueId: req.body.social_unique_id });
+        if (socialUniqueId) {
+
+            let payload = _.pick(socialUniqueId, ['_id', 'firstName', 'lastName', 'email', 'mobile']);
+
+            const token = socialUniqueId.generateAuthToken(payload);
+
+            payload.token = 'Bearer ' + token;
+
+            const data = { user: payload };
+
+            const response = helper.response({ data });
+
+            return res.status(response.statusCode).json(response);
+
+        }
+
+        let email = await User.findOne({ email: req.body.email });
+        if (email) return res.status(422).json( helper.response(  { status: 422, message: 'Email already exists'  }   ));
+
+        let mobile = await User.findOne({ mobile: req.body.mobile });
+        if (mobile) return res.status(422).json( helper.response(  { status: 422, message: 'Mobile already exists'  }   ));
+
+        const user = new User({
+            firstName: req.body.first_name,
+            lastName: req.body.last_name,
+            email: req.body.email,
+            mobile: req.body.mobile,
+            profilePhoto: req.body.profile_photo,
+            loginBy: req.body.login_by,
+            socialUniqueId: req.body.social_unique_id,
+            deviceType: req.body.device_type,
+            deviceToken: req.body.device_token,
+        })
+
+        var verify = Math.floor((Math.random() * 10000000) + 1);
+        const result = await user.save();
+
+        let payload = _.pick(user, ['_id', 'firstName', 'lastName', 'email', 'mobile']);
+
+        const token = user.generateAuthToken(payload);
+
+        payload.token = 'Bearer ' + token;
+
+        const data = { user: payload };
+
+        const response = helper.response({ data });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err)
         if (err[0] != undefined) {
             for (i in err.errors) {
                 const response = helper.response({ status: 422, error : err.errors[i].message });

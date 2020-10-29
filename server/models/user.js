@@ -20,21 +20,30 @@ const userSchema = mongoose.Schema({
     },
     email: {
         type: String,
-        required: true,
         trim: true,
         unique: true
     },
     mobile: {
         type: String,
-        required: true,
         trim: true,
         unique: true
     },
     password: {
         type: String,
-        required: true,
         minlength: 6,
         trim: true,
+    },
+    loginBy: {
+        type: String
+    },
+    socialUniqueId: {
+        type: String
+    },
+    deviceType: {
+        type: String
+    },
+    deviceToken: {
+        type: String
     },
     country: { type: Schema.Types.ObjectId, ref: 'Country' },
     city: { type: Schema.Types.ObjectId, ref: 'City' },
@@ -44,24 +53,19 @@ const userSchema = mongoose.Schema({
         status: { type: Boolean, default: false }
     }],
     profilePhoto: {
-        type: String,
-        default: false
+        type: String
     },
     coverPhoto: {
-        type: String,
-        default: false
+        type: String
     },
     headline: {
-        type: String,
-        default: false
+        type: String
     },
     description: {
-        type: String,
-        default: false
+        type: String
     },
     experience: {
-        type: String,
-        default: false
+        type: String
     },
     skill: [{
         skill: { type: Schema.Types.ObjectId, ref: 'Skill' },
@@ -84,7 +88,6 @@ const userSchema = mongoose.Schema({
     },
     referralId: {
         type: String,
-        required: true,
         minlength: 6,
         trim: true,
     },

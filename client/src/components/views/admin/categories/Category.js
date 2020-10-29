@@ -151,7 +151,7 @@ const Category = () => {
         <div className="breadcrumbs">
           <div className="row">
             <div className="col-sm-12">
-              <div className="page-header float-left">
+              <div className="page-header">
                 <div className="page-title">
                   <h1><i className="menu-icon fa fa-cubes"></i> Categories </h1>
                 </div>

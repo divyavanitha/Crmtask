@@ -10,7 +10,6 @@ import Gig from "./gigs/Gig"
 import OwlCarousel from 'react-owl-carousel';
 
 
-
 function App() {
 
    const dispatch = useDispatch();

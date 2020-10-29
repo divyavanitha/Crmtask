@@ -22,6 +22,10 @@ router.post('/register', (req, res) => {
   authController.register(req, res);
 });
 
+router.post('/social', (req, res) => {
+  authController.social(req, res);
+});
+
 router.get('/countries', (req, res) => {
   authController.country(req, res);
 });

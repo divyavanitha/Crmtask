@@ -3,7 +3,8 @@ import { withRouter, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import { register } from "../../../../_actions/user.action";
+import { register, social_login } from "../../../../_actions/user.action";
+import SocialButton from '../includes/SocialButton';
 import * as Yup from 'yup';
 import $ from 'jquery';
 
@@ -11,10 +12,55 @@ function Register() {
 
     const dispatch = useDispatch();
 
+    let settings = useSelector((state) => state.settings);
+
+    let social = settings.settings && settings.settings.social;
+
+    const handleSocialLogin = (user) => {
+
+        if(user._provider == 'google') {
+
+            let dataToSubmit = {
+                first_name: user._profile.firstName,
+                last_name: user._profile.lastName,
+                email: user._profile.email,
+                mobile: user._profile.mobile,
+                profile_photo: user._profile.profilePicURL,
+                social_unique_id: user._profile.id,
+                login_by: 'GOOGLE'
+            };
+
+            dispatch(social_login(dataToSubmit)).then((res) => {
+                $('#register-modal').modal('hide');
+            })
+
+        } else if(user._provider == 'facebook') {
+
+            let dataToSubmit = {
+                first_name: user._profile.firstName,
+                last_name: user._profile.lastName,
+                email: user._profile.email,
+                mobile: user._profile.mobile,
+                profile_photo: user._profile.profilePicURL,
+                social_unique_id: user._profile.id,
+                login_by: 'FACEBOOK'
+            };
+
+            dispatch(social_login(dataToSubmit)).then((res) => {
+                $('#register-modal').modal('hide');
+            })
+
+        }
+    }
+
+    const handleSocialLoginFailure = (err) => {
+        console.error(err)
+    }
+
     return (
         <Formik
-        
-        enableReinitialize
+
+            enableReinitialize
 
             initialValues={{
                 first_name: '',
@@ -31,7 +77,7 @@ function Register() {
                 email: Yup.string().required('Email is required'),
                 mobile: Yup.string().required('Mobile is required'),
                 password: Yup.string().required('Password is required'),
-                confirm_password: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords does not match') .required('Confirm Password is required')
+                confirm_password: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords does not match').required('Confirm Password is required')
             })}
 
             onSubmit={(values, { setSubmitting }) => {
@@ -123,22 +169,24 @@ function Register() {
                                             <input type="submit" name="register" className="btn btn-success btn-block" value="Register Now" />
                                         </form>
                                         <div className="clearfix"></div>
-                                        <div className="text-center">or, register with either:</div>
-                                        <hr />
-                                        <div className="line mt-3"><span></span></div>
-                                        <div className="text-center">
-                                            <a href="#" className="btn btn-success btn-fb-connect" >
-                                                <i className="fa fa-facebook"></i> FACEBOOK
-               </a>
-                                            <a href="#" className="btn btn-danger btn-gplus-connect " >
-                                                <i className="fa fa-google"></i> GOOGLE
-               </a>
-                                        </div>
-                                        <div className="clearfix"></div>
-                                        <div className="text-center mt-3 text-muted">
-                                            Already Have An Account?          <a href="#" className="text-success" data-toggle="modal" data-target="#login-modal" data-dismiss="modal">
-                                                Login Now          </a>
-                                        </div>
+                                        { social && social.status == 1 && (social.facebookAppId != "" || social.googleClientId != "" ) &&
+                                        <Fragment>
+                                            <div className="text-center">or, register with either:</div>
+                                            <hr />
+                                            <div className="line mt-3"><span></span></div>
+                                            <div className="text-center">
+                                                <SocialButton className="btn btn-success btn-fb-connect" provider='facebook' appId={social.facebookAppId} onClick={handleSocialLogin} onLoginSuccess={handleSocialLogin} onLoginFailure={handleSocialLoginFailure} > <i className="fa fa-facebook"></i> FACEBOOK </SocialButton>
+                                                &nbsp; &nbsp;
+                                                <SocialButton className="btn btn-danger btn-gplus-connect" provider='google' appId={social.googleClientId} onClick={handleSocialLogin} onLoginSuccess={handleSocialLogin} onLoginFailure={handleSocialLoginFailure} > <i className="fa fa-google"></i> GOOGLE </SocialButton>
+                                            </div>
+                                            <div className="clearfix"></div>
+                                            </Fragment>
+                                        }
+
+                                            <div className="text-center mt-3 text-muted">
+                                                Already Have An Account?          <a href="#" className="text-success" data-toggle="modal" data-target="#login-modal" data-dismiss="modal">
+                                                    Login Now          </a>
+                                            </div>
                                     </div>
                                     {/* <!--  modal-body Ends --> */}
                                 </div>

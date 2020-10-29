@@ -87,14 +87,14 @@ console.log('sub', categories);
                         <div className="container">
                             <div className="breadcrumbs">
                                 <div className="row">
-                                    <div className="col-sm-4">
-                                        <div className="page-header float-left">
+                                    <div className="col-sm-12">
+                                        <div className="page-header">
                                             <div className="page-title">
                                                 <h1><i className="menu-icon fa fa-cubes"></i> Sub Categories / {params.id ? "Edit Sub Category" : "Add Sub Category"} </h1>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="col-sm-8">
+                                    {/* <div className="col-sm-8">
                                     <div className="page-header float-right">
                                         <div className="page-title">
                                         <ol className="breadcrumb text-right">
@@ -102,17 +102,20 @@ console.log('sub', categories);
                                         </ol>
                                         </div>
                                     </div>
-                                    </div>
+                                    </div> */}
 
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-lg-12">
-                                    <div className="card">
-                                        <div className="card-header">
-                                            <h4 className="h4">{params.id ? "Edit Sub Category" : "Add Sub Category"}</h4>
+                                    <div className="box box-block bg-white">
+                                        <h5 className="mb-1">{params.id ? "Edit Sub Category" : "Add Sub Category"} 
+                                        <div className="rightBtn-Group">
+                                            <Link className="addMoreBtn" to="/admin/subcategory" ><span className="txt text-capitalize"><span className="amIcon"><i className="fa fa-arrow-left"></i></span> Back</span></Link>
                                         </div>
-                                        <div className="card-body">
+                                        </h5>
+                                        
+                                        <div className="addFormBox">
                                             <form onSubmit={handleSubmit} encType="multipart/form-data">
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Name : </label>
@@ -145,8 +148,8 @@ console.log('sub', categories);
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"></label>
                                                     <div className="col-md-6">
-                                                        {params.id ? <button type="submit" className="btn btn-success">Update</button> :<button type="submit" className="btn btn-success">Save</button>}
-                                                        <Link className="btn btn-danger" to="/admin/subcategory">Cancel</Link>
+                                                        {params.id ? <button type="submit" className="btn btn-success mr-3">Update</button> :<button type="submit" className="btn btn-success mr-3">Save</button>}
+                                                        <Link className="btn btn-outline" to="/admin/subcategory">Cancel</Link>
                                                     </div>
                                                 </div>
                                             </form>

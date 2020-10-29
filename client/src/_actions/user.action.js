@@ -15,6 +15,7 @@ import {
     FIND_GIG
 } from './types';
 
+
 export const login = (data) => async dispatch => {
 
     try {
@@ -38,11 +39,32 @@ export const login = (data) => async dispatch => {
 }
 
 
-
 export const register = (data) => async dispatch => {
 
     try {
         const response = await axios.post(`api/register`, data);
+
+        const { token } = response.data.responseData.user;
+
+        localStorage.setItem('token', token);
+
+        setToken(token);
+
+        dispatch({
+            type: AUTH_USER,
+            payload: response.data.responseData.user
+        });
+
+    } catch (e) {
+
+    }
+}
+
+
+export const social_login = (data) => async dispatch => {
+
+    try {
+        const response = await axios.post(`api/social`, data);
 
         const { token } = response.data.responseData.user;
 

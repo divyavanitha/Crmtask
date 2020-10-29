@@ -15,8 +15,6 @@ function Footer() {
 
     let socialLink = settings.settings && settings.settings.socialLink;
 
-console.log(appLink)
-console.log(socialLink)
     return (
 
         <Fragment>
@@ -32,14 +30,14 @@ console.log(socialLink)
                      </p>
                                 <div className="collapse show" id="collapsefindusOn">
                                     <ul className="list-inline social_icon">
-                                    {socialLink && socialLink.map((social) => (social.status == 1  && (<li className="list-inline-item"><a href={social.url} target="_blank"><img src={social.picture} className="pic" /></a></li>) ) )}
+                                    {socialLink && socialLink.map((social, index) => (social.status == 1  && (<li key={index} className="list-inline-item"><a href={social.url} target="_blank"><img src={social.picture} className="pic" /></a></li>) ) )}
                                         {/* <li className="list-inline-item"><a href="#"><i className="fa fa-google-plus-official"></i></a></li>
                                         <li className="list-inline-item"><a href="#"><i className="fa fa-twitter"></i></a></li>
                                         <li className="list-inline-item"><a href="#"><i className="fa fa-facebook"></i></a></li>
                                         <li className="list-inline-item"><a href="#"><i className="fa fa-linkedin"></i></a></li>
                                         <li className="list-inline-item"><a href="#"><i className="fa fa-pinterest"></i></a></li> */}
                                     </ul>
-                                    {appLink && appLink.map((app) => (app.status == 1  && (<a href={app.url} target="_blank"><img src={app.picture} className="pic" /></a>) ) )}
+                                    {appLink && appLink.map((app, index) => (app.status == 1  && (<a key={index} href={app.url} target="_blank"><img src={app.picture} className="pic" /></a>) ) )}
                                 </div>
                             </div>
                         </div>
