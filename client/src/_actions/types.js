@@ -34,7 +34,7 @@ export const GET_SUBCATEGORY = 'GET_SUBCATEGORY';
 export const GET_CHATS = 'get_chat';
 export const AFTER_POST_MESSAGE = 'after_post_message';
 
-export const GET_USERS = 'GET_USERS';
+//export const GET_USERS = 'GET_USERS';
 
 export const GET_MENUS = 'GET_MENUS';
 

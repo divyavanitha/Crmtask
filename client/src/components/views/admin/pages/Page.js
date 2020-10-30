@@ -2,7 +2,7 @@ import React, { Fragment, Dispatch, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { useToasts } from 'react-toast-notifications';
-import { deleteUser, changeUserStatus } from "../../../../_actions/admin/user.action";
+import { deletePage, changePageStatus } from "../../../../_actions/admin/page.action";
 
 import $ from 'jquery';
 import 'datatables.net';
@@ -13,7 +13,7 @@ import 'datatables.net-buttons-bs4';
 //import 'jszip';
 import 'datatables.net-buttons';
 
-const User = () => {
+const Page = () => {
   const { addToast } = useToasts()
   const dispatch = useDispatch();
   let history = useHistory();
@@ -23,7 +23,7 @@ const User = () => {
 
     $('body').on('click', '.edit', function (e) {
       e.preventDefault();
-      history.push('/admin/user/' + $(this).data('id') + '/edit')
+      history.push('/admin/page/' + $(this).data('id') + '/edit')
     });
 
     $('body').on('click', '.delete', function (e) {
@@ -34,7 +34,7 @@ const User = () => {
       $(".delete-modal-btn")
         .off()
         .on("click", function () {
-          dispatch(deleteUser(sid)).then(res => {
+          dispatch(deletePage(sid)).then(res => {
             addToast(res.message, { appearance: res.status, autoDismiss: true, })
             $('#datatable').DataTable().row($(this).closest('tr')).remove().draw(false);
             $('.delete-modal').modal("hide");
@@ -69,7 +69,7 @@ const User = () => {
       "processing": true,
       "serverSide": true,
       "ajax": {
-        "url": '/api/admin/user',
+        "url": '/api/admin/page',
         "type": "GET",
         data: function (data) {
 
@@ -88,7 +88,7 @@ const User = () => {
 
           json.recordsTotal = data.responseData.total;
           json.recordsFiltered = data.responseData.total;
-          json.data = data.responseData.data.users;
+          json.data = data.responseData.data.pages;
           console.log(json);
           return JSON.stringify(json); // return JSON string
         }
@@ -99,10 +99,7 @@ const User = () => {
             return meta.row + meta.settings._iDisplayStart + 1;
           }
         },
-        { "data": "firstName" },
-        { "data": "lastName" },
-        { "data": "email" },
-        { "data": "mobile" },
+        { "data": "title" },
         {
           "data": function (data, type, row) {
             console.log(data.status);
@@ -138,7 +135,7 @@ const User = () => {
         fail_status = false;
       }
 
-      dispatch(changeUserStatus(id, value)).then(res => {
+      dispatch(changePageStatus(id, value)).then(res => {
 
         addToast(res.message, { appearance: res.status, autoDismiss: true, })
         if (res.statusCode != 200) $(this).prop('checked', fail_status);
@@ -156,7 +153,7 @@ const User = () => {
             <div className="col-sm-12">
               <div className="page-header">
                 <div className="page-title">
-                  <h1><i className="menu-icon fa fa-cubes"></i> Users </h1>
+                  <h1><i className="menu-icon fa fa-cubes"></i> Pages </h1>
                 </div>
               </div>
             </div>
@@ -165,9 +162,9 @@ const User = () => {
         <div className="row">
           <div className="col-lg-12">
             <div className="box box-block bg-white">
-                <h5 className="mb-1">Users 
+                <h5 className="mb-1">Pages 
                 <div className="rightBtn-Group">
-                    <Link className="addMoreBtn" to="/admin/user/add" ><span className="txt text-capitalize"> Add New <span className="amIcon"><i className="fa fa-plus"></i></span></span></Link>
+                    <Link className="addMoreBtn" to="/admin/page/add" ><span className="txt text-capitalize"> Add New <span className="amIcon"><i className="fa fa-plus"></i></span></span></Link>
                 </div>
                 </h5>
               <div className="">
@@ -176,10 +173,7 @@ const User = () => {
                     <thead>
                       <tr>
                         <th>#Id</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                        <th>Mobile</th>
+                        <th>Title</th>
                         <th>Status</th>
                         <th>Action</th>
                       </tr>
@@ -215,4 +209,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default Page;

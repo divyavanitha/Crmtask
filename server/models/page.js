@@ -43,16 +43,6 @@ pageSchema.methods.generateAuthToken = function (payload) {
     return token;
 }
 
-function validate(request) {
 
-    const schema = Joi.object().options({ abortEarly: false }).keys({
-        page_name: Joi.string().min(3).required().label("Title"),
-        content: Joi.string().required().label("Content")
-     
-    });
-
-    return schema.validate(request);
-}
 
 exports.Page = mongoose.model('pages', pageSchema);
-exports.validate = validate;

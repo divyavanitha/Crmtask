@@ -37,7 +37,7 @@ exports._store = async (model, document, options = {}) => {
         return response;
 
     } catch (err) {
-
+        console.log(err);
     }
 
 }

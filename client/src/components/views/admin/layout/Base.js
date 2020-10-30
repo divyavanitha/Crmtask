@@ -33,6 +33,10 @@ import AddMenu from "../menus/AddMenu";
 import Menu from "../menus/Menu";
 import AddPackage from "../packages/AddPackage";
 import Package from "../packages/Package";
+import AddPage from "../pages/AddPage";
+import Page from "../pages/Page";
+import AddUser from "../users/AddUser";
+import User from "../users/User";
 import Dashboard from "../Dashboard";
 import Profile from "../settings/Profile";
 import Social from "../settings/Social";
@@ -96,6 +100,12 @@ const Base = () => {
             <Route path="/admin/package/add" component={AddPackage}></Route>
             <Route path="/admin/package/:id/edit" component={AddPackage}></Route>
             <Route path="/admin/package" component={Package}></Route>
+            <Route path="/admin/page/add" component={AddPage}></Route>
+            <Route path="/admin/page/:id/edit" component={AddPage}></Route>
+            <Route path="/admin/page" component={Page}></Route>
+            <Route path="/admin/user/add" component={AddUser}></Route>
+            <Route path="/admin/user/:id/edit" component={AddUser}></Route>
+            <Route path="/admin/user" component={User}></Route>
             <Route path="/admin/settings/general" component={General}></Route>
             <Route path="/admin/settings/profile/links" component={Profile}></Route>
             <Route path="/admin/settings/social/links" component={Social}></Route>

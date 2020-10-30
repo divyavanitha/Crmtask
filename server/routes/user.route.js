@@ -108,21 +108,6 @@ router.get('/package', (req, res) => {
 });
 
 
-
-
-router.get('/page', (req, res) => {
-  pageController.listpage(req, res);
-});
-router.post('/page', function(req, res){
-  pageController.createpage(req, res);
-});
-router.patch('/page', function(req, res){
-  pageController.updatePage(req, res);
-});
-router.delete('/page/:id', function(req, res){
-  pageController.deletepage(req, res);
-});
-
 /*Gig*/
 router.get('/list/gigs', (req, res) => {
   gigController.withoutAuthgigs(req, res);
