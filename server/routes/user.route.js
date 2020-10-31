@@ -99,52 +99,14 @@ router.get('/slide', (req, res) => {
   profilecontroller.listSlide(req, res);
 });
 
-
-
-
-router.get('/page', (req, res) => {
-  pageController.listpage(req, res);
+router.get('/menu', (req, res) => {
+  profilecontroller.listMenu(req, res);
 });
-router.post('/page', function(req, res){
-  pageController.createpage(req, res);
-});
-router.patch('/page', function(req, res){
-  pageController.updatePage(req, res);
-});
-router.delete('/page/:id', function(req, res){
-  pageController.deletepage(req, res);
-});
-
-
-
-
 
 router.get('/package', (req, res) => {
-  packageController.listPackage(req, res);
-});
-router.post('/package', function(req, res){
-  packageController.createPackage(req, res);
-});
-router.patch('/package', function(req, res){
-  packageController.updatePackage(req, res);
-});
-router.delete('/package/:id', function(req, res){
-  packageController.deletePackage(req, res);
+  profilecontroller.listPackage(req, res);
 });
 
-
-router.get('/menu', (req, res) => {
-  menuController.listMenu(req, res);
-});
-router.post('/menu', [middleware.upload( path.join(__dirname, '../storage/images/menu/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], function(req, res){
-  menuController.createMenu(req, res);
-});
-router.patch('/menu', [middleware.upload( path.join(__dirname, '../storage/images/menu/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], function(req, res){
-  menuController.updateMenu(req, res);
-});
-router.delete('/menu/:id', function(req, res){
-  menuController.deleteMenu(req, res);
-});
 
 /*Gig*/
 router.get('/list/gigs', (req, res) => {

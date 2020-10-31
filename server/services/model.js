@@ -49,7 +49,7 @@ exports._find = async (model, projection = {}, selection = {}, options = {}) => 
         let query = await model.findOne(projection);
 
         if (options.populate) query.populate(options.populate);
-
+        
         const response = await query;
 
         return response;
@@ -64,7 +64,7 @@ exports._update = async (model, condition = {}, document, options = {}) => {
     try {
 
         const query = await model.findOneAndUpdate(condition, document, { new: true });
-
+console.log(query);
         return true;
 
     } catch (err) {

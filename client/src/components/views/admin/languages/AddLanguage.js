@@ -40,7 +40,7 @@ const AddLanguage = (props) => {
                name: Yup.string()
                     .required('Name is required'),
             })}
-            onSubmit={(values, { setSubmitting }) => {
+            onSubmit={(values, { setSubmitting, resetForm }) => {
 
                 let data = {
                     id: values.id,
@@ -57,6 +57,7 @@ const AddLanguage = (props) => {
                         addToast(res.message, { appearance: res.status, autoDismiss: true, })
                     })
                 }
+                resetForm();
                 setSubmitting(false);
             }}>
 
@@ -128,10 +129,12 @@ const AddLanguage = (props) => {
                                                     </div>
                                                 </div> */}
                                                 <div className="form-group row">
-                                                    <label className="col-md-4 control-label"></label>
+                                                    <div className="col-md-4">
+                                                        <label className="control-label"></label>
+                                                    </div>
                                                     <div className="col-md-6">
-                                                        {params.id ? <button type="submit" className="btn btn-success mr-3">Update</button> :<button type="submit" className="btn btn-success mr-3">Save</button>}
-                                                        <Link className="btn btn-outline" to="/admin/language">Cancel</Link>
+                                                        {params.id ? <button type="submit" className="btn btn-success mr-3">Update</button> : <button type="submit" className="btn btn-success mr-3">Save</button>}
+                                                        {params.id ? <Link className="btn btn-outline" to="/admin/language">Cancel</Link> : <button onClick={handleReset} className="btn btn-outline mr-3">Reset</button>}
                                                     </div>
                                                 </div>
                                             </form>

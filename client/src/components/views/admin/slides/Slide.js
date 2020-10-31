@@ -15,7 +15,7 @@ import 'datatables.net-buttons';
 import "react-datepicker/dist/react-datepicker.css";
 
 
-const Coupon = () => {
+const Slide = () => {
   const dispatch = useDispatch();
   const { addToast } = useToasts()
   let history = useHistory();
@@ -91,7 +91,7 @@ const Coupon = () => {
 
           json.recordsTotal = data.responseData.total;
           json.recordsFiltered = data.responseData.total;
-          json.data = data.responseData.data.coupons;
+          json.data = data.responseData.data.slides;
           console.log(json);
           return JSON.stringify(json); // return JSON string
         }
@@ -103,8 +103,22 @@ const Coupon = () => {
           }
         },
         { "data": "title" },
-        { "data": "category" },
-        { "data": "layoutPhoto" },
+        { "data": "category", render: function (data, type, row) {
+                if(data){
+                    return data.name;
+                }else{
+                    return "<h6>NA</h6>"
+                }
+            }
+        },
+        { "data": "layoutPhoto", render: function (data, type, row) {
+                if(data){
+                    return "<img src='"+data+"' style='height: 50px; width: 50px;'>";
+                }else{
+                    return "<h6>NA</h6>"
+                }
+            }
+        },
         {
           "data": function (data, type, row) {
 
@@ -113,11 +127,11 @@ const Coupon = () => {
         },
         {
           "data": function (data, type, row) {
-            var button = `<a href="javascript:;" data-id=` + data._id + ` class="btn btn-danger delete">
-             <i class="fa fa-trash text-white" ></i>
+            var button = `<a href="javascript:;" data-id=` + data._id + ` class="actionBtn delete">
+             <i class="fa fa-trash" ></i>
            </a>
-             <a href="javascript:;" data-id=`+ data._id + ` class="btn btn-success edit">
-             <i class="fa fa-pencil text-white"></i>
+             <a href="javascript:;" data-id=`+ data._id + ` class="actionBtn edit">
+             <i class="fa fa-pencil-square-o"></i>
            </a>`;
 
             return button;
@@ -231,4 +245,4 @@ const Coupon = () => {
   );
 };
 
-export default Coupon;
+export default Slide;

@@ -4,8 +4,10 @@ const { Category } = require('../models/category');
 const { DeliveryTime } = require('../models/DeliveryTime');
 const { Coupon } = require('../models/Coupon');
 const { Slide } = require('../models/Slide');
-const helper = require('../services/helper.js');
-const db = require('../services/model.js');
+const { Menu } = require('../models/Menu');
+const { Package } = require('../models/Package');
+var helper = require('../services/helper.js');
+var db = require('../services/model.js');
 const Joi = require('@hapi/joi');
 const _ = require('lodash');
 const Log = new (require('../config/winston'));
@@ -65,6 +67,7 @@ exports.updateProfile = async (req, res) => {
             email: req.body.email,
             mobile: req.body.mobile,
             city: req.body.city,
+            country: req.body.country,
             profilePhoto: req.body.profile_photo,
             coverPhoto: req.body.cover_photo,
             headline: req.body.headline,
@@ -322,7 +325,7 @@ exports.listbycategoryToSubCategory = async (req, res) => {
     console.log(req.params.id);
     try {
 
-        let sub_categories = await db._get(SubCategory, { category: req.params.id });
+        var sub_categories = await db._get(SubCategory, { category: req.params.id,  status: 1 });
 
         const data = { sub_categories };
 
@@ -336,7 +339,7 @@ exports.listbycategoryToSubCategory = async (req, res) => {
 exports.listDeliveryTime = async (req, res) => {
     try {
 
-        let deliveryTime = await db._get(DeliveryTime);
+        let deliveryTime = await db._get(DeliveryTime, { status: 1 });
         const data = { deliveryTime };
 
         const response = helper.response({ data });
@@ -352,7 +355,7 @@ exports.listCoupon = async (req, res) => {
 
     try {
         
-        let coupons = await db._get(Coupon);
+        let coupons = await db._get(Coupon, { status: 1 });
 
         const data = { coupons };
 
@@ -422,7 +425,7 @@ exports.listSlide = async (req, res) => {
 
     try {
         
-        let slides = await db._get(Slide);
+        let slides = await db._get(Slide, { status: 1 });
 
         const data = { slides };
 
@@ -435,6 +438,38 @@ exports.listSlide = async (req, res) => {
 
 }
 
+exports.listMenu = async (req, res) => {
+
+    try {
+        
+        let menus = await db._get(Menu, { status: 1 });
+
+        const data = { menus };
+
+        const response = helper.response({ data });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.listPackage = async (req, res) => {
+    try {
+
+        let packages = await db._get(Package, { status: 1 });
+
+        const data = { packages };
+
+        const response = helper.response({ data });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
 
 exports.findprofile = async (req, res) => {
     const errors = {};
