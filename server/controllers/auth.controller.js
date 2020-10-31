@@ -11,8 +11,8 @@ const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const transporter = require('../config/mail');
 const dotenv = require('dotenv');
-var helper = require('../services/helper.js');
-var db = require('../services/model.js');
+const helper = require('../services/helper.js');
+const db = require('../services/model.js');
 dotenv.config({ path: __dirname + '/../../.env' });
 
 exports.login = async (req, res) => {
@@ -109,7 +109,7 @@ exports.register = async (req, res) => {
 
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(req.body.password, salt);
-        var verify = Math.floor((Math.random() * 10000000) + 1);
+        let verify = Math.floor((Math.random() * 10000000) + 1);
         const result = await user.save();
 
         let payload = _.pick(user, ['_id', 'firstName', 'lastName', 'email', 'mobile']);
@@ -142,7 +142,7 @@ exports.register = async (req, res) => {
                 console.log(error)
             }
             else {
-                var mailOption = {
+                let mailOption = {
                     from: 'skumaran449@gmail.com', // sender this is your email here
                     to: `${req.body.email}`, // receiver email2
                     subject: "Account Verification",
@@ -262,7 +262,7 @@ exports.social = async (req, res) => {
             deviceToken: req.body.device_token,
         })
 
-        var verify = Math.floor((Math.random() * 10000000) + 1);
+        let verify = Math.floor((Math.random() * 10000000) + 1);
         const result = await user.save();
 
         let payload = _.pick(user, ['_id', 'firstName', 'lastName', 'email', 'mobile']);
@@ -315,9 +315,9 @@ exports.forgetpassword = async (req, res) => {
                     return throwFailed(res, 'No user found with that email address.')
                 }
 
-                var reset = Math.floor((Math.random() * 1000000000) + 1);
+                let reset = Math.floor((Math.random() * 1000000000) + 1);
 
-                var mailOption = {
+                let mailOption = {
                     from: 'skumaran449@gmail.com', // sender this is your email here
                     to: `${req.body.email}`, // receiver email2
                     subject: "Account Verification",
@@ -375,7 +375,7 @@ exports.passwordreset = async (req, res) => {
                             //     console.log(err)
                             // }
                             if (data) {
-                                var mailOption = {
+                                let mailOption = {
                                     from: 'skumaran449@gmail.com', // sender this is your email here
                                     to: `${data.email}`, // receiver email2
                                     subject: "Password reset sucesssfully",
@@ -541,10 +541,10 @@ exports.register1 = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(req.body.password, salt);
         console.log("User is here" + user)
-        var verify = Math.floor((Math.random() * 10000000) + 1);
+        let verify = Math.floor((Math.random() * 10000000) + 1);
         await user.save()
             .then(data => {
-                var mailOption = {
+                let mailOption = {
                     from: 'skumaran449@gmail.com', // sender this is your email here
                     to: `${req.body.Email}`, // receiver email2
                     subject: "Account Verification",

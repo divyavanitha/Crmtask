@@ -1,6 +1,6 @@
-var multer = require('multer');
-var path = require('path');
-var fs = require('fs');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 const jwt = require('jsonwebtoken');
 
 function auth(req, res, next) {
@@ -58,7 +58,7 @@ function upload(destinationPath) {
         fs.mkdirSync(destinationPath, { recursive: true });
     }
     
-    var storage = multer.diskStorage({
+    let storage = multer.diskStorage({
         destination: function (req, file, cb) {
             cb(null, destinationPath);
         },
@@ -67,7 +67,7 @@ function upload(destinationPath) {
         }
     });
 
-    var uploaded = multer({ storage: storage });
+    let uploaded = multer({ storage: storage });
     return uploaded;
 }
 
@@ -77,7 +77,7 @@ function uploadAs(destinationPath) {
         fs.mkdirSync(destinationPath, { recursive: true });
     }
     
-    var storage = multer.diskStorage({
+    let storage = multer.diskStorage({
         destination: function (req, file, cb) {
             cb(null, destinationPath);
         },
@@ -86,7 +86,7 @@ function uploadAs(destinationPath) {
         }
     });
 
-    var uploaded = multer({ storage: storage });
+    let uploaded = multer({ storage: storage });
     return uploaded;
 }
 

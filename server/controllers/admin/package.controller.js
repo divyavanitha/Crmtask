@@ -6,8 +6,8 @@ const Joi = require('@hapi/joi');
 const { Package } = require('../../models/Package');
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
-var db = require('../../services/model.js');
-var helper = require('../../services/helper');
+const db = require('../../services/model.js');
+const helper = require('../../services/helper');
 const dotenv = require('dotenv');
 dotenv.config({ path: __dirname + '/../../.env' });
 

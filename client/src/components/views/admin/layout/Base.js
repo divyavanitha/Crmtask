@@ -38,7 +38,7 @@ import Page from "../pages/Page";
 import AddUser from "../users/AddUser";
 import User from "../users/User";
 import Dashboard from "../Dashboard";
-import Profile from "../settings/Profile";
+import SocialLink from "../settings/SocialLink";
 import Social from "../settings/Social";
 import Sms from "../settings/Sms";
 import Mail from "../settings/Mail";
@@ -107,8 +107,8 @@ const Base = () => {
             <Route path="/admin/user/:id/edit" component={AddUser}></Route>
             <Route path="/admin/user" component={User}></Route>
             <Route path="/admin/settings/general" component={General}></Route>
-            <Route path="/admin/settings/profile/links" component={Profile}></Route>
-            <Route path="/admin/settings/social/links" component={Social}></Route>
+            <Route path="/admin/settings/social/links" component={SocialLink}></Route>
+            <Route path="/admin/settings/social" component={Social}></Route>
             <Route path="/admin/settings/sms" component={Sms}></Route>
             <Route path="/admin/settings/mail" component={Mail}></Route>
             <Route path="/admin/settings/push" component={Push}></Route>

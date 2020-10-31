@@ -8,11 +8,6 @@ const Schema = mongoose.Schema;
 /* A common gotcha for beginners is that the unique option for schemas is not a validator.
 It's a convenient helper for building MongoDB unique indexes. */
 const gigSchema = mongoose.Schema({
-    id: {
-        type: Number,
-        default: 1,
-        unique: true
-    },
     user: { type: Schema.Types.ObjectId, ref: 'users' },
     title: {
         type: String,

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Joi = require('@hapi/joi');
 const jwt = require('jsonwebtoken');
-var SchemaTypes = mongoose.Schema.Types;
+const SchemaTypes = mongoose.Schema.Types;
 /* A common gotcha for beginners is that the unique option for schemas is not a validator.
 It's a convenient helper for building MongoDB unique indexes. */
 const userSchema = mongoose.Schema({

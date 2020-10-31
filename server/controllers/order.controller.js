@@ -2,8 +2,8 @@ const express = require("express");
 const { Cart } = require('../models/Cart');
 const { Order } = require('../models/Order');
 const { Rating } = require('../models/Rating');
-var helper = require('../services/helper.js');
-var db = require('../services/model.js');
+const helper = require('../services/helper.js');
+const db = require('../services/model.js');
 const Joi = require('@hapi/joi');
 const _ = require('lodash');
 
@@ -167,7 +167,7 @@ exports.rating = async (req, res) => {
 
     try {
 
-            var rating = {
+            let rating = {
                 orderId: req.body.order_id,
                 rating: req.body.rating,
                 comment: req.body.comment

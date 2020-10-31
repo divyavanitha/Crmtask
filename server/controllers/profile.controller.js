@@ -11,14 +11,14 @@ var db = require('../services/model.js');
 const Joi = require('@hapi/joi');
 const _ = require('lodash');
 const Log = new (require('../config/winston'));
-var ObjectId = require('mongodb').ObjectID;
+const ObjectId = require('mongodb').ObjectID;
 
 exports.getProfile = async (req, res) => {
 
     const errors = {};
     try {
 
-        var user = await db._get(User, { _id: req.user._id });
+        let user = await db._get(User, { _id: req.user._id });
         const data = { user };
         const response = helper.response({ data });
         return res.status(response.statusCode).json(response);
@@ -119,7 +119,7 @@ exports.updateLanguage = async (req, res) => {
 
     try {
 
-        var user = await User.findById(ObjectId(req.body.id));
+        let user = await User.findById(ObjectId(req.body.id));
 
         let language = [];
 
@@ -173,7 +173,7 @@ exports.updateSkill = async (req, res) => {
 
     try {
 
-        var user = await User.findById(ObjectId(req.body.id));
+        let user = await User.findById(ObjectId(req.body.id));
 
         let skills = [];
 
@@ -230,7 +230,7 @@ exports.updateEducation = async (req, res) => {
 
     try {
 
-        var user = await User.findById(ObjectId(req.body.id));
+        let user = await User.findById(ObjectId(req.body.id));
 
         let education = [];
 
@@ -288,7 +288,7 @@ exports.updateCertification = async (req, res) => {
 
     try {
 
-        var user = await User.findById(ObjectId(req.body.id));
+        let user = await User.findById(ObjectId(req.body.id));
 
         let certification = [];
 
@@ -598,8 +598,8 @@ exports.deleteexperience = async (req, res) => {
         //console.log("removeIndex",removeIndex);
         // Splice out of array
         newprofile.experience.splice(removeIndex, 1);
-        var profile_id = newprofile.id;
-        var exp = newprofile.experience;
+        let profile_id = newprofile.id;
+        let exp = newprofile.experience;
         //console.log( profile.experience);
 
         await Profile.findByIdAndUpdate(profile_id, { experience: exp }).then((err, data) => {

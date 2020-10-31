@@ -1,8 +1,8 @@
 const express = require("express");
 const { User } = require("../models/user");
 const { Gig } = require('../models/gigs');
-var helper = require('../services/helper.js');
-var db = require('../services/model.js');
+const helper = require('../services/helper.js');
+const db = require('../services/model.js');
 const Joi = require('@hapi/joi');
 const _ = require('lodash');
 
@@ -59,7 +59,7 @@ exports.listgigs = async (req, res) => {
 
 exports.creategigs = async (req, res) => {
 
-     const schema = Joi.object().options({ abortEarly: false }).keys({
+    const schema = Joi.object().options({ abortEarly: false }).keys({
         title: Joi.string().required().label("Title"),
         sub_category_id: Joi.string().required().label("Sub Category Id"),
         tags: Joi.string().required().label("Tags")
@@ -80,33 +80,21 @@ exports.creategigs = async (req, res) => {
 
     if (error) return res.status(response.statusCode).json(response);
 
+    let existingGig = await Gig.findOne({ title: req.body.title });
+    if (existingGig) return res.status(422).json( helper.response(  { status: 422, message: 'Gig name already exists'  }   ));
+
     try {
 
-        var lastGig = await Gig.findOne({}).sort({_id:-1}).limit(1);
-
-        console.log(req.user._id);
-
-        if(lastGig !== null){
-            var gigg = {
-                id: (lastGig.id +1),
+        let data = {
                 user: req.user._id,
                 title: req.body.title,
-                subCategoryId: req.body.sub_category_id,
+                subCategory: req.body.sub_category_id,
                 tags: req.body.tags
-            } 
-        }else{
-            var gigg = {
-                user: req.user._id,
-                title: req.body.title,
-                subCategoryId: req.body.sub_category_id,
-                tags: req.body.tags
-            }   
-        }
-        
+            }
 
-        let gigs= await db._store(Gig, gigg);
+        let gig = await db._store(Gig, data);
 
-        const response = helper.response({ message: res.__('inserted'), data: gigs });
+        const response = helper.response({ message: res.__('inserted'), data: gig });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -148,7 +136,7 @@ exports.updatePricing = async(req, res) => {
 
     try {
 
-        var gig = await Gig.findById(req.body.id);
+        let gig = await Gig.findById(req.body.id);
 
         let pricing = [];
 
@@ -205,7 +193,7 @@ exports.updateFaq = async(req, res) => {
 
     try {
 
-        var gig = await Gig.findById(req.body.id);
+        let gig = await Gig.findById(req.body.id);
 
         let faqs = [];
 
@@ -258,7 +246,7 @@ exports.updateRequirement = async(req, res) => {
 
     try {
 
-        var gig = await Gig.findById(req.body.id);
+        let gig = await Gig.findById(req.body.id);
 
         
         let requirements = {
@@ -305,7 +293,7 @@ exports.updateImage = async(req, res) => {
 
     try {
 
-        var gig = await Gig.findById(req.body.id);
+        let gig = await Gig.findById(req.body.id);
 
         let photos = [];
 
@@ -359,7 +347,7 @@ exports.updateConfirm = async(req, res) => {
 
     try {
 
-        var gig = await Gig.findById(req.body.id);
+        let gig = await Gig.findById(req.body.id);
 
         let gigs = await db._update(Gig, { _id: req.body.id }, gig);
 //console.log(gigs);
@@ -414,8 +402,8 @@ exports.getallyourgigs = async (req, res) => {
                 errors = 'There are no gig';
                 return res.status(404).json(errors);
             }
-            for (var i = 0; i <= gig.length; i++) {
-                var gigs = gigs.filter(gigg => gigg.user !== null)
+            for (let i = 0; i <= gig.length; i++) {
+                let gigs = gigs.filter(gigg => gigg.user !== null)
             }
             res.json({ gigs });
         })

@@ -19,12 +19,10 @@ const settingSchema = mongoose.Schema({
             minlength: 1
         },
         logo: {
-            type: String,
-            default: false
+            type: String
         },
         favicon: {
-            type: String,
-            default: false
+            type: String
         },
         email: {
             type: String,
@@ -38,23 +36,25 @@ const settingSchema = mongoose.Schema({
         },
         copyright: {
             type: String,
-            default: false
+            trim: true
+        },
+        playstoreLink: {
+            type: String,
+            trim: true
+        },
+        appstoreLink: {
+            type: String,
+            trim: true
         }
     },
-    appLink: [{
+   socialLink: [{
         name: {
             type: String,
             required: true,
             trim: true,
             minlength: 1
         },
-        url: {
-            type: String,
-            default: false
-        }
-    }],
-   socialLink: [{
-        name: {
+        title: {
             type: String,
             required: true,
             trim: true,
@@ -101,6 +101,62 @@ const settingSchema = mongoose.Schema({
         googleRedirect: {
             type: String,
             default: false
+        }
+    },
+    sms: {
+        status: {
+            type: Boolean,
+            default: false
+        },
+        provider: {
+            type: String,
+            required: true,
+            trim: true,
+            minlength: 1
+        },
+        sid: {
+            type: String,
+            required: true,
+            trim: true,
+            minlength: 1
+        },
+        token: {
+            type: String,
+            required: true,
+            trim: true,
+            minlength: 1
+        },
+        sender: {
+            type: String,
+            required: true,
+            trim: true,
+            minlength: 1
+        }
+    },
+    mail: {
+        status: {
+            type: Boolean,
+            default: false
+        },
+        service: {
+            type: String,
+            trim: true,
+            minlength: 1
+        },
+        username: {
+            type: String,
+            trim: true,
+            minlength: 1
+        },
+        password: {
+            type: String,
+            trim: true,
+            minlength: 1
+        },
+        from: {
+            type: String,
+            trim: true,
+            minlength: 1
         }
     },
     createdAt: {

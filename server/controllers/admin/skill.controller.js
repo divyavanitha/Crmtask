@@ -5,8 +5,8 @@ const mongoose = require('mongoose');
 const Joi = require('@hapi/joi');
 const { Skill } = require('../../models/skill');
 const _ = require('lodash');
-var db = require('../../services/model.js');
-var helper = require('../../services/helper');
+const db = require('../../services/model.js');
+const helper = require('../../services/helper');
 const dotenv = require('dotenv');
 dotenv.config({ path: __dirname + '/../../.env' });
 

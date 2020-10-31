@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const path = require("path");
 
 const middleware = require("../middlewares/common");
@@ -16,6 +16,7 @@ const menuController = require('../controllers/admin/menu.controller');
 const skillController = require('../controllers/admin/skill.controller');
 const languageController = require('../controllers/admin/language.controller');
 const slideController = require('../controllers/admin/slide.controller');
+const homeController = require('../controllers/home.controller');
 const userController = require('../controllers/admin/user.controller');
 
 
@@ -245,6 +246,30 @@ router.get('/settings', (req, res) => {
 
 router.post('/settings/general', [middleware.admin, middleware.uploadAs( path.join(__dirname, '../storage/images/common/') ).fields([{ name: 'logo', maxCount: 1 }, { name: 'favicon', maxCount: 1 }]) ],  (req, res) => {
   settingController.updateGeneral(req, res);
+});
+
+router.post('/settings/social_links', [middleware.admin],  (req, res) => {
+  settingController.updateSocialLink(req, res);
+});
+
+router.post('/settings/push', [middleware.admin],  (req, res) => {
+  settingController.updatePush(req, res);
+});
+
+router.post('/settings/social', [middleware.admin],  (req, res) => {
+  settingController.updateSocial(req, res);
+});
+
+router.post('/settings/sms', [middleware.admin],  (req, res) => {
+  settingController.updateSms(req, res);
+});
+
+router.post('/settings/mail', [middleware.admin],  (req, res) => {
+  settingController.updateMail(req, res);
+});
+
+router.post('/settings/payment', [middleware.admin],  (req, res) => {
+  settingController.updatePayment(req, res);
 });
 
 
