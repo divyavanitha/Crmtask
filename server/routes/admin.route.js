@@ -220,22 +220,22 @@ router.get('/page/changestatus/:id/:status', function(req, res){
   pageController.changeStatus(req, res);
 });
 
-router.get('/user', (req, res) => {
+router.get('/user', middleware.admin, (req, res) => {
   userController.listusers(req, res);
 });
-router.post('/user', function(req, res){
+router.post('/user', middleware.admin, function(req, res){
   userController.createuser(req, res);
 });
-router.patch('/user', function(req, res){
+router.patch('/user', middleware.admin, function(req, res){
   userController.updateuser(req, res);
 });
-router.delete('/user/:id', function(req, res){
+router.delete('/user/:id', middleware.admin, function(req, res){
   userController.deleteuser(req, res);
 });
-router.get('/get/user/:id', function(req, res){
+router.get('/get/user/:id', middleware.admin, function(req, res){
   userController.listuserbyid(req, res);
 });
-router.get('/user/changestatus/:id/:status', function(req, res){
+router.get('/user/changestatus/:id/:status', middleware.admin, function(req, res){
   userController.changeStatus(req, res);
 });
 
