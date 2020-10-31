@@ -2,8 +2,8 @@ const express = require("express");
 const { Cart } = require('../models/Cart');
 const { Order } = require('../models/Order');
 const { Rating } = require('../models/Rating');
-var helper = require('../services/helper.js');
-var db = require('../services/model.js');
+const helper = require('../services/helper.js');
+const db = require('../services/model.js');
 const Joi = require('@hapi/joi');
 const _ = require('lodash');
 
@@ -47,7 +47,7 @@ exports.addcart = async (req, res) => {
 
     try {
 
-            var cart = {
+            let cart = {
                 gigId: req.body.gig_id,
                 quantity: req.body.quantity
             }
@@ -109,7 +109,7 @@ exports.checkout = async (req, res) => {
 
     try {
 
-            var order = {
+            let order = {
                 couponId: req.body.coupon_id,
                 wallet: req.body.wallet,
                 payment_mode: req.body.payment_mode
@@ -157,7 +157,7 @@ exports.rating = async (req, res) => {
 
     try {
 
-            var rating = {
+            let rating = {
                 orderId: req.body.order_id,
                 rating: req.body.rating,
                 comment: req.body.comment

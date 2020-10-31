@@ -8,8 +8,8 @@ const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
 dotenv.config({ path: __dirname + '/../../.env' });
-var db = require('../../services/model.js');
-var helper = require('../../services/helper');
+const db = require('../../services/model.js');
+const helper = require('../../services/helper');
 
 
 exports.createpage = async (req, res) => {

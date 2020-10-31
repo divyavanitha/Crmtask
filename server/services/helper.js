@@ -1,27 +1,82 @@
 const nodemailer = require('nodemailer');
 const queryString = require('query-string');
-var smtpTransport = require('nodemailer-smtp-transport');
+const smtpTransport = require('nodemailer-smtp-transport');
+const twilio = require('twilio');
+const db = require('../services/model.js');
+const { Setting } = require('./../models/setting');
 
-exports.sendMail = (data, callback) => {
+exports.sendMail = async (data) => {
 
-    let smtp_host = settings.settings.smtp_host;
-    let smtp_port = settings.settings.smtp_port;
-    let smtp_username = settings.settings.smtp_username;
-    let smtp_password = settings.settings.smtp_password;
+    try {
+        let settings = await db._find(Setting, {}, {createdAt: 0, updatedAt: 0 });
 
-    let transporter = nodemailer.createTransport(smtpTransport({
-        host: smtp_host,
-        port: smtp_port,
-        secure: true, // use NO SSL
-        auth: {
-            user: smtp_username,
-            pass: smtp_password
+        const mail = settings.mail;
+        let host;
+
+        if(mail.service == 'gmail') {
+            host = 'smtp.gmail.com';
         }
-    }));
 
-    transporter.sendMail(data, function (error, info) {
-        callback(error, info);
-    });
+        let transporter = nodemailer.createTransport(smtpTransport({
+            service: mail.service,
+            host: mail.host,
+            auth: {
+              user: mail.username,
+              pass: mail.password, 
+            },
+        }));
+
+        let info = await transporter.sendMail({
+            from: mail.from,
+            to: data.to,
+            subject: data.subject,
+            text: data.subject,
+            html: data.message,
+        });
+
+        console.log("Message sent: %s", info.messageId);
+
+        // Preview only available when sending through an Ethereal account
+        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+
+        return info;
+
+    } catch(err) {
+        console.log(err);
+        return err;
+    }
+
+
+}
+
+exports.sendSms = async (data) => {
+
+    try {
+
+        let settings = await db._find(Setting, {}, {createdAt: 0, updatedAt: 0 });
+
+        const sms = settings.sms;
+
+        let accountSid = sms.sid;
+        let authToken = sms.token; 
+
+        let client = new twilio(accountSid, authToken);
+
+        let message = client.messages.create({
+            body: data.message,
+            to: data.number,
+            from: sms.sender
+        })
+        .then((response) => console.log(response) );
+
+        return message;
+
+    } catch(err) {
+        console.log(err)
+    }
+    
+
+    
 
 }
 

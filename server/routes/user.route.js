@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const path = require("path");
 
 const middleware = require("../middlewares/common")
@@ -191,6 +191,18 @@ router.post('/gig/checkout', middleware.user, function(req, res){
 });
 router.post('/gig/rate', middleware.user, function(req, res){
   orderController.rating(req, res);
+});
+
+
+
+
+
+router.post('/send_sms', (req, res) => {
+  homeController.sendSms(req, res);
+});
+
+router.post('/send_mail', (req, res) => {
+  homeController.sendMail(req, res);
 });
 
 /* //const auth = require("../middlewares/auth");

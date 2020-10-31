@@ -114,7 +114,7 @@ const AddCategory = (props) => {
                                                         <label className="control-label"></label>
                                                     </div>
                                                     <div className="col-md-6">
-                                                        {params.id ? <button type="submit" className="btn btn-success mr-3">Update</button> : <button type="submit" className="btn btn-success mr-3">Save</button>}
+                                                        <button type="submit" className="btn btn-success mr-3"> { params.id ? 'Update' : 'Save' } </button>
                                                         {params.id ? <Link className="btn btn-outline" to="/admin/category">Cancel</Link> : <button onClick={handleReset} className="btn btn-outline mr-3">Reset</button>}
                                                     </div>
                                                 </div>

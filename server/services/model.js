@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 exports._get = async (model, projection = {}, selection = {}, options = {}) => {
 
@@ -20,7 +20,7 @@ exports._get = async (model, projection = {}, selection = {}, options = {}) => {
         return response;
 
     } catch (err) {
-
+        console.log(err)
     }
 
 
@@ -33,11 +33,11 @@ exports._store = async (model, document, options = {}) => {
         const query = new model(document)
 
         const response = await query.save();
-
         return response;
 
     } catch (err) {
-
+        console.log(err)
+        throw err;
     }
 
 }
@@ -46,7 +46,7 @@ exports._store = async (model, document, options = {}) => {
 exports._find = async (model, projection = {}, selection = {}, options = {}) => {
 
     try {
-        var query = await model.findOne(projection);
+        let query = await model.findOne(projection);
 
         if (options.populate) query.populate(options.populate);
 
@@ -55,7 +55,7 @@ exports._find = async (model, projection = {}, selection = {}, options = {}) => 
         return response;
 
     } catch (err) {
-
+        console.log(err)
     }
 }
 
@@ -68,7 +68,7 @@ exports._update = async (model, condition = {}, document, options = {}) => {
         return true;
 
     } catch (err) {
-
+        console.log(err)
     }
 
 }
@@ -82,7 +82,7 @@ exports._delete = async (model, condition = {}, options = {}) => {
 
         return query;
     } catch (err) {
-
+        console.log(err)
     }
 
 }
@@ -94,7 +94,7 @@ exports._deleteAll = async (model, condition = {}, options = {}) => {
 
         return true;
     } catch (err) {
-
+        console.log(err)
     }
 }
 
@@ -105,6 +105,6 @@ exports._count = async (model, condition = {}, options = {}) => {
 
         return query;
     } catch (err) {
-
+        console.log(err)
     }
 }

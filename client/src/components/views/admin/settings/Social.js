@@ -7,19 +7,21 @@ import * as Yup from 'yup';
 import { useToasts } from 'react-toast-notifications'
 import $ from 'jquery';
 
-import { addCategory, getCategorybyId, updateCategory } from "../../../../_actions/admin/category.action";
+import { getSetting, updateGeneralSetting } from "../../../../_actions/admin/setting.action";
 
 const Social = (props) => {
     const { addToast } = useToasts()
     const dispatch = useDispatch();
-
-    let history = useHistory();
-    const params = useParams();
+    
     useEffect(() => {
 
-        dispatch(getCategorybyId(params.id))
+        dispatch(getSetting())
 
-    }, [params.id]);
+    }, []);
+
+    const settings = useSelector(state => state);
+
+    let social = settings.settings && settings.settings.social;
 
     $('body').on('change', '.social_switch', function() {
         var that = $(this);
@@ -29,9 +31,6 @@ const Social = (props) => {
             that.closest('.main_container').find('.hide_container').hide();
         }
     })
-
-
-    const category = useSelector(state => state.categories && state.categories.category && state.categories.category.responseData.category);
 
     return (
 
@@ -73,16 +72,9 @@ const Social = (props) => {
                     copyright: values.copyright
                 };
 
-                if (params.id) {
-                    dispatch(updateCategory(data)).then(res => {
-                        addToast(res.message, { appearance: res.status, autoDismiss: true, })
-                        history.push('/admin/category/')
-                    })
-                } else {
-                    dispatch(addCategory(data)).then(res => {
-                        addToast(res.message, { appearance: res.status, autoDismiss: true, })
-                    })
-                }
+                dispatch(updateGeneralSetting(data)).then(res => {
+                    addToast(res.message, { appearance: res.status, autoDismiss: true, })
+                })
                 setSubmitting(false);
             }}>
 
@@ -123,9 +115,9 @@ const Social = (props) => {
                                         <div style={{ padding: '0px' }} className="">
                                             <div className="tab-container">
                                                 <Link to="/admin/settings/general" className="tab-item">General</Link>
-                                                <Link to="/admin/settings/profile/links" className="tab-item">Social Links</Link>
+                                                <Link to="/admin/settings/social/links" className="tab-item">Social Links</Link>
                                                 <Link to="/admin/settings/push" className="tab-item">Push Notification</Link>
-                                                <Link to="/admin/settings/social/links" className="tab-item active">Social Config</Link>
+                                                <Link to="/admin/settings/social" className="tab-item active">Social Config</Link>
                                                 <Link to="/admin/settings/sms" className="tab-item">SMS Config</Link>
                                                 <Link to="/admin/settings/mail" className="tab-item">Mail Settings</Link>
                                                 <Link to="/admin/settings/payment" className="tab-item">Payment Config</Link>

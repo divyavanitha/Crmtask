@@ -1,12 +1,12 @@
 const winston = new (require('./config/winston'));
 
-var express = require('express');
+const express = require('express');
 // const auth = require("../middlewares/auth");
 
 const passport = require('passport');
 // require('../config/passport')(passport)
 
-var router = express.Router();
+const router = express.Router();
 
 const setupController = require('./controllers/setup.controller');
 

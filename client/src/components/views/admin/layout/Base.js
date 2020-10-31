@@ -30,7 +30,7 @@ import Coupon from "../coupons/Coupon";
 import AddSlide from "../slides/AddSlide";
 import Slide from "../slides/Slide";
 import Dashboard from "../Dashboard";
-import Profile from "../settings/Profile";
+import SocialLink from "../settings/SocialLink";
 import Social from "../settings/Social";
 import Sms from "../settings/Sms";
 import Mail from "../settings/Mail";
@@ -87,8 +87,8 @@ const Base = () => {
             <Route path="/admin/slide/:id/edit" component={AddSlide}></Route>
             <Route path="/admin/slide" component={Slide}></Route>
             <Route path="/admin/settings/general" component={General}></Route>
-            <Route path="/admin/settings/profile/links" component={Profile}></Route>
-            <Route path="/admin/settings/social/links" component={Social}></Route>
+            <Route path="/admin/settings/social/links" component={SocialLink}></Route>
+            <Route path="/admin/settings/social" component={Social}></Route>
             <Route path="/admin/settings/sms" component={Sms}></Route>
             <Route path="/admin/settings/mail" component={Mail}></Route>
             <Route path="/admin/settings/push" component={Push}></Route>

@@ -1,6 +1,6 @@
 const JwtStrategy = require('passport-jwt').Strategy;
-var GoogleStrategy = require('passport-google-oauth20').Strategy;
-var FacebookStrategy = require('passport-facebook').Strategy;
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
@@ -40,7 +40,7 @@ module.exports = (passport) => {
       function (token, tokenSecret, profile, done) {
         console.log(profile);
 
-        var userData = {
+        let userData = {
           email: profile.emails[0].value,
           name: profile.displayName,
           token: accessToken
