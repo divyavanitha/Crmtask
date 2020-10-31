@@ -19,7 +19,7 @@ export const login = (data) => async dispatch => {
     } catch (e) {
         dispatch({
             type: ADD_NOTIFICATION,
-            payload: { title: e.response.data.title, message: e.response.data.error.message }
+            //payload: { title: e.response.data.title, message: e.response.data.error.message }
         });
         console.log('err',e.response.data);
     }

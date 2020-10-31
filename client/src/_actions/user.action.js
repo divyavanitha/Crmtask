@@ -161,13 +161,13 @@ export const getCategory = (data) => async dispatch => {
 
 export const getSubCategory = (id) => async dispatch => {
     const subcategory = await axios.get(`/api/subcategory/${id}`)
-    //console.log("subcategory",subcategory)
-    dispatch({
+    console.log("subcategory",subcategory.data)
+    /*dispatch({
         type: GET_SUBCATEGORY,
         payload: subcategory.data
-    });
+    });*/
 
-    //return subcategory.data;
+    return subcategory.data;
 }
 
 export const getSlide = (data) => async dispatch => {

@@ -112,7 +112,7 @@ exports.updateSocialLink = async (req, res) => {
     for (let data of Object.keys(req.body)) {
         let indexOfItem = setting.socialLink.findIndex(q => q.name === data);
         let item = setting.socialLink.find(q => q.name === data);
-        let item.url = setting.socialLink.find(q => q.name === data);
+        //let item.url = setting.socialLink.find(q => q.name === data);
         console.log(item)
     }
 

@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from "react";
-
+import { ToastProvider } from 'react-toast-notifications'
 import { Switch, Route } from "react-router";
 import { useSelector, useDispatch } from 'react-redux';
 import { Helmet } from "react-helmet";

@@ -44,7 +44,7 @@ exports.getGigDetails = async (req, res) => {
 exports.listgigs = async (req, res) => {
     try {
 
-        let gigs = await db._get(Gig, { _id: req.user._id });
+        let gigs = await db._get(Gig, { user: req.user._id });
 
         const data = { gigs };
 

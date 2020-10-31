@@ -12,22 +12,16 @@ import {
 
 //const dispatch = useDispatch();
 
-export const creategigs = (dataToSubmit) =>  async dispatch => {
-  try{
-    console.log("dataToSubmit",dataToSubmit)
-  const request=await axios.post(`/api/gig`, dataToSubmit)
-     console.log("new request",request)
-      dispatch({
-        type: CREATE_GIGS,
-         payload: request.data
-      });
-    
-  }catch(e){
-      dispatch({
-        type: GET_ERRORS,
-        payload: e.response.data
-     });
-  }
+export const creategigs = (data) =>  async dispatch => {
+  try {
+        let response = await axios.post('/api/gig', data);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        return e.response.data;
+    }
  }
 
 

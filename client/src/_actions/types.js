@@ -22,12 +22,6 @@ export const CREATE_POSTJOB = 'create_postjob';
 export const DELETE_POSTJOB = 'delete_postjob';
 export const GET_ERRORS='get_errors';
 
-export const GET_MYALLGIGS = 'get_myallgigs';
-export const GET_GIGSBYID = 'get_gigsbyid';
-export const CREATE_GIGS = 'create_gigs';
-export const DELETE_GIGS = 'delete_gigs';
-export const GET_ALLGIGS = 'get_allgigs';
-
 export const GET_CATEGORY = 'GET_CATEGORY';
 export const GET_SUBCATEGORY = 'GET_SUBCATEGORY';
 
@@ -45,3 +39,9 @@ export const GET_GIGS = 'GET_GIGS';
 export const FIND_GIG = 'FIND_GIG';
 
 export const SITE = 'SITE';
+
+export const CREATE_GIGS = 'CREATE_GIGS';
+export const GET_MYALLGIGS = 'GET_MYALLGIGS';
+export const GET_GIGSBYID = 'GET_GIGSBYID';
+export const DELETE_GIGS = 'DELETE_GIGS';
+export const GET_ALLGIGS = 'GET_ALLGIGS';
