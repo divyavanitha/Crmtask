@@ -27,7 +27,7 @@ exports.getGigDetails = async (req, res) => {
     try {
 
         //let gig = //await db._find(Gig, {_id:req.params.id}, {}, {populate: "user"});
-        let gig = await db._find(Gig, {_id:req.params.id}, {} );
+        let gig = await db._find(Gig, {_id:req.params.id}, {}, {populate: "user"});
 
         const data = { gig };
 

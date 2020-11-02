@@ -48,16 +48,15 @@ const AddGig = (props) => {
             }
             }
 
-            validationSchema={Yup.object().shape({
+            /*validationSchema={Yup.object().shape({
                 title: Yup.string()
                     .required('Title is required'),
                 sub_category_id: Yup.string()
                     .required('Sub Category is required'),
                 tags: Yup.string()
                     .required('Tags is required'),
-            })}
+            })}*/
             onSubmit={(values, { setSubmitting, resetForm }) => {
-
                 let data = {
                     id: values.id,
                     title: values.title,
@@ -72,6 +71,8 @@ const AddGig = (props) => {
                     })
                 } else {*/
                     dispatch(creategigs(data)).then(res => {
+                      console.log(res.responseData._id);
+                      history.push('/gig/post/pricing'+res.responseData._id)
                         //addToast(res.message, { appearance: res.status, autoDismiss: true, })
                     })
                 //}
@@ -90,6 +91,7 @@ const AddGig = (props) => {
                     handleBlur,
                     handleSubmit,
                     handleReset,
+                    setFieldValue,
                 } = props;
 
                 return (
@@ -158,10 +160,10 @@ const AddGig = (props) => {
 
                       </select>
                       <small className="form-text text-danger"></small>
-                      <select name="sub_category_id" className="form-control">
+                      <select name="sub_category_id" className="form-control" onChange={ (e) => { console.log(e.currentTarget); setFieldValue('sub_category_id', e.currentTarget.value);} } >
                         <option  value="">Sub Catagory</option>
                         
-                        {subCategory.map((s_list) => (<option key={s_list._id} value={s_list._id} onChange={handleChange}>{s_list.name}</option>)) }
+                        {subCategory.map((s_list) => (<option key={s_list._id} value={s_list._id} >{s_list.name}</option>)) }
                       </select>
                    </div>
                 </div>
@@ -177,7 +179,7 @@ const AddGig = (props) => {
                 <div className="form-group mb-0">
                    {/* <!--- form-group Starts ---> */}
                    <a href="view_proposals" className="float-left btn btn-secondary">Cancel</a>
-                   <input className="btn btn-success float-right" type="submit" value="Save & Continue" />
+                   <button type="submit" className="btn btn-success mr-3 float-right">Save & Continue</button>
                 </div>
                 {/* <!--- form-group Starts ---> */}
              </form>
