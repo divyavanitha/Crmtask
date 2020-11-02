@@ -12,6 +12,7 @@ const packageController = require('../controllers/admin/package.controller');
 const menuController = require('../controllers/admin/menu.controller');
 const gigController = require('../controllers/gigs.controller');
 const orderController = require('../controllers/order.controller');
+const proposalController = require('../controllers/proposal.controller');
 
 
 router.post('/login', (req, res) => {
@@ -155,8 +156,13 @@ router.post('/gig/rate', middleware.user, function(req, res){
   orderController.rating(req, res);
 });
 
+router.post('/request', [middleware.user, middleware.upload( path.join(__dirname, '../storage/images/request/') ).fields([{ name: 'files[]', maxCount: 4 }]) ], (req, res) => {
+  proposalController.createrequest(req, res);
+});
 
-
+router.post('/offer', middleware.user, function(req, res){
+  proposalController.request_offer(req, res);
+});
 
 
 router.post('/send_sms', (req, res) => {

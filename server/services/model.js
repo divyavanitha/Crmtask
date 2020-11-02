@@ -30,7 +30,9 @@ exports._get = async (model, projection = {}, selection = {}, options = {}) => {
 exports._store = async (model, document, options = {}) => {
 
     try {
-        const query = new model(document)
+        console.log(model);
+        console.log(document);
+        const query = new model(document);
 
         const response = await query.save();
         return response;
