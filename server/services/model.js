@@ -46,7 +46,7 @@ exports._store = async (model, document, options = {}) => {
 exports._find = async (model, projection = {}, selection = {}, options = {}) => {
 
     try {
-        let query = await model.findOne(projection);
+        let query =  model.findOne(projection);
 
         if (options.populate) query.populate(options.populate);
         
