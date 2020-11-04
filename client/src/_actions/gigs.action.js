@@ -15,6 +15,20 @@ import {
 export const creategigs = (data) =>  async dispatch => {
   try {
         let response = await axios.post('/api/gig', data);
+        console.log('data',response);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        return e.response.data;
+    }
+ }
+
+ export const updatePricing = (data) =>  async dispatch => {
+  try {
+        let response = await axios.post('/api/gig/pricing', data);
+        console.log('data',response);
         response.data.status = 'success';
         return response.data;
     } catch(e) {

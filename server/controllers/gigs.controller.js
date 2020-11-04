@@ -111,7 +111,6 @@ exports.creategigs = async (req, res) => {
 exports.updatePricing = async(req, res) => {
     const schema = Joi.object().options({ abortEarly: false }).keys({
         package_id: Joi.array().required().label("Package Id"),
-        name: Joi.array().required().label("Name"),
         delivery_timing_id: Joi.array().required().label("Delivery Time Id"),
         revisions: Joi.array().required().label("Revisions"),
         price: Joi.array().required().label("Price"),
@@ -142,14 +141,16 @@ exports.updatePricing = async(req, res) => {
         for(let i in req.body.package_id) {
             let price = {
                 package: req.body.package_id[i],
-                name: req.body.name[i],
                 description: req.body.description[i],
                 revisions: req.body.revisions[i],
-                price: req.body.price[i]
+                price: req.body.price[i],
+                DeliveryTime: req.body.delivery_time_id[i]
             }
             pricing.push(price);
         }
-
+        
+        pricing.fixed = req.body.fixed_price;
+        
         if(pricing.length > 0) gig.pricing = pricing;
 
         let gigs = await db._update(Gig, { _id: req.body.id }, gig);

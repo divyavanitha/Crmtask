@@ -12,14 +12,15 @@ import {
     GET_SUBCATEGORY,
     GET_SLIDES,
     GET_GIGS,
-    FIND_GIG
+    FIND_GIG,
+    GET_DELIVERY_TIME
 } from './types';
 
 
 export const login = (data) => async dispatch => {
 
     try {
-        const response = await axios.post(`api/login`, data);
+        const response = await axios.post(`/api/login`, data);
 
         const { token } = response.data.responseData.user;
 
@@ -42,7 +43,7 @@ export const login = (data) => async dispatch => {
 export const register = (data) => async dispatch => {
 
     try {
-        const response = await axios.post(`api/register`, data);
+        const response = await axios.post(`/api/register`, data);
 
         const { token } = response.data.responseData.user;
 
@@ -156,6 +157,14 @@ export const getCategory = (data) => async dispatch => {
     dispatch({
         type: GET_CATEGORY,
         payload: category.data
+    });
+}
+
+export const getDeliveryTime = (data) => async dispatch => {
+    const delivery_time = await axios.get(`/api/delivery/time`, data)
+    dispatch({
+        type: GET_DELIVERY_TIME,
+        payload: delivery_time.data
     });
 }
 

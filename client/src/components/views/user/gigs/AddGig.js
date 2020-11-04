@@ -48,14 +48,14 @@ const AddGig = (props) => {
             }
             }
 
-            /*validationSchema={Yup.object().shape({
+            validationSchema={Yup.object().shape({
                 title: Yup.string()
                     .required('Title is required'),
                 sub_category_id: Yup.string()
                     .required('Sub Category is required'),
                 tags: Yup.string()
                     .required('Tags is required'),
-            })}*/
+            })}
             onSubmit={(values, { setSubmitting, resetForm }) => {
                 let data = {
                     id: values.id,
@@ -71,8 +71,8 @@ const AddGig = (props) => {
                     })
                 } else {*/
                     dispatch(creategigs(data)).then(res => {
-                      console.log(res.responseData._id);
-                      history.push('/gig/post/pricing'+res.responseData._id)
+                      console.log('id',res.responseData._id);
+                      history.push('/gig/post/pricing/'+res.responseData._id)
                         //addToast(res.message, { appearance: res.status, autoDismiss: true, })
                     })
                 //}
@@ -110,7 +110,7 @@ const AddGig = (props) => {
                                 <a className="nav-link d-none " href="#video">
                                   Video Settings      </a>
 
-                                <a className="nav-link  " href="#instant-delivery">
+                                <a className="nav-link  d-none" href="#instant-delivery">
                                   Instant Delivery      </a>
 
                                 <a className="nav-link  " href="#pricing">
@@ -145,26 +145,31 @@ const AddGig = (props) => {
                 <div className="form-group row">
                    {/* <!--- form-group row Starts ---> */}
                    <div className="col-md-3">Gig Title</div>
-                   <div className="col-md-9"><textarea name="title" value={values.title} onChange={handleChange} rows="2" placeholder="Title" className="form-control">logo making </textarea></div>
+                   <div className="col-md-9">
+                   <textarea name="title" value={values.title} onChange={handleChange} rows="2" placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} >logo making </textarea>
+                   <ErrorMessage name="title" component="div" className="invalid-feedback" />
+                   </div>
                    <small className="form-text text-danger"></small>
                 </div>
                 {/* <!--- form-group row Ends ---> */}
-                <div className="form-group row">
+                <div className="form-group row"> 
                    {/* <!--- form-group row Starts ---> */}
                    <div className="col-md-3"> Category </div>
                    <div className="col-md-9">
-                      <select name="category_id" className="form-control mb-3" onChange={handleCategoryChange}>
+                      <select name="category_id" className="form-control mb-3"  onChange={handleCategoryChange}>
                         <option value="">Select Catagory</option>
 
                         {category_list && category_list.map((c_list) => (<option key={c_list._id} value={c_list._id} onChange={handleCategoryChange}>{c_list.name}</option>))}
 
                       </select>
                       <small className="form-text text-danger"></small>
-                      <select name="sub_category_id" className="form-control" onChange={ (e) => { console.log(e.currentTarget); setFieldValue('sub_category_id', e.currentTarget.value);} } >
+                      <select name="sub_category_id" className={'form-control' + (errors.sub_category_id && touched.sub_category_id ? ' is-invalid' : '')} onChange={ (e) => { console.log(e.currentTarget); setFieldValue('sub_category_id', e.currentTarget.value);} } >
+
                         <option  value="">Sub Catagory</option>
                         
                         {subCategory.map((s_list) => (<option key={s_list._id} value={s_list._id} >{s_list.name}</option>)) }
                       </select>
+                      <ErrorMessage name="sub_category_id" component="div" className="invalid-feedback" />
                    </div>
                 </div>
                 {/* <!--- form-group row Ends ---> */}
@@ -172,7 +177,10 @@ const AddGig = (props) => {
                 <div className="form-group row">
                    {/* <!--- form-group row Starts ---> */}
                    <div className="col-md-3">Tags</div>
-                   <div className="col-md-9"><input type="text" value={values.tags} onChange={handleChange} name="tags" className="form-control" data-role="tagsinput" /></div>
+                   <div className="col-md-9">
+                   <input type="text" value={values.tags} onChange={handleChange} name="tags" className={'form-control' + (errors.tags && touched.tags ? ' is-invalid' : '')} data-role="tagsinput" />
+                   <ErrorMessage name="tags" component="div" className="invalid-feedback" />
+                   </div>
                    <small className="form-text text-danger"></small>
                 </div>
                 {/* <!--- form-group row Ends ---> */}
