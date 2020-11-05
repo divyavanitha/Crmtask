@@ -17,9 +17,12 @@ import slides from './admin/slide.reducer';
 import menus from './admin/menu.reducer';
 import packages from './admin/package.reducer';
 import pages from './admin/page.reducer';
+import requests from './admin/request.reducer';
+import users from './admin/user.reducer';
 
 const rootReducer = combineReducers({
     user,
+    users,
     postjob,
     profile,
     admin,
@@ -36,7 +39,8 @@ const rootReducer = combineReducers({
     menus,
     packages,
     pages,
-    gig
+    gig,
+    requests
 
 });
 

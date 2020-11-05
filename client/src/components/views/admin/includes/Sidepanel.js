@@ -39,7 +39,7 @@ const Sidepanel = () => {
                             </li>
 
                             <li>
-                                <Link> <i className="menu-icon fa fa-table"></i>Proposals/Services <span className="badge badge-success">18</span> </Link>
+                                <Link to="/admin/request"> <i className="menu-icon fa fa-table"></i>Proposals/Services <span className="badge badge-success">18</span> </Link>
                             </li>
 
                             <li className="menu-item-has-children dropdown">
@@ -74,7 +74,7 @@ const Sidepanel = () => {
                             </li>
 
                             <li>
-                                <Link > <i className="menu-icon fa fa-table"></i>Buyer Requests <span className="badge badge-success">18</span> </Link>
+                                <Link to="/admin/request"> <i className="menu-icon fa fa-table"></i>Buyer Requests <span className="badge badge-success">18</span> </Link>
                             </li>
 
                             <li>

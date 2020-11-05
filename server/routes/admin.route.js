@@ -18,6 +18,7 @@ const languageController = require('../controllers/admin/language.controller');
 const slideController = require('../controllers/admin/slide.controller');
 const homeController = require('../controllers/home.controller');
 const userController = require('../controllers/admin/user.controller');
+const proposalController = require('../controllers/proposal.controller');
 
 
 router.post('/login',  async (req, res) => {
@@ -28,13 +29,13 @@ router.post('/register', async (req, res) => {
     await adminController.adminAuthRegister(req.body, "admin", res);
 });
 
-router.get('/user', [middleware.admin], (req, res) => {
+/*router.get('/user', [middleware.admin], (req, res) => {
   adminController.getAllUser(req, res);
 });
 
 router.post('/user', [middleware.admin], (req, res) => {
   adminController.addUser(req, res);
-});
+});*/
 
 router.get('/category', (req, res) => {
   categoryController.listcategory(req, res);
@@ -221,24 +222,35 @@ router.get('/page/changestatus/:id/:status', function(req, res){
   pageController.changeStatus(req, res);
 });
 
-router.get('/user', middleware.admin, (req, res) => {
+router.get('/user', (req, res) => {
   userController.listusers(req, res);
 });
-router.post('/user', middleware.admin, function(req, res){
+router.post('/user', function(req, res){
   userController.createuser(req, res);
 });
-router.patch('/user', middleware.admin, function(req, res){
+router.patch('/user', function(req, res){
   userController.updateuser(req, res);
 });
-router.delete('/user/:id', middleware.admin, function(req, res){
+router.delete('/user/:id', function(req, res){
   userController.deleteuser(req, res);
 });
-router.get('/get/user/:id', middleware.admin, function(req, res){
+router.get('/get/user/:id', function(req, res){
   userController.listuserbyid(req, res);
 });
-router.get('/user/changestatus/:id/:status', middleware.admin, function(req, res){
+router.get('/user/changestatus/:id/:status', function(req, res){
   userController.changeStatus(req, res);
 });
+
+router.get('/requests', (req, res) => {
+  proposalController.listRequests(req, res);
+});
+router.delete('/request/:id', function(req, res){
+  proposalController.deleteRequest(req, res);
+});
+router.get('/request/changestatus/:id/:status', function(req, res){
+  proposalController.changeStatus(req, res);
+});
+
 
 router.get('/settings', (req, res) => {
   settingController.getSetting(req, res);
