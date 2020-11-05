@@ -11,6 +11,7 @@ const requestSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    user: { type: Schema.Types.ObjectId, ref: 'users' },
     description: {
         type: String
     },

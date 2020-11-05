@@ -51,10 +51,10 @@ const Pricing = (props) => {
             enableReinitialize
             initialValues={{
                 id: params.id,
-                package_id: '',
-                delivery_timing_id: '',
-                revisions: '',
-                price: [],
+                package_id: [''],
+                delivery_time_id: ['1day'],
+                revisions: ['0'],
+                price: ['50'],
             }
             }
 
@@ -72,7 +72,7 @@ const Pricing = (props) => {
                 let data = {
                     id: values.id,
                     package_id: values.package_id,
-                    delivery_timing_id: values.delivery_timing_id,
+                    delivery_time_id: values.delivery_time_id,
                     revisions: values.revisions,
                     price: values.price,
                     fixed_price: values.fixed
@@ -167,39 +167,61 @@ const Pricing = (props) => {
              <div className="clearfix"></div>
              <hr className="mt-0" />
              <div className="fixed_price">
-             <div className="form-group row proposal-price justify-content-center">
+             <div className="form-group row proposal-price justify-content-center mb-4">
                 <div className="col-md-7">
                    <label>Proposal Price</label>
                    <div className="input-group">
                       <span className="input-group-addon font-weight-bold">
                       &#036;    </span>
-                      <FieldArray type="number" className={'form-control' + (errors.price && touched.price ? ' is-invalid' : '')} onChange={handleChange} name="price" value={values.price} />
 
+                      <FieldArray name="price" render={arrayHelpers => (
+                         <div>
+                           {values.price && values.price.map((data, index) => (
+                               <div key={index}>
+                                 <Field name={`price.${index}`} values={`price.${index}`} className="form-control" style={{width:'419px'}} />
+                                 
+                               </div>
+                             ))}
+                         </div>
+
+                       )}
+                      />
                       <ErrorMessage name="price" component="div" className="invalid-feedback" />
                    </div>
                    
                    <small>If you want to use packages, you need to set this field value to 0.</small>
+
                 </div>
              </div>
              <div className="form-group row proposal-price justify-content-center mb-4">
                 {/* <!--- form-group row Starts ---> */}
                 <div className="col-md-7">
                    <label>Proposal Revisions</label>
-                   <select name="revisions" onChange={ (e) => { console.log(e.currentTarget); setFieldValue('revisions', e.currentTarget.value);} } className="form-control">
-                      <option value="">Select Revision</option>
-                      <option value='0' >0</option>
-                      <option value='1' >1</option>
-                      <option value='2' >2</option>
-                      <option value='3' >3</option>
-                      <option value='4' >4</option>
-                      <option value='5' >5</option>
-                      <option value='6' >6</option>
-                      <option value='7' >7</option>
-                      <option value='8' >8</option>
-                      <option value='9' >9</option>
-                      <option value='10' >10</option>
-                      <option value='unlimited' >Unlimited Revisions</option>
-                   </select>
+                   <FieldArray name="revisions" render={arrayHelpers => (
+                    <div>
+                    {values.revisions && values.revisions.map((data, index) => (
+                      <div key={index}>
+                     <Field component="select" name={`revisions.${index}`}  className="form-control">
+                        <option value="">Select Revision</option>
+                        <option value='0' >0</option>
+                        <option value='1' >1</option>
+                        <option value='2' >2</option>
+                        <option value='3' >3</option>
+                        <option value='4' >4</option>
+                        <option value='5' >5</option>
+                        <option value='6' >6</option>
+                        <option value='7' >7</option>
+                        <option value='8' >8</option>
+                        <option value='9' >9</option>
+                        <option value='10' >10</option>
+                        <option value='unlimited' >Unlimited Revisions</option>
+                     </Field>
+                    </div>
+                      ))}
+                    </div>
+
+                       )}
+                      />
                    <small>Set to 0 if your proposal is configured for instant delivery.</small>
                 </div>
                 <small className="form-text text-danger"></small>
@@ -209,11 +231,20 @@ const Pricing = (props) => {
                 {/* <!--- form-group row Starts ---> */}
                 <div className="col-md-7">
                    <label>Delivery Time</label>
+                   <FieldArray name="delivery_time_id" render={arrayHelpers => (
+                    <div>
+                    {values.delivery_time_id && values.delivery_time_id.map((data, index) => (
+                      <div key={index}>
+                     <Field component="select" name={`delivery_time_id.${index}`} className="form-control">
+                        <option value="">Select Delivery Time</option>
+                        {delivery && delivery.deliveryTime.map((s_list) => (<option key={s_list._id} value={s_list._id} >{s_list.name}</option>)) }
+                     </Field>
+                   </div>
+                      ))}
+                    </div>
 
-                   <select name="delivery_time_id" onChange={ (e) => { console.log(e.currentTarget); setFieldValue('delivery_time_id', e.currentTarget.value);} } className="form-control">
-                      <option value="">Select Delivery Time</option>
-                      {delivery && delivery.deliveryTime.map((s_list) => (<option key={s_list._id} value={s_list._id} >{s_list.name}</option>)) }
-                   </select>
+                       )}
+                      />
                    <small>Please select 1 day if this is for an instant delivery.</small>
                 </div>
                 <small className="form-text text-danger"></small>

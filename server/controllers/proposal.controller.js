@@ -67,7 +67,8 @@ exports.createrequest = async (req, res) => {
                 subCategory: req.body.sub_category_id,
                 duration: req.body.duration,
                 budget: req.body.budget,
-                title: req.body.title
+                title: req.body.title,
+                user: req.user._id
             }
 
          let documents = [];

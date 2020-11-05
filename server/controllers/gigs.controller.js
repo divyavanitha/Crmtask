@@ -109,6 +109,8 @@ exports.creategigs = async (req, res) => {
 }
 
 exports.updatePricing = async(req, res) => {
+
+    console.log(req.body);
     const schema = Joi.object().options({ abortEarly: false }).keys({
         package_id: Joi.array().required().label("Package Id"),
         delivery_timing_id: Joi.array().required().label("Delivery Time Id"),
@@ -138,7 +140,7 @@ exports.updatePricing = async(req, res) => {
 
         let pricing = [];
 
-        for(let i in req.body.package_id) {
+        for(let i in req.body.price) {
             let price = {
                 package: req.body.package_id[i],
                 description: req.body.description[i],
