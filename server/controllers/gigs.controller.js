@@ -109,13 +109,15 @@ exports.creategigs = async (req, res) => {
 }
 
 exports.updatePricing = async(req, res) => {
+
+    console.log(req.body);
     const schema = Joi.object().options({ abortEarly: false }).keys({
-        package_id: Joi.array().required().label("Package Id"),
-        name: Joi.array().required().label("Name"),
-        delivery_timing_id: Joi.array().required().label("Delivery Time Id"),
+        //package_id: Joi.array().required().label("Package Id"),
+        delivery_time_id: Joi.array().required().label("Delivery Time Id"),
         revisions: Joi.array().required().label("Revisions"),
         price: Joi.array().required().label("Price"),
-        id: Joi.string().required().label("Gig Id")
+        id: Joi.string().required().label("Gig Id"),
+        //fixed_price: Joi.boolean().required().label("Fixed")
 
     }).unknown(true);
 
@@ -139,22 +141,23 @@ exports.updatePricing = async(req, res) => {
 
         let pricing = [];
 
-        for(let i in req.body.package_id) {
+        for(let i in req.body.price) {
             let price = {
                 package: req.body.package_id[i],
-                name: req.body.name[i],
                 description: req.body.description[i],
                 revisions: req.body.revisions[i],
-                price: req.body.price[i]
+                price: req.body.price[i],
+                DeliveryTime: req.body.delivery_time_id[i]
             }
             pricing.push(price);
         }
-
+        
         if(pricing.length > 0) gig.pricing = pricing;
-
+        gig.fixed_price = req.body.fixed_price;
+        console.log(pricing);
         let gigs = await db._update(Gig, { _id: req.body.id }, gig);
 
-        const response = helper.response({ message: res.__('updated'), data: gigs });
+        const response = helper.response({ message: res.__('updated'), data: gig });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -208,7 +211,7 @@ exports.updateFaq = async(req, res) => {
         gig.description = req.body.description;
         let gigs = await db._update(Gig, { _id: req.body.id }, gig);
 
-        const response = helper.response({ message: res.__('updated'), data: gigs });
+        const response = helper.response({ message: res.__('updated'), data: gig });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -247,16 +250,12 @@ exports.updateRequirement = async(req, res) => {
 
         let gig = await Gig.findById(req.body.id);
 
-        
-        let requirements = {
-            requirement: req.body.requirement,
-        }
-        gig.requirement = requirements;
+        gig.requirement = req.body.requirement;
 console.log(gig);
         let gigs = await db._update(Gig, { _id: req.body.id }, gig);
 //console.log(gigs);
 
-        const response = helper.response({ message: res.__('updated'), data: gigs });
+        const response = helper.response({ message: res.__('updated'), data: gig });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {

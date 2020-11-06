@@ -38,6 +38,10 @@ export const GET_GIGS = 'GET_GIGS';
 
 export const FIND_GIG = 'FIND_GIG';
 
+export const GET_DELIVERY_TIME = 'GET_DELIVERY_TIME';
+
+export const GET_PACKAGE = 'GET_PACKAGE';
+
 export const SITE = 'SITE';
 
 export const CREATE_GIGS = 'CREATE_GIGS';

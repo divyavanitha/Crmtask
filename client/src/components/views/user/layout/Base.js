@@ -10,6 +10,10 @@ import Nav from '../includes/Nav';
 import Footer from "../includes/Footer";
 import GigDetail from "../gigs/GigDetail";
 import AddGig from "../gigs/AddGig";
+import Pricing from "../gigs/Pricing";
+import Faq from "../gigs/faq";
+import Requirement from "../gigs/Requirement";
+import Gallery from "../gigs/gallery";
 import Profile from "../Profile";
 
 import "../../../../assets/css/custom.css";
@@ -50,6 +54,10 @@ const Base = () => {
             <Switch>
                 <Route exact={true} path="/" component={Home}></Route>
                 <Route exact={true} path="/gig/post" component={AddGig}></Route>
+                <Route exact={true} path="/gig/post/pricing/:id" component={Pricing}></Route>
+                <Route exact={true} path="/gig/post/faq/:id" component={Faq}></Route>
+                <Route exact={true} path="/gig/post/requirements/:id" component={Requirement}></Route>
+                <Route exact={true} path="/gig/post/gallery/:id" component={Gallery}></Route>
                 <Route exact={true} path="/gig/:user/:gig" component={GigDetail}></Route>
                 <Route exact={true} path="/profile" component={Profile}></Route>
             </Switch>

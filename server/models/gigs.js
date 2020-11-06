@@ -26,13 +26,17 @@ const gigSchema = mongoose.Schema({
     requirement: {
         type: String
     },
+    fixed_price: {
+        type: Boolean
+    },
     pricing: [{
-        package: { type: Schema.Types.ObjectId, ref: 'Package' },
+        package: { type: Schema.Types.ObjectId, ref: 'Package', required: false },
         name: { type: String },
         description: { type: String },
         revisions: { type: String },
         price: { type: Number },
-        delivery_time_id: { type: Schema.Types.ObjectId, ref: 'DeliveryTime' },
+        DeliveryTime: { type: Schema.Types.ObjectId, ref: 'DeliveryTime' },
+        
     }],
     faq: [{
         question: { type: String },

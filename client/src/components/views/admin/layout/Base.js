@@ -37,6 +37,7 @@ import AddPage from "../pages/AddPage";
 import Page from "../pages/Page";
 import AddUser from "../users/AddUser";
 import User from "../users/User";
+import Request from "../requests/Request";
 import Dashboard from "../Dashboard";
 import SocialLink from "../settings/SocialLink";
 import Social from "../settings/Social";
@@ -106,6 +107,7 @@ const Base = () => {
             <Route path="/admin/user/add" component={AddUser}></Route>
             <Route path="/admin/user/:id/edit" component={AddUser}></Route>
             <Route path="/admin/user" component={User}></Route>
+            <Route path="/admin/request" component={Request}></Route>
             <Route path="/admin/settings/general" component={General}></Route>
             <Route path="/admin/settings/social/links" component={SocialLink}></Route>
             <Route path="/admin/settings/social" component={Social}></Route>

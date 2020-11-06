@@ -1,8 +1,7 @@
 import {
   
     CREATE_PROFILE,
-    GET_PROFILE,
- GET_PROFILES 
+    GET_PROFILE
 
 } from '../_actions/types';
 

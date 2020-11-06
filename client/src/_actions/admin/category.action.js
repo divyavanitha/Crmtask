@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { GET_CATEGORIES, FIND_CATEGORY, ADD_NOTIFICATION } from "./types";
+import { GET_CATEGORIES, FIND_CATEGORY } from "./types";
 
 export const getCategories = () => async dispatch => {
     try {
@@ -42,7 +42,7 @@ export const addCategory = (user) => async dispatch => {
         return response.data;
     } catch(e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };
@@ -54,7 +54,7 @@ export const updateCategory = (user) => async dispatch => {
         return response.data;
     } catch(e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };

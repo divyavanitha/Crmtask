@@ -21,11 +21,11 @@ const Payment = (props) => {
 
     const settings = useSelector(state => state);
 
-    let payment = settings  && settings.adminsettings && settings.adminsettings.setting && settings.adminsettings.setting.payment;
+    let payment = settings && settings.adminsettings && settings.adminsettings.setting && settings.adminsettings.setting.payment;
 
-    $('body').on('change', '.toggle_switch', function() {
+    $('body').on('change', '.toggle_switch', function () {
         var that = $(this);
-        if($(this).is(':checked')) {
+        if ($(this).is(':checked')) {
             that.closest('.main_container').find('.hide_container').show();
         } else {
             that.closest('.main_container').find('.hide_container').hide();
@@ -34,30 +34,28 @@ const Payment = (props) => {
 
     let name = [];
     let status = [];
-    let key = [];
-    let value = [];
 
     let initial = {}
 
-    if(payment) {
+    if (payment) {
 
-        for(let pay of payment) {
+        for (let pay of payment) {
             name.push(pay.name);
             status.push(pay.status);
-            window[`${pay.name }_name`] = [];
-            window[`${pay.name }_value`] = [];
+            window[`${pay.name}_name`] = [];
+            window[`${pay.name}_value`] = [];
 
-            for(let credential of pay.credentials) {
-                window[`${pay.name }_name`].push(credential.name);
-                window[`${pay.name }_value`].push(credential.value);
+            for (let credential of pay.credentials) {
+                window[`${pay.name}_name`].push(credential.name);
+                window[`${pay.name}_value`].push(credential.value);
             }
 
-            initial[`${pay.name }_name`] = window[`${pay.name }_name`];
-            initial[`${pay.name }_value`] = window[`${pay.name }_value`];
+            initial[`${pay.name}_name`] = window[`${pay.name}_name`];
+            initial[`${pay.name}_value`] = window[`${pay.name}_value`];
         }
 
-    initial.name = name;
-    initial.status = status;
+        initial.name = name;
+        initial.status = status;
 
     }
 
@@ -67,7 +65,7 @@ const Payment = (props) => {
 
             enableReinitialize
 
-             initialValues={initial}
+            initialValues={initial}
 
             validationSchema={Yup.object().shape({
             })}
@@ -78,7 +76,7 @@ const Payment = (props) => {
                     obj.name = (values.name)[i];
                     obj.status = (values.status)[i];
                     let credentials = [];
-                    for (let j in values[`${(values.name)[i]}_name`] ) {
+                    for (let j in values[`${(values.name)[i]}_name`]) {
                         var cred = {};
                         cred.name = values[`${(values.name)[i]}_name`][j];
                         cred.value = values[`${(values.name)[i]}_value`][j];
@@ -149,36 +147,27 @@ const Payment = (props) => {
 
                                                     <div key={index} className="main_container">
                                                         <div className="form-group row">
-                                                            <label className="col-md-4 control-label"> {  (pay.name).charAt(0).toUpperCase() + (pay.name).slice(1).toLowerCase()   } : </label>
+                                                            <label className="col-md-4 control-label"> {(pay.name).charAt(0).toUpperCase() + (pay.name).slice(1).toLowerCase()} : </label>
                                                             <div className="col-md-6">
                                                                 <label className='switch' style={{ marginTop: '15px' }}>
-                                                                <input type="checkbox" id={`status.${index}`} name={`status.${index}`} value={`status.${index}`} defaultChecked={pay && pay.status} onClick={ (e) => { setFieldValue(`status.${index}`, e.currentTarget.checked); } } className='toggle_switch' />
-                                                                <span className='slider round'></span></label>
+                                                                    <input type="checkbox" id={`status.${index}`} name={`status.${index}`} value={`status.${index}`} defaultChecked={pay && pay.status} onClick={(e) => { setFieldValue(`status.${index}`, e.currentTarget.checked); }} className='toggle_switch' />
+                                                                    <span className='slider round'></span></label>
                                                             </div>
                                                         </div>
 
-                                                        <div className="hide_container" style={ pay.status == 0 ? { display:'none', paddingBottom: '15px', paddingTop: '15px'} : { paddingBottom: '15px', paddingTop: '15px'}} >
-                                                        {pay && pay.credentials.map((credential, i) => (
-                                                            <div key={i} className="form-group row">
-                                                                <label className="col-md-4 control-label"> { (credential.name).charAt(0).toUpperCase() + ((credential.name).slice(1).toLowerCase()).replace("_", " ")  } : </label>
-                                                                <div className="col-md-6">
-                                                                    <Field type="text" id={`${pay.name }_${credential.name}.${i}`} name={`${pay.name }_value.${i}`}  onChange={handleChange} placeholder={ (credential.name).charAt(0).toUpperCase() + ((credential.name).slice(1).toLowerCase()).replace("_", " ")  } className='form-control' />
+                                                        <div className="hide_container" style={pay.status == 0 ? { display: 'none', paddingBottom: '15px', paddingTop: '15px' } : { paddingBottom: '15px', paddingTop: '15px' }} >
+                                                            {pay && pay.credentials.map((credential, i) => (
+                                                                <div key={i} className="form-group row">
+                                                                    <label className="col-md-4 control-label"> {(credential.name).charAt(0).toUpperCase() + ((credential.name).slice(1).toLowerCase()).replace("_", " ")} : </label>
+                                                                    <div className="col-md-6">
+                                                                        <Field type="text" id={`${pay.name}_${credential.name}.${i}`} name={`${pay.name}_value.${i}`} onChange={handleChange} placeholder={(credential.name).charAt(0).toUpperCase() + ((credential.name).slice(1).toLowerCase()).replace("_", " ")} className='form-control' />
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                        ))} 
+                                                            ))}
                                                         </div>
 
                                                     </div>
-
-
-
                                                 ))}
-
-
-
-
-
-                                            
 
                                                 <div className="form-group row">
                                                     <div className="col-md-4">

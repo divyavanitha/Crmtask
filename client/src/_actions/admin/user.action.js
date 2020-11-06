@@ -1,6 +1,4 @@
 import axios from "axios";
-import setAuthToken from "../../components/utils/set_admin_token";
-import jwt_decode from "jwt-decode";
 
 import { GET_USERS, FIND_USER } from "./types";
 
@@ -44,7 +42,7 @@ export const addUser = (user) => async dispatch => {
         return response.data;
     } catch(e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };
@@ -56,7 +54,7 @@ export const updateUser = (user) => async dispatch => {
         return response.data;
     } catch(e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { GET_PACKAGES, FIND_PACKAGE, ADD_NOTIFICATION } from "./types";
+import { GET_PACKAGES, FIND_PACKAGE } from "./types";
 
 export const getPackages = () => async dispatch => {
     try {
@@ -42,7 +42,7 @@ export const addPackage = (user) => async dispatch => {
         return response.data;
     } catch(e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };
@@ -54,7 +54,7 @@ export const updatePackage = (user) => async dispatch => {
         return response.data;
     } catch(e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };

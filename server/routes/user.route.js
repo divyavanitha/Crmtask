@@ -7,9 +7,6 @@ const middleware = require("../middlewares/common")
 const authController = require('../controllers/auth.controller');
 const homeController = require('../controllers/home.controller');
 const profilecontroller = require('../controllers/profile.controller');
-const pageController = require('../controllers/admin/page.controller');
-const packageController = require('../controllers/admin/package.controller');
-const menuController = require('../controllers/admin/menu.controller');
 const gigController = require('../controllers/gigs.controller');
 const orderController = require('../controllers/order.controller');
 const proposalController = require('../controllers/proposal.controller');
@@ -107,7 +104,6 @@ router.get('/menu', (req, res) => {
 router.get('/package', (req, res) => {
   profilecontroller.listPackage(req, res);
 });
-
 
 /*Gig*/
 router.get('/list/gigs', (req, res) => {

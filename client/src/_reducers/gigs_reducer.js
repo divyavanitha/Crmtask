@@ -1,7 +1,6 @@
 import {
     GET_MYALLGIGS,
     GET_ALLGIGS,
-     GET_ERRORS,
      GET_GIGSBYID,
      DELETE_GIGS,
      CREATE_GIGS

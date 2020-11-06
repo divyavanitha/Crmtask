@@ -1,8 +1,6 @@
 import axios from "axios";
-import setAuthToken from "../../components/utils/set_admin_token";
-import jwt_decode from "jwt-decode";
 
-import { GET_COUPONS, FIND_COUPON, ADD_NOTIFICATION } from "./types";
+import { GET_COUPONS, FIND_COUPON } from "./types";
 
 export const getCoupons = () => dispatch => {
     axios
@@ -47,7 +45,7 @@ export const addCoupon = (user) => async dispatch => {
         return response.data;
     } catch(e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };
@@ -59,7 +57,7 @@ export const updateCoupon = (user) => async dispatch => {
         return response.data;
     } catch(e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };

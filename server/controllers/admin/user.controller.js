@@ -76,7 +76,6 @@ exports.createuser = async (req, res) => {
             lastName: req.body.last_name,
             email: req.body.email,
             mobile: req.body.mobile,
-            password: req.body.password,
             referralId: Math.random().toString(36).slice(2)
         })
 
@@ -151,7 +150,6 @@ exports.updateuser = async (req, res) => {
             lastName: req.body.last_name,
             email: req.body.email,
             mobile: req.body.mobile,
-            password: req.body.password,
             referralId: Math.random().toString(36).slice(2)
         })
 

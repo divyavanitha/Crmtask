@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
-import { Route, Switch } from "react-router-dom";
-import { useSelector, useDispatch } from 'react-redux';
+import { Switch } from "react-router-dom";
+import { useDispatch } from 'react-redux';
 
 import AdminLogin from './views/admin/auth/Login';
 import Admin from './views/admin/layout/Base';
