@@ -13,7 +13,8 @@ import {
     GET_SLIDES,
     GET_GIGS,
     FIND_GIG,
-    GET_DELIVERY_TIME
+    GET_DELIVERY_TIME,
+    GET_PACKAGE
 } from './types';
 
 
@@ -165,6 +166,14 @@ export const getDeliveryTime = (data) => async dispatch => {
     dispatch({
         type: GET_DELIVERY_TIME,
         payload: delivery_time.data
+    });
+}
+
+export const getPackage = (data) => async dispatch => {
+    const packages = await axios.get(`/api/package`, data)
+    dispatch({
+        type: GET_PACKAGE,
+        payload: packages.data
     });
 }
 

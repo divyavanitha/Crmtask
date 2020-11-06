@@ -7,7 +7,7 @@ import $ from 'jquery';
 //import { useToasts } from 'react-toast-notifications'
 
 import { updatePricing } from "../../../../_actions/gigs.action";
-import { getDeliveryTime } from "../../../../_actions/user.action";
+import { getDeliveryTime, getPackage } from "../../../../_actions/user.action";
 
 const Pricing = (props) => {
     //const { addToast } = useToasts()
@@ -17,21 +17,22 @@ const Pricing = (props) => {
     const params = useParams();
     useEffect(() => {
         dispatch(getDeliveryTime())
+        dispatch(getPackage())
 
         $(".packages").show();
         $(".add-attribute").show();
         $(".fixed_price").hide();
-    $('body').on('change', 'input[name=fixed]', function () {
+    $('body').on('change', 'input[name=fixed_price]', function () {
 
       if ($(this).is(":checked")) {
 
-        $('input[name=fixed]').val(1);
+        $('input[name=fixed_price]').val(1);
         $(".packages").hide();
         $(".add-attribute").hide();
         $(".fixed_price").show();
       }else{
 
-        $('input[name=fixed]').val(0);
+        $('input[name=fixed_price]').val(0);
         $(".packages").show();
         $(".add-attribute").show();
         $(".fixed_price").hide();
@@ -42,19 +43,37 @@ const Pricing = (props) => {
     }, [params.id]);
 
     const delivery = useSelector(state => state.user.delivery_times && state.user.delivery_times.responseData);
-    //const category_list = category && category.responseData.categories;
-  console.log('delivery', delivery);
+    const packages = useSelector(state => state.user && state.user.packages && state.user.packages.responseData && state.user.packages.responseData.packages);
+  console.log('package', packages);
+
+    let description = [];
+    let delivery_time_id = [];
+    let revisions = [];
+    let price = [];
+    let package_id = [];
+    if(packages){
+    for (var i = 0; i < packages.length; i++) {
+        description.push("");
+        delivery_time_id.push("");
+        revisions.push("");
+        price.push("");
+        package_id.push("");
+    }
+    }
     return (
 
         <Formik
 
             enableReinitialize
-            initialValues={{
+
+            initialValues={{              
                 id: params.id,
-                package_id: [''],
-                delivery_time_id: ['1day'],
-                revisions: ['0'],
-                price: ['50'],
+                fixed_price: 0,
+                package_id: package_id,
+                description: description,
+                delivery_time_id: delivery_time_id,
+                revisions: revisions,
+                price: price,
             }
             }
 
@@ -67,15 +86,15 @@ const Pricing = (props) => {
                     .required('Price is required'),
             })}*/
             onSubmit={(values, { setSubmitting, resetForm }) => {
-              //alert();
               console.log('values',values);
                 let data = {
                     id: values.id,
                     package_id: values.package_id,
+                    description: values.description,
                     delivery_time_id: values.delivery_time_id,
                     revisions: values.revisions,
                     price: values.price,
-                    fixed_price: values.fixed
+                    fixed_price: values.fixed_price
                 };
 
                 /*if (params.id) {
@@ -160,7 +179,7 @@ const Pricing = (props) => {
              <div className="float-right switch-box">
                 <span className="text">Fixed Price :</span>
                 <label class='switch'>
-                <input type='checkbox' value="1" name='fixed' /> 
+                <input type='checkbox' onChange={handleChange} value={values.fixed_price} name='fixed_price' /> 
                 <span class='slider round'></span>
                 </label>
              </div>
@@ -262,116 +281,106 @@ const Pricing = (props) => {
                       </tr>
                    </thead>
                    <tbody>
-                         <input type="hidden" name="proposal_packages[1][package_id]" form="pricing-form" value="3145" />
-                         <input type="hidden" name="proposal_packages[2][package_id]" form="pricing-form" value="3146" />
-                         <input type="hidden" name="proposal_packages[3][package_id]" form="pricing-form" value="3147" />
+
+                         <FieldArray name="package_id" render={arrayHelpers => (
+                         <div>
+                           {values.package_id && values.package_id.map((data, index) => (
+                               <div key={index}>
+                                 {packages && packages.map((s_list) => (
+                                  <Field name={`package_id.${index}`} type="hidden" values={s_list._id} className="form-control" />)) }
+                               </div>
+                             ))}
+                         </div>
+
+                         )}
+                        />
+                         
                          <tr>
                             <td>Description</td>
-                            <td className="p-0"><textarea name="proposal_packages[1][description]" form="pricing-form" className="form-control" placeholder="Description" rows="3"></textarea></td>
-                            <td className="p-0"><textarea name="proposal_packages[2][description]" form="pricing-form" className="form-control" placeholder="Description" rows="3"></textarea></td>
-                            <td className="p-0"><textarea name="proposal_packages[3][description]" form="pricing-form" className="form-control" placeholder="Description" rows="3"></textarea></td>
+                           <td className="p-0">
+                              <FieldArray name="description" render={arrayHelpers => (
+                              <div>
+                               {values.description && values.description.map((data, index) => (
+                                <div key={index}>
+                                  <Field  name={`description.${index}`} onChange={handleChange} className="form-control" values={values.description} placeholder="Description" rows="3" />
+                                  </div>
+                                   ))}
+                               </div>
+
+                               )}
+                              />
+                            </td>
+                           
                          </tr>
                          <tr className="delivery-time">
                             <td>Delivery Time</td>
                             <td className="p-0">
-                               <select name="proposal_packages[1][delivery_time]" className="form-control">
-                                  <option value='1' >1 Day</option>
-                                  <option value='2' >2 Days</option>
-                                  <option value='3' >3 Days</option>
-                                  <option value='4' >4 Days</option>
-                                  <option value='5' >5 Days</option>
-                                  <option value='6' >6 Days</option>
-                                  <option value='7' >7 Days</option>
-                                  <option value='7' >7+</option>
-                               </select>
+                               <FieldArray name="delivery_time_id" render={arrayHelpers => (
+                                <div>
+                                {values.delivery_time_id && values.delivery_time_id.map((data, index) => (
+                                  <div key={index}>
+                                 <Field component="select" name={`delivery_time_id.${index}`} className="form-control">
+                                    <option value="">Select Delivery Time</option>
+                                    {delivery && delivery.deliveryTime.map((s_list) => (<option key={s_list._id} values={s_list._id} >{s_list.name}</option>)) }
+                                 </Field>
+                               </div>
+                                  ))}
+                                </div>
+
+                                   )}
+                                  />
                             </td>
-                            <td className="p-0">
-                               <select name="proposal_packages[2][delivery_time]" form="pricing-form" className="form-control">
-                                  <option value='1' >1 Day</option>
-                                  <option value='2' >2 Days</option>
-                                  <option value='3' >3 Days</option>
-                                  <option value='4' >4 Days</option>
-                                  <option value='5' >5 Days</option>
-                                  <option value='6' >6 Days</option>
-                                  <option value='7' >7 Days</option>
-                                  <option value='7' >7+</option>
-                               </select>
-                            </td>
-                            <td className="p-0">
-                               <select name="proposal_packages[3][delivery_time]" form="pricing-form" className="form-control">
-                                  <option value='1' >1 Day</option>
-                                  <option value='2' >2 Days</option>
-                                  <option value='3' >3 Days</option>
-                                  <option value='4' >4 Days</option>
-                                  <option value='5' >5 Days</option>
-                                  <option value='6' >6 Days</option>
-                                  <option value='7' >7 Days</option>
-                                  <option value='7' >7+</option>
-                               </select>
-                            </td>
+
+                            
                          </tr>
                          <tr>
                             <td>Revisions</td>
                             <td className="p-0">
-                               <select name="proposal_packages[1][revisions]" form="pricing-form" className="form-control">
-                                  <option value='0'selected>0</option>
-                                  <option value='1'>1</option>
-                                  <option value='2'>2</option>
-                                  <option value='3'>3</option>
-                                  <option value='4'>4</option>
-                                  <option value='5'>5</option>
-                                  <option value='6'>6</option>
-                                  <option value='7'>7</option>
-                                  <option value='8'>8</option>
-                                  <option value='9'>9</option>
-                                  <option value='10'>10</option>
-                                  <option value='unlimited'>Unlimited Revisions</option>
-                               </select>
+                               <FieldArray name="revisions" render={arrayHelpers => (
+                                <div>
+                                {values.revisions && values.revisions.map((data, index) => (
+                                  <div key={index}>
+                                 <Field component="select" name={`revisions.${index}`}  className="form-control">
+                                    <option value="">Select Revision</option>
+                                    <option value='0' >0</option>
+                                    <option value='1' >1</option>
+                                    <option value='2' >2</option>
+                                    <option value='3' >3</option>
+                                    <option value='4' >4</option>
+                                    <option value='5' >5</option>
+                                    <option value='6' >6</option>
+                                    <option value='7' >7</option>
+                                    <option value='8' >8</option>
+                                    <option value='9' >9</option>
+                                    <option value='10' >10</option>
+                                    <option value='unlimited' >Unlimited Revisions</option>
+                                 </Field>
+                                </div>
+                                  ))}
+                                </div>
+
+                                   )}
+                                  />
                             </td>
-                            <td className="p-0">
-                               <select name="proposal_packages[2][revisions]" form="pricing-form" className="form-control">
-                                  <option value='0'selected>0</option>
-                                  <option value='1'>1</option>
-                                  <option value='2'>2</option>
-                                  <option value='3'>3</option>
-                                  <option value='4'>4</option>
-                                  <option value='5'>5</option>
-                                  <option value='6'>6</option>
-                                  <option value='7'>7</option>
-                                  <option value='8'>8</option>
-                                  <option value='9'>9</option>
-                                  <option value='10'>10</option>
-                                  <option value='unlimited'>Unlimited Revisions</option>
-                               </select>
-                            </td>
-                            <td className="p-0">
-                               <select name="proposal_packages[3][revisions]" form="pricing-form" className="form-control">
-                                  <option value='0'selected>0</option>
-                                  <option value='1'>1</option>
-                                  <option value='2'>2</option>
-                                  <option value='3'>3</option>
-                                  <option value='4'>4</option>
-                                  <option value='5'>5</option>
-                                  <option value='6'>6</option>
-                                  <option value='7'>7</option>
-                                  <option value='8'>8</option>
-                                  <option value='9'>9</option>
-                                  <option value='10'>10</option>
-                                  <option value='unlimited'>Unlimited Revisions</option>
-                               </select>
-                            </td>
+                            
                          </tr>
                          <tr>
                             <td>Price</td>
                             <td className="p-0">
-                               <input type="number" min='5' required name="proposal_packages[1][price]" form="pricing-form" value="5" className="form-control" />
+                               <FieldArray name="price" render={arrayHelpers => (
+                                   <div>
+                                     {values.price && values.price.map((data, index) => (
+                                         <div key={index}>
+                                           <Field name={`price.${index}`} values={`price.${index}`} className="form-control" style={{width:'419px'}} />
+                                           
+                                         </div>
+                                       ))}
+                                   </div>
+
+                                 )}
+                                />
                             </td>
-                            <td className="p-0">
-                               <input type="number" min='5' required name="proposal_packages[2][price]" form="pricing-form" value="10" className="form-control" />
-                            </td>
-                            <td className="p-0">
-                               <input type="number" min='5' required name="proposal_packages[3][price]" form="pricing-form" value="15" className="form-control" />
-                            </td>
+                            
                          </tr>
                       
                    </tbody>

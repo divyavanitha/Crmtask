@@ -38,6 +38,31 @@ export const creategigs = (data) =>  async dispatch => {
     }
  }
 
+ export const updateFaq = (data) =>  async dispatch => {
+  try {
+        let response = await axios.post('/api/gig/faq', data);
+        console.log('data',response);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        return e.response.data;
+    }
+ }
+
+ export const updateRequirement = (data) =>  async dispatch => {
+  try {
+        let response = await axios.post('/api/gig/requirement', data);
+        console.log('data',response);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        return e.response.data;
+    }
+ }
 
 // Add Post
 // export const creategigs = postjob => dispatch => {
