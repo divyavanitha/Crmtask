@@ -39,7 +39,7 @@ export const updateSocialLinkSetting = (data) => async dispatch => {
 
 export const updateSocialSetting = (data) => async dispatch => {
     try {
-        let response = await axios.post('/api/admin/settings/general', data);
+        let response = await axios.post('/api/admin/settings/social', data);
         response.data.status = 'success';
         return response.data;
     } catch(e) {
@@ -51,7 +51,7 @@ export const updateSocialSetting = (data) => async dispatch => {
 
 export const updateSmsSetting = (data) => async dispatch => {
     try {
-        let response = await axios.post('/api/admin/settings/general', data);
+        let response = await axios.post('/api/admin/settings/sms', data);
         response.data.status = 'success';
         return response.data;
     } catch(e) {
@@ -63,7 +63,7 @@ export const updateSmsSetting = (data) => async dispatch => {
 
 export const updateMailSetting = (data) => async dispatch => {
     try {
-        let response = await axios.post('/api/admin/settings/general', data);
+        let response = await axios.post('/api/admin/settings/mail', data);
         response.data.status = 'success';
         return response.data;
     } catch(e) {
@@ -75,7 +75,7 @@ export const updateMailSetting = (data) => async dispatch => {
 
 export const updatePaymentSetting = (data) => async dispatch => {
     try {
-        let response = await axios.post('/api/admin/settings/general', data);
+        let response = await axios.post('/api/admin/settings/payment', data);
         response.data.status = 'success';
         return response.data;
     } catch(e) {

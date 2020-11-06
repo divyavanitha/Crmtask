@@ -20,18 +20,9 @@ const SocialLink = (props) => {
 
     const settings = useSelector(state => state);
 
-    const setting = settings && settings.adminsettings && settings.adminsettings.setting;
-
-    let appLink = settings  && settings.adminsettings && settings.adminsettings.setting && settings.adminsettings.setting.appLink;
     let socialLink = settings  && settings.adminsettings && settings.adminsettings.setting && settings.adminsettings.setting.socialLink;
 
     let initialvalues = {};
-
-    if(appLink) {
-        for(let app of appLink) {
-            initialvalues[app.name] = app.url;
-        }
-    }
 
     if(socialLink) {
         for(let social of socialLink) {
@@ -51,11 +42,12 @@ const SocialLink = (props) => {
             })}
             onSubmit={(values, { setSubmitting }) => {
 
-                let data = {
-                    playstore_link: values.playstore_link,
-                    appstore_link: values.appstore_link,
-                    facebook_link: values.facebook_link,
-                    twitter_link: values.twitter_link
+                let data = {};
+
+                if(socialLink) {
+                    for(let social of socialLink) {
+                        data[social.name] = values[social.name];
+                    }
                 }
 
                 dispatch(updateSocialLinkSetting(data)).then(res => {
@@ -111,16 +103,6 @@ const SocialLink = (props) => {
                                         </div>
                                         <div className="addFormBox">
                                             <form onSubmit={handleSubmit}>
-
-                                                { appLink && appLink.map((app, index) => ( 
-                                                    <div key={index} className="form-group row">
-                                                        <label className="col-md-4 control-label"> {app.title} : </label>
-                                                        <div className="col-md-6">
-                                                            <Field type="text" id={app.name} name={app.name} value={values[app.name]} onChange={handleChange} maxLength={100} placeholder={app.title} className={'form-control' + (errors[app.url] && touched[app.url] ? ' is-invalid' : '')} />
-                                                            <ErrorMessage name={app.name} component="div" className="invalid-feedback" />
-                                                        </div>
-                                                    </div>
-                                                )) }
 
                                                 { socialLink && socialLink.map((social, index) => ( 
                                                     <div key={index} className="form-group row">

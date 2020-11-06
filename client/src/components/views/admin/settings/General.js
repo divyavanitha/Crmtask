@@ -19,7 +19,7 @@ const General = (props) => {
 
     const settings = useSelector(state => state);
 
-    const setting = settings && settings.adminsettings && settings.adminsettings.setting;
+    const site = settings && settings.adminsettings && settings.adminsettings.setting && settings.adminsettings.setting.site;
 
     return (
 
@@ -27,13 +27,13 @@ const General = (props) => {
 
             enableReinitialize
             initialValues={{
-                title: setting ? setting.site.title : '',
-                description: setting ? setting.site.description : '',
+                title: site ? site.title : '',
+                description: site ? site.description : '',
                 logo: '',
                 favicon: '',
-                mobile: setting ? setting.site.mobile : '',
-                email: setting ? setting.site.email : '',
-                copyright: setting ? setting.site.copyright : ''
+                mobile: site ? site.mobile : '',
+                email: site ? site.email : '',
+                copyright: site ? site.copyright : ''
 
             }
             }

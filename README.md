@@ -61,6 +61,10 @@ npm install pm2 -g
 
 pm2 start server/bin/www
 
+# Debug Mode
+
+DEBUG=app:* npm start
+
 
 ## Remote Server Configuration
 
@@ -77,7 +81,7 @@ ProxyVia Full
    Require all granted
 </Proxy>
 
-<Location /socket.io>
+<Location />
    ProxyPass http://localhost:5000/
    ProxyPassReverse http://localhost:5000/
 </Location>

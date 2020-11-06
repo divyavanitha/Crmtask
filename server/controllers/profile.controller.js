@@ -58,7 +58,7 @@ exports.updateProfile = async (req, res) => {
 
     const response = helper.response({ status: 422, error: errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
         const user = {
@@ -115,7 +115,7 @@ exports.updateLanguage = async (req, res) => {
 
     const response = helper.response({ status: 422, error: errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
 
@@ -169,7 +169,7 @@ exports.updateSkill = async (req, res) => {
 
     const response = helper.response({ status: 422, error: errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
 
@@ -226,7 +226,7 @@ exports.updateEducation = async (req, res) => {
 
     const response = helper.response({ status: 422, error: errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
 
@@ -284,7 +284,7 @@ exports.updateCertification = async (req, res) => {
 
     const response = helper.response({ status: 422, error: errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
 
@@ -390,9 +390,9 @@ exports.createCoupon = async (req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
         const coupon = {

@@ -2,7 +2,6 @@ import React, { Fragment, Dispatch, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { withRouter, Link, useHistory } from "react-router-dom";
 import { useToasts } from 'react-toast-notifications';
-import Popup from "reactjs-popup";
 import { deleteSubCategory, changeSubCategoryStatus } from "../../../../_actions/admin/subcategory.action";
 
 import $ from 'jquery';

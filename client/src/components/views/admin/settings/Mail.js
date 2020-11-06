@@ -5,13 +5,14 @@ import { Switch, Route } from "react-router";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useToasts } from 'react-toast-notifications'
+import $ from 'jquery';
 
-import { getSetting, updateGeneralSetting } from "../../../../_actions/admin/setting.action";
+import { getSetting, updateMailSetting } from "../../../../_actions/admin/setting.action";
 
 const Mail = (props) => {
     const { addToast } = useToasts()
     const dispatch = useDispatch();
-    
+
     useEffect(() => {
 
         dispatch(getSetting())
@@ -20,7 +21,16 @@ const Mail = (props) => {
 
     const settings = useSelector(state => state);
 
-    const setting = settings && settings.adminsettings && settings.adminsettings.setting;
+    let mail = settings  && settings.adminsettings && settings.adminsettings.setting && settings.adminsettings.setting.mail;
+
+    $('body').on('change', '.toggle_switch', function() {
+        var that = $(this);
+        if($(this).is(':checked')) {
+            that.closest('.main_container').find('.hide_container').show();
+        } else {
+            that.closest('.main_container').find('.hide_container').hide();
+        }
+    })
 
     return (
 
@@ -28,41 +38,31 @@ const Mail = (props) => {
 
             enableReinitialize
             initialValues={{
-                id: '',
-                title: '',
-                description: '',
-                logo: '',
-                favicon: '',
-                mobile: '',
-                email: '',
-                copyright: ''
+                status: mail ? mail.status : 0,
+                service: mail ? mail.provider : '',
+                username: mail ? mail.username : '',
+                password: mail ? mail.password : '',
+                from: mail ? mail.from : ''
 
             }
             }
 
             validationSchema={Yup.object().shape({
-                title: Yup.string().required('Title is required'),
-                description: Yup.string().required('Description is required'),
-                logo: Yup.string().required('Logo is required'),
-                favicon: Yup.string().required('Favicon is required'),
-                mobile: Yup.string().required('Mobile Number is required'),
-                email: Yup.string().required('Email Address is required'),
-                copyright: Yup.string().required('Copyright content is required')
+                username: Yup.string().required('Username is required'),
+                password: Yup.string().required('Password is required'),
+                from: Yup.string().required('From Address is required')
             })}
             onSubmit={(values, { setSubmitting }) => {
 
                 let data = {
-                    id: values.id,
-                    title: values.title,
-                    description: values.description,
-                    logo: values.logo,
-                    favicon: values.favicon,
-                    mobile: values.mobile,
-                    email: values.email,
-                    copyright: values.copyright
+                    status: values.status,
+                    service: values.service,
+                    username: values.username,
+                    password: values.password,
+                    from: values.from
                 };
 
-                dispatch(updateGeneralSetting(data)).then(res => {
+                dispatch(updateMailSetting(data)).then(res => {
                     addToast(res.message, { appearance: res.status, autoDismiss: true, })
                 })
                 setSubmitting(false);
@@ -79,6 +79,7 @@ const Mail = (props) => {
                     handleBlur,
                     handleSubmit,
                     handleReset,
+                    setFieldValue,
                 } = props;
 
                 return (
@@ -115,73 +116,40 @@ const Mail = (props) => {
                                         </div>
                                         <div className="addFormBox">
                                             <form onSubmit={handleSubmit} encType="multipart/form-data">
-
+                                            <div className="main_container">
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Send Mail : </label>
                                                     <div className="col-md-6">
-                                                    <label className='switch' style={{ marginTop: '15px' }}><input type='checkbox' className='status_enable' /> <span className='slider round'></span></label>
+                                                        <label className='switch' style={{ marginTop: '15px' }}>
+                                                        <input type='checkbox' className='toggle_switch' defaultChecked={mail && mail.status} onClick={ (e) => { setFieldValue('status', e.currentTarget.checked); } }  />
+                                                            <span className='slider round'></span></label>
                                                     </div>
                                                 </div>
 
-
-                                                <div className="form-group row">
-                                                    <label className="col-md-4 control-label"> Driver : </label>
-                                                    <div className="col-md-6">
-                                                        <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
-                                                        <ErrorMessage name="title" component="div" className="invalid-feedback" />
+                                                <div className="hide_container" style={ mail && mail.status == 1 ? { display:'block', paddingBottom: '15px'} : { display:'none', paddingBottom: '15px'}} >
+                                                    <div className="form-group row">
+                                                        <label className="col-md-4 control-label"> Username : </label>
+                                                        <div className="col-md-6">
+                                                            <Field type="text" id="username" name="username" value={values.username} onChange={handleChange} maxLength={100} placeholder="Username" className={'form-control' + (errors.username && touched.username ? ' is-invalid' : '')} />
+                                                            <ErrorMessage name="username" component="div" className="invalid-feedback" />
+                                                        </div>
+                                                    </div>
+                                                    <div className="form-group row">
+                                                        <label className="col-md-4 control-label"> Password : </label>
+                                                        <div className="col-md-6">
+                                                            <Field type="password" id="password" name="password" value={values.password} onChange={handleChange} maxLength={100} placeholder="Password" className={'form-control' + (errors.password && touched.password ? ' is-invalid' : '')} />
+                                                            <ErrorMessage name="password" component="div" className="invalid-feedback" />
+                                                        </div>
+                                                    </div>
+                                                    <div className="form-group row">
+                                                        <label className="col-md-4 control-label"> From Address : </label>
+                                                        <div className="col-md-6">
+                                                            <Field type="text" id="from" name="from" value={values.from} onChange={handleChange} maxLength={100} placeholder="From" className={'form-control' + (errors.from && touched.from ? ' is-invalid' : '')} />
+                                                            <ErrorMessage name="from" component="div" className="invalid-feedback" />
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div className="form-group row">
-                                                    <label className="col-md-4 control-label"> Host : </label>
-                                                    <div className="col-md-6">
-                                                        <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
-                                                        <ErrorMessage name="title" component="div" className="invalid-feedback" />
-                                                    </div>
                                                 </div>
-                                                <div className="form-group row">
-                                                    <label className="col-md-4 control-label"> Port : </label>
-                                                    <div className="col-md-6">
-                                                        <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
-                                                        <ErrorMessage name="title" component="div" className="invalid-feedback" />
-                                                    </div>
-                                                </div>
-                                                <div className="form-group row">
-                                                    <label className="col-md-4 control-label"> Username : </label>
-                                                    <div className="col-md-6">
-                                                        <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
-                                                        <ErrorMessage name="title" component="div" className="invalid-feedback" />
-                                                    </div>
-                                                </div>
-                                                <div className="form-group row">
-                                                    <label className="col-md-4 control-label"> Password : </label>
-                                                    <div className="col-md-6">
-                                                        <Field type="password" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
-                                                        <ErrorMessage name="title" component="div" className="invalid-feedback" />
-                                                    </div>
-                                                </div>
-                                                <div className="form-group row">
-                                                    <label className="col-md-4 control-label"> From Address : </label>
-                                                    <div className="col-md-6">
-                                                        <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
-                                                        <ErrorMessage name="title" component="div" className="invalid-feedback" />
-                                                    </div>
-                                                </div>
-                                                <div className="form-group row">
-                                                    <label className="col-md-4 control-label"> From Name : </label>
-                                                    <div className="col-md-6">
-                                                        <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
-                                                        <ErrorMessage name="title" component="div" className="invalid-feedback" />
-                                                    </div>
-                                                </div>
-                                                <div className="form-group row">
-                                                    <label className="col-md-4 control-label"> Encryption : </label>
-                                                    <div className="col-md-6">
-                                                        <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
-                                                        <ErrorMessage name="title" component="div" className="invalid-feedback" />
-                                                    </div>
-                                                </div>
-                                                
-                                                
                                                 <div className="form-group row">
                                                     <div className="col-md-4">
                                                         <label className="control-label"></label>

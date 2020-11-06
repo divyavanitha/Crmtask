@@ -19,7 +19,7 @@ import {
 export const login = (data) => async dispatch => {
 
     try {
-        const response = await axios.post(`api/login`, data);
+        const response = await axios.post(`/api/login`, data);
 
         const { token } = response.data.responseData.user;
 
@@ -42,7 +42,7 @@ export const login = (data) => async dispatch => {
 export const register = (data) => async dispatch => {
 
     try {
-        const response = await axios.post(`api/register`, data);
+        const response = await axios.post(`/api/register`, data);
 
         const { token } = response.data.responseData.user;
 
@@ -64,7 +64,7 @@ export const register = (data) => async dispatch => {
 export const social_login = (data) => async dispatch => {
 
     try {
-        const response = await axios.post(`api/social`, data);
+        const response = await axios.post(`/api/social`, data);
 
         const { token } = response.data.responseData.user;
 
@@ -85,7 +85,7 @@ export const social_login = (data) => async dispatch => {
 
 export function auth() {
 
-    const request = axios.get(`api/users/user`, { headers: { 'Authorization': localStorage.getItem('jwtToken') } })
+    const request = axios.get(`/api/users/user`, { headers: { 'Authorization': localStorage.getItem('jwtToken') } })
         .then(response => response.data);
 
     return {
@@ -110,7 +110,7 @@ export const logout = () => dispatch => {
     })
 }
 export function forgetpassword(dataToSubmit) {
-    const request = axios.post(`api/auth/reset-password`, dataToSubmit)
+    const request = axios.post(`/api/auth/reset-password`, dataToSubmit)
         .then(response => response.data);
 
     return {
@@ -119,7 +119,7 @@ export function forgetpassword(dataToSubmit) {
     }
 }
 export function verification() {
-    const request = axios.post(`api/auth/verification`)
+    const request = axios.post(`/api/auth/verification`)
         .then(response => response.data);
 
     return {
@@ -128,7 +128,7 @@ export function verification() {
     }
 }
 export function getallpostjob() {
-    const request = axios.get(`api/postjob/getallpostjob`)
+    const request = axios.get(`/api/postjob/getallpostjob`)
         .then(response => response.data);
 
     return {

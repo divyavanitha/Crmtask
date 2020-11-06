@@ -2,16 +2,17 @@ import React, { Fragment, useState, FormEvent, Dispatch, useEffect } from "react
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { Switch, Route } from "react-router";
-import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { Formik, Field, Form, FieldArray, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useToasts } from 'react-toast-notifications'
+import $ from 'jquery';
 
-import { getSetting, updateGeneralSetting } from "../../../../_actions/admin/setting.action";
+import { getSetting, updatePaymentSetting } from "../../../../_actions/admin/setting.action";
 
 const Payment = (props) => {
     const { addToast } = useToasts()
     const dispatch = useDispatch();
-    
+
     useEffect(() => {
 
         dispatch(getSetting())
@@ -20,49 +21,76 @@ const Payment = (props) => {
 
     const settings = useSelector(state => state);
 
-    const setting = settings && settings.adminsettings && settings.adminsettings.setting;
+    let payment = settings  && settings.adminsettings && settings.adminsettings.setting && settings.adminsettings.setting.payment;
+
+    $('body').on('change', '.toggle_switch', function() {
+        var that = $(this);
+        if($(this).is(':checked')) {
+            that.closest('.main_container').find('.hide_container').show();
+        } else {
+            that.closest('.main_container').find('.hide_container').hide();
+        }
+    })
+
+    let name = [];
+    let status = [];
+    let key = [];
+    let value = [];
+
+    let initial = {}
+
+    if(payment) {
+
+        for(let pay of payment) {
+            name.push(pay.name);
+            status.push(pay.status);
+            window[`${pay.name }_name`] = [];
+            window[`${pay.name }_value`] = [];
+
+            for(let credential of pay.credentials) {
+                window[`${pay.name }_name`].push(credential.name);
+                window[`${pay.name }_value`].push(credential.value);
+            }
+
+            initial[`${pay.name }_name`] = window[`${pay.name }_name`];
+            initial[`${pay.name }_value`] = window[`${pay.name }_value`];
+        }
+
+    initial.name = name;
+    initial.status = status;
+
+    }
 
     return (
 
         <Formik
 
             enableReinitialize
-            initialValues={{
-                id: '',
-                title: '',
-                description: '',
-                logo: '',
-                favicon: '',
-                mobile: '',
-                email: '',
-                copyright: ''
 
-            }
-            }
+             initialValues={initial}
 
             validationSchema={Yup.object().shape({
-                title: Yup.string().required('Title is required'),
-                description: Yup.string().required('Description is required'),
-                logo: Yup.string().required('Logo is required'),
-                favicon: Yup.string().required('Favicon is required'),
-                mobile: Yup.string().required('Mobile Number is required'),
-                email: Yup.string().required('Email Address is required'),
-                copyright: Yup.string().required('Copyright content is required')
             })}
             onSubmit={(values, { setSubmitting }) => {
+                let payment = [];
+                for (let i in values.name) {
+                    var obj = {};
+                    obj.name = (values.name)[i];
+                    obj.status = (values.status)[i];
+                    let credentials = [];
+                    for (let j in values[`${(values.name)[i]}_name`] ) {
+                        var cred = {};
+                        cred.name = values[`${(values.name)[i]}_name`][j];
+                        cred.value = values[`${(values.name)[i]}_value`][j];
+                        credentials.push(cred)
+                    }
+                    obj.credentials = credentials;
+                    payment.push(obj)
+                }
+                let data = { payment: payment };
+                console.log(data)
 
-                let data = {
-                    id: values.id,
-                    title: values.title,
-                    description: values.description,
-                    logo: values.logo,
-                    favicon: values.favicon,
-                    mobile: values.mobile,
-                    email: values.email,
-                    copyright: values.copyright
-                };
-
-                dispatch(updateGeneralSetting(data)).then(res => {
+                dispatch(updatePaymentSetting(data)).then(res => {
                     addToast(res.message, { appearance: res.status, autoDismiss: true, })
                 })
                 setSubmitting(false);
@@ -79,6 +107,7 @@ const Payment = (props) => {
                     handleBlur,
                     handleSubmit,
                     handleReset,
+                    setFieldValue,
                 } = props;
 
                 return (
@@ -91,7 +120,7 @@ const Payment = (props) => {
                                     <div className="col-sm-12">
                                         <div className="page-header">
                                             <div className="page-title">
-                                                <h1><i className="menu-icon fa fa-gear"></i> Settings / Payment Config </h1>
+                                                <h1><i className="menu-icon fa fa-gear"></i> Settings / SMS Config </h1>
                                             </div>
                                         </div>
                                     </div>
@@ -116,35 +145,40 @@ const Payment = (props) => {
                                         <div className="addFormBox">
                                             <form onSubmit={handleSubmit} encType="multipart/form-data">
 
-                                                <div className="form-group row">
-                                                    <label className="col-md-4 control-label"> Stripe : </label>
-                                                    <div className="col-md-6">
-                                                    <label className='switch' style={{ marginTop: '15px' }}><input type='checkbox' className='status_enable' /> <span className='slider round'></span></label>
+                                                {payment && payment.map((pay, index) => (
+
+                                                    <div key={index} className="main_container">
+                                                        <div className="form-group row">
+                                                            <label className="col-md-4 control-label"> {  (pay.name).charAt(0).toUpperCase() + (pay.name).slice(1).toLowerCase()   } : </label>
+                                                            <div className="col-md-6">
+                                                                <label className='switch' style={{ marginTop: '15px' }}>
+                                                                <input type="checkbox" id={`status.${index}`} name={`status.${index}`} value={`status.${index}`} defaultChecked={pay && pay.status} onClick={ (e) => { setFieldValue(`status.${index}`, e.currentTarget.checked); } } className='toggle_switch' />
+                                                                <span className='slider round'></span></label>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="hide_container" style={ pay.status == 0 ? { display:'none', paddingBottom: '15px', paddingTop: '15px'} : { paddingBottom: '15px', paddingTop: '15px'}} >
+                                                        {pay && pay.credentials.map((credential, i) => (
+                                                            <div key={i} className="form-group row">
+                                                                <label className="col-md-4 control-label"> { (credential.name).charAt(0).toUpperCase() + ((credential.name).slice(1).toLowerCase()).replace("_", " ")  } : </label>
+                                                                <div className="col-md-6">
+                                                                    <Field type="text" id={`${pay.name }_${credential.name}.${i}`} name={`${pay.name }_value.${i}`}  onChange={handleChange} placeholder={ (credential.name).charAt(0).toUpperCase() + ((credential.name).slice(1).toLowerCase()).replace("_", " ")  } className='form-control' />
+                                                                </div>
+                                                            </div>
+                                                        ))} 
+                                                        </div>
+
                                                     </div>
-                                                </div>
 
 
-                                                <div className="form-group row">
-                                                    <label className="col-md-4 control-label"> Stripe Publishable Key : </label>
-                                                    <div className="col-md-6">
-                                                        <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
-                                                        <ErrorMessage name="title" component="div" className="invalid-feedback" />
-                                                    </div>
-                                                </div>
-                                                <div className="form-group row">
-                                                    <label className="col-md-4 control-label"> Stripe Secret Key : </label>
-                                                    <div className="col-md-6">
-                                                        <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
-                                                        <ErrorMessage name="title" component="div" className="invalid-feedback" />
-                                                    </div>
-                                                </div>
-                                                <div className="form-group row">
-                                                    <label className="col-md-4 control-label"> Stripe Currency : </label>
-                                                    <div className="col-md-6">
-                                                        <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
-                                                        <ErrorMessage name="title" component="div" className="invalid-feedback" />
-                                                    </div>
-                                                </div>
+
+                                                ))}
+
+
+
+
+
+                                            
 
                                                 <div className="form-group row">
                                                     <div className="col-md-4">

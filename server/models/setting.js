@@ -61,8 +61,10 @@ const settingSchema = mongoose.Schema({
             minlength: 1
         },
         url: {
-            type: String,
-            default: false
+            type: String
+        },
+        picture: {
+            type: String
         }
     }],
     social: {
@@ -76,32 +78,18 @@ const settingSchema = mongoose.Schema({
             trim: true,
             minlength: 1
         },
-        facebookAppSecret: {
-            type: String,
-            required: true,
-            trim: true,
-            minlength: 1
-        },
-        facebookRedirect: {
-            type: String,
-            default: false
-        },
         googleClientId: {
             type: String,
             required: true,
             trim: true,
             minlength: 1
         },
-        googleClientSecret: {
+        appleId: {
             type: String,
             required: true,
             trim: true,
             minlength: 1
         },
-        googleRedirect: {
-            type: String,
-            default: false
-        }
     },
     sms: {
         status: {
@@ -159,6 +147,30 @@ const settingSchema = mongoose.Schema({
             minlength: 1
         }
     },
+    payment: [{
+         name: {
+             type: String,
+             required: true,
+             trim: true,
+             minlength: 1
+         },
+         status: {
+             type: Boolean,
+             default: false
+         },
+         credentials: [{
+            name: {
+                type: String,
+                trim: true,
+                minlength: 1
+            },
+            value: {
+                type: String,
+                trim: true,
+                minlength: 1
+            }
+         }]
+     }],
     createdAt: {
         type: Date,
         default: Date.now
