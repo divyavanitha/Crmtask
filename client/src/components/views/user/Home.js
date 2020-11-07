@@ -41,7 +41,7 @@ function Home() {
                         <h5>Welcome <span className="text-success">{ auth.user && auth.user.firstName  }</span> </h5>
                         <hr />
                         <p>Sell your services to millions of people all over the world.</p>
-                        <button className="btn get_btn mt-0">Post A Request</button>
+                        <Link to="/request/add" className="btn get_btn mt-0">Post A Request</Link>
                      </div>
                      {/* <!-- card-body Ends --> */}
                   </div>

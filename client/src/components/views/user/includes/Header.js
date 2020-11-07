@@ -310,8 +310,7 @@ function Header() {
                                         <div id="selling" className="dropdown-submenu collapse">
                                             <a className="dropdown-item" href="selling_orders">
                                                 Orders      </a>
-                                            <a className="dropdown-item" href="proposals/view_proposals">
-                                                My Proposals      </a>
+                                            <Link className="dropdown-item" to="/gig/list"> My Gigs </Link>
                                             <a className="dropdown-item" href="proposals/create_coupon">
                                                 Create A Coupon      </a>
                                             <a className="dropdown-item" href="requests/buyer_requests">
@@ -334,10 +333,8 @@ function Header() {
                                         <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#requests">
                                             Requests   </a>
                                         <div id="requests" className="dropdown-submenu collapse">
-                                            <a className="dropdown-item" href="requests/post_request">
-                                                Post A Request      </a>
-                                            <a className="dropdown-item" href="requests/manage_requests">
-                                                Manage Requests      </a>
+                                            <Link className="dropdown-item" to="/request/add"> Post A Request </Link>
+                                            <Link className="dropdown-item" to="/request/manage"> Manage Requests </Link>
                                         </div>
                                         <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#contacts">
                                             Contacts   </a>
