@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const path = require("path");
 
 const middleware = require("../middlewares/common")
@@ -7,11 +7,9 @@ const middleware = require("../middlewares/common")
 const authController = require('../controllers/auth.controller');
 const homeController = require('../controllers/home.controller');
 const profilecontroller = require('../controllers/profile.controller');
-const pageController = require('../controllers/admin/page.controller');
-const packageController = require('../controllers/admin/package.controller');
-const menuController = require('../controllers/admin/menu.controller');
 const gigController = require('../controllers/gigs.controller');
 const orderController = require('../controllers/order.controller');
+const proposalController = require('../controllers/proposal.controller');
 
 
 router.post('/login', (req, res) => {
@@ -99,51 +97,12 @@ router.get('/slide', (req, res) => {
   profilecontroller.listSlide(req, res);
 });
 
-
-
-
-router.get('/page', (req, res) => {
-  pageController.listpage(req, res);
+router.get('/menu', (req, res) => {
+  profilecontroller.listMenu(req, res);
 });
-router.post('/page', function(req, res){
-  pageController.createpage(req, res);
-});
-router.patch('/page', function(req, res){
-  pageController.updatePage(req, res);
-});
-router.delete('/page/:id', function(req, res){
-  pageController.deletepage(req, res);
-});
-
-
-
-
 
 router.get('/package', (req, res) => {
-  packageController.listPackage(req, res);
-});
-router.post('/package', function(req, res){
-  packageController.createPackage(req, res);
-});
-router.patch('/package', function(req, res){
-  packageController.updatePackage(req, res);
-});
-router.delete('/package/:id', function(req, res){
-  packageController.deletePackage(req, res);
-});
-
-
-router.get('/menu', (req, res) => {
-  menuController.listMenu(req, res);
-});
-router.post('/menu', [middleware.upload( path.join(__dirname, '../storage/images/menu/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], function(req, res){
-  menuController.createMenu(req, res);
-});
-router.patch('/menu', [middleware.upload( path.join(__dirname, '../storage/images/menu/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], function(req, res){
-  menuController.updateMenu(req, res);
-});
-router.delete('/menu/:id', function(req, res){
-  menuController.deleteMenu(req, res);
+  profilecontroller.listPackage(req, res);
 });
 
 /*Gig*/
@@ -191,6 +150,23 @@ router.post('/gig/checkout', middleware.user, function(req, res){
 });
 router.post('/gig/rate', middleware.user, function(req, res){
   orderController.rating(req, res);
+});
+
+router.post('/request', [middleware.user, middleware.upload( path.join(__dirname, '../storage/images/request/') ).fields([{ name: 'files[]', maxCount: 4 }]) ], (req, res) => {
+  proposalController.createrequest(req, res);
+});
+
+router.post('/offer', middleware.user, function(req, res){
+  proposalController.request_offer(req, res);
+});
+
+
+router.post('/send_sms', (req, res) => {
+  homeController.sendSms(req, res);
+});
+
+router.post('/send_mail', (req, res) => {
+  homeController.sendMail(req, res);
 });
 
 /* //const auth = require("../middlewares/auth");

@@ -6,7 +6,9 @@ import {
     GET_SUBCATEGORY,
     GET_SLIDES,
     GET_GIGS,
-    FIND_GIG
+    FIND_GIG,
+    GET_DELIVERY_TIME,
+    GET_PACKAGE
 } from '../_actions/types';
 
 let initialState = {
@@ -39,10 +41,12 @@ const userReducer = (state = initialState, action) => {
             return { ...state, gig: action.payload }
         case FIND_GIG:
             return { ...state, gig_details: action.payload }
-        case LOGOUT_USER:
-            return { ...state }
         case GET_ALLPOSTJOB:
             return { ...state, userData: action.payload }
+        case GET_DELIVERY_TIME:
+            return { ...state, delivery_times: action.payload }
+        case GET_PACKAGE:
+            return { ...state, packages: action.payload }
         default:
             return state;
     }

@@ -13,7 +13,7 @@ const categorySchema = mongoose.Schema({
         type: Boolean,
         default: true
     },
-    subCategory: { type: Schema.Types.ObjectId, ref: 'SubCategory' },
+    //subCategory: { type: Schema.Types.ObjectId, ref: 'SubCategory' },
     created_at: {
         type: Date,
         default: Date.now

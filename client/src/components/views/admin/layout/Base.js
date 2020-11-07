@@ -29,8 +29,17 @@ import Skill from "../skills/Skill";
 import Coupon from "../coupons/Coupon";
 import AddSlide from "../slides/AddSlide";
 import Slide from "../slides/Slide";
+import AddMenu from "../menus/AddMenu";
+import Menu from "../menus/Menu";
+import AddPackage from "../packages/AddPackage";
+import Package from "../packages/Package";
+import AddPage from "../pages/AddPage";
+import Page from "../pages/Page";
+import AddUser from "../users/AddUser";
+import User from "../users/User";
+import Request from "../requests/Request";
 import Dashboard from "../Dashboard";
-import Profile from "../settings/Profile";
+import SocialLink from "../settings/SocialLink";
 import Social from "../settings/Social";
 import Sms from "../settings/Sms";
 import Mail from "../settings/Mail";
@@ -40,9 +49,9 @@ import Payment from "../settings/Payment";
 
 const Base = () => {
 
-    let settings = useSelector((state) => state.settings);
+  let settings = useSelector((state) => state.settings);
 
-    let site = settings.settings && settings.settings.site;
+  let site = settings.settings && settings.settings.site;
 
   return (
     <ToastProvider>
@@ -86,9 +95,22 @@ const Base = () => {
             <Route path="/admin/slide/add" component={AddSlide}></Route>
             <Route path="/admin/slide/:id/edit" component={AddSlide}></Route>
             <Route path="/admin/slide" component={Slide}></Route>
+            <Route path="/admin/menu/add" component={AddMenu}></Route>
+            <Route path="/admin/menu/:id/edit" component={AddMenu}></Route>
+            <Route path="/admin/menu" component={Menu}></Route>
+            <Route path="/admin/package/add" component={AddPackage}></Route>
+            <Route path="/admin/package/:id/edit" component={AddPackage}></Route>
+            <Route path="/admin/package" component={Package}></Route>
+            <Route path="/admin/page/add" component={AddPage}></Route>
+            <Route path="/admin/page/:id/edit" component={AddPage}></Route>
+            <Route path="/admin/page" component={Page}></Route>
+            <Route path="/admin/user/add" component={AddUser}></Route>
+            <Route path="/admin/user/:id/edit" component={AddUser}></Route>
+            <Route path="/admin/user" component={User}></Route>
+            <Route path="/admin/request" component={Request}></Route>
             <Route path="/admin/settings/general" component={General}></Route>
-            <Route path="/admin/settings/profile/links" component={Profile}></Route>
-            <Route path="/admin/settings/social/links" component={Social}></Route>
+            <Route path="/admin/settings/social/links" component={SocialLink}></Route>
+            <Route path="/admin/settings/social" component={Social}></Route>
             <Route path="/admin/settings/sms" component={Sms}></Route>
             <Route path="/admin/settings/mail" component={Mail}></Route>
             <Route path="/admin/settings/push" component={Push}></Route>

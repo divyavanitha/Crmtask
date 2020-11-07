@@ -19,12 +19,10 @@ const settingSchema = mongoose.Schema({
             minlength: 1
         },
         logo: {
-            type: String,
-            default: false
+            type: String
         },
         favicon: {
-            type: String,
-            default: false
+            type: String
         },
         email: {
             type: String,
@@ -38,21 +36,17 @@ const settingSchema = mongoose.Schema({
         },
         copyright: {
             type: String,
-            default: false
+            trim: true
+        },
+        playstoreLink: {
+            type: String,
+            trim: true
+        },
+        appstoreLink: {
+            type: String,
+            trim: true
         }
     },
-    appLink: [{
-        name: {
-            type: String,
-            required: true,
-            trim: true,
-            minlength: 1
-        },
-        url: {
-            type: String,
-            default: false
-        }
-    }],
    socialLink: [{
         name: {
             type: String,
@@ -60,9 +54,17 @@ const settingSchema = mongoose.Schema({
             trim: true,
             minlength: 1
         },
-        url: {
+        title: {
             type: String,
-            default: false
+            required: true,
+            trim: true,
+            minlength: 1
+        },
+        url: {
+            type: String
+        },
+        picture: {
+            type: String
         }
     }],
     social: {
@@ -76,33 +78,99 @@ const settingSchema = mongoose.Schema({
             trim: true,
             minlength: 1
         },
-        facebookAppSecret: {
-            type: String,
-            required: true,
-            trim: true,
-            minlength: 1
-        },
-        facebookRedirect: {
-            type: String,
-            default: false
-        },
         googleClientId: {
             type: String,
             required: true,
             trim: true,
             minlength: 1
         },
-        googleClientSecret: {
+        appleId: {
             type: String,
             required: true,
             trim: true,
             minlength: 1
         },
-        googleRedirect: {
-            type: String,
+    },
+    sms: {
+        status: {
+            type: Boolean,
             default: false
+        },
+        provider: {
+            type: String,
+            required: true,
+            trim: true,
+            minlength: 1
+        },
+        sid: {
+            type: String,
+            required: true,
+            trim: true,
+            minlength: 1
+        },
+        token: {
+            type: String,
+            required: true,
+            trim: true,
+            minlength: 1
+        },
+        sender: {
+            type: String,
+            required: true,
+            trim: true,
+            minlength: 1
         }
     },
+    mail: {
+        status: {
+            type: Boolean,
+            default: false
+        },
+        service: {
+            type: String,
+            trim: true,
+            minlength: 1
+        },
+        username: {
+            type: String,
+            trim: true,
+            minlength: 1
+        },
+        password: {
+            type: String,
+            trim: true,
+            minlength: 1
+        },
+        from: {
+            type: String,
+            trim: true,
+            minlength: 1
+        }
+    },
+    payment: [{
+         name: {
+             type: String,
+             required: true,
+             trim: true,
+             minlength: 1
+         },
+         status: {
+             type: Boolean,
+             default: false
+         },
+         credentials: [{
+            name: {
+                type: String,
+                trim: true,
+                minlength: 1
+            },
+            value: {
+                type: String,
+                trim: true,
+                minlength: 1
+            }
+         }]
+     }],
     createdAt: {
         type: Date,
         default: Date.now

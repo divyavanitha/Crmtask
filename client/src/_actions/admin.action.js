@@ -4,7 +4,7 @@ import jwt_decode from "jwt-decode";
 
 import { GET_USERS } from "./types";
 
-export const getUsers = () => dispatch => {
+/*export const getUsers = () => dispatch => {
     axios
         .get('/api/admin/user')
         .then(res => {
@@ -21,15 +21,15 @@ export const getUsers = () => dispatch => {
             })
         );
 };
-
-export const addUser = (user) => dispatch => {
+*/
+/*export const addUser = (user) => dispatch => {
     axios
         .post('/api/admin/user', user)
         .then(res => {
-            /* dispatch({
+             dispatch({
                 type: GET_USERS,
                 payload: res.data
-            }) */
+            }) 
             return {
                 type: GET_USERS,
                 payload: res.data
@@ -39,4 +39,4 @@ export const addUser = (user) => dispatch => {
         .catch(err =>
             console.log(err)
         );
-};
+};*/

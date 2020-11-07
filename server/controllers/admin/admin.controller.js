@@ -30,7 +30,7 @@ exports.adminAuth = async (req, res) => {
 
         let user = await Admin.findOne({ email: req.body.email });
         if (!user) res.status(422).json( helper.response(  { status: 422, error : { message: 'Invalid credentials' } }   ));
-console.log( user );
+
         const validPassword = await bcrypt.compare(req.body.password, user.password);
         if (!validPassword) res.status(422).json( helper.response(  { status: 422, error : { message: 'Invalid credentials' } }   ));
 
@@ -140,7 +140,7 @@ exports.addUser = async (req, res) => {
 
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(req.body.password, salt);
-        var verify = Math.floor((Math.random() * 10000000) + 1);
+        let verify = Math.floor((Math.random() * 10000000) + 1);
         await user.save(function (error, user) {
             res.send("Inserted sucessfully");
  

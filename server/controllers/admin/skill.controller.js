@@ -5,8 +5,8 @@ const mongoose = require('mongoose');
 const Joi = require('@hapi/joi');
 const { Skill } = require('../../models/skill');
 const _ = require('lodash');
-var db = require('../../services/model.js');
-var helper = require('../../services/helper');
+const db = require('../../services/model.js');
+const helper = require('../../services/helper');
 const dotenv = require('dotenv');
 dotenv.config({ path: __dirname + '/../../.env' });
 
@@ -27,9 +27,9 @@ exports.createSkill = async (req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
         const skill = {
@@ -70,9 +70,9 @@ exports.updateSkill = async (req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
         const skill = {

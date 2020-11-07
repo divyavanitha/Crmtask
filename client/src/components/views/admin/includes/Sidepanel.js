@@ -39,21 +39,21 @@ const Sidepanel = () => {
                             </li>
 
                             <li>
-                                <Link> <i className="menu-icon fa fa-table"></i>Proposals/Services <span className="badge badge-success">18</span> </Link>
+                                <Link to="/admin/request"> <i className="menu-icon fa fa-table"></i>Proposals/Services <span className="badge badge-success">18</span> </Link>
                             </li>
 
                             <li className="menu-item-has-children dropdown">
                                 <a className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i className="menu-icon fa fa fa-money"></i> Payouts </a>
                                 <ul className="sub-menu children dropdown-menu">
-                                    <li><i className="fa fa-arrow-circle-right"></i><Link > Pending </Link></li>
-                                    <li><i className="fa fa-arrow-circle-right"></i><Link > Declined </Link></li>
-                                    <li><i className="fa fa-arrow-circle-right"></i><Link > Completed </Link></li>
+                                    <li><i className="fa fa-arrow-circle-right"></i><Link to="/admin"> Pending </Link></li>
+                                    <li><i className="fa fa-arrow-circle-right"></i><Link to="/admin"> Declined </Link></li>
+                                    <li><i className="fa fa-arrow-circle-right"></i><Link to="/admin"> Completed </Link></li>
                                 </ul>
                             </li>
 
                             <li>
-                                <Link > <i className="menu-icon fa fa-dashboard"></i> Inbox Messages </Link>
+                                <Link to="/admin"> <i className="menu-icon fa fa-dashboard"></i> Inbox Messages </Link>
                             </li>
 
                             {/* <li className="menu-item-has-children dropdown">
@@ -69,12 +69,12 @@ const Sidepanel = () => {
                                 <a className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i className="menu-icon fa fa fa-star"></i> Reviews </a>
                                 <ul className="sub-menu children dropdown-menu">
-                                    <li><i className="fa fa-arrow-circle-right"></i><Link > User Reviews </Link></li>
+                                    <li><i className="fa fa-arrow-circle-right"></i><Link to="/admin"> User Reviews </Link></li>
                                 </ul>
                             </li>
 
                             <li>
-                                <Link > <i className="menu-icon fa fa-table"></i>Buyer Requests <span className="badge badge-success">18</span> </Link>
+                                <Link to="/admin/request"> <i className="menu-icon fa fa-table"></i>Buyer Requests <span className="badge badge-success">18</span> </Link>
                             </li>
 
                             <li>
@@ -106,11 +106,19 @@ const Sidepanel = () => {
                             </li>
 
                             <li>
-                                <Link to="/admin/pages"> <i className="menu-icon fa fa-file"></i>Pages </Link>
+                                <Link to="/admin/menu"> <i className="menu-icon fa fa-picture-o"></i>Menus </Link>
                             </li>
 
                             <li>
-                                <Link to="/admin/users"> <i className="menu-icon fa fa-users"></i>Users </Link>
+                                <Link to="/admin/package"> <i className="menu-icon fa fa-file"></i>Packages </Link>
+                            </li>
+
+                            <li>
+                                <Link to="/admin/page"> <i className="menu-icon fa fa-file"></i>Pages </Link>
+                            </li>
+
+                            <li>
+                                <Link to="/admin/user"> <i className="menu-icon fa fa-users"></i>Users </Link>
                             </li>
 
                             <li>

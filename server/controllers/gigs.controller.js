@@ -1,8 +1,8 @@
 const express = require("express");
 const { User } = require("../models/user");
 const { Gig } = require('../models/gigs');
-var helper = require('../services/helper.js');
-var db = require('../services/model.js');
+const helper = require('../services/helper.js');
+const db = require('../services/model.js');
 const Joi = require('@hapi/joi');
 const _ = require('lodash');
 
@@ -26,8 +26,7 @@ exports.withoutAuthgigs = async (req, res) => {
 exports.getGigDetails = async (req, res) => {
     try {
 
-        //let gig = //await db._find(Gig, {_id:req.params.id}, {}, {populate: "user"});
-        let gig = await db._find(Gig, {_id:req.params.id}, {} );
+        let gig = await db._find(Gig, {_id:req.params.id}, {}, {populate: "user"});
 
         const data = { gig };
 
@@ -44,7 +43,7 @@ exports.getGigDetails = async (req, res) => {
 exports.listgigs = async (req, res) => {
     try {
 
-        let gigs = await db._get(Gig, { _id: req.user._id });
+        let gigs = await db._get(Gig, { user: req.user._id });
 
         const data = { gigs };
 
@@ -59,7 +58,7 @@ exports.listgigs = async (req, res) => {
 
 exports.creategigs = async (req, res) => {
 
-     const schema = Joi.object().options({ abortEarly: false }).keys({
+    const schema = Joi.object().options({ abortEarly: false }).keys({
         title: Joi.string().required().label("Title"),
         sub_category_id: Joi.string().required().label("Sub Category Id"),
         tags: Joi.string().required().label("Tags")
@@ -76,37 +75,25 @@ exports.creategigs = async (req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
+
+    let existingGig = await Gig.findOne({ title: req.body.title });
+    if (existingGig) return res.status(422).json( helper.response(  { status: 422, message: 'Gig name already exists'  }   ));
 
     try {
 
-        var lastGig = await Gig.findOne({}).sort({_id:-1}).limit(1);
-
-        console.log(req.user._id);
-
-        if(lastGig !== null){
-            var gigg = {
-                id: (lastGig.id +1),
+        let data = {
                 user: req.user._id,
                 title: req.body.title,
-                subCategoryId: req.body.sub_category_id,
+                subCategory: req.body.sub_category_id,
                 tags: req.body.tags
-            } 
-        }else{
-            var gigg = {
-                user: req.user._id,
-                title: req.body.title,
-                subCategoryId: req.body.sub_category_id,
-                tags: req.body.tags
-            }   
-        }
-        
+            }
 
-        let gigs= await db._store(Gig, gigg);
+        let gig = await db._store(Gig, data);
 
-        const response = helper.response({ message: res.__('inserted'), data: gigs });
+        const response = helper.response({ message: res.__('inserted'), data: gig });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -122,13 +109,15 @@ exports.creategigs = async (req, res) => {
 }
 
 exports.updatePricing = async(req, res) => {
+
+    console.log(req.body);
     const schema = Joi.object().options({ abortEarly: false }).keys({
-        package_id: Joi.array().required().label("Package Id"),
-        name: Joi.array().required().label("Name"),
-        delivery_timing_id: Joi.array().required().label("Delivery Time Id"),
+        //package_id: Joi.array().required().label("Package Id"),
+        delivery_time_id: Joi.array().required().label("Delivery Time Id"),
         revisions: Joi.array().required().label("Revisions"),
         price: Joi.array().required().label("Price"),
-        id: Joi.string().required().label("Gig Id")
+        id: Joi.string().required().label("Gig Id"),
+        //fixed_price: Joi.boolean().required().label("Fixed")
 
     }).unknown(true);
 
@@ -142,32 +131,33 @@ exports.updatePricing = async(req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
 
-        var gig = await Gig.findById(req.body.id);
+        let gig = await Gig.findById(req.body.id);
 
         let pricing = [];
 
-        for(let i in req.body.package_id) {
+        for(let i in req.body.price) {
             let price = {
                 package: req.body.package_id[i],
-                name: req.body.name[i],
                 description: req.body.description[i],
                 revisions: req.body.revisions[i],
-                price: req.body.price[i]
+                price: req.body.price[i],
+                DeliveryTime: req.body.delivery_time_id[i]
             }
             pricing.push(price);
         }
-
+        
         if(pricing.length > 0) gig.pricing = pricing;
-
+        gig.fixed_price = req.body.fixed_price;
+        console.log(pricing);
         let gigs = await db._update(Gig, { _id: req.body.id }, gig);
 
-        const response = helper.response({ message: res.__('updated'), data: gigs });
+        const response = helper.response({ message: res.__('updated'), data: gig });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -199,13 +189,13 @@ exports.updateFaq = async(req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
 
-        var gig = await Gig.findById(req.body.id);
+        let gig = await Gig.findById(req.body.id);
 
         let faqs = [];
 
@@ -221,7 +211,7 @@ exports.updateFaq = async(req, res) => {
         gig.description = req.body.description;
         let gigs = await db._update(Gig, { _id: req.body.id }, gig);
 
-        const response = helper.response({ message: res.__('updated'), data: gigs });
+        const response = helper.response({ message: res.__('updated'), data: gig });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -252,24 +242,20 @@ exports.updateRequirement = async(req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
 
-        var gig = await Gig.findById(req.body.id);
+        let gig = await Gig.findById(req.body.id);
 
-        
-        let requirements = {
-            requirement: req.body.requirement,
-        }
-        gig.requirement = requirements;
+        gig.requirement = req.body.requirement;
 console.log(gig);
         let gigs = await db._update(Gig, { _id: req.body.id }, gig);
 //console.log(gigs);
 
-        const response = helper.response({ message: res.__('updated'), data: gigs });
+        const response = helper.response({ message: res.__('updated'), data: gig });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -299,13 +285,13 @@ exports.updateImage = async(req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
 
-        var gig = await Gig.findById(req.body.id);
+        let gig = await Gig.findById(req.body.id);
 
         let photos = [];
 
@@ -353,13 +339,13 @@ exports.updateConfirm = async(req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
 
-        var gig = await Gig.findById(req.body.id);
+        let gig = await Gig.findById(req.body.id);
 
         let gigs = await db._update(Gig, { _id: req.body.id }, gig);
 //console.log(gigs);
@@ -414,8 +400,8 @@ exports.getallyourgigs = async (req, res) => {
                 errors = 'There are no gig';
                 return res.status(404).json(errors);
             }
-            for (var i = 0; i <= gig.length; i++) {
-                var gigs = gigs.filter(gigg => gigg.user !== null)
+            for (let i = 0; i <= gig.length; i++) {
+                let gigs = gigs.filter(gigg => gigg.user !== null)
             }
             res.json({ gigs });
         })

@@ -149,7 +149,7 @@ const AddSubCategory = (props) => {
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"></label>
                                                     <div className="col-md-6">
-                                                        {params.id ? <button type="submit" className="btn btn-success mr-3">Update</button> :<button type="submit" className="btn btn-success mr-3">Save</button>}
+                                                        <button type="submit" className="btn btn-success mr-3"> { params.id ? 'Update' : 'Save' } </button>
                                                         {params.id ? <Link className="btn btn-outline" to="/admin/subcategory">Cancel</Link> : <button onClick={handleReset} className="btn btn-outline mr-3">Reset</button>}
                                                     </div>
                                                 </div>

@@ -10,7 +10,7 @@ const cookieParser = require("cookie-parser");
 const socketio = require('socket.io');
 const Log = new (require('./config/winston'));
 const i18n = require('i18n');
-var helper = require('./services/helper.js');
+const helper = require('./services/helper.js');
 
 i18n.configure({ 
   locales: ['en', 'ar'], 

@@ -1,8 +1,6 @@
 import axios from "axios";
-import setAuthToken from "../../components/utils/set_admin_token";
-import jwt_decode from "jwt-decode";
 
-import { GET_LANGUAGES, FIND_LANGUAGE, ADD_NOTIFICATION } from "./types";
+import { GET_LANGUAGES, FIND_LANGUAGE } from "./types";
 
 export const getLanguages = () => dispatch => {
     axios
@@ -47,7 +45,7 @@ export const addLanguage = (user) => async dispatch => {
         return response.data;
     } catch(e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };
@@ -59,7 +57,7 @@ export const updateLanguage = (user) => async dispatch => {
         return response.data;
     } catch(e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };

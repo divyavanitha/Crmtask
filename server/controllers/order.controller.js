@@ -2,8 +2,8 @@ const express = require("express");
 const { Cart } = require('../models/Cart');
 const { Order } = require('../models/Order');
 const { Rating } = require('../models/Rating');
-var helper = require('../services/helper.js');
-var db = require('../services/model.js');
+const helper = require('../services/helper.js');
+const db = require('../services/model.js');
 const Joi = require('@hapi/joi');
 const _ = require('lodash');
 
@@ -27,7 +27,8 @@ exports.addcart = async (req, res) => {
 
      const schema = Joi.object().options({ abortEarly: false }).keys({
         gig_id: Joi.string().required().label("Gig Id"),
-        quantity: Joi.number().required().label("Quantity")
+        quantity: Joi.number().required().label("Quantity"),
+        price: Joi.number().required().label("Price")
 
     }).unknown(true);
 
@@ -41,9 +42,9 @@ exports.addcart = async (req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
 
@@ -92,6 +93,9 @@ exports.checkout = async (req, res) => {
         coupon_id: Joi.string().required().label("Coupon Id"),
         wallet: Joi.string().required().label("wallet"),
         payment_mode: Joi.string().required().label("Payment Mode"),
+        gig_id: Joi.string().required().label("Gig Id"),
+        quantity: Joi.number().required().label("Quantity"),
+        total: Joi.number().required().label("total")
 
     }).unknown(true);
 
@@ -105,16 +109,20 @@ exports.checkout = async (req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
 
             var order = {
-                couponId: req.body.coupon_id,
+                coupon: req.body.coupon_id,
                 wallet: req.body.wallet,
-                payment_mode: req.body.payment_mode
+                payment_mode: req.body.payment_mode,
+                user: req.user._id,
+                gig: req.body.gig_id,
+                quantity: req.body.quantity,
+                total: req.body.total
             }
 
         let orders= await db._store(Order, order);
@@ -153,13 +161,13 @@ exports.rating = async (req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
 
-            var rating = {
+            let rating = {
                 orderId: req.body.order_id,
                 rating: req.body.rating,
                 comment: req.body.comment

@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const path = require("path");
 
 const middleware = require("../middlewares/common");
@@ -16,6 +16,10 @@ const menuController = require('../controllers/admin/menu.controller');
 const skillController = require('../controllers/admin/skill.controller');
 const languageController = require('../controllers/admin/language.controller');
 const slideController = require('../controllers/admin/slide.controller');
+const homeController = require('../controllers/home.controller');
+const userController = require('../controllers/admin/user.controller');
+const proposalController = require('../controllers/proposal.controller');
+
 
 router.post('/login',  async (req, res) => {
     await adminController.adminAuth(req, res);
@@ -25,13 +29,13 @@ router.post('/register', async (req, res) => {
     await adminController.adminAuthRegister(req.body, "admin", res);
 });
 
-router.get('/user', [middleware.admin], (req, res) => {
+/*router.get('/user', [middleware.admin], (req, res) => {
   adminController.getAllUser(req, res);
 });
 
 router.post('/user', [middleware.admin], (req, res) => {
   adminController.addUser(req, res);
-});
+});*/
 
 router.get('/category', (req, res) => {
   categoryController.listcategory(req, res);
@@ -144,9 +148,11 @@ router.get('/slide', (req, res) => {
   slideController.listSlide(req, res);
 });
 router.post('/slide', [middleware.upload( path.join(__dirname, '../storage/images/slide/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], function(req, res){
+  console.log(req.files);
   slideController.createSlide(req, res);
 });
 router.patch('/slide', [middleware.upload( path.join(__dirname, '../storage/images/slide/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], function(req, res){
+  console.log(req.files);
   slideController.updateSlide(req, res);
 });
 router.delete('/slide/:id', function(req, res){
@@ -159,12 +165,123 @@ router.get('/slide/changestatus/:id/:status', function(req, res){
   slideController.changeStatus(req, res);
 });
 
+router.get('/menu', (req, res) => {
+  menuController.listMenu(req, res);
+});
+router.post('/menu', [middleware.upload( path.join(__dirname, '../storage/images/menu/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], function(req, res){
+  menuController.createMenu(req, res);
+});
+router.patch('/menu', [middleware.upload( path.join(__dirname, '../storage/images/menu/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], function(req, res){
+  menuController.updateMenu(req, res);
+});
+router.delete('/menu/:id', function(req, res){
+  menuController.deleteMenu(req, res);
+});
+router.get('/get/menu/:id', function(req, res){
+  menuController.listMenubyid(req, res);
+});
+router.get('/menu/changestatus/:id/:status', function(req, res){
+  menuController.changeStatus(req, res);
+});
+
+router.get('/package', (req, res) => {
+  packageController.listPackage(req, res);
+});
+router.post('/package', function(req, res){
+  packageController.createPackage(req, res);
+});
+router.patch('/package', function(req, res){
+  packageController.updatePackage(req, res);
+});
+router.delete('/package/:id', function(req, res){
+  packageController.deletePackage(req, res);
+});
+router.get('/get/package/:id', function(req, res){
+  packageController.listPackagebyid(req, res);
+});
+router.get('/package/changestatus/:id/:status', function(req, res){
+  packageController.changeStatus(req, res);
+});
+
+router.get('/page', (req, res) => {
+  pageController.listpage(req, res);
+});
+router.post('/page', function(req, res){
+  pageController.createpage(req, res);
+});
+router.patch('/page', function(req, res){
+  pageController.updatePage(req, res);
+});
+router.delete('/page/:id', function(req, res){
+  pageController.deletepage(req, res);
+});
+router.get('/get/page/:id', function(req, res){
+  pageController.listPagebyid(req, res);
+});
+router.get('/page/changestatus/:id/:status', function(req, res){
+  pageController.changeStatus(req, res);
+});
+
+router.get('/user', (req, res) => {
+  userController.listusers(req, res);
+});
+router.post('/user', function(req, res){
+  userController.createuser(req, res);
+});
+router.patch('/user', function(req, res){
+  userController.updateuser(req, res);
+});
+router.delete('/user/:id', function(req, res){
+  userController.deleteuser(req, res);
+});
+router.get('/get/user/:id', function(req, res){
+  userController.listuserbyid(req, res);
+});
+router.get('/user/changestatus/:id/:status', function(req, res){
+  userController.changeStatus(req, res);
+});
+
+router.get('/requests', (req, res) => {
+  proposalController.listRequests(req, res);
+});
+router.delete('/request/:id', function(req, res){
+  proposalController.deleteRequest(req, res);
+});
+router.get('/request/changestatus/:id/:status', function(req, res){
+  proposalController.changeStatus(req, res);
+});
+
+
 router.get('/settings', (req, res) => {
   settingController.getSetting(req, res);
 });
 
 router.post('/settings/general', [middleware.admin, middleware.uploadAs( path.join(__dirname, '../storage/images/common/') ).fields([{ name: 'logo', maxCount: 1 }, { name: 'favicon', maxCount: 1 }]) ],  (req, res) => {
   settingController.updateGeneral(req, res);
+});
+
+router.post('/settings/social_links', [middleware.admin],  (req, res) => {
+  settingController.updateSocialLink(req, res);
+});
+
+router.post('/settings/push', [middleware.admin],  (req, res) => {
+  settingController.updatePush(req, res);
+});
+
+router.post('/settings/social', [middleware.admin],  (req, res) => {
+  settingController.updateSocial(req, res);
+});
+
+router.post('/settings/sms', [middleware.admin],  (req, res) => {
+  settingController.updateSms(req, res);
+});
+
+router.post('/settings/mail', [middleware.admin],  (req, res) => {
+  settingController.updateMail(req, res);
+});
+
+router.post('/settings/payment', [middleware.admin],  (req, res) => {
+  settingController.updatePayment(req, res);
 });
 
 

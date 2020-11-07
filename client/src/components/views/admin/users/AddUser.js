@@ -1,45 +1,81 @@
-import React, { Fragment, useState, FormEvent, Dispatch } from "react";
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import React, { Fragment, useState, FormEvent, Dispatch, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams, useHistory } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { useToasts } from 'react-toast-notifications'
 
-const AddUser = (props) => {
+import { addUser, getUserbyId, updateUser } from "../../../../_actions/admin/user.action";
+
+const AddCategory = (props) => {
+    const { addToast } = useToasts()
     const dispatch = useDispatch();
 
+    let history = useHistory();
+    const params = useParams();
+    useEffect(() => {
+
+        dispatch(getUserbyId(params.id))
+
+    }, [params.id]);
+    const user = useSelector(state => state.users && state.users.user && state.users.user.responseData && state.users.user.responseData.user);
+console.log('user', user);
     return (
 
-        <Formik initialValues={{ first_name: '', last_name: '', email: '', mobile: '', password: '' }}
+        <Formik
+
+            enableReinitialize
+            initialValues={{
+                id: user ? user._id : '',
+                firstName: user ? user.firstName : '',
+                lastName: user ? user.lastName : '',
+                email: user ? user.email : '',
+                mobile: user ? user.mobile : '',
+                //password: user ? user.password : '',
+
+            }
+            }
+
             validationSchema={Yup.object().shape({
-                first_name: Yup.string()
+                firstName: Yup.string()
                     .required('First Name is required'),
-                last_name: Yup.string()
+                lastName: Yup.string()
                     .required('Last Name is required'),
                 email: Yup.string()
-                    .email('Email is invalid')
                     .required('Email is required'),
-                mobile: Yup.number()
+                mobile: Yup.string()
                     .required('Mobile is required'),
                 password: Yup.string()
-                    .min(6, 'Password must be at least 6 characters')
                     .required('Password is required'),
                 confirm_password: Yup.string()
-                    .required('Password is required')
-                    .oneOf([Yup.ref('password'), null], 'Passwords must match')
+                    .required('Confirm Password is required'),
             })}
-            onSubmit={(values, { setSubmitting }) => {
+            onSubmit={(values, { setSubmitting, resetForm }) => {
 
                 let data = {
-                    first_name: values.first_name,
-                    last_name: values.last_name,
+                    id: values.id,
+                    first_name: values.firstName,
+                    last_name: values.lastName,
                     email: values.email,
                     mobile: values.mobile,
-                    password: values.password
+                    password: values.password,
+                    confirm_password: values.confirm_password
                 };
 
-                //  dispatch(login(data));
+                if (params.id) {
+                    dispatch(updateUser(data)).then(res => {
+                        addToast(res.message, { appearance: res.status, autoDismiss: true, })
+                        history.push('/admin/user/')
+                    })
+                } else {
+                    dispatch(addUser(data)).then(res => {
+                        addToast(res.message, { appearance: res.status, autoDismiss: true, })
+                    })
+                }
+                resetForm();
                 setSubmitting(false);
             }}>
+
             {props => {
                 const {
                     values,
@@ -55,57 +91,112 @@ const AddUser = (props) => {
 
                 return (
                     <Fragment>
-                        <h1 className="h3 mb-2 text-gray-800">Users</h1>
-                        <p className="mb-4">User List</p>
-                        <div className="row">
-                            <Link className="btn btn-primary" style={{ float: "right" }} to="/admin/users">Back</Link>
-                        </div>
-                        <div className="col-xl-12 col-lg-12">
-                            <div className="card shadow mb-4">
-                                <div className="card-header py-3">
-                                    create
-                                    {/* <h6 className="m-0 font-weight-bold text-green">Product {(isCreate ? "create" : "edit")}</h6> */}
-                                </div>
-                                <div className="card-body">
-                                    <form onSubmit={handleSubmit}>
-                                        <div className="form-row">
-                                            <div className="form-group col-md-6">
-                                                <Field id="first_name" name="first_name" value={values.first_name} onChange={handleChange} maxLength={100} placeholder="First Name" className={'form-control' + (errors.first_name && touched.first_name ? ' is-invalid' : '')} />
-                                                <ErrorMessage name="first_name" component="div" className="invalid-feedback" />
-                                            </div>
-                                            <div className="form-group col-md-6">
-                                                <Field id="last_name" name="last_name" value={values.last_name} onChange={handleChange} maxLength={100} placeholder="Last Name" className={'form-control' + (errors.last_name && touched.last_name ? ' is-invalid' : '')} />
-                                                <ErrorMessage name="last_name" component="div" className="invalid-feedback" />
-                                            </div>
-                                        </div>
-                                        <div className="form-row">
-                                            <div className="form-group col-md-6">
-                                                <Field id="email" name="email" value={values.email} onChange={handleChange} maxLength={100} placeholder="Email" className={'form-control' + (errors.email && touched.email ? ' is-invalid' : '')} />
-                                                <ErrorMessage name="email" component="div" className="invalid-feedback" />
-                                            </div>
-                                            <div className="form-group col-md-6">
-                                                <Field id="mobile" name="mobile" value={values.mobile} onChange={handleChange} maxLength={15} placeholder="Mobile" className={'form-control' + (errors.mobile && touched.mobile ? ' is-invalid' : '')} />
-                                                <ErrorMessage name="mobile" component="div" className="invalid-feedback" />
-                                            </div>
-                                        </div>
-                                        <div className="form-row">
-                                            <div className="form-group col-md-6">
-                                                <Field id="password" name="password" value={values.password} onChange={handleChange} maxLength={60} type="password" placeholder="Password" className={'form-control' + (errors.password && touched.password ? ' is-invalid' : '')} />
-                                                <ErrorMessage name="password" component="div" className="invalid-feedback" />
-                                            </div>
-                                            <div className="form-group col-md-6">
-                                                <Field id="confirm_password" name="confirm_password" value={values.confirm_password} onChange={handleChange} type="password" placeholder="Confirm Password" className={'form-control' + (errors.confirm_password && touched.confirm_password ? ' is-invalid' : '')} />
-                                                <ErrorMessage name="confirm_password" component="div" className="invalid-feedback" />
-                                            </div>
-                                        </div>
 
 
-
-                                        <button className="btn btn-danger">Cancel</button>
-                                        <button type="submit" className={`btn btn-primary left-margin`}>Save</button>
-                                    </form>
+                        <div className="container">
+                            <div className="breadcrumbs">
+                                <div className="row">
+                                    <div className="col-sm-12">
+                                        <div className="page-header float-left">
+                                            <div className="page-title">
+                                                <h1><i className="menu-icon fa fa-cubes"></i> Users / {params.id ? "Edit User" : "Add User"} </h1>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            <div className="row">
+                                <div className="col-lg-12">
+                                <div className="box box-block bg-white">
+                                    <h5 className="mb-1">{params.id ? "Edit User" : "Add User"} 
+                                    <div className="rightBtn-Group">
+                                        <Link className="addMoreBtn" to="/admin/user" ><span className="txt text-capitalize"><span className="amIcon"><i className="fa fa-arrow-left"></i></span> Back</span></Link>
+                                    </div>
+                                    </h5>
+
+                                        
+                                        <div className="addFormBox">
+                                            <form onSubmit={handleSubmit} encType="multipart/form-data">
+                                                <div className="form-group row">
+                                                    <div className="col-md-4">
+                                                        <label className="control-label"> First Name : </label>
+                                                    </div>
+                                                    
+                                                    <div className="col-md-6">
+                                                        <Field type="text" id="firstName" name="firstName" value={values.firstName} onChange={handleChange} maxLength={100} placeholder="First Name" className={'form-control' + (errors.firstName && touched.firstName ? ' is-invalid' : '')} />
+                                                        <ErrorMessage name="firstName" component="div" className="invalid-feedback" />
+                                                    </div>
+                                                </div>
+
+                                                <div className="form-group row">
+                                                    <div className="col-md-4">
+                                                        <label className="control-label"> Last Name : </label>
+                                                    </div>
+                                                    
+                                                    <div className="col-md-6">
+                                                        <Field type="text" id="lastName" name="lastName" value={values.lastName} onChange={handleChange} maxLength={100} placeholder="Last Name" className={'form-control' + (errors.lastName && touched.lastName ? ' is-invalid' : '')} />
+                                                        <ErrorMessage name="lastName" component="div" className="invalid-feedback" />
+                                                    </div>
+                                                </div>
+                                                <div className="form-group row">
+                                                    <div className="col-md-4">
+                                                        <label className="control-label"> Email : </label>
+                                                    </div>
+                                                    
+                                                    <div className="col-md-6">
+                                                        <Field type="text" id="email" name="email" value={values.email} onChange={handleChange} maxLength={100} placeholder="Email" className={'form-control' + (errors.email && touched.email ? ' is-invalid' : '')} />
+                                                        <ErrorMessage name="email" component="div" className="invalid-feedback" />
+                                                    </div>
+                                                </div>
+
+                                                <div className="form-group row">
+                                                    <div className="col-md-4">
+                                                        <label className="control-label"> Mobile : </label>
+                                                    </div>
+                                                    
+                                                    <div className="col-md-6">
+                                                        <Field type="text" id="mobile" name="mobile" value={values.mobile} onChange={handleChange} maxLength={100} placeholder="Mobile" className={'form-control' + (errors.mobile && touched.mobile ? ' is-invalid' : '')} />
+                                                        <ErrorMessage name="mobile" component="div" className="invalid-feedback" />
+                                                    </div>
+                                                </div>
+
+                                            
+                                                <div className="form-group row">
+                                                    <div className="col-md-4">
+                                                        <label className="control-label"> Password : </label>
+                                                    </div>
+                                                    
+                                                    <div className="col-md-6">
+                                                        <Field type="password" name="password" value={values.password} onChange={handleChange} placeholder="Enter Your Password" className={'form-control' + (errors.password && touched.password ? ' is-invalid' : '')} />
+                                                        <ErrorMessage name="password" component="div" className="invalid-feedback" />
+                                                    </div>
+                                                </div>
+                                                <div className="form-group row">
+                                                    <div className="col-md-4">
+                                                        <label className="control-label"> Confirm Password : </label>
+                                                    </div>
+                                                    
+                                                    <div className="col-md-6">
+                                                        <Field type="password" name="confirm_password" value={values.confirm_password} onChange={handleChange} placeholder="Enter Your Password Again" className={'form-control' + (errors.confirm_password && touched.confirm_password ? ' is-invalid' : '')} />
+                                                        <ErrorMessage name="confirm_password" component="div" className="invalid-feedback" />
+                                                    </div>
+                                                </div>
+                                                
+                                                <div className="form-group row">
+                                                    <div className="col-md-4">
+                                                        <label className="control-label"></label>
+                                                    </div>
+                                                    <div className="col-md-6">
+                                                        {params.id ? <button type="submit" className="btn btn-success mr-3">Update</button> : <button type="submit" className="btn btn-success mr-3">Save</button>}
+                                                        {params.id ? <Link className="btn btn-outline" to="/admin/category">Cancel</Link> : <button onClick={handleReset} className="btn btn-outline mr-3">Reset</button>}
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                </div>
                         </div>
                     </Fragment>
                 );
@@ -114,4 +205,4 @@ const AddUser = (props) => {
     );
 };
 
-export default AddUser;
+export default AddCategory;

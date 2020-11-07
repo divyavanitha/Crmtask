@@ -8,11 +8,6 @@ const Schema = mongoose.Schema;
 /* A common gotcha for beginners is that the unique option for schemas is not a validator.
 It's a convenient helper for building MongoDB unique indexes. */
 const gigSchema = mongoose.Schema({
-    id: {
-        type: Number,
-        default: 1,
-        unique: true
-    },
     user: { type: Schema.Types.ObjectId, ref: 'users' },
     title: {
         type: String,
@@ -22,11 +17,7 @@ const gigSchema = mongoose.Schema({
         unique: true
     },
     description: { type: String },
-    subCategoryId : {
-        type: String,
-        required: true,
-        trim: true
-    },
+    subCategory : { type: Schema.Types.ObjectId, ref: 'SubCategory' },
     tags: {
         type: String,
         required: true,
@@ -35,12 +26,17 @@ const gigSchema = mongoose.Schema({
     requirement: {
         type: String
     },
+    fixed_price: {
+        type: Boolean
+    },
     pricing: [{
-        package: { type: Schema.Types.ObjectId, ref: 'Package' },
+        package: { type: Schema.Types.ObjectId, ref: 'Package', required: false },
         name: { type: String },
         description: { type: String },
         revisions: { type: String },
-        price: { type: Number }
+        price: { type: Number },
+        DeliveryTime: { type: Schema.Types.ObjectId, ref: 'DeliveryTime' },
+        
     }],
     faq: [{
         question: { type: String },

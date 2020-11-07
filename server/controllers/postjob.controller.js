@@ -175,8 +175,8 @@ exports.getmyallpostjob = async (req, res) => {
                 errors= 'There are no postjob';
                 return res.status(404).json(errors);
             }
-            for(var i=0;i<=postjob.length;i++){
-          var postjobs=postjob.filter(postjobb => postjobb.user!==null )
+            for(let i=0;i<=postjob.length;i++){
+          let postjobs=postjob.filter(postjobb => postjobb.user!==null )
         }
             res.json({postjobs});
         })

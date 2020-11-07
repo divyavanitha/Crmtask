@@ -1,4 +1,4 @@
-10@charset "utf-8";
+@charset "utf-8";
 .gnav-header #search-query {
     position: absolute;
     width: 100%;
@@ -10510,4 +10510,10 @@ color: #222 !important;
 
 .onePress-icon.hamburger-icon.nav-icon {
     cursor: pointer;
+}
+
+
+
+.owl-carousel .owl-nav button.owl-next::after {
+    margin-top: -25px !important;
 }

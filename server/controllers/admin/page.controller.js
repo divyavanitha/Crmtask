@@ -8,8 +8,8 @@ const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
 dotenv.config({ path: __dirname + '/../../.env' });
-var db = require('../../services/model.js');
-var helper = require('../../services/helper');
+const db = require('../../services/model.js');
+const helper = require('../../services/helper');
 
 
 exports.createpage = async (req, res) => {
@@ -31,9 +31,9 @@ exports.createpage = async (req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
         const page = {
@@ -77,9 +77,9 @@ exports.updatePage = async (req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
         const page = {
@@ -107,11 +107,17 @@ exports.updatePage = async (req, res) => {
 exports.listpage = async (req, res) => {
     try {
 
-        let pages = await db._get(Page);
+        if(!req.query.length) req.query.length = 10;
+        else req.query.length = parseInt(req.query.length);
+        if(!req.query.page) req.query.page = 1;
+        else req.query.page = parseInt(req.query.page);
 
+        let skip = (req.query.page * req.query.length) - req.query.length;
+        let pages = await db._get(Page, null, null, {limit: req.query.length, skip: skip});
+        let count = await db._count(Page);
         const data = { pages };
 
-        const response = helper.response({ data });
+        const response = helper.response({ data: helper.paginate(req, data, count) });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -142,19 +148,36 @@ exports.deletepage = async (req, res) => {
 };
 
 
-exports.listpagebyid = async (adminDetails, role, res) => {
+exports.listPagebyid = async (req, res) => {
     try {
-    const errors = {};
-    Page.findOne({id: req.params.id})
-    .then(page => {
-        if (!page) {
-            errors.noPage = 'There are no Page';
-            return res.status(404).json(errors);
+
+        let page = await db._find(Page, {_id:req.params.id});
+
+        const data = { page };
+
+        const response = helper.response({ data: data });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.changeStatus = async (req, res) => {
+    try {
+        const page = {
+                status: req.params.status,
         }
 
-        res.json({page});
-    })
-    }    catch (err) {
+        let pages = await db._update(Page, { _id: req.params.id }, page);
+
+        const response = helper.response({ message: res.__('updated') });
+        return res.status(response.statusCode).json(response);
+        
+    }
+    catch (err) {
         if (err[0] != undefined) {
             for (i in err.errors) {
                 res.status(422).send(err.errors[i].message);
@@ -164,4 +187,4 @@ exports.listpagebyid = async (adminDetails, role, res) => {
         }
     }
 
-}
+};

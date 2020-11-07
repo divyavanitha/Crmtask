@@ -1304,11 +1304,11 @@ div#demo1 .carousel-item img{
 }
 .wt-companyinfohold:before{
    left: 0;
-   background-image: url(../images/bg/img-01.jpg);
+   background-image: url('../images/bg/img-01.jpg');
 }
 .wt-companyinfohold:after{
    right: 0;
-   background-image: url(../images/bg/img-02.jpg);
+   background-image: url('../images/bg/img-02.jpg');
 }
 .wt-companydetails{
    float: left;

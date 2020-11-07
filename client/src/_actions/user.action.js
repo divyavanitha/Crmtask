@@ -1,6 +1,5 @@
 import axios from 'axios';
 import setToken from '../components/utils/set_token';
-import { useDispatch } from "react-redux";
 import {
     AUTH_USER,
     LOGOUT_USER,
@@ -9,17 +8,18 @@ import {
     GET_ALLPOSTJOB,
     GET_MENUS,
     GET_CATEGORY,
-    GET_SUBCATEGORY,
     GET_SLIDES,
     GET_GIGS,
-    FIND_GIG
+    FIND_GIG,
+    GET_DELIVERY_TIME,
+    GET_PACKAGE
 } from './types';
 
 
 export const login = (data) => async dispatch => {
 
     try {
-        const response = await axios.post(`api/login`, data);
+        const response = await axios.post(`/api/login`, data);
 
         const { token } = response.data.responseData.user;
 
@@ -42,7 +42,7 @@ export const login = (data) => async dispatch => {
 export const register = (data) => async dispatch => {
 
     try {
-        const response = await axios.post(`api/register`, data);
+        const response = await axios.post(`/api/register`, data);
 
         const { token } = response.data.responseData.user;
 
@@ -64,7 +64,7 @@ export const register = (data) => async dispatch => {
 export const social_login = (data) => async dispatch => {
 
     try {
-        const response = await axios.post(`api/social`, data);
+        const response = await axios.post(`/api/social`, data);
 
         const { token } = response.data.responseData.user;
 
@@ -85,7 +85,7 @@ export const social_login = (data) => async dispatch => {
 
 export function auth() {
 
-    const request = axios.get(`api/users/user`, { headers: { 'Authorization': localStorage.getItem('jwtToken') } })
+    const request = axios.get(`/api/users/user`, { headers: { 'Authorization': localStorage.getItem('jwtToken') } })
         .then(response => response.data);
 
     return {
@@ -110,7 +110,7 @@ export const logout = () => dispatch => {
     })
 }
 export function forgetpassword(dataToSubmit) {
-    const request = axios.post(`api/auth/reset-password`, dataToSubmit)
+    const request = axios.post(`/api/auth/reset-password`, dataToSubmit)
         .then(response => response.data);
 
     return {
@@ -119,7 +119,7 @@ export function forgetpassword(dataToSubmit) {
     }
 }
 export function verification() {
-    const request = axios.post(`api/auth/verification`)
+    const request = axios.post(`/api/auth/verification`)
         .then(response => response.data);
 
     return {
@@ -128,7 +128,7 @@ export function verification() {
     }
 }
 export function getallpostjob() {
-    const request = axios.get(`api/postjob/getallpostjob`)
+    const request = axios.get(`/api/postjob/getallpostjob`)
         .then(response => response.data);
 
     return {
@@ -140,14 +140,18 @@ export function getallpostjob() {
 
 export const getMenu = (data) => async dispatch => {
 
-    let menu = await axios.get("/api/menu", data);
+    try {
+        let menu = await axios.get("/api/menu", data);
 
-    //console.log('menu',menu);
+        dispatch({
+            type: GET_MENUS,
+            payload: menu.data.responseData
+        });
+    } catch (e) {
+        console.log(e)
+    }
 
-    dispatch({
-        type: GET_MENUS,
-        payload: menu.data
-    });
+
 
 };
 
@@ -159,15 +163,31 @@ export const getCategory = (data) => async dispatch => {
     });
 }
 
+export const getDeliveryTime = (data) => async dispatch => {
+    const delivery_time = await axios.get(`/api/delivery/time`, data)
+    dispatch({
+        type: GET_DELIVERY_TIME,
+        payload: delivery_time.data
+    });
+}
+
+export const getPackage = (data) => async dispatch => {
+    const packages = await axios.get(`/api/package`, data)
+    dispatch({
+        type: GET_PACKAGE,
+        payload: packages.data
+    });
+}
+
 export const getSubCategory = (id) => async dispatch => {
     const subcategory = await axios.get(`/api/subcategory/${id}`)
-    //console.log("subcategory",subcategory)
-    dispatch({
+    console.log("subcategory", subcategory.data)
+    /*dispatch({
         type: GET_SUBCATEGORY,
         payload: subcategory.data
-    });
+    });*/
 
-    //return subcategory.data;
+    return subcategory.data;
 }
 
 export const getSlide = (data) => async dispatch => {

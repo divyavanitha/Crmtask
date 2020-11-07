@@ -7,21 +7,23 @@ import * as Yup from 'yup';
 import { useToasts } from 'react-toast-notifications'
 import $ from 'jquery';
 
-import { addCategory, getCategorybyId, updateCategory } from "../../../../_actions/admin/category.action";
+import { getSetting, updateSocialSetting } from "../../../../_actions/admin/setting.action";
 
 const Social = (props) => {
     const { addToast } = useToasts()
     const dispatch = useDispatch();
-
-    let history = useHistory();
-    const params = useParams();
+    
     useEffect(() => {
 
-        dispatch(getCategorybyId(params.id))
+        dispatch(getSetting())
 
-    }, [params.id]);
+    }, []);
 
-    $('body').on('change', '.social_switch', function() {
+    const settings = useSelector(state => state);
+
+    let social = settings  && settings.adminsettings && settings.adminsettings.setting && settings.adminsettings.setting.social;
+
+    $('body').on('change', '.toggle_switch', function() {
         var that = $(this);
         if($(this).is(':checked')) {
             that.closest('.main_container').find('.hide_container').show();
@@ -30,59 +32,32 @@ const Social = (props) => {
         }
     })
 
-
-    const category = useSelector(state => state.categories && state.categories.category && state.categories.category.responseData.category);
-
     return (
 
         <Formik
 
             enableReinitialize
             initialValues={{
-                id: '',
-                title: '',
-                description: '',
-                logo: '',
-                favicon: '',
-                mobile: '',
-                email: '',
-                copyright: ''
+                status: social ? social.status : null,
+                facebook_app_id: social ? social.facebookAppId : '',
+                google_client_id: social ? social.googleClientId : '',
+                apple_id: social ? social.appleId : ''
 
             }
             }
 
-            validationSchema={Yup.object().shape({
-                title: Yup.string().required('Title is required'),
-                description: Yup.string().required('Description is required'),
-                logo: Yup.string().required('Logo is required'),
-                favicon: Yup.string().required('Favicon is required'),
-                mobile: Yup.string().required('Mobile Number is required'),
-                email: Yup.string().required('Email Address is required'),
-                copyright: Yup.string().required('Copyright content is required')
-            })}
             onSubmit={(values, { setSubmitting }) => {
 
                 let data = {
-                    id: values.id,
-                    title: values.title,
-                    description: values.description,
-                    logo: values.logo,
-                    favicon: values.favicon,
-                    mobile: values.mobile,
-                    email: values.email,
-                    copyright: values.copyright
+                    status: values.status,
+                    facebook_app_id: values.facebook_app_id,
+                    google_client_id: values.google_client_id,
+                    apple_id: values.apple_id
                 };
 
-                if (params.id) {
-                    dispatch(updateCategory(data)).then(res => {
-                        addToast(res.message, { appearance: res.status, autoDismiss: true, })
-                        history.push('/admin/category/')
-                    })
-                } else {
-                    dispatch(addCategory(data)).then(res => {
-                        addToast(res.message, { appearance: res.status, autoDismiss: true, })
-                    })
-                }
+                dispatch(updateSocialSetting(data)).then(res => {
+                    addToast(res.message, { appearance: res.status, autoDismiss: true, })
+                })
                 setSubmitting(false);
             }}>
 
@@ -97,6 +72,7 @@ const Social = (props) => {
                     handleBlur,
                     handleSubmit,
                     handleReset,
+                    setFieldValue,
                 } = props;
 
                 return (
@@ -123,9 +99,9 @@ const Social = (props) => {
                                         <div style={{ padding: '0px' }} className="">
                                             <div className="tab-container">
                                                 <Link to="/admin/settings/general" className="tab-item">General</Link>
-                                                <Link to="/admin/settings/profile/links" className="tab-item">Social Links</Link>
+                                                <Link to="/admin/settings/social/links" className="tab-item">Social Links</Link>
                                                 <Link to="/admin/settings/push" className="tab-item">Push Notification</Link>
-                                                <Link to="/admin/settings/social/links" className="tab-item active">Social Config</Link>
+                                                <Link to="/admin/settings/social" className="tab-item active">Social Config</Link>
                                                 <Link to="/admin/settings/sms" className="tab-item">SMS Config</Link>
                                                 <Link to="/admin/settings/mail" className="tab-item">Mail Settings</Link>
                                                 <Link to="/admin/settings/payment" className="tab-item">Payment Config</Link>
@@ -133,55 +109,41 @@ const Social = (props) => {
                                         </div>
                                         <div className="addFormBox">
                                             <form onSubmit={handleSubmit} encType="multipart/form-data">
-
-
                                                 <div className="main_container">
                                                     <div className="form-group row">
                                                         <label className="col-md-4 control-label"> Social Login : </label>
                                                         <div className="col-md-6">
-                                                            <label className='switch' style={{ marginTop: '15px' }}><input type='checkbox' className='social_switch' /> <span className='slider round'></span></label>
+                                                            <label className='switch' style={{ marginTop: '15px' }}>
+                                                                <input type='checkbox' className='toggle_switch' defaultChecked={social && social.status} onClick={ (e) => { setFieldValue('status', e.currentTarget.checked); } }   />   <span className='slider round'></span></label>
                                                         </div>
                                                     </div>
-                                                    <div className="hide_container" style={{ display: 'none' }}>
+                                                    <div className="hide_container" style={ social && social.status == 1 ? { display:'block', paddingBottom: '15px'} : { display:'none', paddingBottom: '15px'}} >
                                                         <div className="form-group row">
                                                             <label className="col-md-4 control-label"> Facebook App ID : </label>
                                                             <div className="col-md-6">
-                                                                <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
-                                                                <ErrorMessage name="title" component="div" className="invalid-feedback" />
-                                                            </div>
-                                                        </div><div className="form-group row">
-                                                            <label className="col-md-4 control-label"> Facebook App Secret : </label>
-                                                            <div className="col-md-6">
-                                                                <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
-                                                                <ErrorMessage name="title" component="div" className="invalid-feedback" />
-                                                            </div>
-                                                        </div><div className="form-group row">
-                                                            <label className="col-md-4 control-label"> Facebook Redirect : </label>
-                                                            <div className="col-md-6">
-                                                                <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
-                                                                <ErrorMessage name="title" component="div" className="invalid-feedback" />
+                                                                <Field type="text" id="facebook_app_id" name="facebook_app_id" value={values.facebook_app_id} onChange={handleChange} maxLength={100} placeholder="Facebook App ID" className={'form-control' + (errors.facebook_app_id && touched.facebook_app_id ? ' is-invalid' : '')} />
+                                                                <ErrorMessage name="facebook_app_id" component="div" className="invalid-feedback" />
                                                             </div>
                                                         </div>
+                                                        
+                                                        
 
                                                         <div className="form-group row">
                                                             <label className="col-md-4 control-label"> Google Client ID : </label>
                                                             <div className="col-md-6">
-                                                                <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
-                                                                <ErrorMessage name="title" component="div" className="invalid-feedback" />
-                                                            </div>
-                                                        </div><div className="form-group row">
-                                                            <label className="col-md-4 control-label"> Google Client Secret : </label>
-                                                            <div className="col-md-6">
-                                                                <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
-                                                                <ErrorMessage name="title" component="div" className="invalid-feedback" />
-                                                            </div>
-                                                        </div><div className="form-group row">
-                                                            <label className="col-md-4 control-label"> Google Redirect : </label>
-                                                            <div className="col-md-6">
-                                                                <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
-                                                                <ErrorMessage name="title" component="div" className="invalid-feedback" />
+                                                                <Field type="text" id="google_client_id" name="google_client_id" value={values.google_client_id} onChange={handleChange} maxLength={100} placeholder="Google Client ID" className={'form-control' + (errors.google_client_id && touched.google_client_id ? ' is-invalid' : '')} />
+                                                                <ErrorMessage name="google_client_id" component="div" className="invalid-feedback" />
                                                             </div>
                                                         </div>
+                                                        
+                                                        <div className="form-group row">
+                                                            <label className="col-md-4 control-label"> Apple ID : </label>
+                                                            <div className="col-md-6">
+                                                                <Field type="text" id="apple_id" name="apple_id" value={values.apple_id} onChange={handleChange} maxLength={100} placeholder="Apple ID" className={'form-control' + (errors.apple_id && touched.apple_id ? ' is-invalid' : '')} />
+                                                                <ErrorMessage name="apple_id" component="div" className="invalid-feedback" />
+                                                            </div>
+                                                        </div>
+                                                        
                                                     </div>
                                                 </div>
 

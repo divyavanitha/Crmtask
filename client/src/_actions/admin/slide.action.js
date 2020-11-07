@@ -1,6 +1,4 @@
 import axios from "axios";
-import setAuthToken from "../../components/utils/set_admin_token";
-import jwt_decode from "jwt-decode";
 
 import { GET_SLIDES, FIND_SLIDE } from "./types";
 
@@ -47,7 +45,7 @@ export const addSlide = (user) => async dispatch => {
         return response.data;
     } catch(e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };
@@ -59,7 +57,7 @@ export const updateSlide = (user) => async dispatch => {
         return response.data;
     } catch(e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode == 422) e.response.data.status = 'warning';
+        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };

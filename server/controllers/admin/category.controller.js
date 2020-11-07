@@ -6,8 +6,8 @@ const Joi = require('@hapi/joi');
 const { Category } = require('../../models/category');
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
-var db = require('../../services/model.js');
-var helper = require('../../services/helper');
+const db = require('../../services/model.js');
+const helper = require('../../services/helper');
 const dotenv = require('dotenv');
 dotenv.config({ path: __dirname + '/../../.env' });
 
@@ -55,9 +55,9 @@ exports.createcategory = async (req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
         const category = {
@@ -117,9 +117,9 @@ exports.updateCategory = async (req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
         const category = {

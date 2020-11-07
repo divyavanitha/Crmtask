@@ -5,37 +5,35 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useToasts } from 'react-toast-notifications'
 
-import { getGeneralSetting, updateGeneralSetting } from "../../../../_actions/admin/setting.action";
+import { getSetting, updateGeneralSetting } from "../../../../_actions/admin/setting.action";
 
 const General = (props) => {
     const { addToast } = useToasts()
     const dispatch = useDispatch();
-
-    let history = useHistory();
     
     useEffect(() => {
 
-        dispatch(getGeneralSetting())
+        dispatch(getSetting())
 
     }, []);
 
     const settings = useSelector(state => state);
 
-    const setting = settings && settings.adminsettings && settings.adminsettings.setting;
-    console.log(setting);
+    const site = settings && settings.adminsettings && settings.adminsettings.setting && settings.adminsettings.setting.site;
+
     return (
 
         <Formik
 
             enableReinitialize
             initialValues={{
-                title: setting ? setting.site.title : '',
-                description: setting ? setting.site.description : '',
+                title: site ? site.title : '',
+                description: site ? site.description : '',
                 logo: '',
                 favicon: '',
-                mobile: setting ? setting.site.mobile : '',
-                email: setting ? setting.site.email : '',
-                copyright: setting ? setting.site.copyright : ''
+                mobile: site ? site.mobile : '',
+                email: site ? site.email : '',
+                copyright: site ? site.copyright : ''
 
             }
             }
@@ -113,9 +111,9 @@ const General = (props) => {
                                         <div style={{ padding: '0px' }} className="">
                                             <div className="tab-container">
                                                 <Link to="/admin/settings/general" className="tab-item active">General</Link>
-                                                <Link to="/admin/settings/profile/links" className="tab-item">Social Links</Link>
+                                                <Link to="/admin/settings/social/links" className="tab-item">Social Links</Link>
                                                 <Link to="/admin/settings/push" className="tab-item">Push Notification</Link>
-                                                <Link to="/admin/settings/social/links" className="tab-item">Social Config</Link>
+                                                <Link to="/admin/settings/social" className="tab-item">Social Config</Link>
                                                 <Link to="/admin/settings/sms" className="tab-item">SMS Config</Link>
                                                 <Link to="/admin/settings/mail" className="tab-item">Mail Settings</Link>
                                                 <Link to="/admin/settings/payment" className="tab-item">Payment Config</Link>

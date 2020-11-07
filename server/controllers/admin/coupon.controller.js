@@ -8,8 +8,8 @@ const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
 dotenv.config({ path: __dirname + '/../../.env' });
-var db = require('../../services/model.js');
-var helper = require('../../services/helper');
+const db = require('../../services/model.js');
+const helper = require('../../services/helper');
 
 exports.createCoupon = async (req, res) => {
 
@@ -31,9 +31,9 @@ exports.createCoupon = async (req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
         const coupon = {
@@ -82,9 +82,9 @@ exports.updateCoupon = async (req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
         const coupon = {

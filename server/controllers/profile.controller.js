@@ -4,19 +4,21 @@ const { Category } = require('../models/category');
 const { DeliveryTime } = require('../models/DeliveryTime');
 const { Coupon } = require('../models/Coupon');
 const { Slide } = require('../models/Slide');
+const { Menu } = require('../models/Menu');
+const { Package } = require('../models/Package');
 var helper = require('../services/helper.js');
 var db = require('../services/model.js');
 const Joi = require('@hapi/joi');
 const _ = require('lodash');
 const Log = new (require('../config/winston'));
-var ObjectId = require('mongodb').ObjectID;
+const ObjectId = require('mongodb').ObjectID;
 
 exports.getProfile = async (req, res) => {
 
     const errors = {};
     try {
 
-        var user = await db._get(User, { _id: req.user._id });
+        let user = await db._get(User, { _id: req.user._id });
         const data = { user };
         const response = helper.response({ data });
         return res.status(response.statusCode).json(response);
@@ -56,7 +58,7 @@ exports.updateProfile = async (req, res) => {
 
     const response = helper.response({ status: 422, error: errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
         const user = {
@@ -113,11 +115,11 @@ exports.updateLanguage = async (req, res) => {
 
     const response = helper.response({ status: 422, error: errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
 
-        var user = await User.findById(ObjectId(req.body.id));
+        let user = await User.findById(ObjectId(req.body.id));
 
         let language = [];
 
@@ -167,11 +169,11 @@ exports.updateSkill = async (req, res) => {
 
     const response = helper.response({ status: 422, error: errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
 
-        var user = await User.findById(ObjectId(req.body.id));
+        let user = await User.findById(ObjectId(req.body.id));
 
         let skills = [];
 
@@ -224,11 +226,11 @@ exports.updateEducation = async (req, res) => {
 
     const response = helper.response({ status: 422, error: errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
 
-        var user = await User.findById(ObjectId(req.body.id));
+        let user = await User.findById(ObjectId(req.body.id));
 
         let education = [];
 
@@ -282,11 +284,11 @@ exports.updateCertification = async (req, res) => {
 
     const response = helper.response({ status: 422, error: errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
 
-        var user = await User.findById(ObjectId(req.body.id));
+        let user = await User.findById(ObjectId(req.body.id));
 
         let certification = [];
 
@@ -323,7 +325,7 @@ exports.listbycategoryToSubCategory = async (req, res) => {
     console.log(req.params.id);
     try {
 
-        var sub_categories = await db._get(SubCategory, { category: req.params.id });
+        var sub_categories = await db._get(SubCategory, { category: req.params.id,  status: 1 });
 
         const data = { sub_categories };
 
@@ -337,7 +339,7 @@ exports.listbycategoryToSubCategory = async (req, res) => {
 exports.listDeliveryTime = async (req, res) => {
     try {
 
-        let deliveryTime = await db._get(DeliveryTime);
+        let deliveryTime = await db._get(DeliveryTime, { status: 1 });
         const data = { deliveryTime };
 
         const response = helper.response({ data });
@@ -353,7 +355,7 @@ exports.listCoupon = async (req, res) => {
 
     try {
         
-        let coupons = await db._get(Coupon);
+        let coupons = await db._get(Coupon, { status: 1 });
 
         const data = { coupons };
 
@@ -388,9 +390,9 @@ exports.createCoupon = async (req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
 
-    if (error) return res.status(response.statusCode).json(response);
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
         const coupon = {
@@ -423,7 +425,7 @@ exports.listSlide = async (req, res) => {
 
     try {
         
-        let slides = await db._get(Slide);
+        let slides = await db._get(Slide, { status: 1 });
 
         const data = { slides };
 
@@ -436,6 +438,38 @@ exports.listSlide = async (req, res) => {
 
 }
 
+exports.listMenu = async (req, res) => {
+
+    try {
+        
+        let menus = await db._get(Menu, { status: 1 });
+
+        const data = { menus };
+
+        const response = helper.response({ data });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.listPackage = async (req, res) => {
+    try {
+
+        let packages = await db._get(Package, { status: 1 });
+
+        const data = { packages };
+
+        const response = helper.response({ data });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
 
 exports.findprofile = async (req, res) => {
     const errors = {};
@@ -564,8 +598,8 @@ exports.deleteexperience = async (req, res) => {
         //console.log("removeIndex",removeIndex);
         // Splice out of array
         newprofile.experience.splice(removeIndex, 1);
-        var profile_id = newprofile.id;
-        var exp = newprofile.experience;
+        let profile_id = newprofile.id;
+        let exp = newprofile.experience;
         //console.log( profile.experience);
 
         await Profile.findByIdAndUpdate(profile_id, { experience: exp }).then((err, data) => {
