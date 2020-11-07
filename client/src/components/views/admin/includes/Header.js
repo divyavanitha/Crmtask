@@ -20,7 +20,7 @@ const Header = () => {
           <div className="col-sm-5 pr-sm-0">
             <div className="user-area dropdown float-right">
               <button className="btn btn-outline-secondary btn-sm dropdown-toggle text=white" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img src="admin-img.jpg" width="30" height="30" className="rounded-circle text-white" />
+                <img src={ require('../../../../assets/admin/images/admin-img.jpg') }width="30" height="30" className="rounded-circle text-white" />
                      &nbsp; {admin.admin.name}  &nbsp; <span className="caret"></span>
               </button>
               <div className="user-menu dropdown-menu">
