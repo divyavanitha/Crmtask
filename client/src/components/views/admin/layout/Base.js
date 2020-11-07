@@ -49,9 +49,9 @@ import Payment from "../settings/Payment";
 
 const Base = () => {
 
-    let settings = useSelector((state) => state.settings);
+  let settings = useSelector((state) => state.settings);
 
-    let site = settings.settings && settings.settings.site;
+  let site = settings.settings && settings.settings.site;
 
   return (
     <ToastProvider>

@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { getGigWithoutAuth } from "../../../../_actions/user.action";
 
-function Gig() {
+function Gig(props) {
 
     const dispatch = useDispatch();
 
@@ -13,15 +13,13 @@ function Gig() {
       dispatch(getGigWithoutAuth())
    }, []);
     const gig = useSelector((state) => state.user && state.user.gig && state.user.gig.responseData && state.user.gig.responseData.gigs);
-    //console.log('gig',gig);
 
     return (
 
         <Fragment>
             
-                {gig && gig.map((list) => (<div key={list._id} className="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-3 pr-lg-1">
+                {gig && gig.map((list) => (<div key={list._id} className={props.styles ? props.styles : "col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-3 pr-lg-1"}>
                     <div className="proposal-card-base mp-proposal-card">
-                    {console.log(list)}
                     {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
                     <Link to={list.user ? "/gig/"+list.user.firstName+"/"+list._id : ""}>
                         <img src={list.photo[0] ? list.photo[0].photo : ""} className="img-fluid" />

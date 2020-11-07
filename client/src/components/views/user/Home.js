@@ -10,7 +10,7 @@ import Gig from "./gigs/Gig"
 import OwlCarousel from 'react-owl-carousel';
 
 
-function App() {
+function Home() {
 
    const dispatch = useDispatch();
    let auth = useSelector((state) => state.user);
@@ -21,11 +21,8 @@ function App() {
       dispatch(getGigWithoutAuth())
    }, []);
 
-   const menu = useSelector((state) => state.menu);
-   const result = menu && menu.menu.responseData && menu.menu.responseData.menus;
    const slide = useSelector((state) => state.user && state.user.slide && state.user.slide.responseData && state.user.slide.responseData.slides);
    const gig = useSelector((state) => state.user && state.user.gig && state.user.gig.responseData && state.user.gig.responseData.gigs);
-   //console.log('gig',gig);
 
    return (
 
@@ -767,4 +764,4 @@ function App() {
    );
 }
 
-export default App;
+export default Home;

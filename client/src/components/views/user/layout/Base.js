@@ -4,7 +4,11 @@ import { Switch, Route } from "react-router";
 import { useSelector, useDispatch } from 'react-redux';
 import { Helmet } from "react-helmet";
 
+
+import ProtectedRoute from '../../../utils/protected_route';
+
 import Home from "../Home";
+import Landing from "../Landing";
 import Header from '../includes/Header';
 import Nav from '../includes/Nav';
 import Footer from "../includes/Footer";
@@ -17,27 +21,11 @@ import Gallery from "../gigs/gallery";
 import Profile from "../Profile";
 
 import "../../../../assets/css/custom.css";
-/* import "../../../../assets/css/bootstrap.css";
-import "../../../../assets/css/custom.css";
-import "../../../../assets/css/customStyle.css";
-import "../../../../assets/css/styles.css";
-import "../../../../assets/css/cate-nav-styles.css";
-import "../../../../assets/css/owl.carousel.css";
-import "../../../../assets/css/animate.css";
-import "../../../../assets/css/knowledge_bank.css";
-import "../../../../assets/css/owl.theme.default.css";
-import "../../../../assets/css/mainStyle.css";
-import "../../../../assets/css/homepage.css";
-import "../../../../assets/css/msdropdown.css";
-
- import "../../../../assets/js/msdropdown.js"; */
-
-/*  import "../../../../assets/js/popper.min.js";
- import "../../../../assets/js/bootstrap.js"; */
 
 const Base = () => {
 
     let settings = useSelector((state) => state.settings);
+    const auth = useSelector((state) => state.user);
 
     let site = settings.settings && settings.settings.site;
 
@@ -52,14 +40,14 @@ const Base = () => {
 
             <Nav />
             <Switch>
-                <Route exact={true} path="/" component={Home}></Route>
-                <Route exact={true} path="/gig/post" component={AddGig}></Route>
-                <Route exact={true} path="/gig/post/pricing/:id" component={Pricing}></Route>
-                <Route exact={true} path="/gig/post/faq/:id" component={Faq}></Route>
-                <Route exact={true} path="/gig/post/requirements/:id" component={Requirement}></Route>
-                <Route exact={true} path="/gig/post/gallery/:id" component={Gallery}></Route>
-                <Route exact={true} path="/gig/:user/:gig" component={GigDetail}></Route>
-                <Route exact={true} path="/profile" component={Profile}></Route>
+                <Route exact={true} path="/" component={ auth.isAuthenticated ? Home : Landing } />
+                <ProtectedRoute exact={true} path="/gig/post" component={AddGig} />
+                <ProtectedRoute exact={true} path="/gig/post/pricing/:id" component={Pricing} />
+                <ProtectedRoute exact={true} path="/gig/post/faq/:id" component={Faq} />
+                <ProtectedRoute exact={true} path="/gig/post/requirements/:id" component={Requirement} />
+                <ProtectedRoute exact={true} path="/gig/post/gallery/:id" component={Gallery} />
+                <ProtectedRoute exact={true} path="/gig/:user/:gig" component={GigDetail} />
+                <ProtectedRoute exact={true} path="/profile" component={Profile} />
             </Switch>
 
             <Footer />

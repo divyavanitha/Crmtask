@@ -13,12 +13,12 @@ function GigDetail() {
     const dispatch = useDispatch();
     const params = useParams();
 
-   useEffect(() => {
-      
-      dispatch(getGigbyId(params.gig))
-   }, [params.gig]);
+    useEffect(() => {
+
+        dispatch(getGigbyId(params.gig))
+    }, [params.gig]);
     const gig = useSelector((state) => state.user && state.user.gig_details && state.user.gig_details.responseData && state.user.gig_details.responseData.gig);
-    console.log('gig',gig);
+    console.log('gig', gig);
 
     return (
 
@@ -72,38 +72,38 @@ function GigDetail() {
                                             <a href="../../categories/video-animation/whiteboard-explainer-videos">
                                                 Whiteboard & Explainer Videos          </a>
                                         </nav>
-                                        <img className='mb-1' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='mb-1' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='mb-1' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='mb-1' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='mb-1' src={ require('../../../../assets/images/user_rate_blank.png')} />         <span className="text-muted span"> (22) &nbsp;309 Order(s) In Queue.</span>
-                                        <div className="sharethis-inline-share-buttons  st-right  st-inline-share-buttons st-animated" style={{marginTop: "-36px"}} id="st-1"><div className="st-btn st-first" data-network="whatsapp" style={{display: "inline-block"}}>
+                                        <img className='mb-1' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='mb-1' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='mb-1' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='mb-1' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='mb-1' src={require('../../../../assets/images/user_rate_blank.png')} />         <span className="text-muted span"> (22) &nbsp;309 Order(s) In Queue.</span>
+                                        <div className="sharethis-inline-share-buttons  st-right  st-inline-share-buttons st-animated" style={{ marginTop: "-36px" }} id="st-1"><div className="st-btn st-first" data-network="whatsapp" style={{ display: "inline-block" }}>
                                             <img alt="whatsapp sharing button" src="https://platform-cdn.sharethis.com/img/whatsapp.svg" />
 
-                                        </div><div className="st-btn" data-network="facebook" style={{display: "inline-block"}}>
+                                        </div><div className="st-btn" data-network="facebook" style={{ display: "inline-block" }}>
                                                 <img alt="facebook sharing button" src="https://platform-cdn.sharethis.com/img/facebook.svg" />
 
-                                            </div><div className="st-btn" data-network="twitter" style={{display: "inline-block"}}>
+                                            </div><div className="st-btn" data-network="twitter" style={{ display: "inline-block" }}>
                                                 <img alt="twitter sharing button" src="https://platform-cdn.sharethis.com/img/twitter.svg" />
 
-                                            </div><div className="st-btn" data-network="linkedin" style={{display: "inline-block"}}>
+                                            </div><div className="st-btn" data-network="linkedin" style={{ display: "inline-block" }}>
                                                 <img alt="linkedin sharing button" src="https://platform-cdn.sharethis.com/img/linkedin.svg" />
 
-                                            </div><div className="st-btn" data-network="pinterest" style={{display: "inline-block"}}>
+                                            </div><div className="st-btn" data-network="pinterest" style={{ display: "inline-block" }}>
                                                 <img alt="pinterest sharing button" src="https://platform-cdn.sharethis.com/img/pinterest.svg" />
 
-                                            </div><div className="st-btn st-last" data-network="sharethis" style={{display: "inline-block"}}>
+                                            </div><div className="st-btn st-last" data-network="sharethis" style={{ display: "inline-block" }}>
                                                 <img alt="sharethis sharing button" src="https://platform-cdn.sharethis.com/img/sharethis.svg" />
 
                                             </div></div>
                                     </div>
 
                                     <div id="myCarousel" className="carousel slide">
-                                       
+
                                         <OwlCarousel className="carousel-inner" loop dots={true} autoplay={true} items={1} >
-                                            
+
                                             {gig && gig.photo.map((list) => (<div className="row"><div className="carousel-item active"><a><img className="img-fluid d-block w-100" src={list.photo} alt="videosales-1.png" /></a>
-                                               
-                                                  
+
+
                                             </div></div>))}
 
-                                         </OwlCarousel>
+                                        </OwlCarousel>
                                     </div>
                                     <div className="card mb-0 rounded-0 border-0">
                                         {/* <!-- card Starts --> */}
@@ -139,7 +139,7 @@ function GigDetail() {
                                 </div>
                                 <div className="card-body proposal-desc">
                                     <p>{gig && gig.description}</p>
-                                    
+
                                 </div>
                             </div>
                             <div className="card proposal-reviews rounded-0 mb-5" id="reviews">
@@ -147,12 +147,12 @@ function GigDetail() {
                                     <h4 className="mb-0 ">
                                         <div className="float-left">
                                             <span className="mr-2"> 22 Reviews </span>
-                                            <img className='mb-2' src={ require('../../../../assets/images/user_rate_full_big.png')} />  <img className='mb-2' src={ require('../../../../assets/images/user_rate_full_big.png')} />  <img className='mb-2' src={ require('../../../../assets/images/user_rate_full_big.png')} />  <img className='mb-2' src={ require('../../../../assets/images/user_rate_full_big.png')} />  <img className='mb-2' src={ require('../../../../assets/images/user_rate_blank_big.png')} />  <span className="text-muted ml-2"> 4.8 </span>
+                                            <img className='mb-2' src={require('../../../../assets/images/user_rate_full_big.png')} />  <img className='mb-2' src={require('../../../../assets/images/user_rate_full_big.png')} />  <img className='mb-2' src={require('../../../../assets/images/user_rate_full_big.png')} />  <img className='mb-2' src={require('../../../../assets/images/user_rate_full_big.png')} />  <img className='mb-2' src={require('../../../../assets/images/user_rate_blank_big.png')} />  <span className="text-muted ml-2"> 4.8 </span>
                                         </div>
                                         <div className="float-right">
                                             <button id="dropdown-button" className="btn btn-success dropdown-toggle" data-toggle="dropdown">
                                                 Most Recent        </button>
-                                            <ul className="dropdown-menu proposalDropdown" style={{width: "auto !important"}}>
+                                            <ul className="dropdown-menu proposalDropdown" style={{ width: "auto !important" }}>
                                                 <li className="dropdown-item active all">Most Recent</li>
                                                 <li className="dropdown-item good">Positive Reviews</li>
                                                 <li className="dropdown-item bad">Negative Reviews</li>
@@ -167,13 +167,13 @@ function GigDetail() {
                                                 {/* <!-- star-rating-row Starts --> */}
                                                 <span className="user-picture" >
                                                     {/* <!-- user-picture Starts --> */}
-                                                    <img src={ require('../../../../assets/images/userlisting/img-02.jpg')}  width="60" height="60" />
+                                                    <img src={require('../../../../assets/images/userlisting/img-02.jpg')} width="60" height="60" />
                                                 </span>
                                                 {/* <!-- user-picture Ends --> */}
                                                 <h4>
                                                     {/* <!-- h4 Starts --> */}
                                                     <a className="text-success" href="#" className="mr-1"> fixmywebsite </a>
-                                                    <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />
+                                                    <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />
                                                 </h4>
                                                 {/* <!-- h4 Ends --> */}
                                                 <div className="msg-body">
@@ -187,13 +187,13 @@ function GigDetail() {
                                                 {/* <!-- star-rating-row Starts --> */}
                                                 <span className="user-picture" >
                                                     {/* <!-- user-picture Starts --> */}
-                                                    <img src={ require('../../../../assets/images/userlisting/img-02.jpg')}  width="60" height="60" />
+                                                    <img src={require('../../../../assets/images/userlisting/img-02.jpg')} width="60" height="60" />
                                                 </span>
                                                 {/* <!-- user-picture Ends --> */}
                                                 <h4>
                                                     {/* <!-- h4 Starts --> */}
                                                     <a className="text-success" href="#" className="mr-1"> fixmywebsite </a>
-                                                    <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />
+                                                    <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />
                                                 </h4>
                                                 {/* <!-- h4 Ends --> */}
                                                 <div className="msg-body">
@@ -208,13 +208,13 @@ function GigDetail() {
                                                 {/* <!-- star-rating-row Starts --> */}
                                                 <span className="user-picture" >
                                                     {/* <!-- user-picture Starts --> */}
-                                                    <img src={ require('../../../../assets/images/userlisting/img-02.jpg')}  width="60" height="60" />
+                                                    <img src={require('../../../../assets/images/userlisting/img-02.jpg')} width="60" height="60" />
                                                 </span>
                                                 {/* <!-- user-picture Ends --> */}
                                                 <h4>
                                                     {/* <!-- h4 Starts --> */}
                                                     <a className="text-success" href="#" className="mr-1"> fixmywebsite </a>
-                                                    <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />
+                                                    <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />
                                                 </h4>
                                                 {/* <!-- h4 Ends --> */}
                                                 <div className="msg-body">
@@ -229,13 +229,13 @@ function GigDetail() {
                                                 {/* <!-- star-rating-row Starts --> */}
                                                 <span className="user-picture" >
                                                     {/* <!-- user-picture Starts --> */}
-                                                    <img src={ require('../../../../assets/images/userlisting/img-01.jpg')}  width="60" height="60" />
+                                                    <img src={require('../../../../assets/images/userlisting/img-01.jpg')} width="60" height="60" />
                                                 </span>
                                                 {/* <!-- user-picture Ends --> */}
                                                 <h4>
                                                     {/* <!-- h4 Starts --> */}
                                                     <a className="text-success" href="#" className="mr-1"> volarex </a>
-                                                    <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />
+                                                    <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />
                                                 </h4>
                                                 {/* <!-- h4 Ends --> */}
                                                 <div className="msg-body">
@@ -249,13 +249,13 @@ function GigDetail() {
                                                 {/* <!-- star-rating-row Starts --> */}
                                                 <span className="user-picture" >
                                                     {/* <!-- user-picture Starts --> */}
-                                                    <img src={ require('../../../../assets/images/userlisting/img-06.jpg')}  width="60" height="60" />
+                                                    <img src={require('../../../../assets/images/userlisting/img-06.jpg')} width="60" height="60" />
                                                 </span>
                                                 {/* <!-- user-picture Ends --> */}
                                                 <h4>
                                                     {/* <!-- h4 Starts --> */}
                                                     <a className="text-success" href="#" className="mr-1"> shoail </a>
-                                                    <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={ require('../../../../assets/images/user_rate_full.png')} />
+                                                    <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='rating' src={require('../../../../assets/images/user_rate_full.png')} />
                                                 </h4>
                                                 {/* <!-- h4 Ends --> */}
                                                 <div className="msg-body">
@@ -288,32 +288,80 @@ function GigDetail() {
                         </div>
 
                     </div>
-                    {/* <!--- col-lg-8 col-md-7 mb-3 Ends ---> */}
+
                     <div className="col-lg-4 col-md-5 proposal-sidebar">
-                        {/* <!-- Col starts --> */}
-                        <div className="card mb-5">
+
+                        <div className="card mb-5 rounded-0 gigPlanType">
+                            <div className="card-header pt-0 pl-3 tabs-header">
+                                <ul className="nav nav-tabs card-header-tabs rounded-0 justify-content-center">
+                                    <li className="nav-item">
+                                        <a className="nav-link  " href="#tab_2506" data-toggle="tab" formid="checkoutForm1">
+                                            Basic   </a>
+                                    </li>
+                                    <li className="nav-item">
+                                        <a className="nav-link   active" href="#tab_2507" data-toggle="tab" formid="checkoutForm2">
+                                            Standard    </a>
+                                    </li>
+                                    <li className="nav-item">
+                                        <a className="nav-link  " href="#tab_2508" data-toggle="tab" formid="checkoutForm3">
+                                            Advance   </a>
+                                    </li>
+                                </ul>
+                            </div>
                             <div className="card-body order-box tab-content">
-                                {/* <!--- card-body Starts ---> */}
+
                                 <div className="purchase-form">
-                                    <form encType="multipart/form-data">
+                                    <form method="post" action="../../checkout" id="checkoutForm1" class="">
+                                        <input type="hidden" name="proposal_id" value="838" />
+                                        <input type="hidden" name="package_id" value="2506" />
+                                        <input type="hidden" name="proposal_qty" value="1" />
+                                        <h3>
+                                            Basic
+                          <span class="float-right font-weight-normal">
+                                                &#036;<span class='total-price-1'>40.00</span>
+                                            </span>
+                                            <span class="total-price-1-num d-none">40</span>
+                                        </h3>
+                                        <p>Post your song to my music website</p>
+                                        <h6 class="mb-3">
+                                            <i class="fa fa-clock-o"></i> 1 Days Delivery &nbsp; &nbsp; <i class="fa fa-refresh"></i> 0 Revisions
+                       </h6>
+                                        <hr />
+                                        <ul class="buyables m-b-25 list-unstyled ">
+                                            <li class="">
+                                                <label class="">
+                                                    <input class="mb-2" style={{ width: '15px', height: '15px' }} type="checkbox" name="proposal_extras[1]" data-packagenum="1" value="225" form="checkoutForm1" />
+                                                    <span class="js-express-delivery-text "> Radio airplay      </span>
+                                                    <span class='price '>
+                                                        <b class='currency'>&#036;50.00</b>
+                                                        <b class="num d-none">50</b>
+                                                    </span>
+                                                </label>
+                                            </li>
+                                            <li class="">
+                                                <label class="">
+                                                    <input class="mb-2" style={{ width: '15px', height: '15px' }} type="checkbox" name="proposal_extras[2]" data-packagenum="1" value="226" form="checkoutForm1" />
+                                                    <span class="js-express-delivery-text "> YouTube song posting      </span>
+                                                    <span class='price '>
+                                                        <b class='currency'>&#036;50.00</b>
+                                                        <b class="num d-none">50</b>
+                                                    </span>
+                                                </label>
+                                            </li>
+                                        </ul>
+                                        <button type="button" class="btn btn-order primary added mb-3">
+                                            <i class="fa fa-shopping-cart"></i> &nbsp;<strong>Already Added</strong>
+                                        </button>
+                                        <button type="submit" name="add_order" value="1" class="btn btn-order">
+                                            <strong>Order Now (&#036;<span class='total-price-1'>40.00</span>)</strong>
+                                        </button>
+                                    </form>
+                                    {/* <form encType="multipart/form-data">
                                         <input type="hidden" name="proposal_id" value="4" />
                                         <input type="hidden" name="proposal_qty" value="1" />
                                         <div className="header">
                                             <span className="text ">
-                                            <span className="dropdown" tabindex="0" data-toggle="popover" data-placement="bottom" data-html="true" data-content="<div className='card border-0'>
-                                          <div className='card-body pb-3'>
-                                          <h5 className='font-weight-normal mb-3'><strong>How it works</strong> <span className='badge badge-success badge-sm'>SITE RULE</span> </h5>
-                                          <div className='price'>
-                                            <b className='currency'>&#036;<span>10</span></b>
-                                          </div>
-                                          <p className='h6 line-height-full'>This is the base price. Unless you agree otherwise with seller, the delivered work will be as detailed on this page. Ordering extras may extend the delivery time.</p>
-                                          </div>
-                                          </div>
-                                          <script>
-                                          var order_box = $('.order-box');
-                                          $('.popover').css({ 'max-width' : order_box.width() + 'px', left : '155px' });
-                                          </script>
-                                          ">Order Details</span>
+                                                <span className="dropdown" tabindex="0" data-toggle="popover">Order Details</span>
                                                 <a href="#" className="secure ml-2">
 
                                                 </a>
@@ -329,93 +377,102 @@ function GigDetail() {
                                             </div>
                                         </div>
                                         <hr className="mt-0" />
-                                            <div className="row">
-                                                <div className="col-12 ml-2 p-2">
-                                                    <h6 className="mb-0 ">
-                                                        <i className="fa fa-clock-o"></i> 1 Day Delivery
+                                        <div className="row">
+                                            <div className="col-12 ml-2 p-2">
+                                                <h6 className="mb-0 ">
+                                                    <i className="fa fa-clock-o"></i> 1 Day Delivery
                                                         &nbsp;&nbsp;
                                                         <span className="float-right mr-4">
-                                                            <i className="fa fa-refresh"></i>
+                                                        <i className="fa fa-refresh"></i>
                                                             Revisions
                                                         </span>
-                                                    </h6>
+                                                </h6>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <li className="basket-item mb-4">
+                                            <span className="item "><span className="name"><span>Quantity:</span></span></span>
+                                            <div className="quantity-control ">
+                                                <div className="increase ">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 16 16">
+                                                        <g className="icon" fill="#00CCBC">
+                                                            <rect width="1.091" height="8.727" x="7.455" y="3.636" rx=".545"></rect>
+                                                            <rect width="1.091" height="8.727" x="7.455" y="3.636" transform="rotate(90 8 8)" rx=".545"></rect>
+                                                            <path d="M1.35,8 C1.35,11.6725489 4.32745108,14.65 8,14.65 C11.6725489,14.65 14.65,11.6725489 14.65,8 C14.65,4.32745108 11.6725489,1.35 8,1.35 C4.32745108,1.35 1.35,4.32745108 1.35,8 Z M0,8 C0,3.58186667 3.58186667,0 8,0 C12.4181333,0 16,3.58186667 16,8 C16,12.4181333 12.4181333,16 8,16 C3.58186667,16 0,12.4181333 0,8 Z"></path>
+                                                        </g>
+                                                    </svg>
+                                                </div>
+                                                <span className="quantity ">1</span>
+                                                <div class="decrease ">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 16 16">
+                                                        <g class="icon" fill="#00CCBC">
+                                                            <rect width="1.091" height="8.727" x="7.455" y="3.636" transform="rotate(90 8 8)" rx=".545"></rect>
+                                                            <path d="M1.35,8 C1.35,11.6725489 4.32745108,14.65 8,14.65 C11.6725489,14.65 14.65,11.6725489 14.65,8 C14.65,4.32745108 11.6725489,1.35 8,1.35 C4.32745108,1.35 1.35,4.32745108 1.35,8 Z M0,8 C0,3.58186667 3.58186667,0 8,0 C12.4181333,0 16,3.58186667 16,8 C16,12.4181333 12.4181333,16 8,16 C3.58186667,16 0,12.4181333 0,8 Z"></path>
+                                                        </g>
+                                                    </svg>
                                                 </div>
                                             </div>
-                                            <hr />
-                                            <li className="basket-item mb-4">
-                                                <span className="item "><span className="name"><span>Quantity:</span></span></span>
-                                                <div className="quantity-control ">
-                                                    <div className="increase ">
-                                                    <button>+</button>
-                                                    </div>
-                                                    <span className="quantity ">1</span>
-                                                    <div className="decrease ">
-                                                    <button>-</button>
-                                                    </div>
-                                                </div>
-                                                {/* <!-- &#036;<span className="total-price">10</span>.00 --> */}
-                                            </li>
-                                            <button type="submit" name="add_cart" value="1" className="btn btn-order primary mb-3">
-                                                <i className="fa fa-shopping-cart"></i> &nbsp;<strong>Add to Cart</strong>
-                                            </button>
-                                            <button type="submit" name="add_order" value="1" className="btn btn-order">
-                                                {/* <!-- <strong>Order Now (&#036;<span className="total-price">10</span>)</strong> --> */}
-                                                <strong>Order Now (&#036;<span className='total-price'>10.00</span>)</strong>
-                                            </button>
-                                          </form>
-                                       </div>
-                                </div>
-                                {/* <!--- card-body Ends ---> */}
-                            </div>
-                            <div className="card seller-bio mb-3 rounded-0">
-                                <div className="card-body ">
-                                    <center className="mb-4">
-                                        <img src={ require('../../../../assets/images/userlisting/img-06.jpg')}  width="100" className="rounded-circle" />
-                                    </center>
-                                    <h3 className="text-center h3">
-                                        <a className="text-success" href={gig && gig.user.firstName} >
-                                            {gig && gig.user.firstName} {gig && gig.user.lastName}  </a> <span className="divider"> </span> <span className="text-muted">Level Two</span>
-                                    </h3>
-                                    <a href="../../conversations/message?seller_id=2" className="btn btn-lg btn-block btn-success rounded-0">Message me</a>
-                                    <hr />
-                                    <div className="row">
-                                        <div className="col-md-6">
-                                            <p className="text-muted"><i className="fa fa-check pr-1"></i> From</p>
-                                        </div>
-                                        <div className="col-md-6">
-                                            <p> Ecuador</p>
-                                        </div>
-                                        <div className="col-md-6">
-                                            <p className="text-muted"><i className="fa fa-check pr-1"></i>  Speaks</p>
-                                        </div>
-                                        <div className="col-md-6">
-                                            <p>
-                                                <span>English </span>
-                                            </p>
-                                        </div>
-                                        <div className="col-md-6">
-                                            <p className="text-muted"><i className="fa fa-check pr-1"></i>  Positive Reviews</p>
-                                            <p className="text-muted"><i className="fa fa-check pr-1"></i> Recent Delivery</p>
-                                        </div>
-                                        <div className="col-md-6">
-                                            <p> 7% </p>
-                                            <p> July 31, 2020 </p>
-                                        </div>
-                                    </div>
-                                    <hr />
-                                    <p className="text-left "> It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here. </p>
-                                    <a href="../../mir_digimarket" className="text-success"> Read More </a>
+                                        </li>
+                                        <button type="submit" name="add_cart" value="1" className="btn btn-order primary mb-3">
+                                            <i className="fa fa-shopping-cart"></i> &nbsp;<strong>Add to Cart</strong>
+                                        </button>
+                                        <button type="submit" name="add_order" value="1" className="btn btn-order">
+                                            <strong>Order Now (&#036;<span className='total-price'>10.00</span>)</strong>
+                                        </button>
+                                    </form> */}
                                 </div>
                             </div>
-
+                            {/* <!--- card-body Ends ---> */}
                         </div>
-                        {/* <!-- Col ends --> */}
+                        <div className="card seller-bio mb-3 rounded-0">
+                            <div className="card-body ">
+                                <center className="mb-4">
+                                    <img src={require('../../../../assets/images/userlisting/img-06.jpg')} width="100" className="rounded-circle" />
+                                </center>
+                                <h3 className="text-center h3">
+                                    <a className="text-success" href={gig && gig.user.firstName} >
+                                        {gig && gig.user.firstName} {gig && gig.user.lastName}  </a> <span className="divider"> </span> <span className="text-muted">Level Two</span>
+                                </h3>
+                                <a href="../../conversations/message?seller_id=2" className="btn btn-lg btn-block btn-success rounded-0">Message me</a>
+                                <hr />
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <p className="text-muted"><i className="fa fa-check pr-1"></i> From</p>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <p> Ecuador</p>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <p className="text-muted"><i className="fa fa-check pr-1"></i>  Speaks</p>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <p>
+                                            <span>English </span>
+                                        </p>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <p className="text-muted"><i className="fa fa-check pr-1"></i>  Positive Reviews</p>
+                                        <p className="text-muted"><i className="fa fa-check pr-1"></i> Recent Delivery</p>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <p> 7% </p>
+                                        <p> July 31, 2020 </p>
+                                    </div>
+                                </div>
+                                <hr />
+                                <p className="text-left "> It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here. </p>
+                                <a href="../../mir_digimarket" className="text-success"> Read More </a>
+                            </div>
+                        </div>
+
                     </div>
+                    {/* <!-- Col ends --> */}
                 </div>
-            
+            </div>
 
 
-        </Fragment>
+
+        </Fragment >
     );
 }
 
