@@ -4,9 +4,18 @@ import { Link, useParams, useHistory } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 //import { useToasts } from 'react-toast-notifications'
+import Thumb from "./Thumb";
+import Dropzone from "react-dropzone";
+import { updateImage } from "../../../../_actions/gigs.action";
 
-import { creategigs } from "../../../../_actions/gigs.action";
-import { getCategory, getSubCategory } from "../../../../_actions/user.action";
+const dropzoneStyle = {
+  width: "100%",
+  height: "auto",
+  borderWidth: 2,
+  borderColor: "rgb(102, 102, 102)",
+  borderStyle: "dashed",
+  borderRadius: 5,
+}
 
 const AddGig = (props) => {
     //const { addToast } = useToasts()
@@ -15,53 +24,31 @@ const AddGig = (props) => {
     let history = useHistory();
     const params = useParams();
     useEffect(() => {
-        dispatch(getCategory())
-        //dispatch(getCategorybyId(params.id))
+      
 
     }, [params.id]);
-    //const category = useSelector(state => state.categories && state.categories.category && state.categories.category.responseData.category);
-    const category = useSelector(state => state.user.category);
-    const category_list = category && category.responseData.categories;
-
-    const [subCategory, setSubCategory] = useState([])
-
-    const handleCategoryChange = async ({target: input}) => {
-      console.log(input.value);
-      const sub_category = await dispatch(getSubCategory(input.value))
-      if(sub_category && sub_category.responseData.sub_categories){
-
-       setSubCategory(sub_category.responseData.sub_categories)
-      }
-      
-    }
+    
     return (
 
         <Formik
 
             enableReinitialize
             initialValues={{
-                id: '',
-                title: '',
-                sub_category_id: '',
-                tags: ''
-
+                id: params.id,
+                files: [],
+                
             }
             }
 
             validationSchema={Yup.object().shape({
-                title: Yup.string()
-                    .required('Title is required'),
-                sub_category_id: Yup.string()
-                    .required('Sub Category is required'),
-                tags: Yup.string()
-                    .required('Tags is required'),
+               /* photo: Yup.string()
+                    .required('Photo is required'),*/
             })}
             onSubmit={(values, { setSubmitting, resetForm }) => {
+              console.log('values', values);
                 let data = {
                     id: values.id,
-                    title: values.title,
-                    sub_category_id: values.sub_category_id,
-                    tags: values.tags
+                    photo: values.files
                 };
 
                 /*if (params.id) {
@@ -70,9 +57,9 @@ const AddGig = (props) => {
                         history.push('/admin/category/')
                     })
                 } else {*/
-                    dispatch(creategigs(data)).then(res => {
+                    dispatch(updateImage(data)).then(res => {
                       console.log('id',res.responseData._id);
-                      history.push('/gig/post/pricing/'+res.responseData._id)
+                      history.push('/gig/post/upload/'+res.responseData._id)
                         //addToast(res.message, { appearance: res.status, autoDismiss: true, })
                     })
                 //}
@@ -122,7 +109,7 @@ const AddGig = (props) => {
                                   Requirements      </a>
                                 <a className="nav-link active" href="#gallery">
                                   Gallery     </a>
-                                <a className="nav-link " href="#publish">Submit For Approval</a>
+                               
                               </div>
                             </div>
 
@@ -148,69 +135,35 @@ const AddGig = (props) => {
                 <span className="float-left">Proposal Photos/Audio</span>
                 <small className="text-muted" style={{ fontSize:'78%' }}>Upload Photos that describe or related to your proposal.your image size must be 700 x 390 pixels.</small>
              </p>
-             <form action="" className="proposal-form" id="gallery_form">
+             <form onSubmit={handleSubmit} encType="multipart/form-data" id="gallery_form">
                 {/* <!--- form Starts ---> */}
                 <div className="row gallery">
-                   {/* <!--- row gallery Starts ---> */}
-                   <div className="col-md-3">
-                      {/* <!--- col-md-3 Starts ---> */}
-                      <div className="pic add-pic">
-                         {/* <i className="fa fa-picture-o fa-2x mb-2"></i><br /> <span>Browse Image/Audio</span>
-                         <input type="hidden" name="proposal_img1" value="" />
-                         <input type="hidden" name="proposal_img1_s3" value="0" /> */}
-                         <input type="file" name="photo" onChange={(e) => { setFieldValue("photo", e.currentTarget.files[0]) }} />
-                      </div>
-                   </div>
-                   {/* <!--- col-md-3 Ends ---> */}
-                   <div className="col-md-3">
-                      {/* <!--- col-md-3 Starts ---> */}
-                      <div className="pic">
-                         <i className="fa fa-picture-o fa-2x mb-2"></i><br /> <span>Browse Image/Audio</span>
-                         <input type="hidden" name="proposal_img2" value="" />
-                         <input type="hidden" name="proposal_img2_s3" value="0" />
-                      </div>
-                   </div>
-                   {/* <!--- col-md-3 Ends ---> */}
-                   <div className="col-md-3">
-                      {/* <!--- col-md-3 Starts ---> */}
-                      <div className="pic">
-                         <i className="fa fa-picture-o fa-2x mb-2"></i><br /> <span>Browse Image/Audio</span>
-                         <input type="hidden" name="proposal_img3" value="" />
-                         <input type="hidden" name="proposal_img3_s3" value="0" />
-                      </div>
-                   </div>
-                   {/* <!--- col-md-3 Ends ---> */}
-                   <div className="col-md-3">
-                      {/* <!--- col-md-3 Starts ---> */}
-                      <div className="pic">
-                         <i className="fa fa-picture-o fa-2x mb-2"></i><br /> <span>Browse Image/Audio</span>
-                         <input type="hidden" name="proposal_img4" value="" />
-                         <input type="hidden" name="proposal_img3_s3" value="0" />
-                      </div>
-                   </div>
-                   {/* <!--- col-md-3 Ends ---> */}
+                   <Dropzone style={dropzoneStyle} accept="image/*" onDrop={(acceptedFiles) => {
+              // do nothing if no files
+                      if (acceptedFiles.length === 0) { return; }
+
+                      // on drop we add to the existing files
+                      setFieldValue("files", values.files.concat(acceptedFiles));
+                    }}>
+                      {({ isDragActive, isDragReject, acceptedFiles, rejectedFiles }) => {
+                        if (isDragActive) {
+                          return "This file is authorized";
+                        }
+
+                        if (isDragReject) {
+                          return "This file is not authorized";
+                        }
+
+                        if (values.files.length === 0) { 
+                          return <p>Try dragging a file here!</p>
+                        }
+
+                        return values.files.map((file, i) => (<Thumb key={i} file={file} />));
+                      }}
+                    </Dropzone>
                 </div>
-                {/* <!--- row gallery Ends ---> */}
-                <hr />
-                <p className="text-right mb-0">
-                   <span className="float-left">Add Video</span>
-                   <small className="text-muted" style={{ fontSize:'78%' }}>(Optional) Supported Video Extensions Include : 'mp4','mov','avi','flv','wmv'.</small>
-                </p>
-                <div className="row gallery">
-                   {/* <!--- row gallery Starts ---> */}
-                   <div className="col-md-12">
-                      {/* <!--- col-md-3 Starts ---> */}
-                      <div className="pic add-video">
-                         <span className="chose"><i className="fa fa-video-camera fa-2x mb-2"></i><br />Add Video</span>
-                      </div>
-                      <input type='hidden' name='proposal_video' value='' id='v_file' /> 
-                      <input type='hidden' name='proposal_video_s3' value='0' id='v_file_s3' /> 
-                   </div>
-                   {/* <!--- col-md-3 Ends ---> */}
-                </div>
-                {/* <!--- row gallery Ends ---> */}
-             </form>
-             {/* <!--- form Ends ---> */}
+
+           
              <div className="mb-5"></div>
              <div className="form-group mb-0">
                 {/* <!--- form-group Starts ---> */}
@@ -224,7 +177,7 @@ const AddGig = (props) => {
                    --> */}
              </div>
              {/* <!--- form-group Starts ---> */}
-                   
+              </form>     
           </div>
 
           <input type="hidden" name="section" value="instant_delivery" />

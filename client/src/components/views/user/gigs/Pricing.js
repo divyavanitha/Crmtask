@@ -155,7 +155,7 @@ const Pricing = (props) => {
                                  Requirements      </a>
                               <a className="nav-link " href="#gallery">
                                  Gallery     </a>
-                              <a className="nav-link " href="#publish">Submit For Approval</a>
+                              
                            </div>
                         </div>
 
@@ -241,7 +241,7 @@ const Pricing = (props) => {
                                              <label>Delivery Time</label>
                                                 <div>
                                                       <div>
-                                                         <Field component="select" name={`delivery_time_id.${0}`} className="form-control">
+                                                         <Field component="select" name={`delivery_time.${0}`} className="form-control">
                                                             <option value="">Select Delivery Time</option>
                                                             {delivery && delivery.deliveryTime.map((deliveryTime) => (<option key={deliveryTime._id} value={deliveryTime._id} >{deliveryTime.name}</option>))}
                                                          </Field>

@@ -5,6 +5,8 @@ import { useEffect } from 'react';
 import "./Gig.css";
 import { getGigbyId } from "../../../../_actions/user.action";
 
+import $ from 'jquery';
+
 import OwlCarousel from 'react-owl-carousel';
 
 
@@ -16,6 +18,19 @@ function GigDetail() {
     useEffect(() => {
 
         dispatch(getGigbyId(params.gig))
+
+        var $input = $("input[name='quantity']");
+
+        // Colocar a 0 ao início
+        $input.val(1);
+
+        // Aumenta ou diminui o valor sendo 0 o mais baixo possível
+        $(".qnty").click(function(){
+            if ($(this).hasClass('plus'))
+                $input.val(parseInt($input.val())+1);
+            else if ($input.val()>=1)
+                $input.val(parseInt($input.val())-1);
+        });
     }, [params.gig]);
     const gig = useSelector((state) => state.user && state.user.gig_details && state.user.gig_details.responseData && state.user.gig_details.responseData.gig);
     console.log('gig', gig);
