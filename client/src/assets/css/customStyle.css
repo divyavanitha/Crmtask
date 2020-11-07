@@ -1701,6 +1701,144 @@ div#demo1 .carousel-item img{
 
 /* gig detail end */
 
+/* post request start */
+
+.post-request-container{}
+.post-request-container .card{
+   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+   border: 1px solid #e6e6e6 !important;
+   border-radius: 4px;
+}
+.post-request-container .card-body{
+   box-shadow: none;
+   padding:20px;
+}
+
+.budget-form{
+}
+.budget-form span.input-group-addon {
+    padding: 0 20px;
+    border-radius: 4px 0 0 4px;
+}
+.budget-form input.form-control {
+    border-radius: 0 4px 4px 0 !important;
+}
+
+select#sub-category.disabled {
+    background: #dddfe6;
+    pointer-events: none;
+}
+.serviceDelivaryLsit {}
+
+span.custom-control-indicator {}
+
+.serviceDelivaryLsit label.custom-control.custom-radio {
+   vertical-align: middle; 
+   display: inline-flex;
+   justify-content: center;
+   align-items: center;
+}
+.post-request-container .request-sidebar .card {
+    background: #ffffff;
+    border-radius: 4px !important;
+}
+.post-request-container .request-sidebar .card-body:before{
+   border-right-color: #fff;
+}
+.post-request-container .request-sidebar .card-body p {
+    font-size: 14px;
+    background-color: transparent;
+}
+
+.serviceDelivaryLsit label.custom-control.custom-radio span.custom-control-description {
+    padding-top: 3px;
+}
+
+.custom-control-input:checked~.custom-control-indicator {
+    background-position: center center;
+    color: #fff;
+    background-color: #007bff;
+    width: 16px;
+    height: 16px;
+}
+
+/* post request end */
+
+/* manage request start */
+
+.proposals-container{}
+.proposals-container .nav.nav-tabs{
+   background: #ffffff;
+}
+.proposals-container .nav.nav-tabs li.nav-item{
+}
+.proposals-container .nav.nav-tabs li.nav-item a{
+   padding: 14px 20px;
+   border: none;
+
+}
+.proposals-container .nav.nav-tabs li.nav-item a:hover{
+   border: none;
+}
+
+.proposals-container .nav.nav-tabs li.nav-item a.active{
+   border-bottom-color:#3a6cff !important; 
+}
+
+.proposals-container table.table{
+   border-collapse: separate !important;
+   font-size: 13px;
+   border-spacing: 0 7px;
+}
+.proposals-container table.table thead{}
+.proposals-container table.table thead tr{
+   background: transparent;
+}
+.proposals-container table.table thead tr th{
+       font-size: 11px;
+    color: #333333;
+    text-transform: uppercase;
+    display: table-cell;
+    white-space: nowrap;
+    /* background: #fff; */
+    background: none;
+    border: none;
+    font-weight: 600 !important;
+}
+.proposals-container table.table tbody{}
+.proposals-container table.table tbody tr{}
+.proposals-container table.table tbody tr td{
+   padding: 15px 10px;
+    font-size: 13px;
+    vertical-align: middle;
+    border-top: 1px solid #F5F6FA;
+    border-bottom: 1px solid #F5F6FA;
+    white-space: nowrap;
+}
+.proposals-container table.table tbody tr td button.btn{
+   padding: 0;
+   width: 30px; height: 30px;
+}
+.proposals-container table.table tbody tr td button.btn:focus{
+   box-shadow: none;
+   outline: none;
+}
+.proposals-container.view-proposals .box-table{
+   padding:20px;
+}
+.table-striped tbody tr:nth-of-type(even) td {
+    background-color: #F5F6FA;
+}
+.proposals-container table.table tbody tr td:first-child {
+    border-left: 1px solid #f5f6fa;
+}
+.proposals-container table.table tbody tr td:last-child {
+    border-right: 1px solid #f5f6fa;
+}
+
+/* manage request end */
+
+
 
 @media only screen and (max-width: 768px){
  label.col-form-label{
