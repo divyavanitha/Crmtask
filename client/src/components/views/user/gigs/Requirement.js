@@ -102,7 +102,7 @@ const AddGig = (props) => {
                                   Requirements      </a>
                                 <a className="nav-link " href="#gallery">
                                   Gallery     </a>
-                                <a className="nav-link " href="#publish">Submit For Approval</a>
+                                
                               </div>
                             </div>
 

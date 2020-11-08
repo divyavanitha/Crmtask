@@ -119,7 +119,8 @@ exports.checkout = async (req, res) => {
                 coupon: req.body.coupon_id,
                 wallet: req.body.wallet,
                 payment_mode: req.body.payment_mode,
-                user: req.user._id,
+                buyer: req.user._id,
+                seller: req.body.seller_id,
                 gig: req.body.gig_id,
                 quantity: req.body.quantity,
                 total: req.body.total

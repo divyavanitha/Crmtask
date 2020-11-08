@@ -38,6 +38,7 @@ const Base = () => {
                 <meta charSet="utf-8" />
                 <title>{site && site.title}</title>
                 <link rel="icon" href={site && site.favicon} />
+                
             </Helmet>
             <Header />
 

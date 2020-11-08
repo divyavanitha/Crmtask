@@ -11,7 +11,8 @@ const orderSchema = mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'Coupon'
     },
-    user: { type: Schema.Types.ObjectId, ref: 'users' },
+    buyer: { type: Schema.Types.ObjectId, ref: 'users' },
+    seller: { type: Schema.Types.ObjectId, ref: 'users' },
     gig : {
         type: Schema.Types.ObjectId,
         ref: 'gigs'
