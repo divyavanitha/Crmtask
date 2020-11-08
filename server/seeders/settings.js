@@ -1,68 +1,78 @@
+const dotenv = require('dotenv');
+
+dotenv.config();
+
 module.exports = [{
-	"general": {
-		"settings": {
-			"site_title": "",
-			"email_address": "",
-			"file_size": 10,
-			"contactus_email_address": "",
-			"sms_verification": false,
-			"email_verification": false,
-			"time_zone": "US/Arizona",
-			"footer_aboutus": "Site Name",
-			"footer_features": "Site Name",
-			"footer_privacy": "Site Name",
-			"footer_title": "Site Name",
-			"date_format": "MM/DD/YYYY",
-			"time_format": "hh:mm a",
-			"referral": {
-				"status": false,
-				"amount": {
-					"referral": "503",
-					"referrer": "25"
-				}
-			},
-			"logo": "",
-			"favicon": "",
-			"landing_image": "",
-			"play_url": "",
-			"ios_url": "",
-			"play_image": "",
-			"ios_image": ""
-		}
+	"site": {
+		"title": "Freelancer",
+		"description": "Freelancer Application",
+		"logo": process.env.APP_URL+"/public/images/logo.png",
+		"favicon": process.env.APP_URL+"/public/images/favicon.png",
+		"email": "support@freelancer.com",
+		"mobile": "9874563210",
+		"copyright": "©Freelancer 2020. All Rights Reserved.",
+		"playstoreLink": "",
+		"appstoreLink": ""
 	},
-	"sms": {
-		"twilio": {
-			"account_sid": "ACf0eddc3d08f5bbaddb229593dcf15747",
-			"authentication_token": "26411f691f5317e2dc5097ad62373e97",
-			"default_phone_number": "+12512346079",
-			"mode": "development"
-		}
-	},
-	"mail": {
-		"from_address": "",
-		"from_name": "",
-		"gmail": {
-			"host": "smtp.gmail.com",
-			"port": "465",
-			"username": "",
-			"password": "",
-			"encryption": "",
-		}
-	},
-	"social_networks": {
-		"link": {
-			"facebook": "https://www.facebook.com/Site Name",
-			"gmail": "https://twitter.com/Site Name"
-		},
-		"facebook_api": {
-			"application_id": "",
-			"application_secret": "",
-			"redirect": ""
-		},
-		"google_api": {
-			"client_id": "",
-			"secret_key": "",
-			"redirect": ""
-		}
-	}
+	"socialLink": [{
+		"name": "Facebook Link",
+		"url": "",
+		"picture": process.env.APP_URL+"/public/images/facebook.png"
+	},{
+		"name": "Google Plus Link",
+		"url": "",
+		"picture": process.env.APP_URL+"/public/images/google-plus.png"
+	},{
+		"name": "Twitter Link",
+		"url": "",
+		"picture": process.env.APP_URL+"/public/images/twitter.png"
+	},{
+		"name": "LinkedIn Link",
+		"url": "",
+		"picture": process.env.APP_URL+"/public/images/linkedin.png"
+	},{
+		"name": "Instagram Link",
+		"url": "",
+		"picture": process.env.APP_URL+"/public/images/instagram.png"
+	},{
+		"name": "Pinterest Link",
+		"url": "",
+		"picture": process.env.APP_URL+"/public/images/pinterest.png"
+	}],
+	"social": {
+        "status": false,
+        "facebookAppId": "",
+        "googleClientId": "",
+        "appleId": ""
+    },
+    "sms": {
+        "status": false,
+        "provider": "Twilio",
+        "sid": "",
+        "token": "",
+        "sender": ""
+    },
+    "mail": {
+        "status": false,
+        "service": "gmail",
+        "username": "",
+        "password": "",
+        "from": ""
+    },
+    "payment": [{
+         "status": false,
+         "name": "Stripe",
+         "credentials": [{
+            "name": "publishable_key",
+            "value": ""
+         },
+         {
+            "name": "secret_key",
+            "value": ""
+         },
+         {
+            "name": "currency",
+            'value': ""
+         }]
+     }]
 }]

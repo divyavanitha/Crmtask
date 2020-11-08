@@ -19,6 +19,10 @@ const slideSchema = mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'category'
     },
+    subCategory:{
+        type: Schema.Types.ObjectId,
+        ref: 'SubCategory'
+    },
     status:{
         type: Boolean,
         default: true

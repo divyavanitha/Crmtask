@@ -106,7 +106,7 @@ const SocialLink = (props) => {
 
                                                 { socialLink && socialLink.map((social, index) => ( 
                                                     <div key={index} className="form-group row">
-                                                        <label className="col-md-4 control-label"> {social.title} : </label>
+                                                        <label className="col-md-4 control-label"> {(social.name).charAt(0).toUpperCase() + (social.name).slice(1).toLowerCase()} : </label>
                                                         <div className="col-md-6">
                                                             <Field type="text" id={social.name} name={social.name} value={values[social.name]} onChange={handleChange} maxLength={100} placeholder={social.title} className={'form-control' + (errors[social.url] && touched[social.url] ? ' is-invalid' : '')} />
                                                             <ErrorMessage name={social.name} component="div" className="invalid-feedback" />

@@ -25,17 +25,12 @@ function Footer() {
                         <div className="col-md-6 col-12">
                             <div className="footerAbout">
                                 <div className="footerLogo"><a href=""><img src={site && site.logo} /></a></div>
-                                <p className="f-abt-desc">
-                                {site && site.description}
-                     </p>
+                                <p className="f-abt-desc">{site && site.description}</p>
+                                <p class="f-abt-desc"><span class="bold">Phone:</span> {site && site.email}</p>
+                                <p class="f-abt-desc"><span class="bold">Email:</span> {site && site.mobile}</p>
                                 <div className="collapse show" id="collapsefindusOn">
                                     <ul className="list-inline social_icon">
-                                    {socialLink && socialLink.map((social, index) => (social.status == 1  && (<li key={index} className="list-inline-item"><a href={social.url} target="_blank"><img src={social.picture} className="pic" /></a></li>) ) )}
-                                        {/* <li className="list-inline-item"><a href="#"><i className="fa fa-google-plus-official"></i></a></li>
-                                        <li className="list-inline-item"><a href="#"><i className="fa fa-twitter"></i></a></li>
-                                        <li className="list-inline-item"><a href="#"><i className="fa fa-facebook"></i></a></li>
-                                        <li className="list-inline-item"><a href="#"><i className="fa fa-linkedin"></i></a></li>
-                                        <li className="list-inline-item"><a href="#"><i className="fa fa-pinterest"></i></a></li> */}
+                                    {socialLink && socialLink.map((social, index) => (social.url != ""  && (<li key={index} className="list-inline-item"><a href={social.url} target="_blank"><img src={social.picture} className="pic" /></a></li>) ) )}
                                     </ul>
                                     {appLink && appLink.map((app, index) => (app.status == 1  && (<a key={index} href={app.url} target="_blank"><img src={app.picture} className="pic" /></a>) ) )}
                                 </div>
