@@ -366,14 +366,24 @@ exports.updateConfirm = async(req, res) => {
     }
 }
 
-exports.deletegigs = async (req, res) => {
-     console.log("gigid");
-        Gig.findByIdAndRemove({ _id: req.params.gigid }).then((data) => {
-            if (!data) { return res.json({ error: "your authorization does cannot be deleted" }) }
-            res.json({ success: true, response: data })
+exports.deleteGig = async (req, res) => {
+    try {
+        await db._delete(Gig, {"_id":req.params.id});
 
-        });
-}
+        const response = helper.response({ message: res.__('deleted') });
+        return res.status(response.statusCode).json(response);
+    }
+    catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                res.status(422).send(err.errors[i].message);
+            }
+        } else {
+            res.status(422).send(err);
+        }
+    }
+
+};
 exports.getallgigs = async (req, res) => {
     const errors = {};
 
