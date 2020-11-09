@@ -10,7 +10,7 @@ const _ = require('lodash');
 exports.listcart = async (req, res) => {
     try {
 
-        let carts = await db._get(Cart);
+        let carts = await db._get(Cart, {}, {}, {populate: "gig"});
 
         const data = { carts };
 

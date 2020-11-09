@@ -60,6 +60,7 @@ exports.creategigs = async (req, res) => {
 
     const schema = Joi.object().options({ abortEarly: false }).keys({
         title: Joi.string().required().label("Title"),
+        category_id: Joi.string().required().label("Category Id"),
         sub_category_id: Joi.string().required().label("Sub Category Id"),
         tags: Joi.string().required().label("Tags")
 
@@ -87,6 +88,7 @@ exports.creategigs = async (req, res) => {
         let data = {
                 user: req.user._id,
                 title: req.body.title,
+                category: req.body.category_id,
                 subCategory: req.body.sub_category_id,
                 tags: req.body.tags
             }
@@ -364,14 +366,24 @@ exports.updateConfirm = async(req, res) => {
     }
 }
 
-exports.deletegigs = async (req, res) => {
-     console.log("gigid");
-        Gig.findByIdAndRemove({ _id: req.params.gigid }).then((data) => {
-            if (!data) { return res.json({ error: "your authorization does cannot be deleted" }) }
-            res.json({ success: true, response: data })
+exports.deleteGig = async (req, res) => {
+    try {
+        await db._delete(Gig, {"_id":req.params.id});
 
-        });
-}
+        const response = helper.response({ message: res.__('deleted') });
+        return res.status(response.statusCode).json(response);
+    }
+    catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                res.status(422).send(err.errors[i].message);
+            }
+        } else {
+            res.status(422).send(err);
+        }
+    }
+
+};
 exports.getallgigs = async (req, res) => {
     const errors = {};
 

@@ -17,6 +17,7 @@ const gigSchema = mongoose.Schema({
         unique: true
     },
     description: { type: String },
+    category: { type: Schema.Types.ObjectId, ref: 'category' },
     subCategory : { type: Schema.Types.ObjectId, ref: 'SubCategory' },
     tags: {
         type: String,
