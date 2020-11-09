@@ -21,7 +21,7 @@ const pageSchema = mongoose.Schema({
     },
     status: {
         type: Boolean,
-        default: false
+        default: true
     },
     created_at: {
         type: Date,

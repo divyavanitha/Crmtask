@@ -59,6 +59,10 @@ npm run client-build
 
 npm install pm2 -g
 
+### Change credentials in env
+
+npm run seed
+
 pm2 start server/bin/www
 
 # Debug Mode

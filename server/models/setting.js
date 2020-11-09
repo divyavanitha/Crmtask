@@ -14,7 +14,6 @@ const settingSchema = mongoose.Schema({
         },
         description: {
             type: String,
-            required: true,
             trim: true,
             minlength: 1
         },
@@ -26,12 +25,10 @@ const settingSchema = mongoose.Schema({
         },
         email: {
             type: String,
-            required: true,
             trim: true
         },
         mobile: {
             type: String,
-            required: true,
             trim: true
         },
         copyright: {
@@ -54,12 +51,6 @@ const settingSchema = mongoose.Schema({
             trim: true,
             minlength: 1
         },
-        title: {
-            type: String,
-            required: true,
-            trim: true,
-            minlength: 1
-        },
         url: {
             type: String
         },
@@ -74,21 +65,15 @@ const settingSchema = mongoose.Schema({
         },
         facebookAppId: {
             type: String,
-            required: true,
-            trim: true,
-            minlength: 1
+            trim: true
         },
         googleClientId: {
             type: String,
-            required: true,
-            trim: true,
-            minlength: 1
+            trim: true
         },
         appleId: {
             type: String,
-            required: true,
-            trim: true,
-            minlength: 1
+            trim: true
         },
     },
     sms: {
@@ -98,27 +83,19 @@ const settingSchema = mongoose.Schema({
         },
         provider: {
             type: String,
-            required: true,
-            trim: true,
-            minlength: 1
+            trim: true
         },
         sid: {
             type: String,
-            required: true,
-            trim: true,
-            minlength: 1
+            trim: true
         },
         token: {
             type: String,
-            required: true,
-            trim: true,
-            minlength: 1
+            trim: true
         },
         sender: {
             type: String,
-            required: true,
-            trim: true,
-            minlength: 1
+            trim: true
         }
     },
     mail: {
@@ -128,23 +105,19 @@ const settingSchema = mongoose.Schema({
         },
         service: {
             type: String,
-            trim: true,
-            minlength: 1
+            trim: true
         },
         username: {
             type: String,
-            trim: true,
-            minlength: 1
+            trim: true
         },
         password: {
             type: String,
-            trim: true,
-            minlength: 1
+            trim: true
         },
         from: {
             type: String,
-            trim: true,
-            minlength: 1
+            trim: true
         }
     },
     payment: [{
@@ -161,13 +134,11 @@ const settingSchema = mongoose.Schema({
          credentials: [{
             name: {
                 type: String,
-                trim: true,
-                minlength: 1
+                trim: true
             },
             value: {
                 type: String,
-                trim: true,
-                minlength: 1
+                trim: true
             }
          }]
      }],
