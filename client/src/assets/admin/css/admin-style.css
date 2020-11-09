@@ -3104,6 +3104,7 @@ header .form-inline .search-form.close {
 .tab-container .tab-item {
   text-align:center;
   padding: 20px 5px 5px;
+  width: 100%;
 }
 
 .tab-container .tab-item.active {
