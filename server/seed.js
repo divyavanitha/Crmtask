@@ -8,14 +8,11 @@ const countries_data = require('./seeders/countries');
 const states_data = require('./seeders/states');
 const cities_data = require('./seeders/cities');
 const categories_data = require('./seeders/categories');
-const subcategories_data = require('./seeders/subcategories');
 const deliverytimes_data = require('./seeders/deliverytimes');
 const languages_data = require('./seeders/languages');
-const menus_data = require('./seeders/menus');
 const packages_data = require('./seeders/packages');
 const pages_data = require('./seeders/pages');
 const skills_data = require('./seeders/skills');
-const slides_data = require('./seeders/slides');
 const users_data = require('./seeders/users');
 const settings_data = require('./seeders/settings');
 
@@ -95,39 +92,50 @@ async function seed() {
 	})*/
 
 	await async.each(categories_data, async function iteratee(category, next) {
-		await categories.push(  new Category({name: category })  )
-	})
 
-	await async.each(await subcategories_data.subs(), async function iteratee(subcategory, next) {
-		await subcategories.push(  new SubCategory({name: subcategory.name, category: subcategory.category })  )
+		let categoryData = new Category({name: category.name }) ;
+		categories.push( categoryData )
+		for(let subCategory of category.subCategory) {
+			let subCategoryData = new SubCategory({name: subCategory.name, category: categoryData._id }) ;
+			subcategories.push(  subCategoryData  )
+			if(subCategory.menus) {
+				for(let menu of subCategory.menus) {
+					menus.push(  new Menu({ title: menu.title, subTitle: menu.subTitle, layoutPhoto: process.env.APP_URL+menu.layoutPhoto, category: subCategoryData.category, subCategory: subCategoryData._id })  )
+				}
+			}
+			
+		}
+		if(category.menus) {
+			for(let menu of category.menus) {
+				menus.push(  new Menu({ title: menu.title, subTitle: menu.subTitle, layoutPhoto: process.env.APP_URL+menu.layoutPhoto, category: categoryData._ig })  )
+			}
+		}
+		if(category.slides) {
+			for(let slide of category.slides) {
+				slides.push(  new Slide({ title: slide.title, description: slide.description, layoutPhoto: process.env.APP_URL+menu.layoutPhoto, category: categoryData._ig })  )
+			}
+		}
+		
 	})
 
 	await async.each(deliverytimes_data, async function iteratee(deliverytime, next) {
-		await deliverytimes.push(  new DeliveryTime({name: deliverytime })  )
+		deliverytimes.push(  new DeliveryTime({name: deliverytime })  )
 	})
 
 	await async.each(languages_data, async function iteratee(language, next) {
-		await languages.push(  new Language({name: language.name, code: language.code })  )
-	})
-
-	await async.each(await menus_data.menus(), async function iteratee(menu, next) {
-		await menus.push(  new Menu({title: menu.title, subTitle: menu.subTitle, layoutPhoto: process.env.APP_URL+menu.layoutPhoto, category: menu.category, subCategory: menu.subCategory })  )
+		languages.push(  new Language({name: language.name, code: language.code })  )
 	})
 
 	await async.each(packages_data, async function iteratee(package, next) {
-		await packages.push(  new Package({name: package })  )
+		packages.push(  new Package({name: package })  )
 	})
 
 	await async.each(pages_data, async function iteratee(page, next) {
-		await pages.push(  new Page({title: page.title, content: page.content, url: page.url })  )
+		pages.push(  new Page({title: page.title, content: page.content, url: page.url })  )
 	})
 
 	await async.each(skills_data, async function iteratee(skill, next) {
-		await skills.push(  new Skill({name: skill })  )
-	})
-
-	await async.each(await slides_data.slides(), async function iteratee(slide, next) {
-		await slides.push(  new Slide({title: slide.title, description: slide.description, layoutPhoto: process.env.APP_URL+slide.layoutPhoto, category: slide.category, subCategory: slide.subCategory  })  )
+		skills.push(  new Skill({name: skill })  )
 	})
 
 	await async.each(users_data, async function iteratee(user, next) {

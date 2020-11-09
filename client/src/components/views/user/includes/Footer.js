@@ -26,8 +26,8 @@ function Footer() {
                             <div className="footerAbout">
                                 <div className="footerLogo"><a href=""><img src={site && site.logo} /></a></div>
                                 <p className="f-abt-desc">{site && site.description}</p>
-                                <p class="f-abt-desc"><span class="bold">Phone:</span> {site && site.email}</p>
-                                <p class="f-abt-desc"><span class="bold">Email:</span> {site && site.mobile}</p>
+                                <p className="f-abt-desc"><span className="bold">Phone:</span> {site && site.email}</p>
+                                <p className="f-abt-desc"><span className="bold">Email:</span> {site && site.mobile}</p>
                                 <div className="collapse show" id="collapsefindusOn">
                                     <ul className="list-inline social_icon">
                                     {socialLink && socialLink.map((social, index) => (social.url != ""  && (<li key={index} className="list-inline-item"><a href={social.url} target="_blank"><img src={social.picture} className="pic" /></a></li>) ) )}
