@@ -72,24 +72,36 @@ let users = []
 
 
 async function seed() {
+	
+	async.each(countries_data, function iteratee(country, next) {
+		countries.push(  new Country({_id: country.id, name: country.name, countryCode: country.sortname, phoneCode: country.name, currency: country.name})  )
+	})
+	
+	await Country.deleteMany({}).then(function(){  }).catch(function(error){  console.log(error) }); 
+
+	await Country.insertMany(countries).then(function(){  console.log("Country Seeded."); }).catch(function(error){  console.log(error); process.exit();  }); 
+
+	async.each(states_data, function iteratee(state, next) {
+		states.push(  new State({_id: state.id, name: state.name, countryId: Schema.Types.ObjectId(state.country_id), timezone: state.name})  )
+	})
+
+	await State.deleteMany({}).then(function(){  }).catch(function(error){  console.log(error) }); 
+
+	await State.insertMany(states).then(function(){  console.log("State Seeded."); }).catch(function(error){  console.log(error); process.exit();  }); 
+
+	async.each(cities_data, function iteratee(city, next) {
+		cities.push(  new City({_id: city.id, name: city.name, countryId: Schema.Types.ObjectId(city.state_id), stateId: Schema.Types.ObjectId(city.state_id) })  )
+	})
+
+	await City.deleteMany({}).then(function(){  }).catch(function(error){  console.log(error) }); 
+
+	await City.insertMany(cities).then(function(){  console.log("City Seeded.") }).catch(function(error){  console.log(error); process.exit();  }); 
 
 	await async.each(admin_data, async function iteratee(admin, next) {
 		const salt = await bcrypt.genSalt(10);
 	    admin.password = await bcrypt.hash(admin.password, salt);
 		await admins.push(  new Admin({name: admin.name, email: admin.email, password: admin.password })  )
 	})
-	
-	/*await async.each(countries_data, function iteratee(country, next) {
-		countries.push(  new Country({_id: country.id, name: country.name, countryCode: country.sortname, phoneCode: country.name, currency: country.name})  )
-	})
-
-	await async.each(states_data, function iteratee(state, next) {
-		states.push(  new State({_id: state.id, name: state.name, countryId: Schema.Types.ObjectId(state.country_id), timezone: state.name})  )
-	})
-
-	await async.each(cities_data, function iteratee(city, next) {
-		cities.push(  new City({_id: city.id, name: city.name, countryId: Schema.Types.ObjectId(city.state_id), stateId: Schema.Types.ObjectId(city.state_id) })  )
-	})*/
 
 	await async.each(categories_data, async function iteratee(category, next) {
 
@@ -149,18 +161,6 @@ async function seed() {
 
 	await Admin.insertMany(admins).then(function(){  console.log("Admin Seeded."); }).catch(function(error){  console.log(error); process.exit();  }); 
 
-	/*await Country.deleteMany({}).then(function(){  }).catch(function(error){  console.log(error) }); 
-
-	await Country.insertMany(countries).then(function(){  console.log("Country Seeded."); }).catch(function(error){  console.log(error); process.exit();  }); 
-
-	await State.deleteMany({}).then(function(){  }).catch(function(error){  console.log(error) }); 
-
-	await State.insertMany(states).then(function(){  console.log("State Seeded."); }).catch(function(error){  console.log(error); process.exit();  }); 
-
-	await City.deleteMany({}).then(function(){  }).catch(function(error){  console.log(error) }); 
-
-	await City.insertMany(cities).then(function(){  console.log("City Seeded.") }).catch(function(error){  console.log(error); process.exit();  });*/ 
-
 	await Category.deleteMany({}).then(function(){  }).catch(function(error){  console.log(error) }); 
 	
 	await Category.insertMany(categories).then(function(){  console.log("Categories Seeded."); }).catch(function(error){  console.log(error); process.exit();  }); 
@@ -203,7 +203,7 @@ async function seed() {
 
 	await Setting.deleteMany({}).then(function(){  }).catch(function(error){  console.log(error) }); 
 
-	await Setting.create(settings_data).then(function(){  console.log("Setting Seeded.") }).catch(function(error){  console.log(error); process.exit();  }); 
+	await Setting.create(settings_data).then(function(){  console.log("Setting Seeded.") }).catch(function(error){  console.log(error); process.exit();  });
 
 	process.exit();
 

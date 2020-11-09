@@ -40,6 +40,10 @@ import User from "../users/User";
 import Request from "../requests/Request";
 import Dashboard from "../Dashboard";
 import SocialLink from "../settings/SocialLink";
+import Application from "../settings/Application";
+import GigSetting from "../settings/GigSetting";
+import Pricing from "../settings/Pricing";
+import Seller from "../settings/Seller";
 import Social from "../settings/Social";
 import Sms from "../settings/Sms";
 import Mail from "../settings/Mail";
@@ -115,6 +119,10 @@ const Base = () => {
             <Route path="/admin/settings/mail" component={Mail}></Route>
             <Route path="/admin/settings/push" component={Push}></Route>
             <Route path="/admin/settings/payment" component={Payment}></Route>
+            <Route path="/admin/settings/application" component={Application}></Route>
+            <Route path="/admin/settings/seller" component={Seller}></Route>
+            <Route path="/admin/settings/gig" component={GigSetting}></Route>
+            <Route path="/admin/settings/pricing" component={Pricing}></Route>
 
           </Switch>
 
