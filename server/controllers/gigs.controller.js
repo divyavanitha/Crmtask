@@ -24,9 +24,11 @@ exports.withoutAuthgigs = async (req, res) => {
 }
 
 exports.getGigDetails = async (req, res) => {
-    try {
+    //try {
 
-        let gig = await db._find(Gig, {_id:req.params.id}, {}, {populate: "user"});
+        //let gig = await db._find(Gig, {_id:req.params.id}, {}, {populate: [{path: 'user', populate: { path: 'country', model: 'Country' } } ]});
+        let gig = await db._find(Gig, {_id: req.params.id}, {}, { populate: [ { path: "user", populate: { path: 'country', model: 'Country' } } ] } );
+
 
         const data = { gig };
 
@@ -34,9 +36,9 @@ exports.getGigDetails = async (req, res) => {
 
         return res.status(response.statusCode).json(response);
 
-    } catch (err) {
+    /*} catch (err) {
         console.log(err);
-    }
+    }*/
 
 }
 
