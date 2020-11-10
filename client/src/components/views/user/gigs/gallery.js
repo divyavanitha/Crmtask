@@ -51,7 +51,7 @@ const Gallery = (props) => {
     <Formik
       initialValues={{
         id: params.id,
-        photo: [],
+        //photo: [],
       }}
       validationSchema={Yup.object().shape({
         /* photo: Yup.string()
@@ -59,11 +59,14 @@ const Gallery = (props) => {
       })}
 
       onSubmit={(values, { setSubmitting, resetForm }) => {
-        console.log('values', values);
-        let data = {
+        console.log('values', files);
+        /*let data = {
           id: values.id,
           photo: values.photo
-        };
+        };*/
+
+        const data = new FormData();
+        data.append( "id", params.id );
 
         /*if (params.id) {
             dispatch(updateCategory(data)).then(res => {
@@ -71,11 +74,11 @@ const Gallery = (props) => {
                 history.push('/admin/category/')
             })
         } else {*/
-        /*dispatch(updateImage(data)).then(res => {
+        dispatch(updateImage(data)).then(res => {
           console.log('id',res.responseData._id);
           history.push('/gig/post/upload/'+res.responseData._id)
             //addToast(res.message, { appearance: res.status, autoDismiss: true, })
-        })*/
+        })
         //}
         resetForm();
         setSubmitting(false);
@@ -151,7 +154,7 @@ const Gallery = (props) => {
                       </p>
 
 
-                      <form onSubmit={handleSubmit}>
+                      <form onSubmit={handleSubmit} encType="multipart/form-data" >
 
                         <div style={dropzoneStyle} {...getRootProps()}>
                           <input {...getInputProps()} />

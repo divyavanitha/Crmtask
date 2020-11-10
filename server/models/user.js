@@ -45,7 +45,7 @@ const userSchema = mongoose.Schema({
     deviceToken: {
         type: String
     },
-    country: { type: Schema.Types.ObjectId, ref: 'Country' },
+    country: { type: String, ref: 'Country' },
     city: { type: Schema.Types.ObjectId, ref: 'City' },
     language: [{
         language: { type: Schema.Types.ObjectId, ref: 'Language' },

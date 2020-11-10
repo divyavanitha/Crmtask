@@ -49,18 +49,21 @@ const AddGig = (props) => {
             }
 
             validationSchema={Yup.object().shape({
-                title: Yup.string()
+                /*title: Yup.string()
                     .required('Title is required'),
+                category_id: Yup.string()
+                    .required('Category is required'),
                 sub_category_id: Yup.string()
                     .required('Sub Category is required'),
                 tags: Yup.string()
-                    .required('Tags is required'),
+                    .required('Tags is required'),*/
             })}
             onSubmit={(values, { setSubmitting, resetForm }) => {
                 let data = {
                     id: values.id,
                     title: values.title,
                     sub_category_id: values.sub_category_id,
+                    category_id: values.category_id,
                     tags: values.tags
                 };
 
@@ -156,12 +159,13 @@ const AddGig = (props) => {
                    {/* <!--- form-group row Starts ---> */}
                    <div className="col-md-3"> Category </div>
                    <div className="col-md-9">
-                      <select name="category_id" className="form-control mb-3"  onChange={handleCategoryChange}>
+                      <select name="category_id" className={'form-control mb-3' + (errors.category_id && touched.category_id ? ' is-invalid' : '')}  onChange={handleCategoryChange}>
                         <option value="">Select Catagory</option>
 
                         {category_list && category_list.map((c_list) => (<option key={c_list._id} value={c_list._id} onChange={handleCategoryChange}>{c_list.name}</option>))}
 
                       </select>
+                      <ErrorMessage name="category_id" component="div" className="invalid-feedback" />
                       <small className="form-text text-danger"></small>
                       <select name="sub_category_id" className={'form-control' + (errors.sub_category_id && touched.sub_category_id ? ' is-invalid' : '')} onChange={ (e) => { console.log(e.currentTarget); setFieldValue('sub_category_id', e.currentTarget.value);} } >
 
