@@ -375,8 +375,7 @@ exports.createCoupon = async (req, res) => {
         percentage: Joi.string().required().label("Percentage"),
         maxAmount: Joi.string().required().label("Maximum Amount"),
         description: Joi.string().required().label("Description"),
-        expiration: Joi.string().required().label("Expiration"),
-        sellerId: Joi.string().required().label("Seller Id")
+        expiration: Joi.string().required().label("Expiration")
         
     }).unknown(true);
 
@@ -390,11 +389,11 @@ exports.createCoupon = async (req, res) => {
         })
     }
 
-    const errorResponse = helper.response({ status: 422, error:errorMessage });
+    /*const errorResponse = helper.response({ status: 422, error:errorMessage });
 
     if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
-    try {
+    try {*/
         const coupon = {
             code: req.body.code,
             percentage: req.body.percentage,
@@ -409,7 +408,7 @@ exports.createCoupon = async (req, res) => {
         const response = helper.response({ message: res.__('inserted') });
         return res.status(response.statusCode).json(response);
 
-    } catch (err) {
+    /*} catch (err) {
         if (err[0] != undefined) {
             for (i in err.errors) {
                 return res.status(422).json(err.errors[i].message);
@@ -417,7 +416,7 @@ exports.createCoupon = async (req, res) => {
         } else {
             return res.status(422).json(err);
         }
-    }
+    }*/
 
 };
 

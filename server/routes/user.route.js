@@ -85,11 +85,11 @@ router.get('/delivery/time', (req, res) => {
   profilecontroller.listDeliveryTime(req, res);
 });
 
-router.get('/coupon', (req, res) => {
+router.get('/coupon', middleware.user, (req, res) => {
   profilecontroller.listCoupon(req, res);
 });
 
-router.post('/coupon', function(req, res){
+router.post('/coupon', middleware.user, function(req, res){
   profilecontroller.createCoupon(req, res);
 });
 
