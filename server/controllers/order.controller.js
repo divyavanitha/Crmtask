@@ -10,7 +10,7 @@ const _ = require('lodash');
 exports.listcart = async (req, res) => {
     try {
 
-        let carts = await db._get(Cart, {}, {}, { populate: [ { path: "gig", populate: { path: 'category', model: 'category' }, populate: { path: 'subCategory', model: 'subCategory' } } ] });
+        let carts = await db._get(Cart, {}, {}, { populate: [ { path: "gig", populate:[{path: "category", model: "category"}, {path: "subCategory", model: "SubCategory"}] }, "Package" ] } );
 
         const data = { carts };
 
