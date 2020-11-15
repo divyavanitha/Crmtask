@@ -81,7 +81,7 @@ let users = []
 
 async function seed() {
 	
-	/*async.each(countries_data, function iteratee(country, next) {
+	async.each(countries_data, function iteratee(country, next) {
 		countries.push(  new Country({_id: country.id, name: country.name, countryCode: country.sortname, phoneCode: country.name, currency: country.name})  )
 	})
 	
@@ -103,23 +103,28 @@ async function seed() {
 
 	await City.deleteMany({}).then(function(){  }).catch(function(error){  console.log(error) }); 
 
-	await City.insertMany(cities).then(function(){  console.log("City Seeded.") }).catch(function(error){  console.log(error); process.exit();  }); */
+	await City.insertMany(cities).then(function(){  console.log("City Seeded.") }).catch(function(error){  console.log(error); process.exit();  }); 
 
 	await async.each(role_data, async function iteratee(role, next) {
+
 		let permissionList = [];
-		let existingPermission = [];
 
 		for(let permission of role.permission) {
 
-			if(!existingPermission.includes(permission.name)) {
+			let data;
 
-				let data =  new Permission({name: permission.name, resource: permission.resource }) ;
-				permissionList.push({permission: data._id })
+			if( permissions.find(p => p.name == permission.name) ) {
+				data = permissions.find(p => p.name == permission.name) ;
+			} else {
+				data =  new Permission({name: permission.name, resource: permission.resource }) ;
 				permissions.push(data)
-				existingPermission.push(permission.name);
-
 			}
+			
+			permissionList.push({permission: data._id })
+			
+	
 		}
+
 		let roleData = new Role({ name: role.name, permissions: permissionList })
 		roleList.push({role: roleData._id  })
 		roles.push(  roleData  )
@@ -132,7 +137,7 @@ async function seed() {
 		await admins.push(  new Admin({name: admin.name, email: admin.email, password: admin.password, roles: roleList })  )
 	})
 
-	/*await async.each(categories_data, async function iteratee(category, next) {
+	await async.each(categories_data, async function iteratee(category, next) {
 
 		let categoryData = new Category({name: category.name }) ;
 		categories.push( categoryData )
@@ -183,14 +188,14 @@ async function seed() {
 		const salt = await bcrypt.genSalt(10);
 	    user.password = await bcrypt.hash(user.password, salt);
 		await users.push(  new User({firstName: user.firstName, lastName: user.lastName, email: user.email, mobile: user.mobile, password: user.password })  )
-	}) */
+	})
 
 
 	await Admin.deleteMany({}).then(function(){  }).catch(function(error){  console.log(error) }); 
 
 	await Admin.insertMany(admins).then(function(){  console.log("Admin Seeded."); }).catch(function(error){  console.log(error); process.exit();  }); 
 
-	/*await Category.deleteMany({}).then(function(){  }).catch(function(error){  console.log(error) }); 
+	await Category.deleteMany({}).then(function(){  }).catch(function(error){  console.log(error) }); 
 	
 	await Category.insertMany(categories).then(function(){  console.log("Categories Seeded."); }).catch(function(error){  console.log(error); process.exit();  }); 
 	
@@ -232,7 +237,7 @@ async function seed() {
 
 	await Setting.deleteMany({}).then(function(){  }).catch(function(error){  console.log(error) }); 
 
-	await Setting.create(settings_data).then(function(){  console.log("Setting Seeded.") }).catch(function(error){  console.log(error); process.exit();  });*/
+	await Setting.create(settings_data).then(function(){  console.log("Setting Seeded.") }).catch(function(error){  console.log(error); process.exit();  });
 
 	await Role.deleteMany({}).then(function(){  }).catch(function(error){  console.log(error) }); 
 

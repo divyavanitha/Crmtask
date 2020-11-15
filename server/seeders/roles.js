@@ -6,7 +6,8 @@ module.exports = [
       	{ name: "administrator:create", resource: ["administrator"] },
       	{ name: "administrator:edit", resource: ["administrator"] },
       	{ name: "administrator:delete", resource: ["administrator"] },
-      	{ name: "administrator:status", resource: ["administrator"] }
+      	{ name: "administrator:status", resource: ["administrator"] },
+            { name: "permissions", resource: ["permissions"] }
 
       ] },
       { name: "user", permission: [
