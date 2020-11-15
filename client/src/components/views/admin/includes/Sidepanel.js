@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Can from "../../../../components/Can";
 import { Link } from "react-router-dom";
 
 const Sidepanel = () => {
@@ -34,9 +35,11 @@ const Sidepanel = () => {
                     </div>
                     <div id="main-menu" className="main-menu collapse navbar-collapse">
                         <ul className="nav navbar-nav">
-                            <li>
-                                <Link to="/admin/dashboard"> <i className="menu-icon fa fa-dashboard"></i>Dashboard </Link>
-                            </li>
+                            <Can permission="dashboard">
+                                <li>
+                                    <Link to="/admin/dashboard"> <i className="menu-icon fa fa-dashboard"></i>Dashboard </Link>
+                                </li>
+                            </Can>
 
                             <li>
                                 <Link to="/admin/request"> <i className="menu-icon fa fa-table"></i>Proposals/Services <span className="badge badge-success">18</span> </Link>
@@ -120,6 +123,10 @@ const Sidepanel = () => {
                             <li>
                                 <Link to="/admin/user"> <i className="menu-icon fa fa-users"></i>Users </Link>
                             </li>
+
+                            <Can permission="administrator:list"><li>
+                                <Link to="/admin/admininstrator"> <i className="menu-icon fa fa-users"></i>Admininstrators </Link>
+                            </li></Can>
 
                             <li className="menu-item-has-children dropdown">
                                 <a className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

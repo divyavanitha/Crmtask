@@ -35,6 +35,8 @@ import AddPackage from "../packages/AddPackage";
 import Package from "../packages/Package";
 import AddPage from "../pages/AddPage";
 import Page from "../pages/Page";
+import AddAdmin from "../admin/AddAdmin";
+import Admin from "../admin/Admin";
 import AddUser from "../users/AddUser";
 import User from "../users/User";
 import Request from "../requests/Request";
@@ -108,6 +110,9 @@ const Base = () => {
             <Route path="/admin/page/add" component={AddPage}></Route>
             <Route path="/admin/page/:id/edit" component={AddPage}></Route>
             <Route path="/admin/page" component={Page}></Route>
+            <Route path="/admin/admininstrator/add" component={AddAdmin}></Route>
+            <Route path="/admin/admininstrator/:id/edit" component={AddAdmin}></Route>
+            <Route path="/admin/admininstrator" component={Admin}></Route>
             <Route path="/admin/user/add" component={AddUser}></Route>
             <Route path="/admin/user/:id/edit" component={AddUser}></Route>
             <Route path="/admin/user" component={User}></Route>

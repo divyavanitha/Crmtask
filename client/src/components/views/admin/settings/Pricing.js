@@ -5,7 +5,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useToasts } from 'react-toast-notifications'
 
-import { getSetting, updateGeneralSetting } from "../../../../_actions/admin/setting.action";
+import { getSetting, updatePricingSetting } from "../../../../_actions/admin/setting.action";
 
 const GigSetting = (props) => {
     const { addToast } = useToasts()
@@ -19,7 +19,7 @@ const GigSetting = (props) => {
 
     const settings = useSelector(state => state);
 
-    const site = settings && settings.adminsettings && settings.adminsettings.setting && settings.adminsettings.setting.site;
+    const pricing = settings && settings.adminsettings && settings.adminsettings.setting && settings.adminsettings.setting.pricing;
 
     return (
 
@@ -27,46 +27,30 @@ const GigSetting = (props) => {
 
             enableReinitialize
             initialValues={{
-                title: site ? site.title : '',
-                description: site ? site.description : '',
-                logo: '',
-                favicon: '',
-                mobile: site ? site.mobile : '',
-                email: site ? site.email : '',
-                copyright: site ? site.copyright : ''
+                commission_level_one: pricing ? pricing.commissionLevelOne : '',
+                commission_level_two: pricing ? pricing.commissionLevelTwo : '',
+                commission_top_rated: pricing ? pricing.commissionTopRated : '',
+                commission: pricing ? pricing.commission : '',
 
             }
             }
 
             validationSchema={Yup.object().shape({
-                title: Yup.string().required('Title is required'),
-                description: Yup.string().required('Description is required'),
-                mobile: Yup.string().required('Mobile Number is required'),
-                email: Yup.string().required('Email Address is required'),
-                copyright: Yup.string().required('Copyright content is required')
+                commission_level_one: Yup.string().required('Commission Level One is required'),
+                commission_level_two: Yup.string().required('Commission Level Two is required'),
+                commission_top_rated: Yup.string().required('Commission Top Rated" is required'),
+                commission: Yup.string().required('Commission is required')
             })}
             onSubmit={(values, { setSubmitting }) => {
 
-                /* let data = {
-                    title: values.title,
-                    description: values.description,
-                    logo: values.logo,
-                    favicon: values.favicon,
-                    mobile: values.mobile,
-                    email: values.email,
-                    copyright: values.copyright
-                }; */
+                let data = {
+                    commission_level_one: values.commission_level_one,
+                    commission_level_two: values.commission_level_two,
+                    commission_top_rated: values.commission_top_rated,
+                    commission: values.commission
+                };
 
-                const data = new FormData();
-                data.append( "title", values.title );
-                data.append( "description", values.description );
-                data.append( "logo", values.logo );
-                data.append( "favicon", values.favicon );
-                data.append( "mobile", values.mobile );
-                data.append( "email", values.email );
-                data.append( "copyright", values.copyright );
-
-                dispatch(updateGeneralSetting(data)).then(res => {
+                dispatch(updatePricingSetting(data)).then(res => {
                     addToast(res.message, { appearance: res.status, autoDismiss: true, })
                 })
 
@@ -119,33 +103,32 @@ const GigSetting = (props) => {
                                         <div className="addFormBox">
                                             <form onSubmit={handleSubmit} encType="multipart/form-data">
 
-
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Commission % For New Seller : </label>
                                                     <div className="col-md-6">
-                                                        <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
-                                                        <ErrorMessage name="title" component="div" className="invalid-feedback" />
+                                                        <Field type="text" id="commission_level_one" name="commission_level_one" value={values.commission_level_one} onChange={handleChange} maxLength={100} placeholder="Commission % For New Seller" className={'form-control' + (errors.commission_level_one && touched.commission_level_one ? ' is-invalid' : '')} />
+                                                        <ErrorMessage name="commission_level_one" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Commission % For Level One : </label>
                                                     <div className="col-md-6">
-                                                        <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
-                                                        <ErrorMessage name="title" component="div" className="invalid-feedback" />
+                                                        <Field type="text" id="commission_level_two" name="commission_level_two" value={values.commission_level_two} onChange={handleChange} maxLength={100} placeholder="Commission % For Level One" className={'form-control' + (errors.commission_level_two && touched.commission_level_two ? ' is-invalid' : '')} />
+                                                        <ErrorMessage name="commission_level_two" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Commission % For Level Two : </label>
                                                     <div className="col-md-6">
-                                                        <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
-                                                        <ErrorMessage name="title" component="div" className="invalid-feedback" />
+                                                        <Field type="text" id="commission_top_rated" name="commission_top_rated" value={values.commission_top_rated} onChange={handleChange} maxLength={100} placeholder="Commission % For Level Two" className={'form-control' + (errors.commission_top_rated && touched.commission_top_rated ? ' is-invalid' : '')} />
+                                                        <ErrorMessage name="commission_top_rated" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Commission % For Top Rated : </label>
                                                     <div className="col-md-6">
-                                                        <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
-                                                        <ErrorMessage name="title" component="div" className="invalid-feedback" />
+                                                        <Field type="text" id="commission" name="commission" value={values.commission} onChange={handleChange} maxLength={100} placeholder="Commission % For Top Rated" className={'form-control' + (errors.commission && touched.commission ? ' is-invalid' : '')} />
+                                                        <ErrorMessage name="commission" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
 

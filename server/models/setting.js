@@ -142,6 +142,94 @@ const settingSchema = mongoose.Schema({
             }
          }]
      }],
+    application: {
+        manualApproval: {
+             type: Boolean,
+             default: false
+        },
+        editApproval: {
+             type: Boolean,
+             default: false
+        },
+        manualBuyerRequestApproval: {
+             type: Boolean,
+             default: false
+        },
+        referGig: {
+             type: Boolean,
+             default: false
+        }
+    },
+    seller: {
+        levelOneRating: {
+            type: Number,
+            required: true
+        },
+        levelOneCompletedOrder: {
+            type: Number,
+            required: true
+        },
+        levelTwoRating: {
+            type: Number,
+            required: true
+        },
+        levelTwoCompletedOrder: {
+            type: Number,
+            required: true
+        },
+        topRatedRating: {
+            type: Number,
+            required: true
+        },
+        topRatedCompletedOrder: {
+            type: Number,
+            required: true
+        }
+    },
+    gig: {
+        minimumWithdrawalPeriod: {
+            type: Number,
+            required: true
+        },
+        minimumGigPrice: {
+            type: Number,
+            required: true
+        },
+        minimumWithdrawalLimit: {
+            type: Number,
+            required: true
+        },
+        featuredGigPrice: {
+            type: Number,
+            required: true
+        },
+        featuredGigDuration: {
+            type: Number,
+            required: true
+        },
+        processingFee: {
+            type: Number,
+            required: true
+        }
+    },
+    pricing: {
+        commissionLevelOne: {
+            type: Number,
+            required: true
+        },
+        commissionLevelTwo: {
+            type: Number,
+            required: true
+        },
+        commissionTopRated: {
+            type: Number,
+            required: true
+        },
+        commission: {
+            type: Number,
+            required: true
+        }
+    },
     createdAt: {
         type: Date,
         default: Date.now

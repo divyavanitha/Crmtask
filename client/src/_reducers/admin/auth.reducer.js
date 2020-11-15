@@ -1,8 +1,9 @@
-import { ADMIN_USER, LOG_OUT } from "../../_actions/admin/types";
+import { ADMIN_USER, LOG_OUT, RBA } from "../../_actions/admin/types";
 
 const intialState = {
   isAuthenticated: false,
   admin: {},
+  permissions: {},
   users: []
 };
 
@@ -14,6 +15,11 @@ const adminReducer = (state = intialState, action) => {
         ...state,
         isAuthenticated: (action.payload !== "") ? true : false,
         admin: action.payload
+      };
+    case RBA:
+      return {
+        ...state,
+        permissions: action.payload
       };
     case LOG_OUT:
       localStorage.clear('admin_token');

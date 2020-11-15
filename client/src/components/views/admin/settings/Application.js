@@ -5,7 +5,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useToasts } from 'react-toast-notifications'
 
-import { getSetting, updateGeneralSetting } from "../../../../_actions/admin/setting.action";
+import { getSetting, updateApplicationSetting } from "../../../../_actions/admin/setting.action";
 
 const Application = (props) => {
     const { addToast } = useToasts()
@@ -19,7 +19,7 @@ const Application = (props) => {
 
     const settings = useSelector(state => state);
 
-    const site = settings && settings.adminsettings && settings.adminsettings.setting && settings.adminsettings.setting.site;
+    const application = settings && settings.adminsettings && settings.adminsettings.setting && settings.adminsettings.setting.application;
 
     return (
 
@@ -27,46 +27,30 @@ const Application = (props) => {
 
             enableReinitialize
             initialValues={{
-                title: site ? site.title : '',
-                description: site ? site.description : '',
-                logo: '',
-                favicon: '',
-                mobile: site ? site.mobile : '',
-                email: site ? site.email : '',
-                copyright: site ? site.copyright : ''
+                manual_approval: application ? application.manualApproval : '',
+                edit_approval: application ? application.editApproval : '',
+                manual_buyer_request_approval: application ? application.manualBuyerRequestApproval : '',
+                refer_gig: application ? application.referGig : ''
 
             }
             }
 
             validationSchema={Yup.object().shape({
-                title: Yup.string().required('Title is required'),
-                description: Yup.string().required('Description is required'),
-                mobile: Yup.string().required('Mobile Number is required'),
-                email: Yup.string().required('Email Address is required'),
-                copyright: Yup.string().required('Copyright content is required')
+                manual_approval: Yup.string().required('Manual Approval is required'),
+                edit_approval: Yup.string().required('Edit Approval is required'),
+                manual_buyer_request_approval: Yup.string().required('Manual Buyer Request Approval is required'),
+                refer_gig: Yup.string().required('Refer Gig is required')
             })}
             onSubmit={(values, { setSubmitting }) => {
 
-                /* let data = {
-                    title: values.title,
-                    description: values.description,
-                    logo: values.logo,
-                    favicon: values.favicon,
-                    mobile: values.mobile,
-                    email: values.email,
-                    copyright: values.copyright
-                }; */
+                let data = {
+                    manual_approval: values.manual_approval,
+                    edit_approval: values.edit_approval,
+                    manual_buyer_request_approval: values.manual_buyer_request_approval,
+                    refer_gig: values.refer_gig
+                };
 
-                const data = new FormData();
-                data.append( "title", values.title );
-                data.append( "description", values.description );
-                data.append( "logo", values.logo );
-                data.append( "favicon", values.favicon );
-                data.append( "mobile", values.mobile );
-                data.append( "email", values.email );
-                data.append( "copyright", values.copyright );
-
-                dispatch(updateGeneralSetting(data)).then(res => {
+                dispatch(updateApplicationSetting(data)).then(res => {
                     addToast(res.message, { appearance: res.status, autoDismiss: true, })
                 })
 
@@ -122,41 +106,41 @@ const Application = (props) => {
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Manually Gig Approvals : </label>
                                                     <div className="col-md-6">
-                                                        <Field as="select" id="category" name="category" onChange={handleChange} className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} >
-                                                        <option value="1">Yes</option>
-                                                        <option value="0">No</option>
+                                                        <Field as="select" id="manual_approval" name="manual_approval" value={values.manual_approval} onChange={handleChange} className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} >
+                                                        <option value="true">Yes</option>
+                                                        <option value="false">No</option>
                                                         </Field>
-                                                        <ErrorMessage name="category" component="div" className="invalid-feedback" />
+                                                        <ErrorMessage name="manual_approval" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Enable edited proposals to be submitted for approval : </label>
                                                     <div className="col-md-6">
-                                                        <Field as="select" id="category" name="category" onChange={handleChange} className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} >
-                                                        <option value="1">Yes</option>
-                                                        <option value="0">No</option>
+                                                        <Field as="select" id="edit_approval" name="edit_approval" value={values.edit_approval}  onChange={handleChange} className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} >
+                                                        <option value="true">Yes</option>
+                                                        <option value="false">No</option>
                                                         </Field>
-                                                        <ErrorMessage name="category" component="div" className="invalid-feedback" />
+                                                        <ErrorMessage name="edit_approval" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Manual buyer request approval : </label>
                                                     <div className="col-md-6">
-                                                        <Field as="select" id="category" name="category" onChange={handleChange} className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} >
-                                                        <option value="1">Yes</option>
-                                                        <option value="0">No</option>
+                                                        <Field as="select" id="manual_buyer_request_approval" name="manual_buyer_request_approval" value={values.manual_buyer_request_approval}  onChange={handleChange} className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} >
+                                                        <option value="true">Yes</option>
+                                                        <option value="false">No</option>
                                                         </Field>
-                                                        <ErrorMessage name="category" component="div" className="invalid-feedback" />
+                                                        <ErrorMessage name="manual_buyer_request_approval" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Referral in Gigs : </label>
                                                     <div className="col-md-6">
-                                                        <Field as="select" id="category" name="category" onChange={handleChange} className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} >
-                                                        <option value="1">Yes</option>
-                                                        <option value="0">No</option>
+                                                        <Field as="select" id="refer_gig" name="refer_gig" value={values.refer_gig}  onChange={handleChange} className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} >
+                                                        <option value="true">Yes</option>
+                                                        <option value="false">No</option>
                                                         </Field>
-                                                        <ErrorMessage name="category" component="div" className="invalid-feedback" />
+                                                        <ErrorMessage name="refer_gig" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
 

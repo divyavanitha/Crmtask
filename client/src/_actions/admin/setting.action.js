@@ -84,3 +84,51 @@ export const updatePaymentSetting = (data) => async dispatch => {
         return e.response.data;
     }
 };
+
+export const updateApplicationSetting = (data) => async dispatch => {
+    try {
+        let response = await axios.post('/api/admin/settings/application', data);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        return e.response.data;
+    }
+};
+
+export const updateSellerSetting = (data) => async dispatch => {
+    try {
+        let response = await axios.post('/api/admin/settings/seller', data);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        return e.response.data;
+    }
+};
+
+export const updateGigSetting = (data) => async dispatch => {
+    try {
+        let response = await axios.post('/api/admin/settings/gig', data);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        return e.response.data;
+    }
+};
+
+export const updatePricingSetting = (data) => async dispatch => {
+    try {
+        let response = await axios.post('/api/admin/settings/pricing', data);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        return e.response.data;
+    }
+};

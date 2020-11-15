@@ -62,7 +62,7 @@ exports.creategigs = async (req, res) => {
 
     const schema = Joi.object().options({ abortEarly: false }).keys({
         title: Joi.string().required().label("Title"),
-        category_id: Joi.string().required().label("Category Id"),
+        //category_id: Joi.string().required().label("Category Id"),
         sub_category_id: Joi.string().required().label("Sub Category Id"),
         tags: Joi.string().required().label("Tags")
 
@@ -90,7 +90,7 @@ exports.creategigs = async (req, res) => {
         let data = {
                 user: req.user._id,
                 title: req.body.title,
-                category: req.body.category_id,
+                category: req.body.sub_category_id,
                 subCategory: req.body.sub_category_id,
                 tags: req.body.tags
             }

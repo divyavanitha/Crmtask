@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cookieParser = require("cookie-parser");
+var session = require('express-session');
 const socketio = require('socket.io');
 const Log = new (require('./config/winston'));
 const i18n = require('i18n');
@@ -47,6 +48,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(session( { secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: true } ));
 
 mongoose.connect(process.env.DATABASE, { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true, useCreateIndex: true })
     .then(() => console.log('Connected to MongoDb...'))

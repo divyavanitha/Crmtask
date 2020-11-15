@@ -3,6 +3,7 @@ const async = require("async");
 const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
 
+const role_data = require('./seeders/roles');
 const admin_data = require('./seeders/admin');
 const countries_data = require('./seeders/countries');
 const states_data = require('./seeders/states');
@@ -18,6 +19,8 @@ const settings_data = require('./seeders/settings');
 
 const Schema = mongoose.Schema;
 
+const { Role } = require('./models/Role');
+const { Permission } = require('./models/Permission');
 const { Admin } = require('./models/admin');
 const { Country } = require('./models/country');
 const { State } = require('./models/state');
@@ -41,6 +44,11 @@ mongoose.connect(process.env.DATABASE, {
     useCreateIndex: true, 
     useUnifiedTopology: true
 }).then().catch((e) => console.log('Connection Failure...', e));
+
+let permissions = []
+
+let roles = []
+let roleList = [];
 
 let admins = []
 
@@ -73,7 +81,7 @@ let users = []
 
 async function seed() {
 	
-	async.each(countries_data, function iteratee(country, next) {
+	/*async.each(countries_data, function iteratee(country, next) {
 		countries.push(  new Country({_id: country.id, name: country.name, countryCode: country.sortname, phoneCode: country.name, currency: country.name})  )
 	})
 	
@@ -95,15 +103,36 @@ async function seed() {
 
 	await City.deleteMany({}).then(function(){  }).catch(function(error){  console.log(error) }); 
 
-	await City.insertMany(cities).then(function(){  console.log("City Seeded.") }).catch(function(error){  console.log(error); process.exit();  }); 
+	await City.insertMany(cities).then(function(){  console.log("City Seeded.") }).catch(function(error){  console.log(error); process.exit();  }); */
+
+	await async.each(role_data, async function iteratee(role, next) {
+		let permissionList = [];
+		let existingPermission = [];
+
+		for(let permission of role.permission) {
+
+			if(!existingPermission.includes(permission.name)) {
+
+				let data =  new Permission({name: permission.name, resource: permission.resource }) ;
+				permissionList.push({permission: data._id })
+				permissions.push(data)
+				existingPermission.push(permission.name);
+
+			}
+		}
+		let roleData = new Role({ name: role.name, permissions: permissionList })
+		roleList.push({role: roleData._id  })
+		roles.push(  roleData  )
+	})
 
 	await async.each(admin_data, async function iteratee(admin, next) {
 		const salt = await bcrypt.genSalt(10);
 	    admin.password = await bcrypt.hash(admin.password, salt);
-		await admins.push(  new Admin({name: admin.name, email: admin.email, password: admin.password })  )
+
+		await admins.push(  new Admin({name: admin.name, email: admin.email, password: admin.password, roles: roleList })  )
 	})
 
-	await async.each(categories_data, async function iteratee(category, next) {
+	/*await async.each(categories_data, async function iteratee(category, next) {
 
 		let categoryData = new Category({name: category.name }) ;
 		categories.push( categoryData )
@@ -154,14 +183,14 @@ async function seed() {
 		const salt = await bcrypt.genSalt(10);
 	    user.password = await bcrypt.hash(user.password, salt);
 		await users.push(  new User({firstName: user.firstName, lastName: user.lastName, email: user.email, mobile: user.mobile, password: user.password })  )
-	})
+	}) */
 
 
 	await Admin.deleteMany({}).then(function(){  }).catch(function(error){  console.log(error) }); 
 
 	await Admin.insertMany(admins).then(function(){  console.log("Admin Seeded."); }).catch(function(error){  console.log(error); process.exit();  }); 
 
-	await Category.deleteMany({}).then(function(){  }).catch(function(error){  console.log(error) }); 
+	/*await Category.deleteMany({}).then(function(){  }).catch(function(error){  console.log(error) }); 
 	
 	await Category.insertMany(categories).then(function(){  console.log("Categories Seeded."); }).catch(function(error){  console.log(error); process.exit();  }); 
 	
@@ -203,7 +232,15 @@ async function seed() {
 
 	await Setting.deleteMany({}).then(function(){  }).catch(function(error){  console.log(error) }); 
 
-	await Setting.create(settings_data).then(function(){  console.log("Setting Seeded.") }).catch(function(error){  console.log(error); process.exit();  });
+	await Setting.create(settings_data).then(function(){  console.log("Setting Seeded.") }).catch(function(error){  console.log(error); process.exit();  });*/
+
+	await Role.deleteMany({}).then(function(){  }).catch(function(error){  console.log(error) }); 
+
+	await Role.insertMany(roles).then(function(){  console.log("Role Seeded."); }).catch(function(error){  console.log(error); process.exit();  }); 
+
+	await Permission.deleteMany({}).then(function(){  }).catch(function(error){  console.log(error) }); 
+
+	await Permission.insertMany(permissions).then(function(){  console.log("Permission Seeded."); }).catch(function(error){  console.log(error); process.exit();  }); 
 
 	process.exit();
 

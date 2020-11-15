@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 const Joi = require('@hapi/joi');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -18,11 +19,9 @@ const adminSchema = mongoose.Schema({
         trim: true,
         unique: true
     },
-    role: {
-        type: String,
-        default: "admin",
-        enum: ["admin", "demo"]
-      },
+    roles: [{
+        role: { type: Schema.Types.ObjectId, ref: 'roles' }
+    }],
     password: {
         type: String,
         required: true,

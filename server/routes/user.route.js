@@ -106,10 +106,10 @@ router.get('/package', (req, res) => {
 });
 
 /*Gig*/
-router.get('/list/gigs', (req, res) => {
+router.get('/list/gigs', middleware.user, (req, res) => {
   gigController.withoutAuthgigs(req, res);
 });
-router.get('/get/gig/details/:id', (req, res) => {
+router.get('/get/gig/details/:id', middleware.user, (req, res) => {
   gigController.getGigDetails(req, res);
 });
 router.get('/gigs', middleware.user, (req, res) => {

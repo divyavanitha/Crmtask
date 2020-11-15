@@ -74,5 +74,33 @@ module.exports = [{
             "name": "currency",
             'value': ""
          }]
-     }]
+     }],
+    "application": {
+        "manualApproval": false,
+        "editApproval": false,
+        "manualBuyerRequestApproval": false,
+        "referGig": false
+    },
+    "seller": {
+        "levelOneRating": 70,
+        "levelOneCompletedOrder": 50,
+        "levelTwoRating": 50,
+        "levelTwoCompletedOrder": 30,
+        "topRatedRating": 95,
+        'topRatedCompletedOrder': 100
+    },
+    "gig": {
+        "minimumWithdrawalPeriod": 0,
+        "minimumGigPrice": 0,
+        'minimumWithdrawalLimit': 1,
+        "featuredGigPrice": 10,
+        "featuredGigDuration": 10,
+        "processingFee": 5
+    },
+    "pricing": {
+        "commissionLevelOne": 15,
+        "commissionLevelTwo": 10,
+        "commissionTopRated": 5,
+        "commission": 20
+    }
 }]

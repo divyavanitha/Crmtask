@@ -365,3 +365,203 @@ exports.updatePayment = async (req, res) => {
         }
     }
 }
+
+exports.updateApplication = async (req, res) => {
+
+    const schema = Joi.object().options({ abortEarly: false }).keys({
+        manual_approval: Joi.required().label("Manual Approval"),
+        edit_approval: Joi.required().label("Edit Approval"),
+        manual_buyer_request_approval: Joi.required().label("Manual Buyer Request Approval"),
+        refer_gig: Joi.required().label("Refer Gig") 
+    }).unknown(true);
+
+    const { error } = schema.validate(req.body);
+
+    let errorMessage = {};
+
+    if (error) {
+        error.details.forEach(err => {
+            errorMessage[err.context.key] = (err.message).replace(/"/g, "")
+        })
+    }
+
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
+
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
+
+    try {
+
+        let setting = await Setting.findOne();
+
+        setting.application.manualApproval =  req.body.manual_approval;
+        setting.application.editApproval =  req.body.edit_approval;
+        setting.application.manualBuyerRequestApproval =  req.body.manual_buyer_request_approval;
+        setting.application.referGig =  req.body.refer_gig;
+
+        await Setting.updateOne({}, setting, { new: true })
+
+        const response = helper.response({ message: res.__('updated') });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                return res.status(422).json(err.errors[i].message);
+            }
+        } else {
+            return res.status(422).json(err);
+        }
+    }
+}
+
+exports.updateSeller = async (req, res) => {
+
+    const schema = Joi.object().options({ abortEarly: false }).keys({
+        level_one_rating: Joi.string().required().label("Level One Rating"),
+        level_one_completed_order: Joi.string().required().label("Level One Completed Order"),
+        level_two_rating: Joi.string().required().label("Level Two Rating"),
+        level_two_completed_order: Joi.string().required().label("Level Two Completed Order"),
+        top_rated_rating: Joi.string().required().label("Top Rated Rating"),
+        top_rated_completed_order: Joi.string().required().label("Top Rated Completed Order")
+    }).unknown(true);
+
+    const { error } = schema.validate(req.body);
+
+    let errorMessage = {};
+
+    if (error) {
+        error.details.forEach(err => {
+            errorMessage[err.context.key] = (err.message).replace(/"/g, "")
+        })
+    }
+
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
+
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
+
+    try {
+
+        let setting = await Setting.findOne();
+
+        setting.seller.levelOneRating =  req.body.level_one_rating;
+        setting.seller.levelOneCompletedOrder =  req.body.level_one_completed_order;
+        setting.seller.levelTwoRating =  req.body.level_two_rating;
+        setting.seller.levelTwoCompletedOrder =  req.body.level_two_completed_order;
+        setting.seller.topRatedRating =  req.body.top_rated_rating;
+        setting.seller.topRatedCompletedOrder =  req.body.top_rated_completed_order;
+
+        await Setting.updateOne({}, setting, { new: true })
+
+        const response = helper.response({ message: res.__('updated') });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                return res.status(422).json(err.errors[i].message);
+            }
+        } else {
+            return res.status(422).json(err);
+        }
+    }
+}
+
+exports.updateGig = async (req, res) => {
+
+    const schema = Joi.object().options({ abortEarly: false }).keys({
+        minimum_withdrawal_period: Joi.string().required().label("Minimum Withdrawal Period"),
+        minimum_gig_price: Joi.string().required().label("Minimum Gig Price"),
+        minimum_withdrawal_limit: Joi.string().required().label("Minimum Withdrawal Limit"),
+        featured_gig_price: Joi.string().required().label("Featured Gig Price"),
+        featured_gig_duration: Joi.string().required().label("Featured Gig Duration"),
+        processing_fee: Joi.string().required().label("Processing Fee") 
+    }).unknown(true);
+
+    const { error } = schema.validate(req.body);
+
+    let errorMessage = {};
+
+    if (error) {
+        error.details.forEach(err => {
+            errorMessage[err.context.key] = (err.message).replace(/"/g, "")
+        })
+    }
+
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
+
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
+
+    try {
+
+        let setting = await Setting.findOne();
+
+        setting.gig.minimumWithdrawalPeriod =  req.body.minimum_withdrawal_period;
+        setting.gig.minimumGigPrice =  req.body.minimum_gig_price;
+        setting.gig.minimumWithdrawalLimit =  req.body.minimum_withdrawal_limit;
+        setting.gig.featuredGigPrice =  req.body.featured_gig_price;
+        setting.gig.featuredGigDuration =  req.body.featured_gig_duration;
+        setting.gig.processingFee =  req.body.processing_fee;
+
+        await Setting.updateOne({}, setting, { new: true })
+
+        const response = helper.response({ message: res.__('updated') });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                return res.status(422).json(err.errors[i].message);
+            }
+        } else {
+            return res.status(422).json(err);
+        }
+    }
+}
+
+exports.updatePricing = async (req, res) => {
+
+    const schema = Joi.object().options({ abortEarly: false }).keys({
+        commission_level_one: Joi.string().required().label("Commission Level One"),
+        commission_level_two: Joi.string().required().label("Commission Level Two"),
+        commission_top_rated: Joi.string().required().label("Commission Top Rated"),
+        commission: Joi.string().required().label("Commission") 
+    }).unknown(true);
+
+    const { error } = schema.validate(req.body);
+
+    let errorMessage = {};
+
+    if (error) {
+        error.details.forEach(err => {
+            errorMessage[err.context.key] = (err.message).replace(/"/g, "")
+        })
+    }
+
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
+
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
+
+    try {
+
+        let setting = await Setting.findOne();
+
+        setting.pricing.commissionLevelOne =  req.body.commission_level_one;
+        setting.pricing.commissionLevelTwo =  req.body.commission_level_two;
+        setting.pricing.commissionTopRated =  req.body.commission_top_rated;
+        setting.pricing.commission =  req.body.commission;
+
+        await Setting.updateOne({}, setting, { new: true })
+
+        const response = helper.response({ message: res.__('updated') });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                return res.status(422).json(err.errors[i].message);
+            }
+        } else {
+            return res.status(422).json(err);
+        }
+    }
+}

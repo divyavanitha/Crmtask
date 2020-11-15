@@ -20,39 +20,43 @@ const homeController = require('../controllers/home.controller');
 const userController = require('../controllers/admin/user.controller');
 const proposalController = require('../controllers/proposal.controller');
 
-
-router.post('/login',  async (req, res) => {
-    await adminController.adminAuth(req, res);
+router.post('/login', (req, res) => {
+    adminController.adminAuth(req, res);
 });
 
-router.post('/register', async (req, res) => {
-    await adminController.adminAuthRegister(req.body, "admin", res);
+router.post('/register', (req, res) => {
+    adminController.adminAuthRegister(req, res);
 });
 
-/*router.get('/user', [middleware.admin], (req, res) => {
-  adminController.getAllUser(req, res);
+router.post('/permissions', [middleware.admin], (req, res) => {
+  adminController.getPermissions(req, res);
 });
 
-router.post('/user', [middleware.admin], (req, res) => {
-  adminController.addUser(req, res);
-});*/
+router.get('/administrator', [middleware.admin], (req, res) => {
+  adminController.getAdministrators(req, res);
+});
+
+router.post('/administrator', (req, res) => {
+  adminController.addAdministrator(req, res);
+});
+
 
 router.get('/category', (req, res) => {
   categoryController.listcategory(req, res);
 });
-router.post('/category', function(req, res){
+router.post('/category', (req, res) => {
   categoryController.createcategory(req, res);
 });
-router.patch('/category', function(req, res){
+router.patch('/category', (req, res) => {
   categoryController.updateCategory(req, res);
 });
-router.delete('/category/:id', function(req, res){
+router.delete('/category/:id', (req, res) => {
   categoryController.deletecategory(req, res);
 });
-router.get('/get/category/:id', function(req, res){
+router.get('/get/category/:id', (req, res) => {
   categoryController.listcategorybyid(req, res);
 });
-router.get('/category/changestatus/:id/:status', function(req, res){
+router.get('/category/changestatus/:id/:status', (req, res) => {
   categoryController.changeStatus(req, res);
 });
 
@@ -60,19 +64,19 @@ router.get('/category/changestatus/:id/:status', function(req, res){
 router.get('/subcategory', (req, res) => {
   subcategoryController.listSubCategory(req, res);
 });
-router.post('/subcategory', function(req, res){
+router.post('/subcategory', (req, res) => {
   subcategoryController.createSubCategory(req, res);
 });
-router.patch('/subcategory', function(req, res){
+router.patch('/subcategory', (req, res) => {
   subcategoryController.updateSubCategory(req, res);
 });
-router.delete('/subcategory/:id', function(req, res){
+router.delete('/subcategory/:id', (req, res) => {
   subcategoryController.deleteSubCategory(req, res);
 });
-router.get('/get/subcategory/:id', function(req, res){
+router.get('/get/subcategory/:id', (req, res) => {
   subcategoryController.listSubCategorybyid(req, res);
 });
-router.get('/subcategory/changestatus/:id/:status', function(req, res){
+router.get('/subcategory/changestatus/:id/:status', (req, res) => {
   subcategoryController.changeStatus(req, res);
 });
 
@@ -80,16 +84,16 @@ router.get('/subcategory/changestatus/:id/:status', function(req, res){
 router.get('/skill', (req, res) => {
   skillController.listSkill(req, res);
 });
-router.post('/skill', function(req, res){
+router.post('/skill', (req, res) => {
   skillController.createSkill(req, res);
 });
-router.patch('/skill', function(req, res){
+router.patch('/skill', (req, res) => {
   skillController.updateSkill(req, res);
 });
-router.delete('/skill/:id', function(req, res){
+router.delete('/skill/:id', (req, res) => {
   skillController.deleteSkill(req, res);
 });
-router.get('/get/skill/:id', function(req, res){
+router.get('/get/skill/:id', (req, res) => {
   skillController.listSkillbyid(req, res);
 });
 
@@ -97,16 +101,16 @@ router.get('/get/skill/:id', function(req, res){
 router.get('/delivery/time', (req, res) => {
   deliveryTimeController.listDeliveryTime(req, res);
 });
-router.post('/delivery/time', function(req, res){
+router.post('/delivery/time', (req, res) => {
   deliveryTimeController.createDeliveryTime(req, res);
 });
-router.patch('/delivery/time', function(req, res){
+router.patch('/delivery/time', (req, res) => {
   deliveryTimeController.updateDeliveryTime(req, res);
 });
-router.delete('/delivery/time/:id', function(req, res){
+router.delete('/delivery/time/:id', (req, res) => {
   deliveryTimeController.deleteDeliveryTime(req, res);
 });
-router.get('/get/delivery/time/:id', function(req, res){
+router.get('/get/delivery/time/:id', (req, res) => {
   deliveryTimeController.listDeliveryTimebyid(req, res);
 });
 
@@ -114,16 +118,16 @@ router.get('/get/delivery/time/:id', function(req, res){
 router.get('/language', (req, res) => {
   languageController.listLanguage(req, res);
 });
-router.post('/language', function(req, res){
+router.post('/language', (req, res) => {
   languageController.createLanguage(req, res);
 });
-router.patch('/language', function(req, res){
+router.patch('/language', (req, res) => {
   languageController.updateLanguage(req, res);
 });
-router.delete('/language/:id', function(req, res){
+router.delete('/language/:id', (req, res) => {
   languageController.deleteLanguage(req, res);
 });
-router.get('/get/language/:id', function(req, res){
+router.get('/get/language/:id', (req, res) => {
   languageController.listLanguagebyid(req, res);
 });
 
@@ -131,123 +135,123 @@ router.get('/get/language/:id', function(req, res){
 router.get('/coupon', (req, res) => {
   couponController.listCoupon(req, res);
 });
-router.post('/coupon', function(req, res){
+router.post('/coupon', (req, res) => {
   couponController.createCoupon(req, res);
 });
-router.patch('/coupon', function(req, res){
+router.patch('/coupon', (req, res) => {
   couponController.updateCoupon(req, res);
 });
-router.delete('/coupon/:id', function(req, res){
+router.delete('/coupon/:id', (req, res) => {
   couponController.deleteCoupon(req, res);
 });
-router.get('/get/coupon/:id', function(req, res){
+router.get('/get/coupon/:id', (req, res) => {
   couponController.listCouponbyid(req, res);
 });
 
 router.get('/slide', (req, res) => {
   slideController.listSlide(req, res);
 });
-router.post('/slide', [middleware.upload( path.join(__dirname, '../storage/images/slide/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], function(req, res){
+router.post('/slide', [middleware.upload( path.join(__dirname, '../storage/images/slide/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], (req, res) => {
   console.log(req.files);
   slideController.createSlide(req, res);
 });
-router.patch('/slide', [middleware.upload( path.join(__dirname, '../storage/images/slide/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], function(req, res){
+router.patch('/slide', [middleware.upload( path.join(__dirname, '../storage/images/slide/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], (req, res) => {
   console.log(req.files);
   slideController.updateSlide(req, res);
 });
-router.delete('/slide/:id', function(req, res){
+router.delete('/slide/:id', (req, res) => {
   slideController.deleteSlide(req, res);
 });
-router.get('/get/slide/:id', function(req, res){
+router.get('/get/slide/:id', (req, res) => {
   slideController.listSlidebyid(req, res);
 });
-router.get('/slide/changestatus/:id/:status', function(req, res){
+router.get('/slide/changestatus/:id/:status', (req, res) => {
   slideController.changeStatus(req, res);
 });
 
 router.get('/menu', (req, res) => {
   menuController.listMenu(req, res);
 });
-router.post('/menu', [middleware.upload( path.join(__dirname, '../storage/images/menu/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], function(req, res){
+router.post('/menu', [middleware.upload( path.join(__dirname, '../storage/images/menu/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], (req, res) => {
   menuController.createMenu(req, res);
 });
-router.patch('/menu', [middleware.upload( path.join(__dirname, '../storage/images/menu/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], function(req, res){
+router.patch('/menu', [middleware.upload( path.join(__dirname, '../storage/images/menu/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], (req, res) => {
   menuController.updateMenu(req, res);
 });
-router.delete('/menu/:id', function(req, res){
+router.delete('/menu/:id', (req, res) => {
   menuController.deleteMenu(req, res);
 });
-router.get('/get/menu/:id', function(req, res){
+router.get('/get/menu/:id', (req, res) => {
   menuController.listMenubyid(req, res);
 });
-router.get('/menu/changestatus/:id/:status', function(req, res){
+router.get('/menu/changestatus/:id/:status', (req, res) => {
   menuController.changeStatus(req, res);
 });
 
 router.get('/package', (req, res) => {
   packageController.listPackage(req, res);
 });
-router.post('/package', function(req, res){
+router.post('/package', (req, res) => {
   packageController.createPackage(req, res);
 });
-router.patch('/package', function(req, res){
+router.patch('/package', (req, res) => {
   packageController.updatePackage(req, res);
 });
-router.delete('/package/:id', function(req, res){
+router.delete('/package/:id', (req, res) => {
   packageController.deletePackage(req, res);
 });
-router.get('/get/package/:id', function(req, res){
+router.get('/get/package/:id', (req, res) => {
   packageController.listPackagebyid(req, res);
 });
-router.get('/package/changestatus/:id/:status', function(req, res){
+router.get('/package/changestatus/:id/:status', (req, res) => {
   packageController.changeStatus(req, res);
 });
 
 router.get('/page', (req, res) => {
   pageController.listpage(req, res);
 });
-router.post('/page', function(req, res){
+router.post('/page', (req, res) => {
   pageController.createpage(req, res);
 });
-router.patch('/page', function(req, res){
+router.patch('/page', (req, res) => {
   pageController.updatePage(req, res);
 });
-router.delete('/page/:id', function(req, res){
+router.delete('/page/:id', (req, res) => {
   pageController.deletepage(req, res);
 });
-router.get('/get/page/:id', function(req, res){
+router.get('/get/page/:id', (req, res) => {
   pageController.listPagebyid(req, res);
 });
-router.get('/page/changestatus/:id/:status', function(req, res){
+router.get('/page/changestatus/:id/:status', (req, res) => {
   pageController.changeStatus(req, res);
 });
 
-router.get('/user', (req, res) => {
+router.get('/user/:id/id', (req, res) => {
   userController.listusers(req, res);
 });
-router.post('/user', function(req, res){
+router.post('/user', (req, res) => {
   userController.createuser(req, res);
 });
-router.patch('/user', function(req, res){
+router.patch('/user', (req, res) => {
   userController.updateuser(req, res);
 });
-router.delete('/user/:id', function(req, res){
+router.delete('/user/:id', (req, res) => {
   userController.deleteuser(req, res);
 });
-router.get('/get/user/:id', function(req, res){
+router.get('/get/user/:id', (req, res) => {
   userController.listuserbyid(req, res);
 });
-router.get('/user/changestatus/:id/:status', function(req, res){
+router.get('/user/changestatus/:id/:status', (req, res) => {
   userController.changeStatus(req, res);
 });
 
 router.get('/requests', (req, res) => {
   proposalController.listRequests(req, res);
 });
-router.delete('/request/:id', function(req, res){
+router.delete('/request/:id', (req, res) => {
   proposalController.deleteRequest(req, res);
 });
-router.get('/request/changestatus/:id/:status', function(req, res){
+router.get('/request/changestatus/:id/:status', (req, res) => {
   proposalController.changeStatus(req, res);
 });
 
@@ -260,28 +264,44 @@ router.post('/settings/general', [middleware.admin, middleware.uploadAs( path.jo
   settingController.updateGeneral(req, res);
 });
 
-router.post('/settings/social_links', [middleware.admin],  (req, res) => {
+router.post('/settings/social_links',  (req, res) => {
   settingController.updateSocialLink(req, res);
 });
 
-router.post('/settings/push', [middleware.admin],  (req, res) => {
+router.post('/settings/push',  (req, res) => {
   settingController.updatePush(req, res);
 });
 
-router.post('/settings/social', [middleware.admin],  (req, res) => {
+router.post('/settings/social',  (req, res) => {
   settingController.updateSocial(req, res);
 });
 
-router.post('/settings/sms', [middleware.admin],  (req, res) => {
+router.post('/settings/sms',  (req, res) => {
   settingController.updateSms(req, res);
 });
 
-router.post('/settings/mail', [middleware.admin],  (req, res) => {
+router.post('/settings/mail',  (req, res) => {
   settingController.updateMail(req, res);
 });
 
-router.post('/settings/payment', [middleware.admin],  (req, res) => {
+router.post('/settings/payment',  (req, res) => {
   settingController.updatePayment(req, res);
+});
+
+router.post('/settings/application',  (req, res) => {
+  settingController.updateApplication(req, res);
+});
+
+router.post('/settings/seller',  (req, res) => {
+  settingController.updateSeller(req, res);
+});
+
+router.post('/settings/gig',  (req, res) => {
+  settingController.updateGig(req, res);
+});
+
+router.post('/settings/pricing',  (req, res) => {
+  settingController.updatePricing(req, res);
 });
 
 
