@@ -8,9 +8,10 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from 'react-redux';
 import setToken from './components/utils/set_token';
 import jwt_decode from 'jwt-decode';
+import axios from "axios";
 
 import { AUTH_USER } from './_actions/types';
-import { ADMIN_USER } from './_actions/admin/types';
+import { ADMIN_USER, RBA } from './_actions/admin/types';
 import store from "./store.js";
 
 import "popper.js/dist/popper.js";
@@ -33,6 +34,13 @@ if (localStorage.admin_token) {
   setToken(localStorage.admin_token);
 
   const decoded = jwt_decode(localStorage.admin_token);
+
+  axios.post("/api/admin/permissions" ).then((response) => {
+    store.dispatch({
+      type: RBA,
+      payload: response.data.responseData
+    });
+  });
 
   store.dispatch({
     type: ADMIN_USER,

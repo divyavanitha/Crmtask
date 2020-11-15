@@ -1,5 +1,4 @@
 import { useSelector } from "react-redux";
-//import rules from "../rbac-rules";
 import jwt_decode from 'jwt-decode';
 
 export const check = (action, rules) => {
