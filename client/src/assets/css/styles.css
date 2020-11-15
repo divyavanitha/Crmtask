@@ -577,7 +577,7 @@ header .input-group {
 }
 
 .header-message-div .heading, .header-message-div-unread .heading {
-    font-weight: bold;
+    /* font-weight: bold; */
     position: relative;
     margin-left: 13px;
     top: -13px;
@@ -586,7 +586,7 @@ header .input-group {
 }
 
 .header-message-div .message, .header-message-div-unread .message {
-    font-size: 15px;
+    font-size: 14px;
     position: relative;
     margin-left: 55px;
     top: -28px;
