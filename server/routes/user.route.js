@@ -144,6 +144,9 @@ router.get('/gig/cart', middleware.user, function(req, res){
 router.post('/gig/cart', middleware.user, function(req, res){
   orderController.addcart(req, res);
 });
+router.patch('/update/cart', middleware.user, function(req, res){
+  orderController.updateCart(req, res);
+});
 router.delete('/gig/cart/:id', middleware.user, function(req, res){
   orderController.removecart(req, res);
 });

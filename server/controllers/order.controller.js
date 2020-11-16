@@ -73,6 +73,51 @@ exports.addcart = async (req, res) => {
 
 }
 
+exports.updateCart = async (req, res) => {
+
+     const schema = Joi.object().options({ abortEarly: false }).keys({
+        id: Joi.string().required().label("Cart Id"),
+        quantity: Joi.number().required().label("Quantity")
+
+    }).unknown(true);
+
+    const { error } = schema.validate(req.body);
+
+    let errorMessage = {};
+
+    if (error) {
+        error.details.forEach(err => {
+            errorMessage[err.context.key] = (err.message).replace(/"/g, "")
+        })
+    }
+
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
+
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
+
+    try {
+           
+            var cart = {
+                quantity: req.body.quantity
+            }
+
+        let carts= await db._update(Cart, { _id: req.body.id }, cart);
+
+         const response = helper.response({ message: res.__('updated') });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                return res.status(422).json(err.errors[i].message);
+            }
+        } else {
+            return res.status(422).json(err);
+        }
+    }
+
+}
+
 exports.removecart = async (req, res) => {
 
 	 try {
