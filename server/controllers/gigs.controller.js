@@ -24,10 +24,10 @@ exports.withoutAuthgigs = async (req, res) => {
 }
 
 exports.getGigDetails = async (req, res) => {
-    //try {
+    try {
 
-        //let gig = await db._find(Gig, {_id:req.params.id}, {}, {populate: [{path: 'user', populate: { path: 'country', model: 'Country' } } ]});
-        let gig = await db._find(Gig, {_id: req.params.id}, {}, { populate: [ { path: "user", populate: { path: 'country', model: 'Country' } } ] } );
+        //let gig = await db._find(Gig, {_id: req.params.id}, {}, { populate: [ { path: "user", populate: { path: 'country', model: 'Country' } } ] } );
+        let gig = await db._find(Gig, {_id: req.params.id}, {}, { populate: "user" });
 
 
         const data = { gig };
@@ -36,9 +36,25 @@ exports.getGigDetails = async (req, res) => {
 
         return res.status(response.statusCode).json(response);
 
-    /*} catch (err) {
+    } catch (err) {
         console.log(err);
-    }*/
+    }
+
+}
+exports.getPackage = async (req, res) => {
+    try {
+
+        let gig = await db._find(Gig, {_id: req.params.id});
+
+        const data = { gig };
+
+        const response = helper.response({ data: data });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
 
 }
 
@@ -144,21 +160,33 @@ exports.updatePricing = async(req, res) => {
         let gig = await Gig.findById(req.body.id);
 
         let pricing = [];
-
+console.log('gig',req.body);
         for(let i in req.body.price) {
-            let price = {
-                package: req.body.package_id[i],
-                description: req.body.description[i],
-                revisions: req.body.revisions[i],
-                price: req.body.price[i],
-                DeliveryTime: req.body.delivery_time_id[i]
+            if(req.body.fixed_price == 1){
+                var price = {
+                    //package: req.body.package_id[i],
+                    description: req.body.description[i],
+                    revisions: req.body.revisions[i],
+                    price: req.body.price[i],
+                    DeliveryTime: req.body.delivery_time_id[i],
+                    //fixed_price: 1
+                }
+            }else{
+                var price = {
+                    package: req.body.package_id[i],
+                    description: req.body.description[i],
+                    revisions: req.body.revisions[i],
+                    price: req.body.price[i],
+                    DeliveryTime: req.body.delivery_time_id[i],
+                    //fixed_price: 0
+                }
             }
             pricing.push(price);
         }
         
         if(pricing.length > 0) gig.pricing = pricing;
         gig.fixed_price = req.body.fixed_price;
-        console.log(pricing);
+        
         let gigs = await db._update(Gig, { _id: req.body.id }, gig);
 
         const response = helper.response({ message: res.__('updated'), data: gig });

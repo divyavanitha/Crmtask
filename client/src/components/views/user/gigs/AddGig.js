@@ -9,7 +9,7 @@ import { creategigs } from "../../../../_actions/gigs.action";
 import { getCategory, getSubCategory } from "../../../../_actions/user.action";
 
 const AddGig = (props) => {
-    //const { addToast } = useToasts()
+    //const { addToast } = useTasts()
     const dispatch = useDispatch();
 
     let history = useHistory();

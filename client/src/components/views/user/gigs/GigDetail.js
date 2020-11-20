@@ -1,24 +1,26 @@
 import React, { Fragment, useState } from 'react';
-import { withRouter, useParams, Link } from 'react-router-dom';
+import { withRouter, useParams, Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import "./Gig.css";
-import { getGigbyId } from "../../../../_actions/user.action";
-
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 import $ from 'jquery';
+import "./Gig.css";
+import { getGigbyId, createOrder, getPackage } from "../../../../_actions/user.action";
 
 import OwlCarousel from 'react-owl-carousel';
 
 
-function GigDetail() {
+const GigDetail = (props) =>  {
 
     const dispatch = useDispatch();
     const params = useParams();
+    let history = useHistory();
 
     useEffect(() => {
 
         dispatch(getGigbyId(params.gig))
-
+        dispatch(getPackage())
         var $input = $("input[name='quantity']");
 
         // Colocar a 0 ao início
@@ -31,9 +33,135 @@ function GigDetail() {
             else if ($input.val()>=1)
                 $input.val(parseInt($input.val())-1);
         });
+
+        //$("body").on("click", ".nav-link", function () {
+                //$(".body-sub-width").addClass("display-none");
+                /*$(".nav-link").removeClass("active");
+                var node_id = $(this).data('node-id');*/
+                console.log(params.gig);
+                
+            $.ajax({
+                url: "/api/gig/package/"+params.gig,
+                type: "get",
+                
+                /*processData: false,
+                contentType: false,
+                headers: {
+                    Authorization: "Bearer " + getToken(guard)
+                },*/
+                beforeSend: function (request) {
+                    //showInlineLoader();
+                },
+                success: function(response, textStatus, jqXHR) {
+                    
+                    var data = response.responseData.gig;
+                    console.log('gig',data);
+                    if(data.fixed_price == true){
+                        $(".tabs-header").hide();  
+                        $(".total-price-1").text(data.pricing[0].price);
+                        $("input[name=package_id]").val(data.pricing[0].package);
+                        $("input[name=price]").val(data.pricing[0].price);      
+                    }else{
+                        $(".tabs-header").show();   
+                        $("body").on("click", ".nav-link", function () {
+                        var node_id = $(this).data('node-id');
+                        /*$.each( data.pricing, function( key, value ) {
+
+                            var index = $.inArray( value, node_id );
+                            console.log('val',index);
+                            if( index != -1 ) {
+                                $(".total-price-1").text(value.price);
+                            }
+                        });*/
+                        if(node_id == "Basic"){
+                         $(".total-price-1").text(data.pricing[0].price);
+                         $("input[name=package_id]").val(data.pricing[0].package);
+                         $("input[name=price]").val(data.pricing[0].price);
+                        }else if(node_id == "Standard"){
+                         $(".total-price-1").text(data.pricing[1].price);
+                         $("input[name=package_id]").val(data.pricing[1].package);
+                         $("input[name=price]").val(data.pricing[1].price);
+                        }else{
+                         $(".total-price-1").text(data.pricing[2].price);  
+                         $("input[name=package_id]").val(data.pricing[2].package);
+                         $("input[name=price]").val(data.pricing[2].price);
+                        }
+                        });
+                    }
+                    
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    //
+                    
+                }
+      });
+
+           // });
     }, [params.gig]);
     const gig = useSelector((state) => state.user && state.user.gig_details && state.user.gig_details.responseData && state.user.gig_details.responseData.gig);
-    console.log('gig', gig);
+    const packages = useSelector(state => state.user && state.user.packages && state.user.packages.responseData && state.user.packages.responseData.packages);
+    //console.log('gig', gig);
+
+    return (
+
+        <Formik
+
+            enableReinitialize
+            initialValues={{
+                gig_id: params.gig,
+                price: '',
+                quantity: '1',
+                package_id: ''
+
+            }
+            }
+
+            validationSchema={Yup.object().shape({
+               /* title: Yup.string()
+                    .required('Title is required'),
+                sub_category_id: Yup.string()
+                    .required('Sub Category is required'),
+                tags: Yup.string()
+                    .required('Tags is required'),*/
+            })}
+            onSubmit={(values, { setSubmitting, resetForm }) => {
+                console.log('values', values);
+                let data = {
+                    gig_id: params.gig,
+                    total: $("input[name=price]").val(),
+                    quantity: values.quantity,
+                    package_id: values.package_id
+                };
+
+                /*if (params.id) {
+                    dispatch(updateCategory(data)).then(res => {
+                        addToast(res.message, { appearance: res.status, autoDismiss: true, })
+                        history.push('/admin/category/')
+                    })
+                } else {*/
+                    dispatch(createOrder(data)).then(res => {
+                      console.log('id',res.responseData._id);
+                      history.push('/gig/post/order/'+res.responseData._id)
+                        //addToast(res.message, { appearance: res.status, autoDismiss: true, })
+                    })
+                //}
+                resetForm();
+                setSubmitting(false);
+            }}>
+
+            {props => {
+                const {
+                    values,
+                    touched,
+                    errors,
+                    dirty,
+                    isSubmitting,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    handleReset,
+                    setFieldValue,
+                } = props;
 
     return (
 
@@ -309,66 +437,72 @@ function GigDetail() {
                         <div className="card mb-5 rounded-0 gigPlanType">
                             <div className="card-header pt-0 pl-3 tabs-header">
                                 <ul className="nav nav-tabs card-header-tabs rounded-0 justify-content-center">
-                                    <li className="nav-item">
-                                        <a className="nav-link  " href="#tab_2506" data-toggle="tab" formid="checkoutForm1">
-                                            Basic   </a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link   active" href="#tab_2507" data-toggle="tab" formid="checkoutForm2">
-                                            Standard    </a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link  " href="#tab_2508" data-toggle="tab" formid="checkoutForm3">
-                                            Advance   </a>
-                                    </li>
+                                    {packages && packages.map((pack, index) => (<li className="nav-item">
+                                        <a className="nav-link  " href="#tab_2506" data-toggle="tab" formid="checkoutForm1" data-node-id={pack.name}>
+                                            {pack.name}   </a>
+                                    </li>))}
+                                    
                                 </ul>
                             </div>
                             <div className="card-body order-box tab-content">
 
                                 <div className="purchase-form">
-                                    <form method="post" action="../../checkout" id="checkoutForm1" class="">
-                                        <input type="hidden" name="proposal_id" value="838" />
-                                        <input type="hidden" name="package_id" value="2506" />
-                                        <input type="hidden" name="proposal_qty" value="1" />
-                                        <h3>
-                                            Basic
-                          <span class="float-right font-weight-normal">
-                                                &#036;<span class='total-price-1'>40.00</span>
+                                    <form onSubmit={handleSubmit} encType="multipart/form-data">
+                                        <Field type="text" onChange={handleChange} name="gig_id" value={params.gig} />
+                                        <Field type="text" onChange={handleChange} name="package_id" required value="2506" />
+                                        <Field type="text" onChange={handleChange} name="price" value="1" />
+                                        <h3 className="package-price">
+                                            Price
+                                            <span className="float-right font-weight-normal">
+                                                &#036;<span className='total-price-1'>0</span>
                                             </span>
-                                            <span class="total-price-1-num d-none">40</span>
+                                            <span className="total-price-1-num d-none">40</span>
                                         </h3>
                                         <p>Post your song to my music website</p>
-                                        <h6 class="mb-3">
-                                            <i class="fa fa-clock-o"></i> 1 Days Delivery &nbsp; &nbsp; <i class="fa fa-refresh"></i> 0 Revisions
-                       </h6>
+                                        <h6 className="mb-3">
+                                            <i className="fa fa-clock-o"></i> 1 Days Delivery &nbsp; &nbsp; <i className="fa fa-refresh"></i> 0 Revisions
+                                        </h6>
                                         <hr />
-                                        <ul class="buyables m-b-25 list-unstyled ">
-                                            <li class="">
-                                                <label class="">
-                                                    <input class="mb-2" style={{ width: '15px', height: '15px' }} type="checkbox" name="proposal_extras[1]" data-packagenum="1" value="225" form="checkoutForm1" />
-                                                    <span class="js-express-delivery-text "> Radio airplay      </span>
-                                                    <span class='price '>
-                                                        <b class='currency'>&#036;50.00</b>
-                                                        <b class="num d-none">50</b>
+                                        <ul className="buyables m-b-25 list-unstyled ">
+                                             <li className="basket-item mb-4">
+                                                <span className="item "><span className="name"><span>Quantity:</span></span></span>
+                                                <div className="quantity-control ">
+                                                    <div className="increase ">
+                                                    <a className="btn btn-plus plus qnty">+</a>
+                                                    </div>
+                                                    <span className="quantity "><input onChange={handleChange} value={values.quantity} min="1" style={{width: '23px'}} name="quantity" /></span>
+                                                    <div className="decrease ">
+                                                    <a className="btn btn-plus minus qnty">-</a>
+                                                    </div>
+                                                </div>
+                                                {/* <!-- &#036;<span className="total-price">10</span>.00 --> */}
+                                            </li>
+                                            <li className="">
+                                                <label className="">
+                                                    <input className="mb-2" style={{ width: '15px', height: '15px' }} type="checkbox" name="proposal_extras[1]" data-packagenum="1" value="225" form="checkoutForm1" />
+                                                    <span className="js-express-delivery-text "> Radio airplay      </span>
+                                                    <span className='price '>
+                                                        <b className='currency'>&#036;50.00</b>
+                                                        <b className="num d-none">50</b>
                                                     </span>
                                                 </label>
                                             </li>
-                                            <li class="">
-                                                <label class="">
-                                                    <input class="mb-2" style={{ width: '15px', height: '15px' }} type="checkbox" name="proposal_extras[2]" data-packagenum="1" value="226" form="checkoutForm1" />
-                                                    <span class="js-express-delivery-text "> YouTube song posting      </span>
-                                                    <span class='price '>
-                                                        <b class='currency'>&#036;50.00</b>
-                                                        <b class="num d-none">50</b>
+                                            <li className="">
+                                                <label className="">
+                                                    <input className="mb-2" style={{ width: '15px', height: '15px' }} type="checkbox" name="proposal_extras[2]" data-packagenum="1" value="226" form="checkoutForm1" />
+                                                    <span className="js-express-delivery-text "> YouTube song posting      </span>
+                                                    <span className='price '>
+                                                        <b className='currency'>&#036;50.00</b>
+                                                        <b className="num d-none">50</b>
                                                     </span>
                                                 </label>
                                             </li>
                                         </ul>
-                                        <button type="button" class="btn btn-order primary added mb-3">
-                                            <i class="fa fa-shopping-cart"></i> &nbsp;<strong>Already Added</strong>
+                                        <button type="button" className="btn btn-order primary added mb-3">
+                                            <i className="fa fa-shopping-cart"></i> &nbsp;<strong>Add to cart</strong>
                                         </button>
-                                        <button type="submit" name="add_order" value="1" class="btn btn-order">
-                                            <strong>Order Now (&#036;<span class='total-price-1'>40.00</span>)</strong>
+                                        <button type="submit" name="add_order" value="1" className="btn btn-order">
+                                            <strong>Order Now (&#036;<span className='total-price-1'>0</span>)</strong>
                                         </button>
                                     </form>
                                     {/* <form encType="multipart/form-data">
@@ -486,9 +620,10 @@ function GigDetail() {
             </div>
 
 
-
         </Fragment >
+                );
+            }}
+        </Formik>
     );
-}
-
+};
 export default GigDetail;

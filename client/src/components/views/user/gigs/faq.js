@@ -5,6 +5,7 @@ import { Formik, Field, FieldArray, Form, ErrorMessage } from 'formik';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import * as Yup from 'yup';
+import $ from 'jquery';
 //import { useToasts } from 'react-toast-notifications'
 
 import { updateFaq } from "../../../../_actions/gigs.action";
@@ -17,7 +18,75 @@ const AddGig = (props) => {
     let history = useHistory();
     const params = useParams();
     useEffect(() => {
-        
+      
+    $(".insert").on("click", function(){
+      const data = new FormData();
+      data.append( "question", $("input[name='question']").val() );
+      data.append( "answer", $("input[name='answer']").val() );
+
+      $.ajax({
+        url: "/api/faq",
+        type: "post",
+        data: data,
+        /*processData: false,
+        contentType: false,
+        headers: {
+            Authorization: "Bearer " + getToken(guard)
+        },*/
+        beforeSend: function (request) {
+            //showInlineLoader();
+        },
+        success: function(response, textStatus, jqXHR) {
+            /*var data = parseData(response);
+            if (table != null) {
+            var info = $('#data-table').DataTable().page.info();
+            table.order([[ 0, 'asc' ]] ).draw( false );
+            }
+
+            $(".crud-modal").modal("hide");
+            alertMessage("Success", data.message, "success");
+            hideInlineLoader();
+           
+            if(page!=undefined){
+                if(page=='/admin/dashboard'){
+                    if(data.responseData.length != 0){
+                        localStorage.setItem('admin', JSON.stringify(data.responseData));
+                    }
+                 }
+                 if(page=='store/order'){
+                    page = '/home/';
+                 }
+
+                setTimeout(function(){
+                    window.location.replace(page);
+                  }, 1000);
+            }*/
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            
+            /*if (jqXHR.status == 401 && getToken(guard) != null) {
+                refreshToken(guard);
+            } else if (jqXHR.status == 401) {
+                window.location.replace("/admin/login");
+            } else if (jqXHR.status == 403) {
+                window.location.replace("/access-denied");
+            }
+
+            if (jqXHR.responseJSON) {
+                if(page=='store/order'){
+                    $('.commentLength').html(jqXHR.responseJSON.message);
+                    hideInlineLoader();
+                    return false;
+                }else{
+                    alertMessage(textStatus, jqXHR.responseJSON.message, "danger");
+                    hideInlineLoader();
+                }
+            }*/
+            
+        }
+      });
+    });
+      
 
     }, [params.id]);
     
@@ -224,7 +293,7 @@ const AddGig = (props) => {
                               />
                          </div>
                          <div className="form-group mb-0">
-                            <button type="submit" className="btn btn-success btn-sm float-right">Insert</button>
+                            <button className="btn btn-success btn-sm float-right insert">Insert</button>
                             <div className="clearfix"></div>
                          </div>
                       </form>
@@ -237,7 +306,7 @@ const AddGig = (props) => {
              <div className="form-group mb-0">
                 {/* <!--- form-group Starts ---> */}
                 <a href="#" className="btn btn-secondary float-left backButton">Back</a>
-                <button type="submit" className="btn btn-success mr-3 float-right">Save & Continue</button>
+                <button type="submit" className="btn btn-success mr-3 float-right ">Save & Continue</button>
              </div>
              {/* <!--- form-group Starts ---> */}
         </form>

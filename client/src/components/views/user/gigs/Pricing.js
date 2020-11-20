@@ -57,7 +57,7 @@ const Pricing = (props) => {
          delivery_times.push("");
          revisions.push("");
          prices.push("");
-         package_id.push("");
+         package_id.push(packages[i]._id);
       }
    }
    return (
@@ -78,6 +78,7 @@ const Pricing = (props) => {
          }
 
          /*validationSchema={Yup.object().shape({
+           
              delivery_timing_id: Yup.string()
                  .required('Delivery Time is required'),
              revisions: Yup.string()
@@ -179,7 +180,7 @@ const Pricing = (props) => {
                                     <div className="float-right switch-box">
                                        <span className="text">Fixed Price :</span>
                                        <label class='switch'>
-                                          <input type='checkbox' onChange={handleChange} value={values.fixed_price} name='fixed_price' />
+                                          <input type='checkbox' onClick={(e) => { setFieldValue(`fixed_price`, e.currentTarget.checked); }} value={values.fixed_price} name='fixed_price' />
                                           <span class='slider round'></span>
                                        </label>
                                     </div>
@@ -260,8 +261,8 @@ const Pricing = (props) => {
                                              <tr>
                                                 <th></th>
                                                 {packages && packages.map((pack, index) => (
-                                                   <th>{pack.name}
-                                                   <Field name={`package_id.${index}`} type="hidden" values={pack._id} className="form-control" />
+                                                   <th>{pack.name}              
+                                                   <Field name={`package_id.${index}`} onChange={handleChange} value={values.package_id} type="hidden"  className="form-control" />
                                                    </th>
                                                 ))}
                                              </tr>
@@ -269,8 +270,11 @@ const Pricing = (props) => {
                                           <tbody>
                                              <tr>
                                                 <td>Description</td>
+                                                
                                                 {descriptions.map((description, index) => (
-                                                   <td className="p-0"><Field as="textarea" name={`description.${index}`} onChange={handleChange} className="form-control" values={values.description} placeholder="Description" rows="3" /></td>
+                                                   <td className="p-0"><Field as="textarea" name={`description.${index}`} onChange={handleChange} className="form-control" values={values.description} placeholder="Description" rows="3" />
+                                                   
+                                                   </td>
                                                 ))}
                                              </tr>
                                              <tr>
@@ -285,7 +289,8 @@ const Pricing = (props) => {
                                              <tr>
                                                 <td>Revisions</td>
                                                 {revisions.map((revision, index) => (
-                                                   <td className="p-0"><Field component="select" name={`revision.${index}`} className="form-control">
+                                                   <td className="p-0">
+                                                   <Field component="select" name={`revisions.${index}`} className="form-control">
                                                       <option value="">Select Revision</option>
                                                       <option value='0' >0</option>
                                                       <option value='1' >1</option>
@@ -348,6 +353,7 @@ const Pricing = (props) => {
 
                                     <div className="form-group mt-4 mb-0">
                                        {/* <!--- form-group Starts ---> */}
+                                       
                                        <a href="#" className="btn btn-secondary float-left back-to-instant">Back</a>
                                        <button type="submit" className="btn btn-success mr-3 float-right">Save & Continue</button>
                                     </div>
