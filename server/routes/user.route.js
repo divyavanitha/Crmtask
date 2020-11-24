@@ -124,7 +124,10 @@ router.post('/gig', middleware.user, function(req, res){
 router.post('/gig/pricing',middleware.user, function(req, res){
   gigController.updatePricing(req, res);
 });
-router.post('/gig/faq', middleware.user, function(req, res){
+router.post('/gig/faq', function(req, res){
+  gigController.Faq(req, res);
+});
+router.post('/gig/update/faq', function(req, res){
   gigController.updateFaq(req, res);
 });
 router.post('/gig/requirement', middleware.user, function(req, res){

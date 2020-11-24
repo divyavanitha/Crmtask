@@ -6,7 +6,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import $ from 'jquery';
 import "./Gig.css";
-import { getGigbyId, createOrder, getPackage } from "../../../../_actions/user.action";
+import { getGigbyId, createOrder, getPackage, addCart } from "../../../../_actions/user.action";
 
 import OwlCarousel from 'react-owl-carousel';
 
@@ -17,11 +17,15 @@ const GigDetail = (props) =>  {
     const params = useParams();
     let history = useHistory();
 
+    const [price, setPrice] = useState(0);
+    const [package_id, setPackage] = useState("");
+
     useEffect(() => {
 
         dispatch(getGigbyId(params.gig))
         dispatch(getPackage())
         var $input = $("input[name='quantity']");
+        
 
         // Colocar a 0 ao início
         $input.val(1);
@@ -59,8 +63,8 @@ const GigDetail = (props) =>  {
                     if(data.fixed_price == true){
                         $(".tabs-header").hide();  
                         $(".total-price-1").text(data.pricing[0].price);
-                        $("input[name=package_id]").val(data.pricing[0].package);
-                        $("input[name=price]").val(data.pricing[0].price);      
+                        setPackage(data.pricing[0].package);
+                        setPrice(data.pricing[0].price);      
                     }else{
                         $(".tabs-header").show();   
                         $("body").on("click", ".nav-link", function () {
@@ -75,16 +79,16 @@ const GigDetail = (props) =>  {
                         });*/
                         if(node_id == "Basic"){
                          $(".total-price-1").text(data.pricing[0].price);
-                         $("input[name=package_id]").val(data.pricing[0].package);
-                         $("input[name=price]").val(data.pricing[0].price);
+                         setPackage(data.pricing[0].package);
+                         setPrice(data.pricing[0].price);
                         }else if(node_id == "Standard"){
                          $(".total-price-1").text(data.pricing[1].price);
-                         $("input[name=package_id]").val(data.pricing[1].package);
-                         $("input[name=price]").val(data.pricing[1].price);
+                         setPackage(data.pricing[1].package);
+                         setPrice(data.pricing[1].price);
                         }else{
                          $(".total-price-1").text(data.pricing[2].price);  
-                         $("input[name=package_id]").val(data.pricing[2].package);
-                         $("input[name=price]").val(data.pricing[2].price);
+                         setPackage(data.pricing[2].package);
+                         setPrice(data.pricing[2].price);
                         }
                         });
                     }
@@ -109,9 +113,9 @@ const GigDetail = (props) =>  {
             enableReinitialize
             initialValues={{
                 gig_id: params.gig,
-                price: '',
+                price: price,
                 quantity: '1',
-                package_id: ''
+                package_id: package_id
 
             }
             }
@@ -128,23 +132,23 @@ const GigDetail = (props) =>  {
                 console.log('values', values);
                 let data = {
                     gig_id: params.gig,
-                    total: $("input[name=price]").val(),
+                    price: values.price,
                     quantity: values.quantity,
                     package_id: values.package_id
                 };
 
-                /*if (params.id) {
-                    dispatch(updateCategory(data)).then(res => {
-                        addToast(res.message, { appearance: res.status, autoDismiss: true, })
-                        history.push('/admin/category/')
+                if (values.action == "cart") {
+                    dispatch(addCart(data)).then(res => {
+                        //addToast(res.message, { appearance: res.status, autoDismiss: true, })
+                        
                     })
-                } else {*/
-                    dispatch(createOrder(data)).then(res => {
+                } else {
+                    dispatch(addCart(data)).then(res => {
                       console.log('id',res.responseData._id);
                       history.push('/gig/post/order/'+res.responseData._id)
                         //addToast(res.message, { appearance: res.status, autoDismiss: true, })
                     })
-                //}
+                }
                 resetForm();
                 setSubmitting(false);
             }}>
@@ -448,9 +452,9 @@ const GigDetail = (props) =>  {
 
                                 <div className="purchase-form">
                                     <form onSubmit={handleSubmit} encType="multipart/form-data">
-                                        <Field type="text" onChange={handleChange} name="gig_id" value={params.gig} />
-                                        <Field type="text" onChange={handleChange} name="package_id" required value="2506" />
-                                        <Field type="text" onChange={handleChange} name="price" value="1" />
+                                        <Field type="hidden" onChange={handleChange} name="gig_id" value={params.gig} />
+                                        <Field type="hidden" onChange={handleChange} name="package_id" value={values.package_id} />
+                                        <Field type="hidden" onChange={handleChange} name="price" value={values.price} />
                                         <h3 className="package-price">
                                             Price
                                             <span className="float-right font-weight-normal">
@@ -498,10 +502,10 @@ const GigDetail = (props) =>  {
                                                 </label>
                                             </li>
                                         </ul>
-                                        <button type="button" className="btn btn-order primary added mb-3">
+                                        <button type="submit" onClick={() => setFieldValue("action", "cart")} className="btn btn-order primary added mb-3">
                                             <i className="fa fa-shopping-cart"></i> &nbsp;<strong>Add to cart</strong>
                                         </button>
-                                        <button type="submit" name="add_order" value="1" className="btn btn-order">
+                                        <button type="submit" onClick={() => setFieldValue("action", "order")} name="add_order" value="1" className="btn btn-order">
                                             <strong>Order Now (&#036;<span className='total-price-1'>0</span>)</strong>
                                         </button>
                                     </form>

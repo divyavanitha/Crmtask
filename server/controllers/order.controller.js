@@ -58,7 +58,7 @@ exports.addcart = async (req, res) => {
 
         let carts= await db._store(Cart, cart);
 
-        const response = helper.response({ message: res.__('inserted') });
+        const response = helper.response({ message: res.__('inserted'), data: carts });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -169,12 +169,13 @@ exports.checkout = async (req, res) => {
                 seller: req.body.seller_id,
                 gig: req.body.gig_id,
                 quantity: req.body.quantity,
-                total: req.body.total
+                price: req.body.price,
+                status: 1
             }
 
         let orders= await db._store(Order, order);
 
-        const response = helper.response({ message: res.__('inserted') });
+        const response = helper.response({ message: res.__('inserted'), data: order });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {

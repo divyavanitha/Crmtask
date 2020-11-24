@@ -232,7 +232,20 @@ export const getGigbyId = (id) => dispatch => {
 
 export const createOrder = (data) =>  async dispatch => {
   try {
-        let response = await axios.post('/api/checkout', data);
+        let response = await axios.post('/api/gig/checkout', data);
+        console.log('data',response);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        return e.response.data;
+    }
+ }
+
+ export const addCart = (data) =>  async dispatch => {
+  try {
+        let response = await axios.post('/api/gig/cart', data);
         console.log('data',response);
         response.data.status = 'success';
         return response.data;

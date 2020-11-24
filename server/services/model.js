@@ -75,6 +75,19 @@ console.log(query);
 
 }
 
+exports._updateMany = async (model, condition = {}, document, options = {}) => {
+    try {
+
+        const query = await model.updateMany(condition, document, { new: true });
+console.log(query);
+        return true;
+
+    } catch (err) {
+        console.log(err)
+    }
+
+}
+
 
 exports._delete = async (model, condition = {}, options = {}) => {
 

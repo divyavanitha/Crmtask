@@ -20,14 +20,17 @@ const AddGig = (props) => {
     useEffect(() => {
       
     $(".insert").on("click", function(){
-      const data = new FormData();
-      data.append( "question", $("input[name='question']").val() );
-      data.append( "answer", $("input[name='answer']").val() );
+      console.log('data',$("input[name^=question]").map(function() { return $(this).val(); }).get());
 
       $.ajax({
-        url: "/api/faq",
+        url: "/api/gig/faq",
         type: "post",
-        data: data,
+        data: {
+          question: $("input[name^=question]").map(function() { return $(this).val(); }).get(),
+          answer: $("input[name^=answer]").map(function() { return $(this).val(); }).get(),
+          id: params.id,
+          action : "faq"
+        },
         /*processData: false,
         contentType: false,
         headers: {
@@ -37,6 +40,77 @@ const AddGig = (props) => {
             //showInlineLoader();
         },
         success: function(response, textStatus, jqXHR) {
+
+          console.log(response.responseData.faq);
+          var result = response.responseData.faq;
+          var html = "";
+          for(var i in result ){
+
+           html += `<div class="tab rounded border-1">
+
+              <div class="tab-header" data-toggle="collapse" href="#faq-58">
+
+                    <a class="float-left"> <i class="fa fa-bars mr-2"></i>`+ result[i].question +`</a>
+
+                    <a class="float-right text-muted"><i class="fa fa-sort-down"></i></a>
+
+                    <div class="clearfix"></div>
+
+              </div>
+
+                <div class="tab-body p-3 pb-0 collapse" id="faq-58" data-parent="#faqTabs">
+
+                     
+
+                            <div class="form-group mb-2">
+
+                                  <input type="hidden" name="faq_id" value=`+result[i]._id+`>
+
+                                  <input type="text" name="title" placeholder="Title" class="form-control form-control-sm" required value=`+result[i].question+`>
+
+                            </div>
+
+                            <div class="form-group mb-2">
+
+                                  <input name="content" rows="3" class="form-control form-control-sm" value=`+result[i].answer+` />
+
+                            </div>
+
+                            <div class="form-group mb-0">
+
+                                  <a href="#" class="btn btn-danger btn-sm delete-faq">Delete</a>
+
+                                  <button type="submit" class="btn btn-success btn-sm float-right update">Update</button>
+
+                            </div>
+
+                      
+                </div>
+              </div>`;
+
+
+          }
+
+          $('#faTabs').html(html);
+
+          $(".update").on('click',function(e) { 
+                alert();
+                    $.ajax({
+                      url: "/api/gig/update/faq",
+                      type: 'post',
+                      //dataType: 'application/json',
+                      data: {
+                        question: $("input[name=title]").val(),
+                        answer: $("input[name=content]").val(),
+                        faq_id: $("input[name=faq_id]").val(),
+                        action: "faq",
+                        id: params.id
+                      },
+                      success: function(data) {
+                          
+                      }
+                  });
+               });
             /*var data = parseData(response);
             if (table != null) {
             var info = $('#data-table').DataTable().page.info();
@@ -61,6 +135,7 @@ const AddGig = (props) => {
                     window.location.replace(page);
                   }, 1000);
             }*/
+
         },
         error: function(jqXHR, textStatus, errorThrown) {
             
@@ -97,9 +172,7 @@ const AddGig = (props) => {
             enableReinitialize
             initialValues={{
                 id: params.id,
-                description: '',
-                question: [''],
-                answer: ['']
+                description: ''
 
             }
             }
@@ -113,51 +186,27 @@ const AddGig = (props) => {
                     .required('Tags is required'),*/
             })}
 
-            onfaqSubmit={(values, { setSubmitting, resetForm }) => {
-              console.log('values',values);
-                let data = {
-                    id: values.id,
-                    
-                    question: values.question,
-                    answer: values.answer
-                };
-
-                /*if (params.id) {
-                    dispatch(updateCategory(data)).then(res => {
-                        addToast(res.message, { appearance: res.status, autoDismiss: true, })
-                        history.push('/admin/category/')
-                    })
-                } else {*/
-                    dispatch(updateFaq(data)).then(res => {
-                      console.log('id',res.responseData._id);
-                      history.push('/gig/post/faq/'+res.responseData._id)
-                        //addToast(res.message, { appearance: res.status, autoDismiss: true, })
-                    })
-                //}
-                resetForm();
-                setSubmitting(false);
-            }}
-
             onSubmit={(values, { setSubmitting, resetForm }) => {
               console.log('values',values);
                 let data = {
                     id: values.id,
                     description: values.description,
-                   
+                    action : "desc"
                 };
 
-                /*if (params.id) {
-                    dispatch(updateCategory(data)).then(res => {
-                        addToast(res.message, { appearance: res.status, autoDismiss: true, })
-                        history.push('/admin/category/')
-                    })
-                } else {*/
+                if (values.action == "desc") {
                     dispatch(updateFaq(data)).then(res => {
                       console.log('id',res.responseData._id);
                       history.push('/gig/post/requirements/'+res.responseData._id)
                         //addToast(res.message, { appearance: res.status, autoDismiss: true, })
                     })
-                //}
+                } else {
+                    dispatch(updateFaq(data)).then(res => {
+                      
+                      history.push('/gig/post/faq/'+params.id)
+                        //addToast(res.message, { appearance: res.status, autoDismiss: true, })
+                    })
+                }
                 resetForm();
                 setSubmitting(false);
             }}>
@@ -223,6 +272,41 @@ const AddGig = (props) => {
        <div className="tab-content card card-body">
           {/* <!--- tab-content Starts ---> */}
 
+             <h5 className="font-weight-normal"> Frequently Asked Questions  <small className="float-right"><a data-toggle="collapse" href="#insert-faq" className="text-success">+ Add Faq</a></small></h5>
+             <hr />
+             <div className="tabs accordion mt-2" id="faTabs">
+             </div>
+             <div className="tabs accordion mt-2" id="faqTabs">
+                {/* <!--- All Tabs Starts ---> */}
+                <div className="tab">
+                   {/* <!-- tab rounded Starts --> */}
+                   <div className="tab-body rounded border-1 p-3 pb-0 collapse" id="insert-faq" data-parent="#faqTabs">
+                     {/* <form onfaqSubmit={handleFaqSubmit} encType="multipart/form-data" className="add-faq"> */}
+                         <div className="form-group mb-2">
+                          <div className="col-md-12">Question</div>
+                            
+                           <input name="question[]" placeholeder="Question" onChange={handleChange} className="form-control form-control-sm" values="test" />
+ 
+                         </div>
+                         <div className="form-group mb-2">
+                         <div className="col-md-12">Answer</div>
+                            
+                            <input name="answer[]" placeholeder="Answer" onChange={handleChange} className="form-control form-control-sm" values="" />
+                                         
+                                       
+                         </div>
+                         <div className="form-group mb-0">
+                            <button className="btn btn-success btn-sm float-right insert">Insert</button>
+                            <div className="clearfix"></div>
+                         </div>
+                      {/* </form> */}
+                   </div>
+                </div>
+                {/* <!-- tab rounded Ends --> */}
+               
+             </div>
+             {/* <!--- All Tabs Ends ---> */}
+             <hr className="mt-0" />
           <div className="tab-pane fade show active" id="description">
              <h5 className="font-weight-normal">Description</h5>
              <hr />
@@ -253,60 +337,11 @@ const AddGig = (props) => {
                 </div>
              
              {/* <!--- form Ends --> */}
-             <hr className="mt-0" />
-             <h5 className="font-weight-normal"> Frequently Asked Questions  <small className="float-right"><a data-toggle="collapse" href="#insert-faq" className="text-success">+ Add Faq</a></small></h5>
-             <hr />
-             <div className="tabs accordion mt-2" id="faqTabs">
-                {/* <!--- All Tabs Starts ---> */}
-                <div className="tab">
-                   {/* <!-- tab rounded Starts --> */}
-                   <div className="tab-body rounded border-1 p-3 pb-0 collapse" id="insert-faq" data-parent="#faqTabs">
-                      <form onfaqSubmit={handleFaqSubmit} encType="multipart/form-data" className="add-faq">
-                         <div className="form-group mb-2">
-                          <div className="col-md-12">Question</div>
-                            <FieldArray name="question" render={arrayHelpers => (
-                               <div>
-                                 {values.question && values.question.map((data, index) => (
-                                     <div key={index}>
-                                       <Field name={`question.${index}`} placeholeder="Question" onChange={handleChange} className="form-control form-control-sm" values={`question.${index}`} />
-                                       
-                                     </div>
-                                   ))}
-                               </div>
-
-                             )}
-                            />
-                                 
-                         </div>
-                         <div className="form-group mb-2">
-                         <div className="col-md-12">Answer</div>
-                            <FieldArray name="answer" render={arrayHelpers => (
-                                 <div>
-                                   {values.answer && values.answer.map((data, index) => (
-                                       <div key={index}>
-                                         <Field name={`answer.${index}`} placeholeder="Answer" onChange={handleChange} className="form-control form-control-sm" values={`answer.${index}`} />
-                                         
-                                       </div>
-                                     ))}
-                                 </div>
-                               )}
-                              />
-                         </div>
-                         <div className="form-group mb-0">
-                            <button className="btn btn-success btn-sm float-right insert">Insert</button>
-                            <div className="clearfix"></div>
-                         </div>
-                      </form>
-                   </div>
-                </div>
-                {/* <!-- tab rounded Ends --> */}
-               
-             </div>
-             {/* <!--- All Tabs Ends ---> */}
+             
              <div className="form-group mb-0">
                 {/* <!--- form-group Starts ---> */}
                 <a href="#" className="btn btn-secondary float-left backButton">Back</a>
-                <button type="submit" className="btn btn-success mr-3 float-right ">Save & Continue</button>
+                <button type="submit" onClick={() => setFieldValue("action", "desc")} className="btn btn-success mr-3 float-right">Save & Continue</button>
              </div>
              {/* <!--- form-group Starts ---> */}
         </form>

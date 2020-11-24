@@ -41,6 +41,7 @@ exports.getGigDetails = async (req, res) => {
     }
 
 }
+
 exports.getPackage = async (req, res) => {
     try {
 
@@ -130,7 +131,7 @@ exports.creategigs = async (req, res) => {
 
 exports.updatePricing = async(req, res) => {
 
-    console.log(req.body);
+    
     const schema = Joi.object().options({ abortEarly: false }).keys({
         //package_id: Joi.array().required().label("Package Id"),
         delivery_time_id: Joi.array().required().label("Delivery Time Id"),
@@ -203,14 +204,22 @@ console.log('gig',req.body);
     }
 }
 
-exports.updateFaq = async(req, res) => {
-    const schema = Joi.object().options({ abortEarly: false }).keys({
-        question: Joi.array().required().label("Question"),
-        answer: Joi.array().required().label("Answer"),
-        id: Joi.string().required().label("Gig Id")
+exports.Faq = async(req, res) => {
+    //console.log(req.body);
+    if(req.body.action == "faq"){
+        var schema = Joi.object().options({ abortEarly: false }).keys({
+            question: Joi.array().required().label("Question"),
+            answer: Joi.array().required().label("Answer"),
+            id: Joi.string().required().label("Gig Id")
 
-    }).unknown(true);
+        }).unknown(true);
+    }else{
+        var schema = Joi.object().options({ abortEarly: false }).keys({
+            description: Joi.string().required().label("Description"),
+            id: Joi.string().required().label("Gig Id")
 
+        }).unknown(true);
+    }
     const { error } = schema.validate(req.body);
 
     let errorMessage = {};
@@ -228,19 +237,33 @@ exports.updateFaq = async(req, res) => {
     try {
 
         let gig = await Gig.findById(req.body.id);
-
+        const arr = gig.faq;
+        let index = (arr.length - 1);//arr.findIndex((e) => e._id); //e.id === obj.id
         let faqs = [];
-
-        for(let i in req.body.question) {
-            let faq = {
-                question: req.body.question[i],
-                answer: req.body.answer[i] 
+console.log('index',index);
+        if (index === -1) {
+            for(let i in req.body.question) {
+                let faq = {
+                    question: req.body.question[i],
+                    answer: req.body.answer[i] 
+                }
+                faqs.push(faq);
             }
-            faqs.push(faq);
+        } else {
+            for(let i in req.body.question) {
+                let faq = {
+                    question: req.body.question[i],
+                    answer: req.body.answer[i] 
+                }
+                arr[index+1] = faq;
+                faqs = arr[index];
+            }
+            
         }
 
         if(faqs.length > 0) gig.faq = faqs;
         gig.description = req.body.description;
+        let updated_gig = await Gig.findById(gig._id);
         let gigs = await db._update(Gig, { _id: req.body.id }, gig);
 
         const response = helper.response({ message: res.__('updated'), data: gig });
@@ -255,6 +278,88 @@ exports.updateFaq = async(req, res) => {
             return res.status(422).json(err);
         }
     }
+}
+
+exports.updateFaq = async(req, res) => {
+    //console.log(req.body);
+    if(req.body.action == "faq"){
+        var schema = Joi.object().options({ abortEarly: false }).keys({
+            question: Joi.string().required().label("Question"),
+            answer: Joi.string().required().label("Answer"),
+            id: Joi.string().required().label("Gig Id"),
+            faq_id: Joi.string().required().label("Faq Id"),
+
+        }).unknown(true);
+    }else{
+        var schema = Joi.object().options({ abortEarly: false }).keys({
+            description: Joi.string().required().label("Description"),
+            id: Joi.string().required().label("Gig Id")
+
+        }).unknown(true);
+    }
+    const { error } = schema.validate(req.body);
+
+    let errorMessage = {};
+
+    if (error) {
+        error.details.forEach(err => {
+            errorMessage[err.context.key] = (err.message).replace(/"/g, "")
+        })
+    }
+
+    /*const errorResponse = helper.response({ status: 422, error:errorMessage });
+
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
+
+    try {*/
+
+        let gig = await Gig.findById(req.body.id);
+        const arr = gig.faq;
+        //let index = (arr.length - 1);
+
+        let index = arr.find(x => x.id === req.body.faq_id); //e.id === obj.id
+        console.log(index);
+            //let faqs = [];
+//console.log('index',index);
+        /*if (index === -1) {
+            for(let i in req.body.question) {*/
+                let faq = {
+                    question: req.body.question,
+                    answer: req.body.answer 
+                }
+
+                //faqs.push(faq);
+            /*    
+            }
+        } else {
+            for(let i in req.body.question) {
+                let faq = {
+                    question: req.body.question[i],
+                    answer: req.body.answer[i] 
+                }
+                arr[index+1] = faq;
+                faqs = arr[index];
+            }
+            
+        }*/
+        index = faq;
+        gig.faq = index;
+        gig.description = req.body.description;
+        let updated_gig = await Gig.findById(gig._id);
+        let gigs = await db._update(Gig, { _id: req.body.id }, gig);
+
+        const response = helper.response({ message: res.__('updated'), data: gig });
+        return res.status(response.statusCode).json(response);
+
+   /* } catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                return res.status(422).json(err.errors[i].message);
+            }
+        } else {
+            return res.status(422).json(err);
+        }
+    }*/
 }
 
 exports.updateRequirement = async(req, res) => {

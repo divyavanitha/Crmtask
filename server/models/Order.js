@@ -17,7 +17,7 @@ const orderSchema = mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'gigs'
     },
-    total: {
+    price: {
         type: Number,
         required: true
     },
@@ -31,6 +31,10 @@ const orderSchema = mongoose.Schema({
     },
     payment_mode: {
         type: String, 
+        required: true
+    },
+    status: {
+        type: Number, 
         required: true
     },
     created_at: {
