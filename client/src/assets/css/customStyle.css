@@ -2338,6 +2338,12 @@ table.dataTable thead th.sorting:after, table.dataTable thead th.sorting_asc:aft
 
 /* dataTable style end */
 
+.cart-proposal {}
+.cart-proposal .proposalImg{
+   max-height:80px;
+   max-width: 145px;
+}
+
 
 @media only screen and (max-width: 768px){
  label.col-form-label{
