@@ -7,6 +7,7 @@ import $ from 'jquery';
 import Login from '../auth/Login';
 import Register from '../auth/Register';
 import ForgotPassword from '../auth/ForgotPassword';
+import { getCartList } from "../../../../_actions/user.action";
 
 function Header() {
     const dispatch = useDispatch();
@@ -17,7 +18,7 @@ function Header() {
     let site = settings.settings && settings.settings.site;
 
     useEffect(() => {
-
+        dispatch(getCartList())
         $(document).ready(function () {
 
             /*$(function () {
@@ -28,6 +29,7 @@ function Header() {
             });*/
 
             //// Categories Dropdown Code
+
             $("body").on("mouseover", ".top-nav-item", function () {
                 $(".body-sub-width").addClass("display-none");
                 $(".top-nav-item").removeClass("active");
@@ -225,6 +227,11 @@ function Header() {
 
     }, []);
 
+    const cart = useSelector((state) => state.user && state.user.cart_lists && state.user.cart_lists.carts);
+    $(".cart-count").text(cart && cart.length);
+    $(".count_cart").text("Your Cart "+(cart && cart.length));
+    
+
     return (
 
         <Fragment>
@@ -287,12 +294,20 @@ function Header() {
                             </a>
                         </li>
                             <li className="logged-in-link">
-                                <a className="menuItem" href="cart" title="Cart">
+                                <a className="menuItem" href="message" title="Cart">
                                     <span className="onePress-icon nav-icon onePress-icon-relative">
                                         <i className="fa fa-envelope-o" style={{ fontSize: "1.4em" }} aria-hidden="true"></i>
                                     </span>
                                     <span className="total-user-count count">1</span>
                                 </a>
+                            </li>
+                            <li className="logged-in-link">
+                                <Link to="/cart" className="menuItem" title="Cart">
+                                    <span className="onePress-icon nav-icon onePress-icon-relative">
+                                        <i className="fa fa-shopping-cart" style={{ fontSize: "1.4em" }} aria-hidden="true"></i>
+                                    </span>
+                                    <span className="total-user-count count cart-count">0</span>
+                                </Link>
                             </li>
                             <li className="logged-in-link">
                                 <div className="dropdown user-menu">

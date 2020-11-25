@@ -10,7 +10,7 @@ const _ = require('lodash');
 exports.listcart = async (req, res) => {
     try {
 
-        let carts = await db._get(Cart, {}, {}, { populate: [ { path: "gig", populate:[{path: "category", model: "category"}, {path: "subCategory", model: "SubCategory"}] }, "Package" ] } );
+        let carts = await db._get(Cart, {user: req.user._id}, {}, { populate: [ { path: "gig", populate:[{path: "category", model: "category"}, {path: "subCategory", model: "SubCategory"}] }, "Package" ] } );
 
         const data = { carts };
 
@@ -58,7 +58,9 @@ exports.addcart = async (req, res) => {
 
         let carts= await db._store(Cart, cart);
 
-        const response = helper.response({ message: res.__('inserted'), data: carts });
+        let cart_length = await db._get(Cart, {user: req.user._id} );
+        
+        const response = helper.response({ message: res.__('inserted'), data: cart_length });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {

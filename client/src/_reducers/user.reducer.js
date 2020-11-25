@@ -8,7 +8,8 @@ import {
     GET_GIGS,
     FIND_GIG,
     GET_DELIVERY_TIME,
-    GET_PACKAGE
+    GET_PACKAGE,
+    GET_CART_LIST
 } from '../_actions/types';
 
 let initialState = {
@@ -47,6 +48,8 @@ const userReducer = (state = initialState, action) => {
             return { ...state, delivery_times: action.payload }
         case GET_PACKAGE:
             return { ...state, packages: action.payload }
+        case GET_CART_LIST:
+            return { ...state, cart_lists: action.payload }
         default:
             return state;
     }

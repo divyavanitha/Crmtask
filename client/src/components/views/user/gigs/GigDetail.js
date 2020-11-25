@@ -47,12 +47,6 @@ const GigDetail = (props) =>  {
             $.ajax({
                 url: "/api/gig/package/"+params.gig,
                 type: "get",
-                
-                /*processData: false,
-                contentType: false,
-                headers: {
-                    Authorization: "Bearer " + getToken(guard)
-                },*/
                 beforeSend: function (request) {
                     //showInlineLoader();
                 },
@@ -139,6 +133,8 @@ const GigDetail = (props) =>  {
 
                 if (values.action == "cart") {
                     dispatch(addCart(data)).then(res => {
+                        console.log(res.responseData.length);
+                        $(".cart-count").text(res.responseData.length);
                         //addToast(res.message, { appearance: res.status, autoDismiss: true, })
                         
                     })

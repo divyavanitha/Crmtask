@@ -32,6 +32,7 @@ const Gallery = (props) => {
   let [file, setFile] = useState([]);
 
   const onDrop = useCallback(acceptedFiles => {
+
     files.push(acceptedFiles);
     setFile(files);
   }, []);
@@ -59,14 +60,18 @@ const Gallery = (props) => {
       })}
 
       onSubmit={(values, { setSubmitting, resetForm }) => {
-        console.log('values', files);
+        console.log('values', file);
         /*let data = {
           id: values.id,
           photo: values.photo
         };*/
-
+        
         const data = new FormData();
-        data.append( "id", params.id );
+        data.append( "photo", file );
+
+        for (var i = 0; i < file.length; i++) {
+          console.log(file[i]['name']);
+        }
 
         /*if (params.id) {
             dispatch(updateCategory(data)).then(res => {
@@ -76,7 +81,7 @@ const Gallery = (props) => {
         } else {*/
         dispatch(updateImage(data)).then(res => {
           console.log('id',res.responseData._id);
-          history.push('/gig/post/upload/'+res.responseData._id)
+          history.push('/gig/post/approval/'+res.responseData._id)
             //addToast(res.message, { appearance: res.status, autoDismiss: true, })
         })
         //}
@@ -126,7 +131,7 @@ const Gallery = (props) => {
                       Requirements      </a>
                     <a className="nav-link active" href="#gallery">
                       Gallery     </a>
-
+                      <a className="nav-link " href="#publish">Submit For Approval</a>
                   </div>
                 </div>
 
@@ -189,7 +194,7 @@ const Gallery = (props) => {
                         <div className="form-group mb-0">
 
                           <a href="#" className="btn btn-secondary float-left back-to">Back</a>
-                          <input className="btn btn-success float-right" type="submit" form="gallery_form" value="Save & Continue" />
+                          <button type="submit" onClick={() => setFieldValue("action", "desc")} className="btn btn-success mr-3 float-right">Save & Continue</button>
                           <a href="tyrone/logo-making" id="previewProposal" className="btn btn-success float-right mr-3 d-none">Preview Proposal</a>
 
                         </div>

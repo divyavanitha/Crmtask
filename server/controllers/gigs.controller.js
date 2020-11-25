@@ -431,7 +431,7 @@ exports.updateImage = async(req, res) => {
         let gig = await Gig.findById(req.body.id);
 
         let photos = [];
-
+console.log('files',req.files);
         for(i in req.files['photo[]']) {
 
             let image = {

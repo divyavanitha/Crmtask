@@ -12,7 +12,8 @@ import {
     GET_GIGS,
     FIND_GIG,
     GET_DELIVERY_TIME,
-    GET_PACKAGE
+    GET_PACKAGE,
+    GET_CART_LIST
 } from './types';
 
 
@@ -255,3 +256,29 @@ export const createOrder = (data) =>  async dispatch => {
         return e.response.data;
     }
  }
+
+ export const getCartList = (data) => async dispatch => {
+
+    try {
+        let cart = await axios.get("/api/gig/cart", data);
+
+        dispatch({
+            type: GET_CART_LIST,
+            payload: cart.data.responseData
+        });
+    } catch (e) {
+        console.log(e)
+    }
+
+};
+
+export const deleteCart= (id) => async dispatch => {
+    try {
+        let response = await axios.delete(`/api/gig/cart/${id}`);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        return e.response.data;
+    }
+}; 

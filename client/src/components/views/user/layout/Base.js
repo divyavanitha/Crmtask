@@ -21,6 +21,8 @@ import AddRequest from "../requests/AddRequest";
 import RequestList from "../requests/RequestList";
 import Requirement from "../gigs/Requirement";
 import Gallery from "../gigs/gallery";
+import Cart from "../gigs/cart";
+import CartPayment from "../gigs/cartPayment";
 import Profile from "../Profile";
 
 import "../../../../assets/css/custom.css";
@@ -52,6 +54,8 @@ const Base = () => {
                 <ProtectedRoute exact={true} path="/gig/post/requirements/:id" component={Requirement} />
                 <ProtectedRoute exact={true} path="/gig/post/gallery/:id" component={Gallery} />
                 <ProtectedRoute exact={true} path="/gig/:user/:gig" component={GigDetail} />
+                <ProtectedRoute exact={true} path="/cart" component={Cart} />
+                <ProtectedRoute exact={true} path="/cart-payment-option" component={CartPayment} />
                 <ProtectedRoute exact={true} path="/request/add" component={AddRequest} />
                 <ProtectedRoute exact={true} path="/request/manage" component={RequestList} />
                 <ProtectedRoute exact={true} path="/profile" component={Profile} />

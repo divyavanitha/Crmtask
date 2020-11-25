@@ -32,6 +32,8 @@ export const AFTER_POST_MESSAGE = 'after_post_message';
 
 export const GET_MENUS = 'GET_MENUS';
 
+export const GET_CART_LIST = 'GET_CART_LIST';
+
 export const GET_SLIDES = 'GET_SLIDES';
 
 export const GET_GIGS = 'GET_GIGS';
