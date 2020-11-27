@@ -64,6 +64,7 @@ export const creategigs = (data) =>  async dispatch => {
 
  export const updateImage = (data) =>  async dispatch => {
   try {
+    console.log('da',(data.get("photo[]"))[0]);
         let response = await axios.post('/api/gig/upload', data);
         console.log('data',response);
         response.data.status = 'success';
@@ -75,45 +76,27 @@ export const creategigs = (data) =>  async dispatch => {
     }
  }
 
-// Add Post
-// export const creategigs = postjob => dispatch => {
-//   // dispatch(clearErrors());
-//   axios
-//     .post('/api/gigs/create', postjob)
-//     .then(res =>
-//       dispatch({
-//         type: CREATE_GIGS,
-//         payload: res.data
-//       })
-//     )
-//     .catch(err =>
-//       dispatch({
-//         type: GET_ERRORS,
-//         payload: err.response.data
-//       })
-//     );
-// };
-
-// Get Posts 
-export const getallgigs = () => dispatch => {
-//   dispatch(setPostLoading());
-  axios
-    .get('/api/gigs/getallgigs')
-    .then(res => {
-      //console.log(res.data);
-      dispatch({
-        type: GET_ALLGIGS,
-        payload: res.data
-      })
+ export const updateConfirm = (data) =>  async dispatch => {
+  try {
+   
+        let response = await axios.post('/api/gig/confirm', data);
+        console.log('data',response);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        return e.response.data;
     }
-    )
-    .catch(err =>
-      dispatch({
-        type: GET_ERRORS,
-        payload: null
-      })
-    );
-};
+ }
+
+export const getGigList = (data) => async dispatch => {
+    const gig = await axios.get(`/api/gigs`, data)
+    dispatch({
+        type: GET_ALLGIGS,
+        payload: gig.data
+    });
+}
 
 // Get Posts 
 export const getmyallgigs = () => dispatch => {
@@ -154,22 +137,16 @@ export const getgigsById = id => dispatch => {
 };
 
 // Delete Post
-export const deletegigs = id => dispatch => {
-  axios
-    .delete(`/api/gigs/deletepostjob/${id}`)
-    .then(res =>
-      dispatch({
-        type: DELETE_GIGS,
-        payload: id
-      })
-    )
-    .catch(err =>
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data
-      })
-    );
-};
+export const deleteGig= (id) => async dispatch => {
+    try {
+        let response = await axios.delete(`/api/gig/delete/${id}`);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        return e.response.data;
+    }
+}; 
 
 
 // Add Comment

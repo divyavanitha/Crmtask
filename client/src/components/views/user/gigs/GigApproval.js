@@ -5,11 +5,11 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 //import { useToasts } from 'react-toast-notifications'
 
-import { updateRequirement } from "../../../../_actions/gigs.action";
+import { updateConfirm } from "../../../../_actions/gigs.action";
 
 
 const AddGig = (props) => {
-    //const { addToast } = useToasts()
+    //const { addToast } = useTasts()
     const dispatch = useDispatch();
 
     let history = useHistory();
@@ -17,45 +17,39 @@ const AddGig = (props) => {
     useEffect(() => {
         
     }, [params.id]);
-   
+
+    
     return (
 
         <Formik
 
             enableReinitialize
             initialValues={{
-                id: params.id,
-                requirement: ''
+                id: '',
+                proposal: 0
+                
 
             }
             }
 
             validationSchema={Yup.object().shape({
-               /* title: Yup.string()
-                    .required('Title is required'),
-                sub_category_id: Yup.string()
-                    .required('Sub Category is required'),
-                tags: Yup.string()
-                    .required('Tags is required'),*/
+                /*proposal: Yup.number()
+                    .required('Proposal feature is required'),*/
+               
             })}
             onSubmit={(values, { setSubmitting, resetForm }) => {
                 let data = {
-                    id: values.id,
-                    requirement: values.requirement
+                    id: params.id,
+                    proposal: values.proposal,
+                    
                 };
 
-                /*if (params.id) {
-                    dispatch(updateCategory(data)).then(res => {
-                        addToast(res.message, { appearance: res.status, autoDismiss: true, })
-                        history.push('/admin/category/')
-                    })
-                } else {*/
-                    dispatch(updateRequirement(data)).then(res => {
+                    dispatch(updateConfirm(data)).then(res => {
                       console.log('id',res.responseData._id);
-                      history.push('/gig/post/gallery/'+res.responseData._id)
-                        //addToast(res.message, { appearance: res.status, autoDismiss: true, })
+                      history.push('/gig/list');
+                        
                     })
-                //}
+
                 resetForm();
                 setSubmitting(false);
             }}>
@@ -98,11 +92,11 @@ const AddGig = (props) => {
 
                                 <a className="nav-link " href="#description">
                                   Description & FAQ     </a>
-                                <a className="nav-link  active" href="#requirements">
+                                <a className="nav-link  " href="#requirements">
                                   Requirements      </a>
                                 <a className="nav-link " href="#gallery">
                                   Gallery     </a>
-                                <a className="nav-link " href="#publish">Submit For Approval</a>
+                                <a className="nav-link active" href="#publish">Submit For Approval</a>
                               </div>
                             </div>
 
@@ -120,33 +114,38 @@ const AddGig = (props) => {
        <div className="tab-content card card-body">
           {/* <!--- tab-content Starts ---> */}
           
-          <div className="tab-pane fade show active" id="requirements">
+          <div className="tab-pane fade show active" id="publish">
+             <h1><img style={{ position:'relative', top:'-5px' }} src="../images/comp/winner.png" />  Yay! You are almost done!</h1>
+             <h6 className="font-weight-normal line-height-normal">
+                Congrats! you're almost done submitting this proposal. <br />
+                You can go back and check if you entered all the details for this proposal correctly. If all looks good and you agree with 
+                <a href="https://www.gigtodo.com/terms_and_conditions" target="_black" className="text-primary">all our policies</a>, please click on the “Save & Submit For Approval” button.<br /><br />
+                <span className="text-muted">
+                If you do not wish to submit this proposal for approval at this time, please exit this page. You can easily retrieve this proposal by clicking on "Selling => My Proposals => Drafts". Cheers!
+                </span>
+             </h6>
              <form onSubmit={handleSubmit} encType="multipart/form-data">
-                {/* <!--- form Starts --> */}
-                <h5 className="font-weight-normal">
-                   <span className="float-left mr-2"><i className="fa fa-file text-info fa-1x"></i> </span>
-                   <span className="float-left">
-                   Tell your buyer what you need to get started (Optional) <br />
-                   <small className="text-muted">Structure your Buyer Instructions as free text.</small>
-                   </span>
-                   <div className="clearfix"></div>
-                </h5>
-                <hr />
-                <div className="form-group requirements">
-                   <p className="mb-1">Requirements</p>
-                   <textarea  onChange={handleChange} name="requirement" value={values.requirement} placeholder="If you need to obtain information, files or other items from the buyer prior to starting your work, please add your instructions here. For example: Please send me your company name or Please send me the photo you need me to edit."  rows="4" className="form-control"></textarea>
-                </div>
-                <div className="form-group mb-0">
+                <h1 className="h3">Make Proposal Featured (Optional)</h1>
+                <h6 className="font-weight-normal line-height-normal">
+                   Let your proposal appear on several places on GigToDo<br />
+                   Proposal will always be at the top section of search results <br />
+                   WIth GigToDo feature, your proposal already has a 50% chance of getting ordered by potential buyers
+                   <p className="ml-4 mt-3">
+                      <label for="checkid" style={{ wordWrap:'break-word' }}>
+                      <input type='checkbox' onClick={(e) => { setFieldValue(`proposal`, e.currentTarget.checked); }} value={values.proposal} name='proposal' style={{ verticalAlign:'middle', marginLeft: '-1.25rem' }} /> Make Proposal Featured
+                      </label>
+                   </p>
+                </h6>
+                <div className="form-group mb-0 mt-3">
                    {/* <!--- form-group Starts ---> */}
-                   <a href="#" className="btn btn-secondary float-left back-to-desc">Back</a>
-                   <button type="submit" className="btn btn-success btn-sm float-right">Save & Continue</button>
+                   <a href="#" className="btn btn-secondary back-to-gallery">Back</a>
+                   <input className="btn btn-success" type="submit" name="submit_proposal" value="Save & Submit For Approval" />
+                   <a href="#" className="btn btn-success d-none" id="featured-button">Make Proposal Featured</a>
                 </div>
                 {/* <!--- form-group Starts ---> */}
              </form>
-             {/* <!--- form Ends --> */}
-                  
+             
           </div>
-          
           <input type="hidden" name="section" value="instant_delivery" />
        </div>
        {/* <!--- tab-content Ends ---> */}

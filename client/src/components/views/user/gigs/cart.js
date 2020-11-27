@@ -17,16 +17,12 @@ const Cart = (props) =>  {
     const params = useParams();
     let history = useHistory();
 
-
     const [total, setTotal] = useState(0);
 
     useEffect(() => {
-
-        dispatch(getGigbyId(params.gig))
-        dispatch(getPackage())
-
+        dispatch(getCartList())
         $('body').on('click', '.delete', function (e) {
-          alert();
+          //alert();
           var that = $(this);
           e.preventDefault();
           const sid = that.data('id');
@@ -37,8 +33,19 @@ const Cart = (props) =>  {
             .off()
             .on("click", function () {
               dispatch(deleteCart(sid)).then(res => {
+                let len = res.responseData;
                 //addToast(res.message, { appearance: res.status, autoDismiss: true, })
                 that.closest('.cart-card').remove();
+                $(".cart-count").text(res.responseData.length);
+                $(".count_cart").text("Your Cart "+(res.responseData.length));
+                var tot = 0;
+                $.each(len, function (index, value) {
+          
+                    tot = tot + value.price;
+                });
+
+                $(".total").text(tot);
+
                 $('.delete-modal').modal("hide");
 
               })
@@ -46,20 +53,23 @@ const Cart = (props) =>  {
             });
         });
 
+        /*$('body').on('change', 'input[name=quantity]', function(){
+            alert();
+        }); */
 
 
-    }, [params.gig]);
-    const gig = useSelector((state) => state.user && state.user.gig_details && state.user.gig_details.responseData && state.user.gig_details.responseData.gig);
-    const packages = useSelector(state => state.user && state.user.packages && state.user.packages.responseData && state.user.packages.responseData.packages);
+
+    }, []);
+    
     const cart = useSelector((state) => state.user && state.user.cart_lists && state.user.cart_lists.carts);
     
+    $(".count_cart").text("Your Cart "+(cart && cart.length));
+
     $(document).ready(function () {
-      
       var len = cart && cart;
       console.log('cart1',len);
-      var total = 0;
+          var total = 0;
         $.each(len, function (index, value) {
-          
             total = total + value.price;
         });
 
@@ -99,14 +109,14 @@ const Cart = (props) =>  {
 
                 if (values.action == "cart") {
                     dispatch(addCart(data)).then(res => {
-                        console.log(res.responseData.length);
+                        console.log(res.responseData);
                         $(".cart-count").text(res.responseData.length);
                         //addToast(res.message, { appearance: res.status, autoDismiss: true, })
                         
                     })
                 } else {
                     dispatch(addCart(data)).then(res => {
-                      console.log('id',res.responseData._id);
+                      console.log('id',res.responseData);
                       history.push('/gig/post/order/'+res.responseData._id)
                         //addToast(res.message, { appearance: res.status, autoDismiss: true, })
                     })
@@ -149,7 +159,7 @@ const Cart = (props) =>  {
                <div className="card-body">
                   <h5 className="float-left mt-2 pt-2 count_cart" id="count_cart" > Your Cart (1) </h5>
                   <h5 className="float-right mb-0"> 
-                     <Link to="/" className="btn btn-success" href="">
+                     <Link to="/" className="btn btn-success">
                      Continue Shopping                </Link> 
                   </h5>
                </div>
@@ -183,7 +193,8 @@ const Cart = (props) =>  {
                         <strong className="float-right price ml-2 mt-2">
                         &#036;{list.price}                   
                         </strong>
-                        <input type="text" name="quantity" className="float-right form-control quantity" min="1" data-proposal_id="4" value={list.quantity} />
+                        <input type="text" name="quantity" onChange={handleChange} className="float-right form-control quantity" data-proposal_id="4" value={list.quantity} />
+                   
                      </h6>
                      <hr />
                   </div>
@@ -195,7 +206,7 @@ const Cart = (props) =>  {
             <div className="card">
                <div className="card-body cart-order-details">
                   <p>
-                     Cart Subtotal <span className="float-right">&#036;{total}</span>
+                     Cart Subtotal <span className="float-right total">&#036;{total}</span>
                   </p>
                   <hr />
                   {/* <p>Apply Coupon Code</p>
@@ -212,7 +223,7 @@ const Cart = (props) =>  {
                   <hr /> */}
                   <p>
                      Total 
-                     <span className="font-weight-bold float-right">&#036;{total}</span>
+                     <span className="font-weight-bold float-right total">&#036;{total}</span>
                   </p>
                   <hr />
                   <Link to="/cart-payment-option" className="btn btn-lg btn-success btn-block">Proceed To Payment</Link>

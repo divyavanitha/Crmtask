@@ -127,7 +127,7 @@ router.post('/gig/pricing',middleware.user, function(req, res){
 router.post('/gig/faq', function(req, res){
   gigController.Faq(req, res);
 });
-router.post('/gig/update/faq', function(req, res){
+router.post('/gig/update/faq', middleware.user, function(req, res){
   gigController.updateFaq(req, res);
 });
 router.post('/gig/requirement', middleware.user, function(req, res){
@@ -163,6 +163,14 @@ router.post('/gig/checkout', middleware.user, function(req, res){
 });
 router.post('/gig/rate', middleware.user, function(req, res){
   orderController.rating(req, res);
+});
+
+router.get('/buyer/orderlist', middleware.user, function(req, res){
+  orderController.buyerOrderList(req, res);
+});
+
+router.get('/buyer/orderdetails/:id', middleware.user, (req, res) => {
+  orderController.buyerOrderDetails(req, res);
 });
 
 router.post('/request', [middleware.user, middleware.upload( path.join(__dirname, '../storage/images/request/') ).fields([{ name: 'files[]', maxCount: 4 }]) ], (req, res) => {

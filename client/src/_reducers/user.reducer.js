@@ -9,12 +9,16 @@ import {
     FIND_GIG,
     GET_DELIVERY_TIME,
     GET_PACKAGE,
-    GET_CART_LIST
+    GET_CART_LIST,
+    GET_CART_COUNT,
+    BUYER_ORDER_LIST,
+    BUYER_ORDER_DETAILS
 } from '../_actions/types';
 
 let initialState = {
     isAuthenticated: false,
-    user: {}
+    user: {},
+    cart_count: 0
 }
 
 const userReducer = (state = initialState, action) => {
@@ -49,7 +53,16 @@ const userReducer = (state = initialState, action) => {
         case GET_PACKAGE:
             return { ...state, packages: action.payload }
         case GET_CART_LIST:
+        console.log('sdfhghd',action.payload);
             return { ...state, cart_lists: action.payload }
+        case BUYER_ORDER_LIST:
+            return { ...state, buyer_order_list: action.payload }
+        case BUYER_ORDER_DETAILS:
+        return { ...state, buyer_order_details: action.payload }
+        /*case GET_CART_COUNT:
+        let s = {...state}
+        console.log('count',s.cart_count);
+            return { ...state, cart_count: s.cart_count+action.payload }*/
         default:
             return state;
     }

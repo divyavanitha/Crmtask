@@ -228,8 +228,8 @@ function Header() {
     }, []);
 
     const cart = useSelector((state) => state.user && state.user.cart_lists && state.user.cart_lists.carts);
-    $(".cart-count").text(cart && cart.length);
-    $(".count_cart").text("Your Cart "+(cart && cart.length));
+    console.log('dss',cart);
+
     
 
     return (
@@ -306,7 +306,7 @@ function Header() {
                                     <span className="onePress-icon nav-icon onePress-icon-relative">
                                         <i className="fa fa-shopping-cart" style={{ fontSize: "1.4em" }} aria-hidden="true"></i>
                                     </span>
-                                    <span className="total-user-count count cart-count">0</span>
+                                    <span className="total-user-count count cart-count">{cart && cart.length}</span>
                                 </Link>
                             </li>
                             <li className="logged-in-link">

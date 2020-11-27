@@ -3,11 +3,42 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useHistory } from "react-router-dom";
 //import { useToasts } from 'react-toast-notifications'
 
-import { creategigs } from "../../../../_actions/gigs.action";
-import { getCategory, getSubCategory } from "../../../../_actions/user.action";
+import { getGigList, deleteGig } from "../../../../_actions/gigs.action";
+import $ from 'jquery';
 
 const GigList = (props) => {
+   const dispatch = useDispatch();
+   let history = useHistory();
 
+    useEffect(() => {
+         dispatch(getGigList())
+
+         $('body').on('click', '.delete', function (e) {
+          //alert();
+          var that = $(this);
+          e.preventDefault();
+          const sid = that.data('id');
+          console.log('id',sid);
+          console.log(that.closest('tr'));
+          $('.delete-modal').modal("show");
+          $(".delete-modal-btn")
+            .off()
+            .on("click", function () {
+              dispatch(deleteGig(sid)).then(res => {
+                //addToast(res.message, { appearance: res.status, autoDismiss: true, })
+                that.closest('tr').remove();
+                $('.delete-modal').modal("hide");
+
+              })
+
+            });
+        });
+
+    }, []);
+
+    const gig_list = useSelector((state) => state.gig && state.gig.gigs && state.gig.gigs.responseData && state.gig.gigs.responseData.gigs);
+
+    console.log('list', gig_list);
    return (
 
 
@@ -32,7 +63,7 @@ const GigList = (props) => {
                   <ul className="nav nav-tabs flex-column flex-sm-row mt-4">
                      <li className="nav-item">
                         <a href="#active-proposals" data-toggle="tab" className="nav-link active make-black">
-                           Active <span className="badge badge-success">9</span>
+                           Active <span className="badge badge-success">{gig_list && gig_list.length}</span>
                         </a>
                      </li>
                      <li className="nav-item">
@@ -74,10 +105,10 @@ const GigList = (props) => {
                                     <th>Actions</th>
                                  </tr>
                               </thead>
-                              <tbody>
-                                 <tr>
-                                    <td className="proposal-title"> I will do a video session and prepare you for any job interview </td>
-                                    <td className="text-success"> &#036;10.00 </td>
+                              <tbody className="gig-table">
+                                 {gig_list && gig_list.map((list, index) => (<tr key={list._id}>
+                                    <td className="proposal-title"> {list.title} </td>
+                                    <td className="text-success"> &#036;{list.pricing[0].price} </td>
                                     <td>21</td>
                                     <td>22</td>
                                     <td className="text-center">
@@ -90,179 +121,13 @@ const GigList = (props) => {
                                              <a href="" className="dropdown-item"> View Coupons</a>
                                              <a href="" className="dropdown-item"> View Referrals</a>
                                              <a href="" className="dropdown-item"> Edit </a>
-                                             <a href="" className="dropdown-item"> Delete </a>
+                                             <button data-id={list._id} className="dropdown-item delete"> Delete </button>
                                           </div>
                                        </div>
 
                                     </td>
-                                 </tr>
-                                 <tr>
-                                    <td className="proposal-title"> i will design a perfect logo for your company </td>
-                                    <td className="text-success"> &#036;10.00 </td>
-                                    <td>6</td>
-                                    <td>7</td>
-                                    <td className="text-center">
-                                       <div className="dropdown">
-                                          <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
-                                          <div className="dropdown-menu">
-                                             <a href="" className="dropdown-item"> Preview </a>
-                                             <a href="#" className="dropdown-item text-success">Already Featured </a>
-                                             <a href="" className="dropdown-item"> Deactivate Proposal</a>
-                                             <a href="" className="dropdown-item"> View Coupons</a>
-                                             <a href="" className="dropdown-item"> View Referrals</a>
-                                             <a href="" className="dropdown-item"> Edit </a>
-                                             <a href="" className="dropdown-item"> Delete </a>
-                                          </div>
-                                       </div>
-                                    </td>
-                                 </tr>
-                                 <tr>
-                                    <td className="proposal-title"> texto ejemplo </td>
-                                    <td className="text-success"> &#036;5.00 </td>
-                                    <td>4</td>
-                                    <td>1</td>
-                                    <td className="text-center">
-                                       <div className="dropdown">
-                                          <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
-                                          <div className="dropdown-menu">
-                                             <a href="" className="dropdown-item"> Preview </a>
-                                             <a href="#" className="dropdown-item text-success">Already Featured </a>
-                                             <a href="" className="dropdown-item"> Deactivate Proposal</a>
-                                             <a href="" className="dropdown-item"> View Coupons</a>
-                                             <a href="" className="dropdown-item"> View Referrals</a>
-                                             <a href="" className="dropdown-item"> Edit </a>
-                                             <a href="" className="dropdown-item"> Delete </a>
-                                          </div>
-                                       </div>
-
-                                    </td>
-                                 </tr>
-                                 <tr>
-                                    <td className="proposal-title"> w5nb547yn4 573457 n 76 </td>
-                                    <td className="text-success"> &#036;5.00 </td>
-                                    <td>5</td>
-                                    <td>2</td>
-                                    <td className="text-center">
-                                       <div className="dropdown">
-                                          <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
-                                          <div className="dropdown-menu">
-                                             <a href="" className="dropdown-item"> Preview </a>
-                                             <a href="#" className="dropdown-item text-success">Already Featured </a>
-                                             <a href="" className="dropdown-item"> Deactivate Proposal</a>
-                                             <a href="" className="dropdown-item"> View Coupons</a>
-                                             <a href="" className="dropdown-item"> View Referrals</a>
-                                             <a href="" className="dropdown-item"> Edit </a>
-                                             <a href="" className="dropdown-item"> Delete </a>
-                                          </div>
-                                       </div>
-
-                                    </td>
-                                 </tr>
-                                 <tr>
-                                    <td className="proposal-title"> dsfgfdghfrghrfhcxvbsdfhgdfhg </td>
-                                    <td className="text-success"> &#036;25.00 </td>
-                                    <td>4</td>
-                                    <td>1</td>
-                                    <td className="text-center">
-                                       <div className="dropdown">
-                                          <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
-                                          <div className="dropdown-menu">
-                                             <a href="" className="dropdown-item"> Preview </a>
-                                             <a href="#" className="dropdown-item text-success">Already Featured </a>
-                                             <a href="" className="dropdown-item"> Deactivate Proposal</a>
-                                             <a href="" className="dropdown-item"> View Coupons</a>
-                                             <a href="" className="dropdown-item"> View Referrals</a>
-                                             <a href="" className="dropdown-item"> Edit </a>
-                                             <a href="" className="dropdown-item"> Delete </a>
-                                          </div>
-                                       </div>
-
-                                    </td>
-                                 </tr>
-                                 <tr>
-                                    <td className="proposal-title"> instant </td>
-                                    <td className="text-success"> &#036;5.00 </td>
-                                    <td>7</td>
-                                    <td>1</td>
-                                    <td className="text-center">
-                                       <div className="dropdown">
-                                          <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
-                                          <div className="dropdown-menu">
-                                             <a href="" className="dropdown-item"> Preview </a>
-                                             <a href="#" className="dropdown-item text-success">Already Featured </a>
-                                             <a href="" className="dropdown-item"> Deactivate Proposal</a>
-                                             <a href="" className="dropdown-item"> View Coupons</a>
-                                             <a href="" className="dropdown-item"> View Referrals</a>
-                                             <a href="" className="dropdown-item"> Edit </a>
-                                             <a href="" className="dropdown-item"> Delete </a>
-                                          </div>
-                                       </div>
-
-                                    </td>
-                                 </tr>
-                                 <tr>
-                                    <td className="proposal-title"> pro00001 </td>
-                                    <td className="text-success"> &#036;5.00 </td>
-                                    <td>5</td>
-                                    <td>1</td>
-                                    <td className="text-center">
-                                       <div className="dropdown">
-                                          <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
-                                          <div className="dropdown-menu">
-                                             <a href="" className="dropdown-item"> Preview </a>
-                                             <a href="#" className="dropdown-item text-success">Already Featured </a>
-                                             <a href="" className="dropdown-item"> Deactivate Proposal</a>
-                                             <a href="" className="dropdown-item"> View Coupons</a>
-                                             <a href="" className="dropdown-item"> View Referrals</a>
-                                             <a href="" className="dropdown-item"> Edit </a>
-                                             <a href="" className="dropdown-item"> Delete </a>
-                                          </div>
-                                       </div>
-
-                                    </td>
-                                 </tr>
-                                 <tr>
-                                    <td className="proposal-title"> vggg </td>
-                                    <td className="text-success"> &#036;9,000.00 </td>
-                                    <td>21</td>
-                                    <td>0</td>
-                                    <td className="text-center">
-                                       <div className="dropdown">
-                                          <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
-                                          <div className="dropdown-menu">
-                                             <a href="" className="dropdown-item"> Preview </a>
-                                             <a href="#" className="dropdown-item text-success">Already Featured </a>
-                                             <a href="" className="dropdown-item"> Deactivate Proposal</a>
-                                             <a href="" className="dropdown-item"> View Coupons</a>
-                                             <a href="" className="dropdown-item"> View Referrals</a>
-                                             <a href="" className="dropdown-item"> Edit </a>
-                                             <a href="" className="dropdown-item"> Delete </a>
-                                          </div>
-                                       </div>
-
-                                    </td>
-                                 </tr>
-                                 <tr>
-                                    <td className="proposal-title"> Хорошо поесть за 3-их </td>
-                                    <td className="text-success"> &#036;5.00 </td>
-                                    <td>6</td>
-                                    <td>0</td>
-                                    <td className="text-center">
-                                       <div className="dropdown">
-                                          <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
-                                          <div className="dropdown-menu">
-                                             <a href="" className="dropdown-item"> Preview </a>
-                                             <a href="#" className="dropdown-item text-success">Already Featured </a>
-                                             <a href="" className="dropdown-item"> Deactivate Proposal</a>
-                                             <a href="" className="dropdown-item"> View Coupons</a>
-                                             <a href="" className="dropdown-item"> View Referrals</a>
-                                             <a href="" className="dropdown-item"> Edit </a>
-                                             <a href="" className="dropdown-item"> Delete </a>
-                                          </div>
-                                       </div>
-
-                                    </td>
-                                 </tr>
+                                 </tr>))}
+                                 
                               </tbody>
                            </table>
                         </div>
@@ -726,6 +591,22 @@ const GigList = (props) => {
          </div>
          <div id="featured-proposal-modal"></div>
 
+         <div className="modal delete-modal" tabIndex="-1" role="basic" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">Confirm Delete</h4>
+            </div>
+            <div className="modal-body p-2"> Are you sure want to delete? </div>
+            <div className="modal-footer">
+              <button type="button" className="btn default" data-dismiss="modal">Close</button>
+              <button type="button" data-value="1" className="btn btn-danger delete-modal-btn">Delete</button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
 
       </Fragment>
 

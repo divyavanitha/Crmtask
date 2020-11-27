@@ -11,6 +11,10 @@ const orderSchema = mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'Coupon'
     },
+    orderId: {
+        type: String,
+        required: true
+    },
     buyer: { type: Schema.Types.ObjectId, ref: 'users' },
     seller: { type: Schema.Types.ObjectId, ref: 'users' },
     gig : {
@@ -18,6 +22,10 @@ const orderSchema = mongoose.Schema({
         ref: 'gigs'
     },
     price: {
+        type: Number,
+        required: true
+    },
+    total: {
         type: Number,
         required: true
     },
@@ -34,7 +42,7 @@ const orderSchema = mongoose.Schema({
         required: true
     },
     status: {
-        type: Number, 
+        type: String, 
         required: true
     },
     created_at: {

@@ -34,6 +34,12 @@ export const GET_MENUS = 'GET_MENUS';
 
 export const GET_CART_LIST = 'GET_CART_LIST';
 
+export const BUYER_ORDER_LIST = 'BUYER_ORDER_LIST';
+
+export const BUYER_ORDER_DETAILS = 'BUYER_ORDER_DETAILS';
+
+export const GET_CART_COUNT = 'GET_CART_COUNT';
+
 export const GET_SLIDES = 'GET_SLIDES';
 
 export const GET_GIGS = 'GET_GIGS';

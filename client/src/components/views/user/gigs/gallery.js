@@ -51,8 +51,7 @@ const Gallery = (props) => {
 
     <Formik
       initialValues={{
-        id: params.id,
-        //photo: [],
+        id: params.id
       }}
       validationSchema={Yup.object().shape({
         /* photo: Yup.string()
@@ -60,31 +59,20 @@ const Gallery = (props) => {
       })}
 
       onSubmit={(values, { setSubmitting, resetForm }) => {
-        console.log('values', file);
-        /*let data = {
-          id: values.id,
-          photo: values.photo
-        };*/
-        
+
         const data = new FormData();
-        data.append( "photo", file );
+        data.append( "id", params.id );
 
         for (var i = 0; i < file.length; i++) {
-          console.log(file[i]['name']);
+          data.append( "photo[]", file[i][0] );
         }
 
-        /*if (params.id) {
-            dispatch(updateCategory(data)).then(res => {
-                addToast(res.message, { appearance: res.status, autoDismiss: true, })
-                history.push('/admin/category/')
-            })
-        } else {*/
         dispatch(updateImage(data)).then(res => {
           console.log('id',res.responseData._id);
           history.push('/gig/post/approval/'+res.responseData._id)
-            //addToast(res.message, { appearance: res.status, autoDismiss: true, })
+            
         })
-        //}
+        
         resetForm();
         setSubmitting(false);
       }}>

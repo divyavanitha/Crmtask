@@ -47,7 +47,7 @@ exports.addcart = async (req, res) => {
     if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
-
+        let cart_length = await db._get(Cart, {user: req.user._id} );
             var cart = {
                 user: req.user._id,
                 gig: req.body.gig_id,
@@ -57,10 +57,9 @@ exports.addcart = async (req, res) => {
             }
 
         let carts= await db._store(Cart, cart);
-
-        let cart_length = await db._get(Cart, {user: req.user._id} );
-        
-        const response = helper.response({ message: res.__('inserted'), data: cart_length });
+        /*carts.count = cart_length.length;
+        console.log(carts.count);*/
+        const response = helper.response({ message: res.__('inserted'), data: {"carts": carts, "count": cart_length} });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -126,7 +125,9 @@ exports.removecart = async (req, res) => {
 
         let carts = await db._delete(Cart, {"_id":req.params.id});
 
-        const response = helper.response({ message: res.__('deleted') });
+        let cart_length = await db._get(Cart, {user: req.user._id} );
+
+        const response = helper.response({ message: res.__('deleted'), data: cart_length });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -138,11 +139,11 @@ exports.removecart = async (req, res) => {
 exports.checkout = async (req, res) => {
 
      const schema = Joi.object().options({ abortEarly: false }).keys({
-        coupon_id: Joi.string().required().label("Coupon Id"),
-        wallet: Joi.string().required().label("wallet"),
+        //coupon_id: Joi.string().required().label("Coupon Id"),
+        wallet: Joi.boolean().required().label("wallet"),
         payment_mode: Joi.string().required().label("Payment Mode"),
-        gig_id: Joi.string().required().label("Gig Id"),
-        quantity: Joi.number().required().label("Quantity"),
+        //gig_id: Joi.string().required().label("Gig Id"),
+        //quantity: Joi.number().required().label("Quantity"),
         total: Joi.number().required().label("total")
 
     }).unknown(true);
@@ -157,30 +158,43 @@ exports.checkout = async (req, res) => {
         })
     }
 
-    const errorResponse = helper.response({ status: 422, error:errorMessage });
+    /*const errorResponse = helper.response({ status: 422, error:errorMessage });
 
     if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
-    try {
+    try {*/
 
-            var order = {
-                coupon: req.body.coupon_id,
-                wallet: req.body.wallet,
-                payment_mode: req.body.payment_mode,
-                buyer: req.user._id,
-                seller: req.body.seller_id,
-                gig: req.body.gig_id,
-                quantity: req.body.quantity,
-                price: req.body.price,
-                status: 1
+           let carts = await db._get(Cart, {user: req.user._id}, {}, { populate: "gig" }  ); 
+
+           for(let i in carts) {
+
+                let orderId = 'FIV'+Math.floor(100000 + Math.random() * 900000);
+
+                var order = {
+                    orderId: orderId,
+                    coupon: req.body.coupon_id,
+                    wallet: req.body.wallet,
+                    payment_mode: req.body.payment_mode,
+                    buyer: req.user._id,
+                    seller: carts[i].gig.user,
+                    gig: carts[i].gig._id,
+                    quantity: carts[i].quantity,
+                    price: carts[i].price,
+                    total: req.body.total,
+                    status: "In Progress"
+                }
+
+                let orders= await db._store(Order, order);
+
+                await db._delete(Cart, {"_id":carts[i]._id});
             }
+            
+            let tot_carts = await db._get(Cart, {user: req.user._id}); 
 
-        let orders= await db._store(Order, order);
-
-        const response = helper.response({ message: res.__('inserted'), data: order });
+        const response = helper.response({ message: res.__('inserted'), data: tot_carts });
         return res.status(response.statusCode).json(response);
 
-    } catch (err) {
+   /* } catch (err) {
         if (err[0] != undefined) {
             for (i in err.errors) {
                 return res.status(422).json(err.errors[i].message);
@@ -188,6 +202,40 @@ exports.checkout = async (req, res) => {
         } else {
             return res.status(422).json(err);
         }
+    }*/
+
+}
+
+exports.buyerOrderList = async (req, res) => {
+    try {
+
+        let orders = await db._get(Order, {buyer: req.user._id}, {}, {populate: "gig"});
+
+        const data = { orders };
+
+        const response = helper.response({ data });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.buyerOrderDetails = async (req, res) => {
+    try {
+
+        let gig = await db._find(Order, {_id: req.params.id}, {}, { populate: ["gig","buyer"] });
+
+
+        const data = { gig };
+
+        const response = helper.response({ data: data });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
     }
 
 }

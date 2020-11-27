@@ -38,6 +38,8 @@ const gigSchema = mongoose.Schema({
         
     }],
     fixed_price: { type: Boolean },
+    proposal: { type: Boolean },
+    status: { type: Boolean },
     faq: [{
         question: { type: String },
         answer: { type: String }

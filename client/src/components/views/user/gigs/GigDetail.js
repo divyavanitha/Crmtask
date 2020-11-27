@@ -133,15 +133,15 @@ const GigDetail = (props) =>  {
 
                 if (values.action == "cart") {
                     dispatch(addCart(data)).then(res => {
-                        console.log(res.responseData.length);
-                        $(".cart-count").text(res.responseData.length);
+                        console.log('cart',res.responseData.count.length);
+                        $(".cart-count").text(res.responseData.count.length+1);
                         //addToast(res.message, { appearance: res.status, autoDismiss: true, })
                         
                     })
                 } else {
                     dispatch(addCart(data)).then(res => {
-                      console.log('id',res.responseData._id);
-                      history.push('/gig/post/order/'+res.responseData._id)
+                      console.log('id',res);
+                      history.push('cart-payment-option/'+res.responseData.carts._id)
                         //addToast(res.message, { appearance: res.status, autoDismiss: true, })
                     })
                 }

@@ -13,7 +13,10 @@ import {
     FIND_GIG,
     GET_DELIVERY_TIME,
     GET_PACKAGE,
-    GET_CART_LIST
+    GET_CART_LIST,
+    GET_CART_COUNT,
+    BUYER_ORDER_LIST,
+    BUYER_ORDER_DETAILS
 } from './types';
 
 
@@ -247,7 +250,10 @@ export const createOrder = (data) =>  async dispatch => {
  export const addCart = (data) =>  async dispatch => {
   try {
         let response = await axios.post('/api/gig/cart', data);
-        console.log('data',response);
+        /*dispatch({
+            type: GET_CART_COUNT,
+            payload: 1
+        });*/
         response.data.status = 'success';
         return response.data;
     } catch(e) {
@@ -272,6 +278,7 @@ export const createOrder = (data) =>  async dispatch => {
 
 };
 
+
 export const deleteCart= (id) => async dispatch => {
     try {
         let response = await axios.delete(`/api/gig/cart/${id}`);
@@ -282,3 +289,50 @@ export const deleteCart= (id) => async dispatch => {
         return e.response.data;
     }
 }; 
+
+export const checkout = (data) =>  async dispatch => {
+  try {
+        let response = await axios.post('/api/gig/checkout', data);
+        response.data.status = 'success';
+        return response.data;
+    } catch(e) {
+        e.response.data.status = 'error';
+        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        return e.response.data;
+    }
+ }
+
+ export const buyerOrderList = (data) => async dispatch => {
+
+    try {
+        let order = await axios.get("/api/buyer/orderlist", data);
+
+        dispatch({
+            type: BUYER_ORDER_LIST,
+            payload: order.data.responseData
+        });
+    } catch (e) {
+        console.log(e)
+    }
+
+};
+
+export const getBuyerOrderDetails = (id) => async dispatch => {
+
+        axios
+        .get(`/api/buyer/orderdetails/${id}`)
+        .then(res => {
+            dispatch({
+                type: BUYER_ORDER_DETAILS,
+                payload: res.data
+            })
+        }
+        )
+        .catch(e =>
+            dispatch({
+                type: BUYER_ORDER_DETAILS,
+                payload: null
+            })
+        );
+    
+};

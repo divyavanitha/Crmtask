@@ -6,12 +6,14 @@ import {
      CREATE_GIGS
 } from '../_actions/types';
 
-
-export default function (state = {}, action) {
+const intialState = {
+  gig: {}
+};
+export default function (state = intialState, action) {
     switch (action.type) {
       
         case GET_ALLGIGS:
-            return { ...state, gigsData: action.payload  }
+            return { ...state, gigs: action.payload  }
         case GET_MYALLGIGS:
             return { ...state, gigsData: action.payload  }
         case GET_GIGSBYID:

@@ -76,7 +76,8 @@ exports.listgigs = async (req, res) => {
 }
 
 exports.creategigs = async (req, res) => {
-
+/*console.log(req.user);
+return true;*/
     const schema = Joi.object().options({ abortEarly: false }).keys({
         title: Joi.string().required().label("Title"),
         //category_id: Joi.string().required().label("Category Id"),
@@ -446,7 +447,7 @@ console.log('files',req.files);
 
         let gigs = await db._update(Gig, { _id: req.body.id }, gig);
 
-        const response = helper.response({ message: res.__('updated'), data: gigs });
+        const response = helper.response({ message: res.__('updated'), data: gig });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -462,8 +463,8 @@ console.log('files',req.files);
 
 exports.updateConfirm = async(req, res) => {
     const schema = Joi.object().options({ abortEarly: false }).keys({
-        id: Joi.string().required().label("Gig Id")
-
+        id: Joi.string().required().label("Gig Id"),
+        proposal: Joi.boolean().required().label("Proposal Feature")
     }).unknown(true);
 
     const { error } = schema.validate(req.body);
@@ -483,7 +484,7 @@ exports.updateConfirm = async(req, res) => {
     try {
 
         let gig = await Gig.findById(req.body.id);
-
+         gig.proposal = req.body.proposal;
         let gigs = await db._update(Gig, { _id: req.body.id }, gig);
 //console.log(gigs);
 

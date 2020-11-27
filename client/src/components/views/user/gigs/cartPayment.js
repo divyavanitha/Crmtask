@@ -6,7 +6,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import $ from 'jquery';
 import "./Gig.css";
-import { getGigbyId, createOrder, getPackage, addCart, getCartList, deleteCart } from "../../../../_actions/user.action";
+import { getGigbyId, createOrder, getPackage, addCart, getCartList, deleteCart, checkout } from "../../../../_actions/user.action";
 
 import OwlCarousel from 'react-owl-carousel';
 
@@ -139,37 +139,12 @@ const Cart = (props) =>  {
    
    });
 
-        dispatch(getGigbyId(params.gig))
-        dispatch(getPackage())
-
-        $('body').on('click', '.delete', function (e) {
-          alert();
-          var that = $(this);
-          e.preventDefault();
-          const sid = that.data('id');
-          console.log('id',sid);
-          console.log(that.closest('.cart-card'));
-          $('.delete-modal').modal("show");
-          $(".delete-modal-btn")
-            .off()
-            .on("click", function () {
-              dispatch(deleteCart(sid)).then(res => {
-                //addToast(res.message, { appearance: res.status, autoDismiss: true, })
-                that.closest('.cart-card').remove();
-                $('.delete-modal').modal("hide");
-
-              })
-
-            });
-        });
-
-
-
-    }, [params.gig]);
-    const gig = useSelector((state) => state.user && state.user.gig_details && state.user.gig_details.responseData && state.user.gig_details.responseData.gig);
-    const packages = useSelector(state => state.user && state.user.packages && state.user.packages.responseData && state.user.packages.responseData.packages);
+    }, []);
+  
     const cart = useSelector((state) => state.user && state.user.cart_lists && state.user.cart_lists.carts);
-    
+
+    $(".count_cart").text("Your Cart "+(cart && cart.length));
+
     $(document).ready(function () {
       var len = cart && cart;
       console.log('cart1',len);
@@ -186,11 +161,8 @@ const Cart = (props) =>  {
 
             enableReinitialize
             initialValues={{
-                /*gig_id: params.gig,
-                price: price,
-                quantity: '1',
-                package_id: package_id*/
-
+               total: total,
+               payment_mode: ""
             }
             }
 
@@ -203,28 +175,24 @@ const Cart = (props) =>  {
                     .required('Tags is required'),*/
             })}
             onSubmit={(values, { setSubmitting, resetForm }) => {
-                console.log('values', values);
+                
+              let wallet = false;
+                if(values.payment_mode == "WALLET"){
+                   wallet = true;
+                }
                 let data = {
-                   /* gig_id: params.gig,
-                    price: values.price,
-                    quantity: values.quantity,
-                    package_id: values.package_id*/
+                   total: values.total,
+                   payment_mode: values.payment_mode,
+                   wallet: wallet
                 };
 
-                if (values.action == "cart") {
-                    dispatch(addCart(data)).then(res => {
-                        console.log(res.responseData.length);
-                        $(".cart-count").text(res.responseData.length);
-                        //addToast(res.message, { appearance: res.status, autoDismiss: true, })
-                        
-                    })
-                } else {
-                    dispatch(addCart(data)).then(res => {
-                      console.log('id',res.responseData._id);
-                      history.push('/gig/post/order/'+res.responseData._id)
-                        //addToast(res.message, { appearance: res.status, autoDismiss: true, })
-                    })
-                }
+                dispatch(checkout(data)).then(res => {
+                  console.log('check',res);
+                    $(".cart-count").text(res.responseData.length);
+                    history.push('/buyer-order-lists')
+                    
+                })
+                
                 resetForm();
                 setSubmitting(false);
             }}>
@@ -262,7 +230,7 @@ const Cart = (props) =>  {
                <div className="col-md-12">
                   <div className="card mb-3">
                      <div className="card-body">
-                        <h5 className="float-left mt-2 pt-2 count_cart"> Your Cart (1) </h5>
+                        <h5 className="float-left mt-2 pt-2 count_cart">  </h5>
                         <h5 className="float-right mb-0"> 
                            <Link to="/" className="btn btn-success">
                            Continue Shopping                
@@ -288,7 +256,7 @@ const Cart = (props) =>  {
                                  <div className="col-11">
                                     <p className="lead mt-2">
                                        Personal Balance - <b>tyrone</b> 
-                                       <span className="text-success font-weight-bold">&#036;131.50</span>
+                                       <span className="text-success font-weight-bold">&#036;{total}</span>
                                     </p>
                                  </div>
                               </div>
@@ -364,8 +332,9 @@ const Cart = (props) =>  {
                         <hr className="processing-fee" />
                         <p>Total <span className="float-right font-weight-bold total-price">&#036;{total}</span></p>
                         <hr />
-                        <form method="post" id="shopping-balance-form">
-                           <button type="submit" name="cart_submit_order" className="btn btn-lg btn-success btn-block">
+                        <form onSubmit={handleSubmit} encType="multipart/form-data" id="shopping-balance-form">
+                          <input type="hidden" name="total" onChange={handleChange} value={values.total} />
+                           <button type="submit" onClick={() => setFieldValue("payment_mode", "WALLET")} name="cart_submit_order" className="btn btn-lg btn-success btn-block">
                            Pay With Shopping Balance              
                            </button>
                         </form>
