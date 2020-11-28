@@ -41,6 +41,14 @@ const orderSchema = mongoose.Schema({
         type: String, 
         required: true
     },
+    deliveryTime: { 
+        type: String, 
+        required: false 
+    },
+    revisions: {
+        type: Number,
+        required: true
+    },
     status: {
         type: String, 
         required: true

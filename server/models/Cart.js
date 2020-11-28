@@ -25,6 +25,14 @@ const cartSchema = mongoose.Schema({
         ref: 'Package', 
         required: false 
     },
+    deliveryTime: { 
+        type: String, 
+        required: false 
+    },
+    revisions: {
+        type: Number,
+        required: true
+    },
     created_at: {
         type: Date,
         default: Date.now

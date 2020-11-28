@@ -156,6 +156,9 @@ router.patch('/update/cart', middleware.user, function(req, res){
 router.delete('/gig/cart/:id', middleware.user, function(req, res){
   orderController.removecart(req, res);
 });
+router.get('/find/cart/:id', middleware.user, function(req, res){
+  orderController.findcart(req, res);
+});
 
 /*Order*/
 router.post('/gig/checkout', middleware.user, function(req, res){
@@ -171,6 +174,14 @@ router.get('/buyer/orderlist', middleware.user, function(req, res){
 
 router.get('/buyer/orderdetails/:id', middleware.user, (req, res) => {
   orderController.buyerOrderDetails(req, res);
+});
+
+router.get('/seller/orderlist', middleware.user, function(req, res){
+  orderController.sellerOrderList(req, res);
+});
+
+router.get('/seller/orderdetails/:id', middleware.user, (req, res) => {
+  orderController.sellerOrderDetails(req, res);
 });
 
 router.post('/request', [middleware.user, middleware.upload( path.join(__dirname, '../storage/images/request/') ).fields([{ name: 'files[]', maxCount: 4 }]) ], (req, res) => {

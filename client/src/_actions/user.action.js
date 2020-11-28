@@ -16,7 +16,10 @@ import {
     GET_CART_LIST,
     GET_CART_COUNT,
     BUYER_ORDER_LIST,
-    BUYER_ORDER_DETAILS
+    BUYER_ORDER_DETAILS,
+    SELLER_ORDER_LIST,
+    SELLER_ORDER_DETAILS,
+    FIND_CART
 } from './types';
 
 
@@ -234,6 +237,26 @@ export const getGigbyId = (id) => dispatch => {
         );
 };
 
+export const getCartbyId = (id) => dispatch => {
+    console.log('id',id);
+    axios
+        .get(`/api/find/cart/${id}`)
+        .then(res => {
+
+            dispatch({
+                type: FIND_CART,
+                payload: res.data
+            })
+        }
+        )
+        .catch(e =>
+            dispatch({
+                type: FIND_CART,
+                payload: null
+            })
+        );
+};
+
 export const createOrder = (data) =>  async dispatch => {
   try {
         let response = await axios.post('/api/gig/checkout', data);
@@ -331,6 +354,41 @@ export const getBuyerOrderDetails = (id) => async dispatch => {
         .catch(e =>
             dispatch({
                 type: BUYER_ORDER_DETAILS,
+                payload: null
+            })
+        );
+    
+};
+
+export const sellerOrderList = (data) => async dispatch => {
+
+    try {
+        let order = await axios.get("/api/seller/orderlist", data);
+
+        dispatch({
+            type: SELLER_ORDER_LIST,
+            payload: order.data.responseData
+        });
+    } catch (e) {
+        console.log(e)
+    }
+
+};
+
+export const getSellerOrderDetails = (id) => async dispatch => {
+
+        axios
+        .get(`/api/seller/orderdetails/${id}`)
+        .then(res => {
+            dispatch({
+                type: SELLER_ORDER_DETAILS,
+                payload: res.data
+            })
+        }
+        )
+        .catch(e =>
+            dispatch({
+                type: SELLER_ORDER_DETAILS,
                 payload: null
             })
         );

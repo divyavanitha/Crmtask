@@ -19,6 +19,8 @@ const GigDetail = (props) =>  {
 
     const [price, setPrice] = useState(0);
     const [package_id, setPackage] = useState("");
+    const [deliveryTime, setdeliveryTime] = useState(0);
+    const [revision, setrevision] = useState(0);
 
     useEffect(() => {
 
@@ -57,8 +59,12 @@ const GigDetail = (props) =>  {
                     if(data.fixed_price == true){
                         $(".tabs-header").hide();  
                         $(".total-price-1").text(data.pricing[0].price);
+                        $(".delivery").text( data.pricing[0].DeliveryTime+" Delivery");
+                        $(".revision").text( data.pricing[0].revisions+" Revisions");
                         setPackage(data.pricing[0].package);
-                        setPrice(data.pricing[0].price);      
+                        setPrice(data.pricing[0].price); 
+                        setdeliveryTime(data.pricing[0].DeliveryTime); 
+                        setrevision(data.pricing[0].revisions);      
                     }else{
                         $(".tabs-header").show();   
                         $("body").on("click", ".nav-link", function () {
@@ -73,16 +79,28 @@ const GigDetail = (props) =>  {
                         });*/
                         if(node_id == "Basic"){
                          $(".total-price-1").text(data.pricing[0].price);
+                         $(".delivery").text( data.pricing[0].DeliveryTime+" Delivery");
+                        $(".revision").text( data.pricing[0].revisions+" Revisions");
                          setPackage(data.pricing[0].package);
                          setPrice(data.pricing[0].price);
+                         setdeliveryTime(data.pricing[0].DeliveryTime); 
+                         setrevision(data.pricing[0].revisions);
                         }else if(node_id == "Standard"){
                          $(".total-price-1").text(data.pricing[1].price);
+                         $(".delivery").text( data.pricing[1].DeliveryTime+" Delivery");
+                        $(".revision").text( data.pricing[1].revisions+" Revisions");
                          setPackage(data.pricing[1].package);
                          setPrice(data.pricing[1].price);
+                         setdeliveryTime(data.pricing[1].DeliveryTime); 
+                         setrevision(data.pricing[1].revisions);
                         }else{
-                         $(".total-price-1").text(data.pricing[2].price);  
+                         $(".total-price-1").text(data.pricing[2].price); 
+                         $(".delivery").text( data.pricing[2].DeliveryTime+" Delivery");
+                        $(".revision").text( data.pricing[2].revisions+" Revisions"); 
                          setPackage(data.pricing[2].package);
                          setPrice(data.pricing[2].price);
+                         setdeliveryTime(data.pricing[2].DeliveryTime); 
+                         setrevision(data.pricing[2].revisions);
                         }
                         });
                     }
@@ -109,7 +127,9 @@ const GigDetail = (props) =>  {
                 gig_id: params.gig,
                 price: price,
                 quantity: '1',
-                package_id: package_id
+                package_id: package_id,
+                deliveryTime: deliveryTime,
+                revision: revision
 
             }
             }
@@ -128,7 +148,9 @@ const GigDetail = (props) =>  {
                     gig_id: params.gig,
                     price: values.price,
                     quantity: values.quantity,
-                    package_id: values.package_id
+                    package_id: values.package_id,
+                    deliveryTime: values.deliveryTime,
+                    revision: values.revision
                 };
 
                 if (values.action == "cart") {
@@ -140,7 +162,8 @@ const GigDetail = (props) =>  {
                     })
                 } else {
                     dispatch(addCart(data)).then(res => {
-                      console.log('id',res);
+                      console.log('cart',res.responseData.count.length);
+                      $(".cart-count").text(res.responseData.count.length+1);
                       history.push('cart-payment-option/'+res.responseData.carts._id)
                         //addToast(res.message, { appearance: res.status, autoDismiss: true, })
                     })
@@ -460,7 +483,7 @@ const GigDetail = (props) =>  {
                                         </h3>
                                         <p>Post your song to my music website</p>
                                         <h6 className="mb-3">
-                                            <i className="fa fa-clock-o"></i> 1 Days Delivery &nbsp; &nbsp; <i className="fa fa-refresh"></i> 0 Revisions
+                                            <i className="fa fa-clock-o delivery"> 1 Days Delivery </i> &nbsp; &nbsp; <i className="fa fa-refresh revision"> 0 Revisions </i>
                                         </h6>
                                         <hr />
                                         <ul className="buyables m-b-25 list-unstyled ">
@@ -477,7 +500,7 @@ const GigDetail = (props) =>  {
                                                 </div>
                                                 {/* <!-- &#036;<span className="total-price">10</span>.00 --> */}
                                             </li>
-                                            <li className="">
+                                           {/*  <li className="">
                                                 <label className="">
                                                     <input className="mb-2" style={{ width: '15px', height: '15px' }} type="checkbox" name="proposal_extras[1]" data-packagenum="1" value="225" form="checkoutForm1" />
                                                     <span className="js-express-delivery-text "> Radio airplay      </span>
@@ -486,7 +509,7 @@ const GigDetail = (props) =>  {
                                                         <b className="num d-none">50</b>
                                                     </span>
                                                 </label>
-                                            </li>
+                                            </li> */}
                                             <li className="">
                                                 <label className="">
                                                     <input className="mb-2" style={{ width: '15px', height: '15px' }} type="checkbox" name="proposal_extras[2]" data-packagenum="1" value="226" form="checkoutForm1" />

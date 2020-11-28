@@ -323,8 +323,8 @@ function Header() {
                                         <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#selling">
                                             Selling   </a>
                                         <div id="selling" className="dropdown-submenu collapse">
-                                            <a className="dropdown-item" href="selling_orders">
-                                                Orders      </a>
+                                            <Link className="dropdown-item" to="/seller-order-lists">
+                                                Orders      </Link>
                                             <Link className="dropdown-item" to="/gig/list"> My Gigs </Link>
                                             <a className="dropdown-item" href="proposals/create_coupon">
                                                 Create A Coupon      </a>
@@ -338,8 +338,8 @@ function Header() {
                                         <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#buying">
                                             Buying   </a>
                                         <div id="buying" className="dropdown-submenu collapse">
-                                            <a className="dropdown-item" href="buying_orders">
-                                                Orders      </a>
+                                            <Link className="dropdown-item" to="/buyer-order-lists">
+                                                Orders      </Link>
                                             <a className="dropdown-item" href="purchases">
                                                 Purchases      </a>
                                             <a className="dropdown-item" href="favorites">

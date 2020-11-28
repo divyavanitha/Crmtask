@@ -53,7 +53,9 @@ exports.addcart = async (req, res) => {
                 gig: req.body.gig_id,
                 quantity: req.body.quantity,
                 price: req.body.price,
-                package: req.body.package_id
+                package: req.body.package_id,
+                deliveryTime: req.body.deliveryTime,
+                revisions: req.body.revision
             }
 
         let carts= await db._store(Cart, cart);
@@ -135,6 +137,22 @@ exports.removecart = async (req, res) => {
     }
 }
 
+exports.findcart = async (req, res) => {
+
+     try {
+
+        let carts = await db._find(Cart, {"_id":req.params.id});
+        const data = { carts };
+
+        const response = helper.response({ data });
+       
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 
 exports.checkout = async (req, res) => {
 
@@ -181,7 +199,9 @@ exports.checkout = async (req, res) => {
                     quantity: carts[i].quantity,
                     price: carts[i].price,
                     total: req.body.total,
-                    status: "In Progress"
+                    status: "Progress",
+                    deliveryTime: carts[i].deliveryTime,
+                    revisions: carts[i].revisions
                 }
 
                 let orders= await db._store(Order, order);
@@ -225,10 +245,44 @@ exports.buyerOrderList = async (req, res) => {
 exports.buyerOrderDetails = async (req, res) => {
     try {
 
-        let gig = await db._find(Order, {_id: req.params.id}, {}, { populate: ["gig","buyer"] });
+        let gig = await db._find(Order, {_id: req.params.id}, {}, { populate: ["gig","seller"] });
 
 
         const data = { gig };
+
+        const response = helper.response({ data: data });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.sellerOrderList = async (req, res) => {
+    try {
+
+        let orders = await db._get(Order, {seller: req.user._id}, {}, {populate: "gig"});
+
+        const data = { orders };
+
+        const response = helper.response({ data });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.sellerOrderDetails = async (req, res) => {
+    try {
+
+        let order = await db._find(Order, {_id: req.params.id}, {}, { populate: ["gig","buyer"] });
+
+
+        const data = { order };
 
         const response = helper.response({ data: data });
 

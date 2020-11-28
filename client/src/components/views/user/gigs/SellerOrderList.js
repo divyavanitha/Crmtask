@@ -4,7 +4,7 @@ import { Link, useParams, useHistory } from "react-router-dom";
 //import { useToasts } from 'react-toast-notifications'
 
 import { getGigList, deleteGig } from "../../../../_actions/gigs.action";
-import { buyerOrderList } from "../../../../_actions/user.action";
+import { sellerOrderList } from "../../../../_actions/user.action";
 
 import $ from 'jquery';
 
@@ -13,7 +13,7 @@ const GigList = (props) => {
    let history = useHistory();
 
     useEffect(() => {
-         dispatch(buyerOrderList())
+         dispatch(sellerOrderList())
 
          $('body').on('click', '.delete', function (e) {
           //alert();
@@ -38,9 +38,9 @@ const GigList = (props) => {
 
     }, []);
 
-    const buyer_order_list = useSelector((state) => state.user && state.user.buyer_order_list && state.user.buyer_order_list.orders);
+    const seller_order_list = useSelector((state) => state.user && state.user.seller_order_list && state.user.seller_order_list.orders);
 
-    console.log('list', buyer_order_list);
+    console.log('list', seller_order_list);
    return (
 
 
@@ -59,7 +59,7 @@ const GigList = (props) => {
                <ul className="nav nav-tabs card-header-tabs">
                   <li className="nav-item">
                      <a href="#active" data-toggle="tab" className="nav-link make-black active ">
-                     ACTIVE <span className="badge badge-success">{buyer_order_list && buyer_order_list.length}</span>
+                     ACTIVE <span className="badge badge-success">{seller_order_list && seller_order_list.length}</span>
                      </a>
                   </li>
                   <li className="nav-item">
@@ -79,7 +79,7 @@ const GigList = (props) => {
                   </li>
                   <li className="nav-item">
                      <a href="#all" data-toggle="tab" className="nav-link make-black">
-                     ALL <span className="badge badge-success">{buyer_order_list && buyer_order_list.length}</span>
+                     ALL <span className="badge badge-success">{seller_order_list && seller_order_list.length}</span>
                      </a>
                   </li>
                </ul>
@@ -99,9 +99,9 @@ const GigList = (props) => {
                               </tr>
                            </thead>
                            <tbody>
-                              {buyer_order_list && buyer_order_list.map((list, index) => (<tr key={list._id}>
+                              {seller_order_list && seller_order_list.map((list, index) => (<tr key={list._id}>
                                  <td>
-                                    <Link to={"/order/details/"+list._id} className="make-black order-proposal-link">
+                                    <Link to={"/seller-order/details/"+list._id} className="make-black order-proposal-link">
                                        {list.gig.title}
                                     </Link>
                                  </td>

@@ -6,7 +6,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import $ from 'jquery';
 import "./Gig.css";
-import { getBuyerOrderDetails } from "../../../../_actions/user.action";
+import { getSellerOrderDetails } from "../../../../_actions/user.action";
 
 import OwlCarousel from 'react-owl-carousel';
 
@@ -20,7 +20,7 @@ const Cart = (props) =>  {
     const [total, setTotal] = useState(0);
 
     useEffect(() => {
-        dispatch(getBuyerOrderDetails(params.id))
+        dispatch(getSellerOrderDetails(params.id))
        $(document).ready(function(){
    
    // Sticky Code start //
@@ -61,11 +61,9 @@ const Cart = (props) =>  {
 
     }, [params.id]);
     
-    const order_details = useSelector((state) => state.user && state.user.buyer_order_details && state.user.buyer_order_details.responseData && state.user.buyer_order_details.responseData.gig);
+    const order_details = useSelector((state) => state.user && state.user.seller_order_details && state.user.seller_order_details.responseData && state.user.seller_order_details.responseData.order);
 
     console.log('order', order_details);
-    
-    
 
     return (
 
@@ -186,13 +184,13 @@ const Cart = (props) =>  {
                                              </small>
                                           </h4>
                                           <p className="text-muted">
-                                             <span className="font-weight-bold">Seller: </span>
+                                             <span className="font-weight-bold">Buyer: </span>
                                              <a href="pat" target="_blank" className="seller-buyer-name mr-1 text-success">
-                                             {order_details && order_details.seller.firstName} {order_details && order_details.seller.lastName}               </a>
+                                             {order_details && order_details.buyer.firstName} {order_details && order_details.buyer.lastName}               </a>
                                              | <span className="font-weight-bold ml-1"> Status: </span>
-                                             Progress             | <span className="font-weight-bold ml-1"> Date: </span>
-                                             {order_details && order_details.created_at}             | <span className="font-weight-bold ml-1"> Order Revisions:  </span>
-                                            {order_details && order_details.revisions}                        
+                                             {order_details && order_details.status}             | <span className="font-weight-bold ml-1"> Date: </span>
+                                             {order_details && order_details.created_at}             | <span className="font-weight-bold ml-1"> Order Revisions: </span>
+                                              {order_details && order_details.revisions}                             
                                           </p>
                                        </div>
                                     </div>
@@ -289,7 +287,7 @@ const Cart = (props) =>  {
                               <div className="insert-message-box">
                                  <div className="float-right">
                                     <p className="text-muted mt-1">
-                                       Pat      <span         className="text-success font-weight-bold"
+                                       {order_details && order_details.seller.firstName}      <span         className="text-success font-weight-bold"
                                           >  
                                        is Online 
                                        </span> | Local Time

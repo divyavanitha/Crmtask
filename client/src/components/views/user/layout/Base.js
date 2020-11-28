@@ -26,6 +26,8 @@ import Cart from "../gigs/cart";
 import CartPayment from "../gigs/cartPayment";
 import BuyerOrderList from "../gigs/BuyerOrderList";
 import OrderDetails from "../gigs/OrderDetails";
+import SellerOrderList from "../gigs/SellerOrderList";
+import SellerOrderDetails from "../gigs/SellerOrderDetails";
 import Profile from "../Profile";
 
 import "../../../../assets/css/custom.css";
@@ -60,11 +62,15 @@ const Base = () => {
                 <ProtectedRoute exact={true} path="/gig/:user/:gig" component={GigDetail} />
                 <ProtectedRoute exact={true} path="/cart" component={Cart} />
                 <ProtectedRoute exact={true} path="/cart-payment-option" component={CartPayment} />
+                <ProtectedRoute exact={true} path="/gig/:user/cart-payment-option/:id" component={CartPayment} />
                 <ProtectedRoute exact={true} path="/buyer-order-lists" component={BuyerOrderList} />
                 <ProtectedRoute exact={true} path="/order/details/:id" component={OrderDetails} />
+                <ProtectedRoute exact={true} path="/seller-order-lists" component={SellerOrderList} />
+                <ProtectedRoute exact={true} path="/seller-order/details/:id" component={SellerOrderDetails} />
                 <ProtectedRoute exact={true} path="/request/add" component={AddRequest} />
                 <ProtectedRoute exact={true} path="/request/manage" component={RequestList} />
                 <ProtectedRoute exact={true} path="/profile" component={Profile} />
+
             </Switch>
 
             <Footer />

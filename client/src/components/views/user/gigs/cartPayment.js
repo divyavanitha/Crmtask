@@ -6,7 +6,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import $ from 'jquery';
 import "./Gig.css";
-import { getGigbyId, createOrder, getPackage, addCart, getCartList, deleteCart, checkout } from "../../../../_actions/user.action";
+import { getGigbyId, createOrder, getPackage, addCart, getCartList, deleteCart, checkout, getCartbyId } from "../../../../_actions/user.action";
 
 import OwlCarousel from 'react-owl-carousel';
 
@@ -20,7 +20,10 @@ const Cart = (props) =>  {
 
     const [total, setTotal] = useState(0);
 
-    useEffect(() => {
+     useEffect(() => {
+      console.log('id',params.id);
+        dispatch(getCartList())
+        dispatch(getCartbyId(params.id))
 
         $(document).ready(function(){
          //$('.total-price').html('&#036;10.00');
@@ -136,23 +139,31 @@ const Cart = (props) =>  {
             $('#paystack-form').hide();
             $('#shopping-balance-form').hide();
          });
-   
-   });
 
-    }, []);
+         });
+      }, []);
+
+   
   
     const cart = useSelector((state) => state.user && state.user.cart_lists && state.user.cart_lists.carts);
 
+    const cart_details = useSelector((state) => state.user && state.user.cart_details && state.user.cart_details.responseData && state.user.cart_details.responseData.carts);
+console.log('cart_details', cart_details);
     $(".count_cart").text("Your Cart "+(cart && cart.length));
 
     $(document).ready(function () {
       var len = cart && cart;
       console.log('cart1',len);
       var total = 0;
+      if(params.id){
+         total = cart_details && cart_details.price
+      }else{
         $.each(len, function (index, value) {
             total = total + value.price;
         });
-        setTotal(total);
+        
+      }
+      setTotal(total);
     });
 
     return (
@@ -230,7 +241,7 @@ const Cart = (props) =>  {
                <div className="col-md-12">
                   <div className="card mb-3">
                      <div className="card-body">
-                        <h5 className="float-left mt-2 pt-2 count_cart">  </h5>
+                        <h5 className="float-left mt-2 pt-2 count_cart"> Your Cart 1 </h5>
                         <h5 className="float-right mb-0"> 
                            <Link to="/" className="btn btn-success">
                            Continue Shopping                
@@ -256,7 +267,7 @@ const Cart = (props) =>  {
                                  <div className="col-11">
                                     <p className="lead mt-2">
                                        Personal Balance - <b>tyrone</b> 
-                                       <span className="text-success font-weight-bold">&#036;{total}</span>
+                                       <span className="text-success font-weight-bold">&#036;{ params.id ? cart_details &&cart_details.price :total}</span>
                                     </p>
                                  </div>
                               </div>
@@ -326,11 +337,11 @@ const Cart = (props) =>  {
                <div className="col-md-5">
                   <div className="card">
                      <div className="card-body cart-order-details">
-                        <p>Cart Subtotal <span className="float-right">&#036;{total}</span></p>
+                        <p>Cart Subtotal <span className="float-right">&#036;{ params.id ? cart_details &&cart_details.price :total}</span></p>
                         <hr />
                         {/* <p className="processing-fee">Processing Fee <span className="float-right">&#036;0.50 </span></p> */}
                         <hr className="processing-fee" />
-                        <p>Total <span className="float-right font-weight-bold total-price">&#036;{total}</span></p>
+                        <p>Total <span className="float-right font-weight-bold total-price">&#036;{ params.id ? cart_details &&cart_details.price :total}</span></p>
                         <hr />
                         <form onSubmit={handleSubmit} encType="multipart/form-data" id="shopping-balance-form">
                           <input type="hidden" name="total" onChange={handleChange} value={values.total} />

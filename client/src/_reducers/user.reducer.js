@@ -12,7 +12,10 @@ import {
     GET_CART_LIST,
     GET_CART_COUNT,
     BUYER_ORDER_LIST,
-    BUYER_ORDER_DETAILS
+    BUYER_ORDER_DETAILS,
+    SELLER_ORDER_LIST,
+    SELLER_ORDER_DETAILS,
+    FIND_CART
 } from '../_actions/types';
 
 let initialState = {
@@ -53,12 +56,17 @@ const userReducer = (state = initialState, action) => {
         case GET_PACKAGE:
             return { ...state, packages: action.payload }
         case GET_CART_LIST:
-        console.log('sdfhghd',action.payload);
             return { ...state, cart_lists: action.payload }
         case BUYER_ORDER_LIST:
             return { ...state, buyer_order_list: action.payload }
         case BUYER_ORDER_DETAILS:
         return { ...state, buyer_order_details: action.payload }
+        case SELLER_ORDER_LIST:
+            return { ...state, seller_order_list: action.payload }
+        case SELLER_ORDER_DETAILS:
+        return { ...state, seller_order_details: action.payload }
+        case FIND_CART:
+        return { ...state, cart_details: action.payload }
         /*case GET_CART_COUNT:
         let s = {...state}
         console.log('count',s.cart_count);
