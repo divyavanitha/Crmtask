@@ -7,13 +7,13 @@ import OrderList from "../Orders/OrderList"; */
 
 const Home = () => {
   //const products = useSelector((state) => state.products);
-  const numberItemsCount =  100;//products.products.length;
-  const totalPrice =  100;//products.products.reduce((prev, next) => prev + ((next.price * next.amount) || 0), 0);
+  const numberItemsCount = 100;//products.products.length;
+  const totalPrice = 100;//products.products.reduce((prev, next) => prev + ((next.price * next.amount) || 0), 0);
   const totalProductAmount = 100;// products.products.reduce((prev, next) => prev + (next.amount || 0), 0);
 
-  const orders=  100;//useSelector((state) => state.orders.orders);
-  const totalSales =  100;//orders.reduce((prev, next) => prev + next.totalPrice, 0);
-  const totalOrderAmount =  100;//orders.reduce((prev, next) => prev + next.amount, 0);
+  const orders = 100;//useSelector((state) => state.orders.orders);
+  const totalSales = 100;//orders.reduce((prev, next) => prev + next.totalPrice, 0);
+  const totalOrderAmount = 100;//orders.reduce((prev, next) => prev + next.amount, 0);
 
   const dispatch = useDispatch();
   //dispatch(updateCurrentPath("home", ""));
@@ -38,7 +38,7 @@ const Home = () => {
               <h6 className="m-0 font-weight-bold text-green">Product list</h6>
             </div>
             <div className="card-body">
-             {/*  <ProductList /> */}
+              {/*  <ProductList /> */}
             </div>
           </div>
 
@@ -50,7 +50,7 @@ const Home = () => {
               <h6 className="m-0 font-weight-bold text-green">Order list</h6>
             </div>
             <div className="card-body">
-             {/*  <OrderList /> */}
+              {/*  <OrderList /> */}
             </div>
           </div>
         </div>

@@ -1,121 +1,121 @@
 import axios from 'axios';
 import {
- GET_MYALLGIGS,
- GET_ALLGIGS,
+  GET_MYALLGIGS,
+  GET_ALLGIGS,
   GET_ERRORS,
   GET_GIGSBYID,
   DELETE_GIGS
-  
+
 } from './types';
 
 //const dispatch = useDispatch();
 
-export const creategigs = (data) =>  async dispatch => {
+export const creategigs = (data) => async dispatch => {
   try {
-        let response = await axios.post('/api/gig', data);
-        console.log('data',response);
-        response.data.status = 'success';
-        return response.data;
-    } catch(e) {
-        e.response.data.status = 'error';
-        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
-        return e.response.data;
-    }
- }
+    let response = await axios.post('/api/gig', data);
+    console.log('data', response);
+    response.data.status = 'success';
+    return response.data;
+  } catch (e) {
+    e.response.data.status = 'error';
+    if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
+    return e.response.data;
+  }
+}
 
- export const updatePricing = (data) =>  async dispatch => {
+export const updatePricing = (data) => async dispatch => {
   try {
-        let response = await axios.post('/api/gig/pricing', data);
-        console.log('data',response);
-        response.data.status = 'success';
-        return response.data;
-    } catch(e) {
-        e.response.data.status = 'error';
-        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
-        return e.response.data;
-    }
- }
+    let response = await axios.post('/api/gig/pricing', data);
+    console.log('data', response);
+    response.data.status = 'success';
+    return response.data;
+  } catch (e) {
+    e.response.data.status = 'error';
+    if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
+    return e.response.data;
+  }
+}
 
- export const updateFaq = (data) =>  async dispatch => {
+export const updateFaq = (data) => async dispatch => {
   try {
-        let response = await axios.post('/api/gig/faq', data);
-        console.log('data',response);
-        response.data.status = 'success';
-        return response.data;
-    } catch(e) {
-        e.response.data.status = 'error';
-        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
-        return e.response.data;
-    }
- }
+    let response = await axios.post('/api/gig/faq', data);
+    console.log('data', response);
+    response.data.status = 'success';
+    return response.data;
+  } catch (e) {
+    e.response.data.status = 'error';
+    if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
+    return e.response.data;
+  }
+}
 
- export const updateRequirement = (data) =>  async dispatch => {
+export const updateRequirement = (data) => async dispatch => {
   try {
-        let response = await axios.post('/api/gig/requirement', data);
-        console.log('data',response);
-        response.data.status = 'success';
-        return response.data;
-    } catch(e) {
-        e.response.data.status = 'error';
-        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
-        return e.response.data;
-    }
- }
+    let response = await axios.post('/api/gig/requirement', data);
+    console.log('data', response);
+    response.data.status = 'success';
+    return response.data;
+  } catch (e) {
+    e.response.data.status = 'error';
+    if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
+    return e.response.data;
+  }
+}
 
- export const updateImage = (data) =>  async dispatch => {
+export const updateImage = (data) => async dispatch => {
   try {
-    console.log('da',(data.get("photo[]"))[0]);
-        let response = await axios.post('/api/gig/upload', data);
-        console.log('data',response);
-        response.data.status = 'success';
-        return response.data;
-    } catch(e) {
-        e.response.data.status = 'error';
-        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
-        return e.response.data;
-    }
- }
+    console.log('da', (data.get("photo[]"))[0]);
+    let response = await axios.post('/api/gig/upload', data);
+    console.log('data', response);
+    response.data.status = 'success';
+    return response.data;
+  } catch (e) {
+    e.response.data.status = 'error';
+    if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
+    return e.response.data;
+  }
+}
 
- export const updateConfirm = (data) =>  async dispatch => {
+export const updateConfirm = (data) => async dispatch => {
   try {
-   
-        let response = await axios.post('/api/gig/confirm', data);
-        console.log('data',response);
-        response.data.status = 'success';
-        return response.data;
-    } catch(e) {
-        e.response.data.status = 'error';
-        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
-        return e.response.data;
-    }
- }
+
+    let response = await axios.post('/api/gig/confirm', data);
+    console.log('data', response);
+    response.data.status = 'success';
+    return response.data;
+  } catch (e) {
+    e.response.data.status = 'error';
+    if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
+    return e.response.data;
+  }
+}
 
 export const getGigList = (data) => async dispatch => {
-    const gig = await axios.get(`/api/gigs`, data)
-    dispatch({
-        type: GET_ALLGIGS,
-        payload: gig.data
-    });
+  const gig = await axios.get(`/api/gigs`, data)
+  dispatch({
+    type: GET_ALLGIGS,
+    payload: gig.data
+  });
 }
 
 // Get Posts 
 export const getmyallgigs = () => dispatch => {
-    // dispatch(setPostLoading());
-    axios
-      .get('/api/gigs/getmyallgigs')
-      .then(res =>
-        dispatch({
-          type: GET_MYALLGIGS,
-          payload: res.data
-        })
-      )
-      .catch(err =>
-        dispatch({
-          type: GET_MYALLGIGS,
-          payload: null
-        })
-      );
-  };
+  // dispatch(setPostLoading());
+  axios
+    .get('/api/gigs/getmyallgigs')
+    .then(res =>
+      dispatch({
+        type: GET_MYALLGIGS,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_MYALLGIGS,
+        payload: null
+      })
+    );
+};
 
 // Get findpostjobbyid
 export const getgigsById = id => dispatch => {
@@ -137,16 +137,16 @@ export const getgigsById = id => dispatch => {
 };
 
 // Delete Post
-export const deleteGig= (id) => async dispatch => {
-    try {
-        let response = await axios.delete(`/api/gig/delete/${id}`);
-        response.data.status = 'success';
-        return response.data;
-    } catch(e) {
-        e.response.data.status = 'error';
-        return e.response.data;
-    }
-}; 
+export const deleteGig = (id) => async dispatch => {
+  try {
+    let response = await axios.delete(`/api/gig/delete/${id}`);
+    response.data.status = 'success';
+    return response.data;
+  } catch (e) {
+    e.response.data.status = 'error';
+    return e.response.data;
+  }
+};
 
 
 // Add Comment

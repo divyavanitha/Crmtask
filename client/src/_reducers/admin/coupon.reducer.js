@@ -12,12 +12,12 @@ const couponReducer = (state = intialState, action) => {
         ...state,
         coupons: action.payload
       };
-     case FIND_COUPON:
+    case FIND_COUPON:
       return {
         ...state,
         coupon: action.payload
       };
-      
+
     default:
       return state;
   }

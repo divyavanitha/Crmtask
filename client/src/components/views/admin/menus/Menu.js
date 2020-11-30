@@ -32,19 +32,19 @@ const Menu = () => {
       e.preventDefault();
       const sid = $(this).data('id');
       console.log($(this).closest('tr'));
-       $('.delete-modal').modal("show");
+      $('.delete-modal').modal("show");
       $(".delete-modal-btn")
         .off()
         .on("click", function () {
-         dispatch(deleteMenu(sid)).then(res => { 
-           addToast(res.message, { appearance: res.status, autoDismiss: true, })
-          $('#datatable').DataTable().row( $(this).closest('tr') ).remove().draw();
-          $('.delete-modal').modal("hide");
+          dispatch(deleteMenu(sid)).then(res => {
+            addToast(res.message, { appearance: res.status, autoDismiss: true, })
+            $('#datatable').DataTable().row($(this).closest('tr')).remove().draw();
+            $('.delete-modal').modal("hide");
 
           })
-          
-         // 
-        }); 
+
+          // 
+        });
     });
 
 
@@ -54,18 +54,18 @@ const Menu = () => {
       language: {
         searchPlaceholder: "Search"
       },
-      fnDrawCallback: function ( oSettings ){
-            if(oSettings.fnRecordsTotal() <= 10){     
-               $('.dataTables_length').hide();
-               $('.dataTables_paginate').hide();
-               $('.dataTables_filter').hide();
-               $('.dataTables_wrapper').addClass('noFilters');
-            } else {
-               $('.dataTables_length').show();
-               $('.dataTables_paginate').show(); 
-               $('.dataTables_filter').show();
-               $('.dataTables_wrapper.noFilters').removeClass('noFilters');
-            }
+      fnDrawCallback: function (oSettings) {
+        if (oSettings.fnRecordsTotal() <= 10) {
+          $('.dataTables_length').hide();
+          $('.dataTables_paginate').hide();
+          $('.dataTables_filter').hide();
+          $('.dataTables_wrapper').addClass('noFilters');
+        } else {
+          $('.dataTables_length').show();
+          $('.dataTables_paginate').show();
+          $('.dataTables_filter').show();
+          $('.dataTables_wrapper.noFilters').removeClass('noFilters');
+        }
       },
       "bLengthChange": false,
       "info": false,
@@ -104,26 +104,28 @@ const Menu = () => {
         },
         { "data": "title" },
         { "data": "subTitle" },
-        { "data": "category", render: function (data, type, row) {
-                if(data){
-                    return data.name;
-                }else{
-                    return "<h6>NA</h6>"
-                }
+        {
+          "data": "category", render: function (data, type, row) {
+            if (data) {
+              return data.name;
+            } else {
+              return "<h6>NA</h6>"
             }
+          }
         },
-        { "data": "layoutPhoto", render: function (data, type, row) {
-                if(data){
-                    return "<img src='"+data+"' style='height: 50px; width: 50px;'>";
-                }else{
-                    return "<h6>NA</h6>"
-                }
+        {
+          "data": "layoutPhoto", render: function (data, type, row) {
+            if (data) {
+              return "<img src='" + data + "' style='height: 50px; width: 50px;'>";
+            } else {
+              return "<h6>NA</h6>"
             }
+          }
         },
         {
           "data": function (data, type, row) {
 
-            return  "<label class='switch'><input "+ ((data.status == 1) ? "checked" :  "" ) +" type='checkbox' class='status_enable' value='true' data-id='"+data._id+"' data-value='"+ ((data.status == 1) ? "1" :  "0" ) +"'> <span class='slider round'></span></label>";
+            return "<label class='switch'><input " + ((data.status == 1) ? "checked" : "") + " type='checkbox' class='status_enable' value='true' data-id='" + data._id + "' data-value='" + ((data.status == 1) ? "1" : "0") + "'> <span class='slider round'></span></label>";
           }
         },
         {
@@ -144,23 +146,23 @@ const Menu = () => {
       ]
     });
 
-    $('body').on('change', '.status_enable', function() {
+    $('body').on('change', '.status_enable', function () {
 
-        var id = $(this).data('id');
-        var value = 0;
-        var fail_status = true;
+      var id = $(this).data('id');
+      var value = 0;
+      var fail_status = true;
 
-        if($(this).is(":checked")){
-           value = 1; 
-           fail_status = false;
-        }
-       
-          console.log(id, value);
+      if ($(this).is(":checked")) {
+        value = 1;
+        fail_status = false;
+      }
 
-          dispatch(changeMenuStatus(id, value)).then(res => {
-               addToast(res.message, { appearance: res.status, autoDismiss: true, })
-                if (res.statusCode != 200) $(this).prop('checked', fail_status);
-          })
+      console.log(id, value);
+
+      dispatch(changeMenuStatus(id, value)).then(res => {
+        addToast(res.message, { appearance: res.status, autoDismiss: true, })
+        if (res.statusCode != 200) $(this).prop('checked', fail_status);
+      })
 
     });
 
@@ -195,9 +197,9 @@ const Menu = () => {
         <div className="row">
           <div className="col-lg-12">
             <div className="box box-block bg-white">
-              <h5 className="mb-1">Slides 
+              <h5 className="mb-1">Slides
                 <div className="rightBtn-Group">
-                    <Link className="addMoreBtn" to="/admin/menu/add" ><span className="txt text-capitalize"> Add New <span className="amIcon"><i className="fa fa-plus"></i></span></span></Link>
+                  <Link className="addMoreBtn" to="/admin/menu/add" ><span className="txt text-capitalize"> Add New <span className="amIcon"><i className="fa fa-plus"></i></span></span></Link>
                 </div>
               </h5>
               <div className="">

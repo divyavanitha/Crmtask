@@ -1,6 +1,6 @@
 import React, { Fragment, useState, FormEvent, Dispatch, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams, useHistory  } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { useToasts } from 'react-toast-notifications'
 import * as Yup from 'yup';
@@ -13,8 +13,8 @@ const AddSubCategory = (props) => {
     const dispatch = useDispatch();
     const { addToast } = useToasts()
     //console.log('param',props.match.params.id);
-    
-  let history = useHistory();
+
+    let history = useHistory();
     const params = useParams();
     useEffect(() => {
 
@@ -41,12 +41,12 @@ const AddSubCategory = (props) => {
             }
 
             validationSchema={Yup.object().shape({
-               name: Yup.string()
+                name: Yup.string()
                     .required('Name is required'),
                 category: Yup.string()
                     .required('Category is required')
             })}
-            onSubmit={(values, { setSubmitting, resetForm  }) => {
+            onSubmit={(values, { setSubmitting, resetForm }) => {
 
                 let data = {
                     id: values.id,
@@ -55,7 +55,7 @@ const AddSubCategory = (props) => {
                 };
 
                 if (params.id) {
-                    dispatch(updateSubCategory(data)).then(res => { 
+                    dispatch(updateSubCategory(data)).then(res => {
                         addToast(res.message, { appearance: res.status, autoDismiss: true, })
                         history.push('/admin/subcategory/')
                     })
@@ -110,18 +110,18 @@ const AddSubCategory = (props) => {
                             <div className="row">
                                 <div className="col-lg-12">
                                     <div className="box box-block bg-white">
-                                        <h5 className="mb-1">{params.id ? "Edit Sub Category" : "Add Sub Category"} 
-                                        <div className="rightBtn-Group">
-                                            <Link className="addMoreBtn" to="/admin/subcategory" ><span className="txt text-capitalize"><span className="amIcon"><i className="fa fa-arrow-left"></i></span> Back</span></Link>
-                                        </div>
+                                        <h5 className="mb-1">{params.id ? "Edit Sub Category" : "Add Sub Category"}
+                                            <div className="rightBtn-Group">
+                                                <Link className="addMoreBtn" to="/admin/subcategory" ><span className="txt text-capitalize"><span className="amIcon"><i className="fa fa-arrow-left"></i></span> Back</span></Link>
+                                            </div>
                                         </h5>
-                                        
+
                                         <div className="addFormBox">
                                             <form onSubmit={handleSubmit} encType="multipart/form-data">
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Name : </label>
                                                     <div className="col-md-6">
-                                                        <Field type="text" id="name" name="name" value={values.name} onChange={handleChange} maxLength={100} placeholder="Name"  className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')}  />
+                                                        <Field type="text" id="name" name="name" value={values.name} onChange={handleChange} maxLength={100} placeholder="Name" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="name" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
@@ -129,9 +129,9 @@ const AddSubCategory = (props) => {
                                                     <label className="col-md-4 control-label"> Category : </label>
                                                     <div className="col-md-6">
                                                         <Field as="select" id="category" name="category" onChange={handleChange} className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} >
-                                                        <option value="">Select Catagory</option>
+                                                            <option value="">Select Catagory</option>
 
-                                                        {categories && categories.map((c_list) => (<option key={c_list._id} value={c_list._id} onChange={handleChange}>{c_list.name}</option>))}
+                                                            {categories && categories.map((c_list) => (<option key={c_list._id} value={c_list._id} onChange={handleChange}>{c_list.name}</option>))}
 
                                                         </Field>
                                                         <ErrorMessage name="category" component="div" className="invalid-feedback" />
@@ -149,7 +149,7 @@ const AddSubCategory = (props) => {
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"></label>
                                                     <div className="col-md-6">
-                                                        <button type="submit" className="btn btn-success mr-3"> { params.id ? 'Update' : 'Save' } </button>
+                                                        <button type="submit" className="btn btn-success mr-3"> {params.id ? 'Update' : 'Save'} </button>
                                                         {params.id ? <Link className="btn btn-outline" to="/admin/subcategory">Cancel</Link> : <button onClick={handleReset} className="btn btn-outline mr-3">Reset</button>}
                                                     </div>
                                                 </div>

@@ -4,12 +4,13 @@ import { GET_PACKAGES, FIND_PACKAGE } from "./types";
 
 export const getPackages = () => async dispatch => {
     try {
-        let response = await axios.get('/api/admin/package');
+        let token = localStorage.admin_token;
+        let response = await axios.get('/api/admin/package', { headers: { 'Authorization': `${token}` } });
         dispatch({
             type: GET_PACKAGES,
             payload: response.data
         })
-    } catch(e) {
+    } catch (e) {
         dispatch({
             type: GET_PACKAGES,
             payload: null
@@ -18,8 +19,9 @@ export const getPackages = () => async dispatch => {
 };
 
 export const getPackagebyId = (id) => dispatch => {
+    let token = localStorage.admin_token;
     axios
-        .get(`/api/admin/get/package/${id}`)
+        .get(`/api/admin/get/package/${id}`, { headers: { 'Authorization': `${token}` } })
         .then(res => {
             dispatch({
                 type: FIND_PACKAGE,
@@ -35,48 +37,52 @@ export const getPackagebyId = (id) => dispatch => {
         );
 };
 
-export const addPackage = (user) => async dispatch => {
+export const addPackage = (data) => async dispatch => {
     try {
-        let response = await axios.post('/api/admin/package', user);
+        let token = localStorage.admin_token;
+        let response = await axios.post('/api/admin/package', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };
 
-export const updatePackage = (user) => async dispatch => {
+export const updatePackage = (data) => async dispatch => {
     try {
-        let response = await axios.patch('/api/admin/package', user);
+        let token = localStorage.admin_token;
+        let response = await axios.patch('/api/admin/package', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };
 
 export const deletePackage = (id) => async dispatch => {
     try {
-        let response = await axios.delete(`/api/admin/package/${id}`);
+        let token = localStorage.admin_token;
+        let response = await axios.delete(`/api/admin/package/${id}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
         return e.response.data;
     }
-}; 
+};
 
 
 export const changePackageStatus = (id, status) => async dispatch => {
     try {
-        let response = await axios.get(`/api/admin/package/changestatus/${id}/${status}`);
+        let token = localStorage.admin_token;
+        let response = await axios.get(`/api/admin/package/changestatus/${id}/${status}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
         return e.response.data;
     }

@@ -1,6 +1,6 @@
 import React, { Fragment, useState, FormEvent, Dispatch, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams, useHistory  } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import DatePicker from "../DatePicker";
 import { useToasts } from 'react-toast-notifications'
@@ -14,23 +14,23 @@ const AddCategory = (props) => {
     const dispatch = useDispatch();
     const [description, setDescription] = useState("");
     //console.log('param',props.match.params.id);
-    
-  let history = useHistory();
+
+    let history = useHistory();
     const params = useParams();
     useEffect(() => {
-         /*$("body").on('keyup', "#percentage", function(){
-            var per=$(this).val()||0;
-            var max=$("#maxAmount").val()||0;
-            //var description = $("#description").val(per+'% off, Max discount is '+max);
-            setDescription(per+'% off, Max discount is '+max);
-        });
+        /*$("body").on('keyup', "#percentage", function(){
+           var per=$(this).val()||0;
+           var max=$("#maxAmount").val()||0;
+           //var description = $("#description").val(per+'% off, Max discount is '+max);
+           setDescription(per+'% off, Max discount is '+max);
+       });
 
-        $("body").on('keyup', "#maxAmount", function(){
-            var max=$(this).val()||0;
-            var per=$("#percentage").val()||0;
-            //var description = $("#description").val(per+'% off, Max discount is '+max);
-            setDescription(per+'% off, Max discount is '+max);
-        });*/
+       $("body").on('keyup', "#maxAmount", function(){
+           var max=$(this).val()||0;
+           var per=$("#percentage").val()||0;
+           //var description = $("#description").val(per+'% off, Max discount is '+max);
+           setDescription(per+'% off, Max discount is '+max);
+       });*/
         // Update the document title using the browser API
 
 
@@ -67,7 +67,7 @@ const AddCategory = (props) => {
                     .required('Expiration is required')
             })}
             onSubmit={(values, { setSubmitting, resetForm }) => {
-console.log('values', values);
+                console.log('values', values);
                 let data = {
                     id: values.id,
                     code: values.code,
@@ -78,7 +78,7 @@ console.log('values', values);
                 };
 
                 if (params.id) {
-                    dispatch(updateCoupon(data)).then(res => { 
+                    dispatch(updateCoupon(data)).then(res => {
                         addToast(res.message, { appearance: res.status, autoDismiss: true, })
                         history.push('/admin/promocode/')
                     })
@@ -136,9 +136,9 @@ console.log('values', values);
                                 <div className="col-lg-12">
                                     <div className="box box-block bg-white">
                                         <h5 className="mb-1">{params.id ? "Edit Promocode" : "Add Promocode"}
-                                        <div className="rightBtn-Group">
-                                            <Link className="addMoreBtn" to="/admin/promocode" ><span className="txt text-capitalize"><span className="amIcon"><i className="fa fa-arrow-left"></i></span> Back</span></Link>
-                                        </div>
+                                            <div className="rightBtn-Group">
+                                                <Link className="addMoreBtn" to="/admin/promocode" ><span className="txt text-capitalize"><span className="amIcon"><i className="fa fa-arrow-left"></i></span> Back</span></Link>
+                                            </div>
                                         </h5>
                                         {/* <div className="card-header">
                                             <h4 className="h4">{params.id ? "Edit Promocode" : "Add Promocode"}</h4>
@@ -148,28 +148,28 @@ console.log('values', values);
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Promocode : </label>
                                                     <div className="col-md-6">
-                                                        <Field type="text" id="code" name="code" value={values.code} onChange={handleChange} maxLength={100} placeholder="Promocode"  className={'form-control' + (errors.code && touched.code ? ' is-invalid' : '')}  />
+                                                        <Field type="text" id="code" name="code" value={values.code} onChange={handleChange} maxLength={100} placeholder="Promocode" className={'form-control' + (errors.code && touched.code ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="code" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Percentage : </label>
                                                     <div className="col-md-6">
-                                                        <Field type="text" id="percentage" name="percentage" value={values.percentage} onChange={handleChange} maxLength={100} placeholder="Percentage"  className={'form-control' + (errors.percentage && touched.percentage ? ' is-invalid' : '')}  />
+                                                        <Field type="text" id="percentage" name="percentage" value={values.percentage} onChange={handleChange} maxLength={100} placeholder="Percentage" className={'form-control' + (errors.percentage && touched.percentage ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="percentage" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Maximum Amount : </label>
                                                     <div className="col-md-6">
-                                                        <Field type="text" id="maxAmount" name="maxAmount" value={values.maxAmount} onChange={handleChange} maxLength={100} placeholder="Maximum Amount"  className={'form-control' + (errors.maxAmount && touched.maxAmount ? ' is-invalid' : '')}  />
+                                                        <Field type="text" id="maxAmount" name="maxAmount" value={values.maxAmount} onChange={handleChange} maxLength={100} placeholder="Maximum Amount" className={'form-control' + (errors.maxAmount && touched.maxAmount ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="maxAmount" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Expiration : </label>
                                                     <div className="col-md-6">
-                                                        <DatePicker id="expiration" name="expiration" value={values.expiration} onChange={handleChange} className={'form-control' + (errors.expiration && touched.expiration ? ' is-invalid' : '')}  />
+                                                        <DatePicker id="expiration" name="expiration" value={values.expiration} onChange={handleChange} className={'form-control' + (errors.expiration && touched.expiration ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="expiration" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
@@ -177,7 +177,7 @@ console.log('values', values);
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Description : </label>
                                                     <div className="col-md-6">
-                                                        <Field component="textarea" rows="2" id="description" value={values.description} name="description"  onChange={handleChange} maxLength={100}  className={'form-control' + (errors.description && touched.description ? ' is-invalid' : '')}  />
+                                                        <Field component="textarea" rows="2" id="description" value={values.description} name="description" onChange={handleChange} maxLength={100} className={'form-control' + (errors.description && touched.description ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="description" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>

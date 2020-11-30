@@ -4,7 +4,6 @@ const { Setting } = require('./../models/setting');
 const Joi = require('@hapi/joi');
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
-const transporter = require('../config/mail');
 const dotenv = require('dotenv');
 const helper = require('../services/helper.js');
 const db = require('../services/model.js');

@@ -14,7 +14,7 @@ import {
     GET_DELIVERY_TIME,
     GET_PACKAGE,
     GET_CART_LIST,
-    GET_CART_COUNT,
+    ADD_CART_COUNT,
     BUYER_ORDER_LIST,
     BUYER_ORDER_DETAILS,
     SELLER_ORDER_LIST,
@@ -238,7 +238,7 @@ export const getGigbyId = (id) => dispatch => {
 };
 
 export const getCartbyId = (id) => dispatch => {
-    console.log('id',id);
+    console.log('id', id);
     axios
         .get(`/api/find/cart/${id}`)
         .then(res => {
@@ -257,36 +257,36 @@ export const getCartbyId = (id) => dispatch => {
         );
 };
 
-export const createOrder = (data) =>  async dispatch => {
-  try {
+export const createOrder = (data) => async dispatch => {
+    try {
         let response = await axios.post('/api/gig/checkout', data);
-        console.log('data',response);
+        console.log('data', response);
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
- }
+}
 
- export const addCart = (data) =>  async dispatch => {
-  try {
+export const addCart = (data) => async dispatch => {
+    try {
         let response = await axios.post('/api/gig/cart', data);
-        /*dispatch({
-            type: GET_CART_COUNT,
-            payload: 1
-        });*/
+        dispatch({
+            type: ADD_CART_COUNT,
+            payload: response.data.responseData.count
+        });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
- }
+}
 
- export const getCartList = (data) => async dispatch => {
+export const getCartList = (data) => async dispatch => {
 
     try {
         let cart = await axios.get("/api/gig/cart", data);
@@ -302,30 +302,36 @@ export const createOrder = (data) =>  async dispatch => {
 };
 
 
-export const deleteCart= (id) => async dispatch => {
+export const deleteCart = (id) => async dispatch => {
     try {
         let response = await axios.delete(`/api/gig/cart/${id}`);
+
+        dispatch({
+            type: ADD_CART_COUNT,
+            payload: response.data.responseData.length
+        });
+
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
         return e.response.data;
     }
-}; 
+};
 
-export const checkout = (data) =>  async dispatch => {
-  try {
+export const checkout = (data) => async dispatch => {
+    try {
         let response = await axios.post('/api/gig/checkout', data);
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
- }
+}
 
- export const buyerOrderList = (data) => async dispatch => {
+export const buyerOrderList = (data) => async dispatch => {
 
     try {
         let order = await axios.get("/api/buyer/orderlist", data);
@@ -342,7 +348,7 @@ export const checkout = (data) =>  async dispatch => {
 
 export const getBuyerOrderDetails = (id) => async dispatch => {
 
-        axios
+    axios
         .get(`/api/buyer/orderdetails/${id}`)
         .then(res => {
             dispatch({
@@ -357,7 +363,7 @@ export const getBuyerOrderDetails = (id) => async dispatch => {
                 payload: null
             })
         );
-    
+
 };
 
 export const sellerOrderList = (data) => async dispatch => {
@@ -377,7 +383,7 @@ export const sellerOrderList = (data) => async dispatch => {
 
 export const getSellerOrderDetails = (id) => async dispatch => {
 
-        axios
+    axios
         .get(`/api/seller/orderdetails/${id}`)
         .then(res => {
             dispatch({
@@ -392,5 +398,5 @@ export const getSellerOrderDetails = (id) => async dispatch => {
                 payload: null
             })
         );
-    
+
 };

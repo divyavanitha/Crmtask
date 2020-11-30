@@ -6,11 +6,11 @@ import {
 
 export default function (state = {}, action) {
     switch (action.type) {
-      
+
         case GET_ALLPOSTJOB:
-            return { ...state, userData: action.payload  }
-            case CREATE_POSTJOB:
-                return { ...state, userData: action.payload  }
+            return { ...state, userData: action.payload }
+        case CREATE_POSTJOB:
+            return { ...state, userData: action.payload }
 
         default:
             return state;

@@ -11,36 +11,37 @@ import {
 
 // Add Post
 export function createprofile(dataToSubmit) {
-  
- const request=axios.post(`api/profile/create`, dataToSubmit)
-      .then(response => {  
-        return {
+
+  const request = axios.post(`api/profile/create`, dataToSubmit)
+    .then(response => {
+      return {
         type: CREATE_PROFILE,
         payload: response.data
-    }});
-     
-return request;
- 
+      }
+    });
+
+  return request;
+
 }
 
-export const getprofilebyid = () => dispatch =>  {
+export const getprofilebyid = () => dispatch => {
 
- axios.get(`/api/profile/getprofilebyid`)
-      .then(res => {
-        dispatch({
-          type: GET_PROFILE,
-          payload: res.data
+  axios.get(`/api/profile/getprofilebyid`)
+    .then(res => {
+      dispatch({
+        type: GET_PROFILE,
+        payload: res.data
       })
     })
     .catch(err =>
-            dispatch({
-              type: GET_PROFILE,
-              payload: null
-            })
-          );
-   
+      dispatch({
+        type: GET_PROFILE,
+        payload: null
+      })
+    );
 
-      
+
+
 }
 
 

@@ -3,8 +3,9 @@ import axios from "axios";
 import { GET_MENUS, FIND_MENU } from "./types";
 
 export const getMenus = () => dispatch => {
+    let token = localStorage.admin_token;
     axios
-        .get('/api/admin/menu')
+        .get('/api/admin/menu', { headers: { 'Authorization': `${token}` } })
         .then(res => {
             dispatch({
                 type: GET_MENUS,
@@ -21,8 +22,9 @@ export const getMenus = () => dispatch => {
 };
 
 export const getMenubyId = (id) => dispatch => {
+    let token = localStorage.admin_token;
     axios
-        .get(`/api/admin/get/menu/${id}`)
+        .get(`/api/admin/get/menu/${id}`, { headers: { 'Authorization': `${token}` } })
         .then(res => {
             dispatch({
                 type: FIND_MENU,
@@ -38,36 +40,39 @@ export const getMenubyId = (id) => dispatch => {
         );
 };
 
-export const addMenu = (user) => async dispatch => {
+export const addMenu = (data) => async dispatch => {
     try {
-        let response = await axios.post('/api/admin/menu', user);
+        let token = localStorage.admin_token;
+        let response = await axios.post('/api/admin/menu', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };
 
-export const updateMenu = (user) => async dispatch => {
+export const updateMenu = (data) => async dispatch => {
     try {
-        let response = await axios.patch('/api/admin/menu', user);
+        let token = localStorage.admin_token;
+        let response = await axios.patch('/api/admin/menu', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };
 
 export const deleteMenu = (id) => async dispatch => {
     try {
-        let response = await axios.delete(`/api/admin/menu/${id}`);
+        let token = localStorage.admin_token;
+        let response = await axios.delete(`/api/admin/menu/${id}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
-    return response.data;
-    } catch(e) {
+        return response.data;
+    } catch (e) {
         e.response.data.status = 'error';
         return e.response.data;
     }
@@ -75,10 +80,11 @@ export const deleteMenu = (id) => async dispatch => {
 
 export const changeMenuStatus = (id, status) => async dispatch => {
     try {
-        let response = await axios.get(`/api/admin/menu/changestatus/${id}/${status}`);
+        let token = localStorage.admin_token;
+        let response = await axios.get(`/api/admin/menu/changestatus/${id}/${status}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
         return e.response.data;
     }

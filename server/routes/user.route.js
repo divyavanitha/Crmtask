@@ -147,6 +147,9 @@ router.delete('/gig/delete/:id', middleware.user, function(req, res){
 router.get('/gig/cart', middleware.user, function(req, res){
   orderController.listcart(req, res);
 });
+router.get('/gig/cart/count', middleware.user, function(req, res){
+  orderController.cartCount(req, res);
+});
 router.post('/gig/cart', middleware.user, function(req, res){
   orderController.addcart(req, res);
 });

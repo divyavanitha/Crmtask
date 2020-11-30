@@ -30,9 +30,9 @@ function Footer() {
                                 <p className="f-abt-desc"><span className="bold">Email:</span> {site && site.mobile}</p>
                                 <div className="collapse show" id="collapsefindusOn">
                                     <ul className="list-inline social_icon">
-                                    {socialLink && socialLink.map((social, index) => (social.url != ""  && (<li key={index} className="list-inline-item"><a href={social.url} target="_blank"><img src={social.picture} className="pic" /></a></li>) ) )}
+                                        {socialLink && socialLink.map((social, index) => (social.url != "" && (<li key={index} className="list-inline-item"><a href={social.url} target="_blank"><img src={social.picture} className="pic" /></a></li>)))}
                                     </ul>
-                                    {appLink && appLink.map((app, index) => (app.status == 1  && (<a key={index} href={app.url} target="_blank"><img src={app.picture} className="pic" /></a>) ) )}
+                                    {appLink && appLink.map((app, index) => (app.status == 1 && (<a key={index} href={app.url} target="_blank"><img src={app.picture} className="pic" /></a>)))}
                                 </div>
                             </div>
                         </div>
@@ -63,7 +63,7 @@ function Footer() {
             </footer>
             <section className="post_footer">
                 {site && site.copyright}
-      </section>
+            </section>
 
         </Fragment>
     );

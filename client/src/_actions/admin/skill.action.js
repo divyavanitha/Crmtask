@@ -3,8 +3,9 @@ import axios from "axios";
 import { GET_SKILLS, FIND_SKILL } from "./types";
 
 export const getSkills = () => dispatch => {
+    let token = localStorage.admin_token;
     axios
-        .get('/api/admin/skill')
+        .get('/api/admin/skill', { headers: { 'Authorization': `${token}` } })
         .then(res => {
             dispatch({
                 type: GET_SKILLS,
@@ -21,8 +22,9 @@ export const getSkills = () => dispatch => {
 };
 
 export const getSkillbyId = (id) => dispatch => {
+    let token = localStorage.admin_token;
     axios
-        .get(`/api/admin/get/skill/${id}`)
+        .get(`/api/admin/get/skill/${id}`, { headers: { 'Authorization': `${token}` } })
         .then(res => {
             dispatch({
                 type: FIND_SKILL,
@@ -38,48 +40,52 @@ export const getSkillbyId = (id) => dispatch => {
         );
 };
 
-export const addSkill = (user) => async dispatch => {
+export const addSkill = (data) => async dispatch => {
     try {
-        let response = await axios.post('/api/admin/skill', user);
+        let token = localStorage.admin_token;
+        let response = await axios.post('/api/admin/skill', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 
 };
 
-export const updateSkill = (user) => async dispatch => {
+export const updateSkill = (data) => async dispatch => {
     try {
-        let response = await axios.patch('/api/admin/skill', user);
+        let token = localStorage.admin_token;
+        let response = await axios.patch('/api/admin/skill', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };
 
 export const deleteSkill = (id) => async dispatch => {
     try {
-        let response = await axios.delete(`/api/admin/skill/${id}`);
+        let token = localStorage.admin_token;
+        let response = await axios.delete(`/api/admin/skill/${id}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
-    return response.data;
-    } catch(e) {
+        return response.data;
+    } catch (e) {
         e.response.data.status = 'error';
         return e.response.data;
     }
-}; 
+};
 
 export const changeSkillStatus = (id, status) => async dispatch => {
     try {
-        let response = await axios.get(`/api/admin/skill/changestatus/${id}/${status}`);
+        let token = localStorage.admin_token;
+        let response = await axios.get(`/api/admin/skill/changestatus/${id}/${status}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
         return e.response.data;
     }

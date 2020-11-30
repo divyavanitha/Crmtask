@@ -30,37 +30,37 @@ const Skill = () => {
       e.preventDefault();
       const sid = $(this).data('id');
       console.log($(this).closest('tr'));
-       $('.delete-modal').modal("show");
+      $('.delete-modal').modal("show");
       $(".delete-modal-btn")
         .off()
         .on("click", function () {
-         dispatch(deleteSkill(sid)).then(res => { 
-           addToast(res.message, { appearance: res.status, autoDismiss: true, })
-          $('#datatable').DataTable().row( $(this).closest('tr') ).remove().draw();
-          $('.delete-modal').modal("hide");
+          dispatch(deleteSkill(sid)).then(res => {
+            addToast(res.message, { appearance: res.status, autoDismiss: true, })
+            $('#datatable').DataTable().row($(this).closest('tr')).remove().draw();
+            $('.delete-modal').modal("hide");
 
           })
-          
-         // 
-        }); 
+
+          // 
+        });
     });
 
     $('#datatable').DataTable({
       language: {
         searchPlaceholder: "Search"
       },
-      fnDrawCallback: function ( oSettings ){
-            if(oSettings.fnRecordsTotal() <= 10){     
-               $('.dataTables_length').hide();
-               $('.dataTables_paginate').hide();
-               $('.dataTables_filter').hide();
-               $('.dataTables_wrapper').addClass('noFilters');
-            } else {
-               $('.dataTables_length').show();
-               $('.dataTables_paginate').show(); 
-               $('.dataTables_filter').show();
-               $('.dataTables_wrapper.noFilters').removeClass('noFilters');
-            }
+      fnDrawCallback: function (oSettings) {
+        if (oSettings.fnRecordsTotal() <= 10) {
+          $('.dataTables_length').hide();
+          $('.dataTables_paginate').hide();
+          $('.dataTables_filter').hide();
+          $('.dataTables_wrapper').addClass('noFilters');
+        } else {
+          $('.dataTables_length').show();
+          $('.dataTables_paginate').show();
+          $('.dataTables_filter').show();
+          $('.dataTables_wrapper.noFilters').removeClass('noFilters');
+        }
       },
       "bLengthChange": false,
       "info": false,
@@ -88,7 +88,7 @@ const Skill = () => {
           json.recordsFiltered = data.responseData.total;
 
           json.data = data.responseData.data.skills;
-           console.log(json);
+          console.log(json);
           return JSON.stringify(json); // return JSON string
         }
       },
@@ -100,9 +100,9 @@ const Skill = () => {
         },
         { "data": "name" },
         {
-           "data": function (data, type, row) {
+          "data": function (data, type, row) {
 
-            return  "<label class='switch'><input "+ ((data.status == 1) ? "checked" :  "" ) +" type='checkbox' class='status_enable' value='true' data-id='"+data._id+"' data-value='"+ ((data.status == 1) ? "1" :  "0" ) +"'> <span class='slider round'></span></label>";
+            return "<label class='switch'><input " + ((data.status == 1) ? "checked" : "") + " type='checkbox' class='status_enable' value='true' data-id='" + data._id + "' data-value='" + ((data.status == 1) ? "1" : "0") + "'> <span class='slider round'></span></label>";
           }
         },
         {
@@ -123,23 +123,23 @@ const Skill = () => {
       ]
     });
 
-    $('body').on('change', '.status_enable', function() {
+    $('body').on('change', '.status_enable', function () {
 
-        var id = $(this).data('id');
-        var value = 0;
-        var fail_status = true;
+      var id = $(this).data('id');
+      var value = 0;
+      var fail_status = true;
 
-        if($(this).is(":checked")){
-           value = 1; 
-           fail_status = false;
-        }
-       
-          console.log(id, value);
+      if ($(this).is(":checked")) {
+        value = 1;
+        fail_status = false;
+      }
 
-          dispatch(changeSkillStatus(id, value)).then(res => {
-               addToast(res.message, { appearance: res.status, autoDismiss: true, })
-                if (res.statusCode != 200) $(this).prop('checked', fail_status);
-          })
+      console.log(id, value);
+
+      dispatch(changeSkillStatus(id, value)).then(res => {
+        addToast(res.message, { appearance: res.status, autoDismiss: true, })
+        if (res.statusCode != 200) $(this).prop('checked', fail_status);
+      })
 
     });
 
@@ -179,9 +179,9 @@ const Skill = () => {
         <div className="row">
           <div className="col-lg-12">
             <div className="box box-block bg-white">
-              <h5 className="mb-1">Skills 
+              <h5 className="mb-1">Skills
                 <div className="rightBtn-Group">
-                    <Link className="addMoreBtn" to="/admin/skill/add" ><span className="txt text-capitalize"> Add New <span className="amIcon"><i className="fa fa-plus"></i></span></span></Link>
+                  <Link className="addMoreBtn" to="/admin/skill/add" ><span className="txt text-capitalize"> Add New <span className="amIcon"><i className="fa fa-plus"></i></span></span></Link>
                 </div>
               </h5>
               <div className="">

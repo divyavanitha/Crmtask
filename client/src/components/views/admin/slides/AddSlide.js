@@ -1,6 +1,6 @@
 import React, { Fragment, useState, FormEvent, Dispatch, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams, useHistory  } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import DatePicker from "../DatePicker";
 import { useToasts } from 'react-toast-notifications'
@@ -15,8 +15,8 @@ const AddSlide = (props) => {
     const dispatch = useDispatch();
     const [description, setDescription] = useState("");
     //console.log('param',props.match.params.id);
-    
-  let history = useHistory();
+
+    let history = useHistory();
     const params = useParams();
     useEffect(() => {
 
@@ -26,7 +26,7 @@ const AddSlide = (props) => {
     }, [params.id]);
     const slide = useSelector(state => state.slides && state.slides.slide && state.slides.slide.responseData.slide);
     const categories = useSelector(state => state.categories && state.categories.categories.responseData && state.categories.categories.responseData.data.categories);
-    console.log(categories);
+
 
     return (
 
@@ -52,7 +52,7 @@ const AddSlide = (props) => {
                     .required('Category is required')
             })}
             onSubmit={(values, { setSubmitting, resetForm }) => {
-console.log('values', values);
+                console.log('values', values);
                 /*let data = {
                     id: values.id,
                     title: values.title,
@@ -61,14 +61,14 @@ console.log('values', values);
                 };*/
 
                 const data = new FormData();
-                data.append( "id", values.id );
-                data.append( "title", values.title );
-                data.append( "category", values.category );
-                data.append( "description", values.description );
-                data.append( "layoutPhoto", values.layoutPhoto );
+                data.append("id", values.id);
+                data.append("title", values.title);
+                data.append("category", values.category);
+                data.append("description", values.description);
+                data.append("layoutPhoto", values.layoutPhoto);
 
                 if (params.id) {
-                    dispatch(updateSlide(data)).then(res => { 
+                    dispatch(updateSlide(data)).then(res => {
                         addToast(res.message, { appearance: res.status, autoDismiss: true, })
                         history.push('/admin/slide/')
                     })
@@ -125,9 +125,9 @@ console.log('values', values);
                                 <div className="col-lg-12">
                                     <div className="box box-block bg-white">
                                         <h5 className="mb-1">{params.id ? "Edit Slide" : "Add Slide"}
-                                        <div className="rightBtn-Group">
-                                            <Link className="addMoreBtn" to="/admin/slide" ><span className="txt text-capitalize"><span className="amIcon"><i className="fa fa-arrow-left"></i></span> Back</span></Link>
-                                        </div>
+                                            <div className="rightBtn-Group">
+                                                <Link className="addMoreBtn" to="/admin/slide" ><span className="txt text-capitalize"><span className="amIcon"><i className="fa fa-arrow-left"></i></span> Back</span></Link>
+                                            </div>
                                         </h5>
                                         {/* <div className="card-header">
                                             <h4 className="h4">{params.id ? "Edit Slide" : "Add Slide"}</h4>
@@ -137,7 +137,7 @@ console.log('values', values);
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Title : </label>
                                                     <div className="col-md-6">
-                                                        <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title"  className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')}  />
+                                                        <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="title" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
@@ -145,9 +145,9 @@ console.log('values', values);
                                                     <label className="col-md-4 control-label"> Category : </label>
                                                     <div className="col-md-6">
                                                         <Field as="select" id="category" name="category" onChange={handleChange} className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} >
-                                                        <option value="">Select Catagory</option>
+                                                            <option value="">Select Catagory</option>
 
-                                                        {categories && categories.map((c_list) => (<option key={c_list._id} value={c_list._id} onChange={handleChange}>{c_list.name}</option>))}
+                                                            {categories && categories.map((c_list) => (<option key={c_list._id} value={c_list._id} onChange={handleChange}>{c_list.name}</option>))}
 
                                                         </Field>
                                                         <ErrorMessage name="category" component="div" className="invalid-feedback" />
@@ -156,20 +156,20 @@ console.log('values', values);
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Image : </label>
                                                     <div className="col-md-6">
-                                                         <input type="file" name="layoutPhoto" onChange={(e) => { setFieldValue("layoutPhoto", e.currentTarget.files[0]) }} className={'form-control' + (errors.layoutPhoto && touched.layoutPhoto ? ' is-invalid' : '')} />
+                                                        <input type="file" name="layoutPhoto" onChange={(e) => { setFieldValue("layoutPhoto", e.currentTarget.files[0]) }} className={'form-control' + (errors.layoutPhoto && touched.layoutPhoto ? ' is-invalid' : '')} />
 
-                                                         {params.id ? <img id="target" src={values.layoutPhoto ? values.layoutPhoto : ""} /> : ""}
+                                                        {params.id ? <img id="target" src={values.layoutPhoto ? values.layoutPhoto : ""} /> : ""}
                                                     </div>
                                                 </div>
 
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Description : </label>
                                                     <div className="col-md-6">
-                                                        <Field component="textarea" rows="2" id="description" value={values.description} name="description"  onChange={handleChange} maxLength={100}  className={'form-control' + (errors.description && touched.description ? ' is-invalid' : '')}  />
+                                                        <Field component="textarea" rows="2" id="description" value={values.description} name="description" onChange={handleChange} maxLength={100} className={'form-control' + (errors.description && touched.description ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="description" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
-                                                
+
                                                 {/* <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Status : </label>
                                                     <div className="col-md-6">

@@ -1,10 +1,10 @@
 export const AUTH_USER = 'auth_user';
 export const LOGOUT_USER = 'logout_user';
 export const RESET_PASSWORD = 'reset_password';
-export const VERIFY='verification';
+export const VERIFY = 'verification';
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 
-export const CLEAR_ERRORS='CLEAR_ERRORS';
+export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 
 export const CREATE_PROFILE = 'CREATE_PROFILE';
 export const GET_PROFILE = 'GET_PROFILE';
@@ -14,13 +14,13 @@ export const CLEAR_CURRENT_PROFILE = 'CLEAR_CURRENT_PROFILE';
 export const GET_PROFILES = 'GET_PROFILES';
 export const POST_LOADING = 'POST_LOADING';
 
-export const GET_ALLPOSTJOB='getallpostjob';
+export const GET_ALLPOSTJOB = 'getallpostjob';
 
 export const GET_MYALLPOSTJOB = 'get_myallpostjob';
 export const GET_POSTJOBBYID = 'get_postjobbyid';
 export const CREATE_POSTJOB = 'create_postjob';
 export const DELETE_POSTJOB = 'delete_postjob';
-export const GET_ERRORS='get_errors';
+export const GET_ERRORS = 'get_errors';
 
 export const GET_CATEGORY = 'GET_CATEGORY';
 export const GET_SUBCATEGORY = 'GET_SUBCATEGORY';
@@ -42,7 +42,7 @@ export const SELLER_ORDER_LIST = 'SELLER_ORDER_LIST';
 
 export const SELLER_ORDER_DETAILS = 'SELLER_ORDER_DETAILS';
 
-export const GET_CART_COUNT = 'GET_CART_COUNT';
+export const ADD_CART_COUNT = 'ADD_CART_COUNT';
 
 export const FIND_CART = 'FIND_CART';
 

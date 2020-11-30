@@ -12,12 +12,12 @@ const slideReducer = (state = intialState, action) => {
         ...state,
         slides: action.payload
       };
-     case FIND_SLIDE:
+    case FIND_SLIDE:
       return {
         ...state,
         slide: action.payload
       };
-      
+
     default:
       return state;
   }

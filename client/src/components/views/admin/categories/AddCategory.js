@@ -88,33 +88,33 @@ const AddCategory = (props) => {
                             </div>
                             <div className="row">
                                 <div className="col-lg-12">
-                                <div className="box box-block bg-white">
-                                    <h5 className="mb-1">{params.id ? "Edit Category" : "Add Category"} 
-                                    <div className="rightBtn-Group">
-                                        <Link className="addMoreBtn" to="/admin/category" ><span className="txt text-capitalize"><span className="amIcon"><i className="fa fa-arrow-left"></i></span> Back</span></Link>
-                                    </div>
-                                    </h5>
+                                    <div className="box box-block bg-white">
+                                        <h5 className="mb-1">{params.id ? "Edit Category" : "Add Category"}
+                                            <div className="rightBtn-Group">
+                                                <Link className="addMoreBtn" to="/admin/category" ><span className="txt text-capitalize"><span className="amIcon"><i className="fa fa-arrow-left"></i></span> Back</span></Link>
+                                            </div>
+                                        </h5>
 
-                                        
+
                                         <div className="addFormBox">
                                             <form onSubmit={handleSubmit} encType="multipart/form-data">
                                                 <div className="form-group row">
                                                     <div className="col-md-4">
                                                         <label className="control-label"> Title : </label>
                                                     </div>
-                                                    
+
                                                     <div className="col-md-6">
                                                         <Field type="text" id="name" name="name" value={values.name} onChange={handleChange} maxLength={100} placeholder="Name" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="name" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div className="form-group row">
                                                     <div className="col-md-4">
                                                         <label className="control-label"></label>
                                                     </div>
                                                     <div className="col-md-6">
-                                                        <button type="submit" className="btn btn-success mr-3"> { params.id ? 'Update' : 'Save' } </button>
+                                                        <button type="submit" className="btn btn-success mr-3"> {params.id ? 'Update' : 'Save'} </button>
                                                         {params.id ? <Link className="btn btn-outline" to="/admin/category">Cancel</Link> : <button onClick={handleReset} className="btn btn-outline mr-3">Reset</button>}
                                                     </div>
                                                 </div>
@@ -123,7 +123,7 @@ const AddCategory = (props) => {
                                     </div>
                                 </div>
 
-                                </div>
+                            </div>
                         </div>
                     </Fragment>
                 );

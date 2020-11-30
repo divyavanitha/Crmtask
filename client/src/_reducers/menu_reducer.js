@@ -3,17 +3,17 @@ import {
 } from '../_actions/types';
 
 const intialState = {
-  menu: {}
+    menu: {}
 };
 
 const menuReducer = (state = intialState, action) => {
 
     switch (action.type) {
-        
+
         case GET_MENUS:
             return {
                 ...state,
-                menu:  action.payload
+                menu: action.payload
             };
 
         default:

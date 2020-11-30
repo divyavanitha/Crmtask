@@ -12,7 +12,7 @@ const userReducer = (state = intialState, action) => {
         ...state,
         users: action.payload
       };
-     case FIND_USER:
+    case FIND_USER:
       return {
         ...state,
         user: action.payload

@@ -12,6 +12,7 @@ import axios from "axios";
 
 import { AUTH_USER } from './_actions/types';
 import { ADMIN_USER, RBA } from './_actions/admin/types';
+import { ADD_CART_COUNT } from './_actions/types';
 import store from "./store.js";
 
 import "popper.js/dist/popper.js";
@@ -29,18 +30,31 @@ if (localStorage.token) {
     payload: decoded
   })
 
+  axios.get("/api/gig/cart/count").then((response) => {
+    store.dispatch({
+      type: ADD_CART_COUNT,
+      payload: response.data.responseData.count
+    });
+  }).catch((err) => {
+
+  });
+
+
 }
 if (localStorage.admin_token) {
-  setToken(localStorage.admin_token);
 
   const decoded = jwt_decode(localStorage.admin_token);
+  if (decoded) {
+    axios.post("/api/admin/permissions", {}, { headers: { 'Authorization': `${localStorage.admin_token}` } }).then((response) => {
+      store.dispatch({
+        type: RBA,
+        payload: response.data.responseData
+      });
+    }).catch((err) => {
 
-  axios.post("/api/admin/permissions" ).then((response) => {
-    store.dispatch({
-      type: RBA,
-      payload: response.data.responseData
     });
-  });
+  }
+
 
   store.dispatch({
     type: ADMIN_USER,

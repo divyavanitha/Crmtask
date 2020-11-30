@@ -11,7 +11,7 @@ const languageReducer = (state = intialState, action) => {
         ...state,
         languages: action.payload
       };
-     case FIND_LANGUAGE:
+    case FIND_LANGUAGE:
       return {
         ...state,
         language: action.payload

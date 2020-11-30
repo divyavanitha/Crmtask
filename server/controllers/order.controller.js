@@ -23,6 +23,22 @@ exports.listcart = async (req, res) => {
 
 }
 
+exports.cartCount = async (req, res) => {
+    try {
+
+        let count = await db._count(Cart, {user: req.user._id} );
+
+        const data = { count };
+
+        const response = helper.response({ data });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
 exports.addcart = async (req, res) => {
 
      const schema = Joi.object().options({ abortEarly: false }).keys({
@@ -61,7 +77,10 @@ exports.addcart = async (req, res) => {
         let carts= await db._store(Cart, cart);
         /*carts.count = cart_length.length;
         console.log(carts.count);*/
-        const response = helper.response({ message: res.__('inserted'), data: {"carts": carts, "count": cart_length} });
+
+        let count = await db._count(Cart, {user: req.user._id} );
+
+        const response = helper.response({ message: res.__('inserted'), data: {"carts": carts, "count": count } });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {

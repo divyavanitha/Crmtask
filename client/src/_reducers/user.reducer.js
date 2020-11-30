@@ -10,7 +10,7 @@ import {
     GET_DELIVERY_TIME,
     GET_PACKAGE,
     GET_CART_LIST,
-    GET_CART_COUNT,
+    ADD_CART_COUNT,
     BUYER_ORDER_LIST,
     BUYER_ORDER_DETAILS,
     SELLER_ORDER_LIST,
@@ -60,17 +60,15 @@ const userReducer = (state = initialState, action) => {
         case BUYER_ORDER_LIST:
             return { ...state, buyer_order_list: action.payload }
         case BUYER_ORDER_DETAILS:
-        return { ...state, buyer_order_details: action.payload }
+            return { ...state, buyer_order_details: action.payload }
         case SELLER_ORDER_LIST:
             return { ...state, seller_order_list: action.payload }
         case SELLER_ORDER_DETAILS:
-        return { ...state, seller_order_details: action.payload }
+            return { ...state, seller_order_details: action.payload }
         case FIND_CART:
-        return { ...state, cart_details: action.payload }
-        /*case GET_CART_COUNT:
-        let s = {...state}
-        console.log('count',s.cart_count);
-            return { ...state, cart_count: s.cart_count+action.payload }*/
+            return { ...state, cart_details: action.payload }
+        case ADD_CART_COUNT:
+            return { ...state, cart_count: action.payload }
         default:
             return state;
     }

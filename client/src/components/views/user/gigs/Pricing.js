@@ -194,12 +194,12 @@ const Pricing = (props) => {
                                                 <span className="input-group-addon font-weight-bold">
                                                    &#036;    </span>
 
+                                                <div>
                                                    <div>
-                                                         <div>
-                                                            <Field name={`price.${0}`} values={`price.${0}`} className="form-control" style={{ width: '419px' }} />
+                                                      <Field name={`price.${0}`} values={`price.${0}`} className="form-control" style={{ width: '419px' }} />
 
-                                                         </div>
                                                    </div>
+                                                </div>
 
                                                 <ErrorMessage name="price" component="div" className="invalid-feedback" />
                                              </div>
@@ -212,25 +212,25 @@ const Pricing = (props) => {
                                           {/* <!--- form-group row Starts ---> */}
                                           <div className="col-md-7">
                                              <label>Proposal Revisions</label>
+                                             <div>
                                                 <div>
-                                                      <div>
-                                                         <Field component="select" name={`revisions.${0}`} className="form-control">
-                                                            <option value="">Select Revision</option>
-                                                            <option value='0' >0</option>
-                                                            <option value='1' >1</option>
-                                                            <option value='2' >2</option>
-                                                            <option value='3' >3</option>
-                                                            <option value='4' >4</option>
-                                                            <option value='5' >5</option>
-                                                            <option value='6' >6</option>
-                                                            <option value='7' >7</option>
-                                                            <option value='8' >8</option>
-                                                            <option value='9' >9</option>
-                                                            <option value='10' >10</option>
-                                                            <option value='unlimited' >Unlimited Revisions</option>
-                                                         </Field>
-                                                      </div>
+                                                   <Field component="select" name={`revisions.${0}`} className="form-control">
+                                                      <option value="">Select Revision</option>
+                                                      <option value='0' >0</option>
+                                                      <option value='1' >1</option>
+                                                      <option value='2' >2</option>
+                                                      <option value='3' >3</option>
+                                                      <option value='4' >4</option>
+                                                      <option value='5' >5</option>
+                                                      <option value='6' >6</option>
+                                                      <option value='7' >7</option>
+                                                      <option value='8' >8</option>
+                                                      <option value='9' >9</option>
+                                                      <option value='10' >10</option>
+                                                      <option value='unlimited' >Unlimited Revisions</option>
+                                                   </Field>
                                                 </div>
+                                             </div>
                                              <small>Set to 0 if your proposal is configured for instant delivery.</small>
                                           </div>
                                           <small className="form-text text-danger"></small>
@@ -240,14 +240,14 @@ const Pricing = (props) => {
                                           {/* <!--- form-group row Starts ---> */}
                                           <div className="col-md-7">
                                              <label>Delivery Time</label>
+                                             <div>
                                                 <div>
-                                                      <div>
-                                                         <Field component="select" name={`delivery_time.${0}`} className="form-control">
-                                                            <option value="">Select Delivery Time</option>
-                                                            {delivery && delivery.deliveryTime.map((deliveryTime) => (<option key={deliveryTime._id} value={deliveryTime._id} >{deliveryTime.name}</option>))}
-                                                         </Field>
-                                                      </div>
+                                                   <Field component="select" name={`delivery_time.${0}`} className="form-control">
+                                                      <option value="">Select Delivery Time</option>
+                                                      {delivery && delivery.deliveryTime.map((deliveryTime) => (<option key={deliveryTime._id} value={deliveryTime._id} >{deliveryTime.name}</option>))}
+                                                   </Field>
                                                 </div>
+                                             </div>
 
                                              <small>Please select 1 day if this is for an instant delivery.</small>
                                           </div>
@@ -261,8 +261,8 @@ const Pricing = (props) => {
                                              <tr>
                                                 <th></th>
                                                 {packages && packages.map((pack, index) => (
-                                                   <th>{pack.name}              
-                                                   <Field name={`package_id.${index}`} onChange={handleChange} value={values.package_id} type="hidden"  className="form-control" />
+                                                   <th>{pack.name}
+                                                      <Field name={`package_id.${index}`} onChange={handleChange} value={values.package_id} type="hidden" className="form-control" />
                                                    </th>
                                                 ))}
                                              </tr>
@@ -270,10 +270,10 @@ const Pricing = (props) => {
                                           <tbody>
                                              <tr>
                                                 <td>Description</td>
-                                                
+
                                                 {descriptions.map((description, index) => (
                                                    <td className="p-0"><Field as="textarea" name={`description.${index}`} onChange={handleChange} className="form-control" values={values.description} placeholder="Description" rows="3" />
-                                                   
+
                                                    </td>
                                                 ))}
                                              </tr>
@@ -290,21 +290,21 @@ const Pricing = (props) => {
                                                 <td>Revisions</td>
                                                 {revisions.map((revision, index) => (
                                                    <td className="p-0">
-                                                   <Field component="select" name={`revisions.${index}`} className="form-control">
-                                                      <option value="">Select Revision</option>
-                                                      <option value='0' >0</option>
-                                                      <option value='1' >1</option>
-                                                      <option value='2' >2</option>
-                                                      <option value='3' >3</option>
-                                                      <option value='4' >4</option>
-                                                      <option value='5' >5</option>
-                                                      <option value='6' >6</option>
-                                                      <option value='7' >7</option>
-                                                      <option value='8' >8</option>
-                                                      <option value='9' >9</option>
-                                                      <option value='10' >10</option>
-                                                      <option value='unlimited' >Unlimited Revisions</option>
-                                                   </Field></td>
+                                                      <Field component="select" name={`revisions.${index}`} className="form-control">
+                                                         <option value="">Select Revision</option>
+                                                         <option value='0' >0</option>
+                                                         <option value='1' >1</option>
+                                                         <option value='2' >2</option>
+                                                         <option value='3' >3</option>
+                                                         <option value='4' >4</option>
+                                                         <option value='5' >5</option>
+                                                         <option value='6' >6</option>
+                                                         <option value='7' >7</option>
+                                                         <option value='8' >8</option>
+                                                         <option value='9' >9</option>
+                                                         <option value='10' >10</option>
+                                                         <option value='unlimited' >Unlimited Revisions</option>
+                                                      </Field></td>
                                                 ))}
                                              </tr>
                                              <tr>
@@ -353,7 +353,7 @@ const Pricing = (props) => {
 
                                     <div className="form-group mt-4 mb-0">
                                        {/* <!--- form-group Starts ---> */}
-                                       
+
                                        <a href="#" className="btn btn-secondary float-left back-to-instant">Back</a>
                                        <button type="submit" className="btn btn-success mr-3 float-right">Save & Continue</button>
                                     </div>

@@ -22,7 +22,6 @@ const adminReducer = (state = intialState, action) => {
         permissions: action.payload
       };
     case LOG_OUT:
-      localStorage.clear('admin_token');
       return {
         ...state,
         isAuthenticated: false,

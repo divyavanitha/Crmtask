@@ -12,12 +12,12 @@ const packageReducer = (state = intialState, action) => {
         ...state,
         packages: action.payload
       };
-     case FIND_PACKAGE:
+    case FIND_PACKAGE:
       return {
         ...state,
         package: action.payload
       };
-      
+
     default:
       return state;
   }

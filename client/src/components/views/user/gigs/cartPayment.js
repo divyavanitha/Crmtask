@@ -11,21 +11,21 @@ import { getGigbyId, createOrder, getPackage, addCart, getCartList, deleteCart, 
 import OwlCarousel from 'react-owl-carousel';
 
 
-const Cart = (props) =>  {
+const Cart = (props) => {
 
-    const dispatch = useDispatch();
-    const params = useParams();
-    let history = useHistory();
+   const dispatch = useDispatch();
+   const params = useParams();
+   let history = useHistory();
 
 
-    const [total, setTotal] = useState(0);
+   const [total, setTotal] = useState(0);
 
-     useEffect(() => {
-      console.log('id',params.id);
-        dispatch(getCartList())
-        dispatch(getCartbyId(params.id))
+   useEffect(() => {
+      console.log('id', params.id);
+      dispatch(getCartList())
+      dispatch(getCartbyId(params.id))
 
-        $(document).ready(function(){
+      $(document).ready(function () {
          //$('.total-price').html('&#036;10.00');
          $('.processing-fee').hide();
          $('#mobile-money-form').hide();
@@ -35,9 +35,9 @@ const Cart = (props) =>  {
          $('#credit-card-form').hide();
          $('#2checkout-form').hide();
          $('#paystack-form').hide();
-         
-         
-         $('#shopping-balance').click(function(){
+
+
+         $('#shopping-balance').click(function () {
             //$('.total-price').html('&#036;10.00');
             $('.processing-fee').hide();
             $('#credit-card-form').hide();
@@ -48,8 +48,8 @@ const Cart = (props) =>  {
             $('#paystack-form').hide();
             $('#shopping-balance-form').show();
          });
-         
-         $('#paypal').click(function(){
+
+         $('#paypal').click(function () {
             //$('.total-price').html('&#036;10.50');
             $('.processing-fee').show();
             $('#mobile-money-form').hide();
@@ -61,8 +61,8 @@ const Cart = (props) =>  {
             $('#paystack-form').hide();
             $('#mercadopago-form').hide();
          });
-         
-         $('#credit-card').click(function(){
+
+         $('#credit-card').click(function () {
             //$('.total-price').html('&#036;10.50');
             $('.processing-fee').show();
             $('#mobile-money-form').hide();
@@ -74,8 +74,8 @@ const Cart = (props) =>  {
             $('#paystack-form').hide();
             $('#mercadopago-form').hide();
          });
-         
-         $('#2checkout').click(function(){
+
+         $('#2checkout').click(function () {
             //$('.total-price').html('&#036;10.50');
             $('.processing-fee').show();
             $('#mobile-money-form').hide();
@@ -87,8 +87,8 @@ const Cart = (props) =>  {
             $('#paystack-form').hide();
             $('#mercadopago-form').hide();
          });
-         
-         $('#mobile-money').click(function(){
+
+         $('#mobile-money').click(function () {
             //$('.total-price').html('&#036;10.50');
             $('.processing-fee').show();
             $('#mobile-money-form').show();
@@ -99,8 +99,8 @@ const Cart = (props) =>  {
             $('#paystack-form').hide();
             $('#mercadopago-form').hide();
          });
-         
-         $('#coinpayments').click(function(){
+
+         $('#coinpayments').click(function () {
             //$('.total-price').html('&#036;10.50');
             $('.processing-fee').show();
             $('#mercadopago-form').hide();
@@ -112,8 +112,8 @@ const Cart = (props) =>  {
             $('#paystack-form').hide();
             $('#shopping-balance-form').hide();
          });
-         
-         $('#paystack').click(function(){
+
+         $('#paystack').click(function () {
             //$('.col-md-5 .card br').hide();
             $('.total-price').html('&#036;10.50');
             $('.processing-fee').show();
@@ -126,8 +126,8 @@ const Cart = (props) =>  {
             $('#paypal-form').hide();
             $('#shopping-balance-form').hide();
          });
-         
-         $('#mercadopago').click(function(){
+
+         $('#mercadopago').click(function () {
             //$('.total-price').html('&#036;10.50');
             $('.processing-fee').show();
             $('#mercadopago-form').show();
@@ -140,141 +140,138 @@ const Cart = (props) =>  {
             $('#shopping-balance-form').hide();
          });
 
-         });
-      }, []);
+      });
+   }, []);
 
-   
-  
-    const cart = useSelector((state) => state.user && state.user.cart_lists && state.user.cart_lists.carts);
 
-    const cart_details = useSelector((state) => state.user && state.user.cart_details && state.user.cart_details.responseData && state.user.cart_details.responseData.carts);
-console.log('cart_details', cart_details);
-    $(".count_cart").text("Your Cart "+(cart && cart.length));
 
-    $(document).ready(function () {
+   const cart = useSelector((state) => state.user && state.user.cart_lists && state.user.cart_lists.carts);
+
+   const cart_details = useSelector((state) => state.user && state.user.cart_details && state.user.cart_details.responseData && state.user.cart_details.responseData.carts);
+
+   let cartCount = useSelector((state) => state.user.cart_count);
+
+   $(document).ready(function () {
       var len = cart && cart;
-      console.log('cart1',len);
+      console.log('cart1', len);
       var total = 0;
-      if(params.id){
+      if (params.id) {
          total = cart_details && cart_details.price
-      }else{
-        $.each(len, function (index, value) {
+      } else {
+         $.each(len, function (index, value) {
             total = total + value.price;
-        });
-        
+         });
+
       }
       setTotal(total);
-    });
+   });
 
-    return (
+   return (
 
-        <Formik
+      <Formik
 
-            enableReinitialize
-            initialValues={{
-               total: total,
-               payment_mode: ""
+         enableReinitialize
+         initialValues={{
+            total: total,
+            payment_mode: ""
+         }
+         }
+
+         validationSchema={Yup.object().shape({
+            /* title: Yup.string()
+                 .required('Title is required'),
+             sub_category_id: Yup.string()
+                 .required('Sub Category is required'),
+             tags: Yup.string()
+                 .required('Tags is required'),*/
+         })}
+         onSubmit={(values, { setSubmitting, resetForm }) => {
+
+            let wallet = false;
+            if (values.payment_mode == "WALLET") {
+               wallet = true;
             }
-            }
+            let data = {
+               total: values.total,
+               payment_mode: values.payment_mode,
+               wallet: wallet
+            };
 
-            validationSchema={Yup.object().shape({
-               /* title: Yup.string()
-                    .required('Title is required'),
-                sub_category_id: Yup.string()
-                    .required('Sub Category is required'),
-                tags: Yup.string()
-                    .required('Tags is required'),*/
-            })}
-            onSubmit={(values, { setSubmitting, resetForm }) => {
-                
-              let wallet = false;
-                if(values.payment_mode == "WALLET"){
-                   wallet = true;
-                }
-                let data = {
-                   total: values.total,
-                   payment_mode: values.payment_mode,
-                   wallet: wallet
-                };
+            dispatch(checkout(data)).then(res => {
+               history.push('/buyer-order-lists')
+            })
 
-                dispatch(checkout(data)).then(res => {
-                  console.log('check',res);
-                    $(".cart-count").text(res.responseData.length);
-                    history.push('/buyer-order-lists')
-                    
-                })
-                
-                resetForm();
-                setSubmitting(false);
-            }}>
+            resetForm();
+            setSubmitting(false);
+         }}>
 
-            {props => {
-                const {
-                    values,
-                    touched,
-                    errors,
-                    dirty,
-                    isSubmitting,
-                    handleChange,
-                    handleBlur,
-                    handleSubmit,
-                    handleReset,
-                    setFieldValue,
-                } = props;
+         {props => {
+            const {
+               values,
+               touched,
+               errors,
+               dirty,
+               isSubmitting,
+               handleChange,
+               handleBlur,
+               handleSubmit,
+               handleReset,
+               setFieldValue,
+            } = props;
 
-    return (
+            return (
 
-        <Fragment>
+               <Fragment>
 
-<div className="dashboardContainer proposals-container">
-   <div className="container mt-5 mb-5">
-      {/* <div className="card"> 
+                  <div className="dashboardContainer proposals-container">
+                     <div className="container mt-5 mb-5">
+                        {/* <div className="card"> 
           <div className="card-body"> */}
-            <div className="row">
-               <div className="col-md-12">
-                  <h1 className="mb-4">
-                     Checkout          
+                        <div className="row">
+                           <div className="col-md-12">
+                              <h1 className="mb-4">
+                                 Checkout
                   </h1>
-               </div>
-            </div>
-            <div className="row">
-               <div className="col-md-12">
-                  <div className="card mb-3">
-                     <div className="card-body">
-                        <h5 className="float-left mt-2 pt-2 count_cart"> Your Cart 1 </h5>
-                        <h5 className="float-right mb-0"> 
-                           <Link to="/" className="btn btn-success">
-                           Continue Shopping                
-                           </Link> 
-                        </h5>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div className="row">
-               <div className="col-md-7">
-                  <div className="row">
-                     <div className="col-md-12 mb-3">
-                        <div className="card payment-options">
-                           <div className="card-header">
-                              <h5 className="mt-2"><i className="fa fa-dollar"></i> Available Shopping Balance</h5>
                            </div>
-                           <div className="card-body">
-                              <div className="row">
-                                 <div className="col-1">
-                                    <input id="shopping-balance" type="radio" name="method" className="form-control radio-input" checked />
-                                 </div>
-                                 <div className="col-11">
-                                    <p className="lead mt-2">
-                                       Personal Balance - <b>tyrone</b> 
-                                       <span className="text-success font-weight-bold">&#036;{ params.id ? cart_details &&cart_details.price :total}</span>
-                                    </p>
+                        </div>
+                        <div className="row">
+                           <div className="col-md-12">
+                              <div className="card mb-3">
+                                 <div className="card-body">
+                                    <h5 className="float-left mt-2 pt-2 count_cart"> {cartCount != 0 ? 'Your cart ' + cartCount : ''} </h5>
+                                    <h5 className="float-right mb-0">
+                                       <Link to="/" className="btn btn-success">
+                                          Continue Shopping
+                           </Link>
+                                    </h5>
                                  </div>
                               </div>
                            </div>
                         </div>
-                     </div>
-                    {/* <div className="col-md-12 mb-3">
+                        <div className="row">
+                           <div className="col-md-7">
+                              <div className="row">
+                                 <div className="col-md-12 mb-3">
+                                    <div className="card payment-options">
+                                       <div className="card-header">
+                                          <h5 className="mt-2"><i className="fa fa-dollar"></i> Available Shopping Balance</h5>
+                                       </div>
+                                       <div className="card-body">
+                                          <div className="row">
+                                             <div className="col-1">
+                                                <input id="shopping-balance" type="radio" name="method" className="form-control radio-input" checked />
+                                             </div>
+                                             <div className="col-11">
+                                                <p className="lead mt-2">
+                                                   Personal Balance - <b>tyrone</b>
+                                                   <span className="text-success font-weight-bold">&#036;{params.id ? cart_details && cart_details.price : total}</span>
+                                                </p>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 {/* <div className="col-md-12 mb-3">
                         <div className="card payment-options">
                            <div className="card-header">
                               <h5 className="mt-2"><i className="fa fa-credit-card"></i> Payment Options</h5>
@@ -332,73 +329,73 @@ console.log('cart_details', cart_details);
                            </div>
                         </div>
                      </div> */}
-                  </div>
-               </div>
-               <div className="col-md-5">
-                  <div className="card">
-                     <div className="card-body cart-order-details">
-                        <p>Cart Subtotal <span className="float-right">&#036;{ params.id ? cart_details &&cart_details.price :total}</span></p>
-                        <hr />
-                        {/* <p className="processing-fee">Processing Fee <span className="float-right">&#036;0.50 </span></p> */}
-                        <hr className="processing-fee" />
-                        <p>Total <span className="float-right font-weight-bold total-price">&#036;{ params.id ? cart_details &&cart_details.price :total}</span></p>
-                        <hr />
-                        <form onSubmit={handleSubmit} encType="multipart/form-data" id="shopping-balance-form">
-                          <input type="hidden" name="total" onChange={handleChange} value={values.total} />
-                           <button type="submit" onClick={() => setFieldValue("payment_mode", "WALLET")} name="cart_submit_order" className="btn btn-lg btn-success btn-block">
-                           Pay With Shopping Balance              
+                              </div>
+                           </div>
+                           <div className="col-md-5">
+                              <div className="card">
+                                 <div className="card-body cart-order-details">
+                                    <p>Cart Subtotal <span className="float-right">&#036;{params.id ? cart_details && cart_details.price : total}</span></p>
+                                    <hr />
+                                    {/* <p className="processing-fee">Processing Fee <span className="float-right">&#036;0.50 </span></p> */}
+                                    <hr className="processing-fee" />
+                                    <p>Total <span className="float-right font-weight-bold total-price">&#036;{params.id ? cart_details && cart_details.price : total}</span></p>
+                                    <hr />
+                                    <form onSubmit={handleSubmit} encType="multipart/form-data" id="shopping-balance-form">
+                                       <input type="hidden" name="total" onChange={handleChange} value={values.total} />
+                                       <button type="submit" onClick={() => setFieldValue("payment_mode", "WALLET")} name="cart_submit_order" className="btn btn-lg btn-success btn-block">
+                                          Pay With Shopping Balance
                            </button>
-                        </form>
-                        <div id="paypal-form" className="paypal-button-container"></div>
-                        <form action="" method="post" id="credit-card-form">
-                           {/* credit-card-form Starts */}
-                           <input name='stripe' type='submit' className="btn btn-lg btn-success btn-block" value='Pay With Credit Card'/>
-                        </form>
-                        {/* credit-card-form Ends */}
-                        <form action="" method="post" id="mercadopago-form">
-                           <input type="submit" name="mercadopago" className="btn btn-lg btn-success btn-block" value="Pay With Mercadopago" />
-                        </form>
-                        <form action="" method="post" id="coinpayments-form">
-                           <button type="submit" name="coinpayments" className="btn btn-lg btn-success btn-block">Pay With Coinpayments</button>
-                        </form>
-                        <form action="" method="post" id="paystack-form">
-                          
-                           <button type="submit" name="paystack" className="btn btn-lg btn-success btn-block">Pay With Paystack</button>
-                        </form>
-                        
+                                    </form>
+                                    <div id="paypal-form" className="paypal-button-container"></div>
+                                    <form action="" method="post" id="credit-card-form">
+                                       {/* credit-card-form Starts */}
+                                       <input name='stripe' type='submit' className="btn btn-lg btn-success btn-block" value='Pay With Credit Card' />
+                                    </form>
+                                    {/* credit-card-form Ends */}
+                                    <form action="" method="post" id="mercadopago-form">
+                                       <input type="submit" name="mercadopago" className="btn btn-lg btn-success btn-block" value="Pay With Mercadopago" />
+                                    </form>
+                                    <form action="" method="post" id="coinpayments-form">
+                                       <button type="submit" name="coinpayments" className="btn btn-lg btn-success btn-block">Pay With Coinpayments</button>
+                                    </form>
+                                    <form action="" method="post" id="paystack-form">
+
+                                       <button type="submit" name="paystack" className="btn btn-lg btn-success btn-block">Pay With Paystack</button>
+                                    </form>
+
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        {/* </div> 
+       </div> */}
                      </div>
                   </div>
-               </div>
-            </div>
-         {/* </div> 
-       </div> */}
-   </div>
-</div>
 
 
-<div className="modal delete-modal" tabIndex="-1" role="basic" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title">Confirm Delete</h4>
-            </div>
-            <div className="modal-body p-2"> Are you sure want to delete? </div>
-            <div className="modal-footer">
-              <button type="button" className="btn default" data-dismiss="modal">Close</button>
-              <button type="button" data-value="1" className="btn btn-danger delete-modal-btn">Delete</button>
-            </div>
-          </div>
+                  <div className="modal delete-modal" tabIndex="-1" role="basic" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+                     <div className="modal-dialog">
+                        <div className="modal-content">
+                           <div className="modal-header">
+                              <h4 className="modal-title">Confirm Delete</h4>
+                           </div>
+                           <div className="modal-body p-2"> Are you sure want to delete? </div>
+                           <div className="modal-footer">
+                              <button type="button" className="btn default" data-dismiss="modal">Close</button>
+                              <button type="button" data-value="1" className="btn btn-danger delete-modal-btn">Delete</button>
+                           </div>
+                        </div>
 
-        </div>
+                     </div>
 
-      </div>
+                  </div>
 
 
 
-        </Fragment >
-                );
-            }}
-        </Formik>
-    );
+               </Fragment >
+            );
+         }}
+      </Formik>
+   );
 };
 export default Cart;

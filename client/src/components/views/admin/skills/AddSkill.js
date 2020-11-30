@@ -1,6 +1,6 @@
 import React, { Fragment, useState, FormEvent, Dispatch, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams, useHistory  } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import { useToasts } from 'react-toast-notifications'
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -12,8 +12,8 @@ const AddDeliveryTime = (props) => {
     const dispatch = useDispatch();
     const { addToast } = useToasts()
     //console.log('param',props.match.params.id);
-    
-  let history = useHistory();
+
+    let history = useHistory();
     const params = useParams();
     useEffect(() => {
 
@@ -22,7 +22,7 @@ const AddDeliveryTime = (props) => {
         dispatch(getSkillbyId(params.id))
 
     }, [params.id]);
-   const skill = useSelector(state => state.skills && state.skills.skill && state.skills.skill.responseData.skill);
+    const skill = useSelector(state => state.skills && state.skills.skill && state.skills.skill.responseData.skill);
 
     return (
 
@@ -37,7 +37,7 @@ const AddDeliveryTime = (props) => {
             }
 
             validationSchema={Yup.object().shape({
-               name: Yup.string()
+                name: Yup.string()
                     .required('Name is required'),
             })}
             onSubmit={(values, { setSubmitting, resetForm }) => {
@@ -48,7 +48,7 @@ const AddDeliveryTime = (props) => {
                 };
 
                 if (params.id) {
-                    dispatch(updateSkill(data)).then(res => { 
+                    dispatch(updateSkill(data)).then(res => {
                         addToast(res.message, { appearance: res.status, autoDismiss: true, })
                         history.push('/admin/skill')
                     })
@@ -103,11 +103,11 @@ const AddDeliveryTime = (props) => {
                             <div className="row">
                                 <div className="col-lg-12">
                                     <div className="box box-block bg-white">
-                                    <h5 className="mb-1">{params.id ? "Edit Skill" : "Add Skill"}
-                                    <div className="rightBtn-Group">
-                                        <Link className="addMoreBtn" to="/admin/skill" ><span className="txt text-capitalize"><span className="amIcon"><i className="fa fa-arrow-left"></i></span> Back</span></Link>
-                                    </div>
-                                    </h5>
+                                        <h5 className="mb-1">{params.id ? "Edit Skill" : "Add Skill"}
+                                            <div className="rightBtn-Group">
+                                                <Link className="addMoreBtn" to="/admin/skill" ><span className="txt text-capitalize"><span className="amIcon"><i className="fa fa-arrow-left"></i></span> Back</span></Link>
+                                            </div>
+                                        </h5>
                                         {/* <div className="card-header">
                                             <h4 className="h4">{params.id ? "Edit Skill" : "Add Skill"}</h4>
                                         </div> */}
@@ -116,7 +116,7 @@ const AddDeliveryTime = (props) => {
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Name : </label>
                                                     <div className="col-md-6">
-                                                        <Field type="text" id="name" name="name" value={values.name} onChange={handleChange} maxLength={100} placeholder="Name"  className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')}  />
+                                                        <Field type="text" id="name" name="name" value={values.name} onChange={handleChange} maxLength={100} placeholder="Name" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="name" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>

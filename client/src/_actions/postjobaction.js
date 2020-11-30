@@ -12,24 +12,25 @@ import {
 
 // Add Post
 export async function createpostjob(dataToSubmit) {
-  try{
-  const request=await axios.post(`/api/postjob/createpostjob`, dataToSubmit)
-     
-      return {
-        type: CREATE_POSTJOB,
-         payload: request.data
-    } 
-    
-  }
-     catch(err){
-      return{
-        type: GET_ERRORS,
-        payload: err.response.data
-      }}
-    
-   
+  try {
+    const request = await axios.post(`/api/postjob/createpostjob`, dataToSubmit)
 
- }
+    return {
+      type: CREATE_POSTJOB,
+      payload: request.data
+    }
+
+  }
+  catch (err) {
+    return {
+      type: GET_ERRORS,
+      payload: err.response.data
+    }
+  }
+
+
+
+}
 
 // export  const createpostjob = dataToSubmit => (dispatch) => {
 //   // dispatch(clearErrors());
@@ -40,7 +41,7 @@ export async function createpostjob(dataToSubmit) {
 //       dispatch({
 //         type: CREATE_POSTJOB,
 //         payload: response.data,
-        
+
 //       })
 //     }
 //     )
@@ -54,7 +55,7 @@ export async function createpostjob(dataToSubmit) {
 
 // Get Posts 
 export const getallpostjob = () => dispatch => {
-//   dispatch(setPostLoading());
+  //   dispatch(setPostLoading());
   axios
     .get('/api/postjob/getallpostjob')
     .then(res => {
@@ -75,22 +76,22 @@ export const getallpostjob = () => dispatch => {
 
 // Get Posts 
 export const getallmypostjob = () => dispatch => {
-    dispatch(setPostLoading());
-    axios
-      .get('/api/postjob/getmyallpostjob')
-      .then(res =>
-        dispatch({
-          type: GET_MYALLPOSTJOB,
-          payload: res.data
-        })
-      )
-      .catch(err =>
-        dispatch({
-          type: GET_MYALLPOSTJOB,
-          payload: null
-        })
-      );
-  };
+  dispatch(setPostLoading());
+  axios
+    .get('/api/postjob/getmyallpostjob')
+    .then(res =>
+      dispatch({
+        type: GET_MYALLPOSTJOB,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_MYALLPOSTJOB,
+        payload: null
+      })
+    );
+};
 
 // Get findpostjobbyid
 export const getPostById = id => dispatch => {

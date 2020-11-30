@@ -12,12 +12,12 @@ const subCategoryReducer = (state = intialState, action) => {
         ...state,
         subcategories: action.payload
       };
-     case FIND_SUB_CATEGORY:
+    case FIND_SUB_CATEGORY:
       return {
         ...state,
         subcategory: action.payload
       };
-      case DELETE_SUB_CATEGORY:
+    case DELETE_SUB_CATEGORY:
       return {
         ...state,
         deleteSubCategory: action.payload

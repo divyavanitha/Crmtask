@@ -12,12 +12,12 @@ const pageReducer = (state = intialState, action) => {
         ...state,
         pages: action.payload
       };
-     case FIND_PAGE:
+    case FIND_PAGE:
       return {
         ...state,
         page: action.payload
       };
-      
+
     default:
       return state;
   }

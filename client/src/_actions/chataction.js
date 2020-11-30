@@ -5,17 +5,17 @@ import {
 } from './types';
 
 
-export function getChats(){
+export function getChats() {
     const request = axios.get(`/api/chat/getChats`)
         .then(response => response.data);
-    
+
     return {
         type: GET_CHATS,
         payload: request
     }
 }
 
-export function afterPostMessage(data){
+export function afterPostMessage(data) {
 
     return {
         type: AFTER_POST_MESSAGE,

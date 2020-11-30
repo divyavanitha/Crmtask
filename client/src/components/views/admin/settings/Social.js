@@ -12,7 +12,7 @@ import { getSetting, updateSocialSetting } from "../../../../_actions/admin/sett
 const Social = (props) => {
     const { addToast } = useToasts()
     const dispatch = useDispatch();
-    
+
     useEffect(() => {
 
         dispatch(getSetting())
@@ -21,11 +21,11 @@ const Social = (props) => {
 
     const settings = useSelector(state => state);
 
-    let social = settings  && settings.adminsettings && settings.adminsettings.setting && settings.adminsettings.setting.social;
+    let social = settings && settings.adminsettings && settings.adminsettings.setting && settings.adminsettings.setting.social;
 
-    $('body').on('change', '.toggle_switch', function() {
+    $('body').on('change', '.toggle_switch', function () {
         var that = $(this);
-        if($(this).is(':checked')) {
+        if ($(this).is(':checked')) {
             that.closest('.main_container').find('.hide_container').show();
         } else {
             that.closest('.main_container').find('.hide_container').hide();
@@ -114,10 +114,10 @@ const Social = (props) => {
                                                         <label className="col-md-4 control-label"> Social Login : </label>
                                                         <div className="col-md-6">
                                                             <label className='switch' style={{ marginTop: '15px' }}>
-                                                                <input type='checkbox' className='toggle_switch' defaultChecked={social && social.status} onClick={ (e) => { setFieldValue('status', e.currentTarget.checked); } }   />   <span className='slider round'></span></label>
+                                                                <input type='checkbox' className='toggle_switch' defaultChecked={social && social.status} onClick={(e) => { setFieldValue('status', e.currentTarget.checked); }} />   <span className='slider round'></span></label>
                                                         </div>
                                                     </div>
-                                                    <div className="hide_container" style={ social && social.status == 1 ? { display:'block', paddingBottom: '15px'} : { display:'none', paddingBottom: '15px'}} >
+                                                    <div className="hide_container" style={social && social.status == 1 ? { display: 'block', paddingBottom: '15px' } : { display: 'none', paddingBottom: '15px' }} >
                                                         <div className="form-group row">
                                                             <label className="col-md-4 control-label"> Facebook App ID : </label>
                                                             <div className="col-md-6">
@@ -125,8 +125,8 @@ const Social = (props) => {
                                                                 <ErrorMessage name="facebook_app_id" component="div" className="invalid-feedback" />
                                                             </div>
                                                         </div>
-                                                        
-                                                        
+
+
 
                                                         <div className="form-group row">
                                                             <label className="col-md-4 control-label"> Google Client ID : </label>
@@ -135,7 +135,7 @@ const Social = (props) => {
                                                                 <ErrorMessage name="google_client_id" component="div" className="invalid-feedback" />
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div className="form-group row">
                                                             <label className="col-md-4 control-label"> Apple ID : </label>
                                                             <div className="col-md-6">
@@ -143,7 +143,7 @@ const Social = (props) => {
                                                                 <ErrorMessage name="apple_id" component="div" className="invalid-feedback" />
                                                             </div>
                                                         </div>
-                                                        
+
                                                     </div>
                                                 </div>
 
