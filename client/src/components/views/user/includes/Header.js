@@ -17,6 +17,8 @@ function Header() {
 
     let site = settings.settings && settings.settings.site;
 
+    let cartCount = useSelector((state) => state.user.cart_count);
+
     useEffect(() => {
         dispatch(getCartList())
         $(document).ready(function () {
@@ -228,9 +230,6 @@ function Header() {
     }, []);
 
     const cart = useSelector((state) => state.user && state.user.cart_lists && state.user.cart_lists.carts);
-    console.log('dss',cart);
-
-    
 
     return (
 
@@ -286,7 +285,8 @@ function Header() {
                                         Join Now
                      </a></li></ul>)
                         }
-                        {auth.isAuthenticated && (<ul className="account-nav apply-nav-height"><li className="logged-in-link d-none d-sm-block d-md-block d-lg-block">
+                        {auth.isAuthenticated && (<ul className="account-nav apply-nav-height">
+                            {/*<li className="logged-in-link d-none d-sm-block d-md-block d-lg-block">
                             <a className="menuItem" href="" title="Blog">
                                 <span className="onePress-icon nav-icon onePress-icon-relative">
                                     <i className="fa fa-rss fa-lg" style={{ fontSize: "1.4em" }}></i>
@@ -300,13 +300,15 @@ function Header() {
                                     </span>
                                     <span className="total-user-count count">1</span>
                                 </a>
-                            </li>
+                            </li>*/}
+
                             <li className="logged-in-link">
                                 <Link to="/cart" className="menuItem" title="Cart">
                                     <span className="onePress-icon nav-icon onePress-icon-relative">
                                         <i className="fa fa-shopping-cart" style={{ fontSize: "1.4em" }} aria-hidden="true"></i>
                                     </span>
-                                    <span className="total-user-count count cart-count">{cart && cart.length}</span>
+                                    {console.log(cartCount != 0)}
+                                    <span className="total-user-count count cart-count">{cartCount != 0 ? cartCount : ''}</span>
                                 </Link>
                             </li>
                             <li className="logged-in-link">
@@ -314,7 +316,7 @@ function Header() {
                                     <a href="#" id="usermenu" className="user dropdown-toggle menuItem" style={{ marginTop: "17px" }}
                                         data-toggle="dropdown">
                                         <img src={require('../../../../assets/images/userlisting/img-03.jpg')} width="27" height="27" className="rounded-circle" />
-                                        <span className="name">{ auth.user && auth.user.firstName  }</span>
+                                        <span className="name">{auth.user && auth.user.firstName}</span>
                                     </a>
 
                                     <div className="dropdown-menu" style={{ minWidth: '200px', width: 'auto!important', zIndex: '2000' }} >
@@ -380,7 +382,7 @@ function Header() {
                                                 Account Settings      </a>
                                         </div>
                                         <div className="dropdown-divider"></div>
-                                        <a onClick={ () => dispatch(logout()) } className="dropdown-item">
+                                        <a onClick={() => dispatch(logout())} className="dropdown-item">
                                             Logout   </a>
                                     </div>
 

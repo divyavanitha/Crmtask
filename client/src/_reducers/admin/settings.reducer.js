@@ -13,7 +13,7 @@ const adminSettingsReducer = (state = intialState, action) => {
         ...state,
         setting: action.payload
       };
-      
+
     default:
       return state;
   }

@@ -28,11 +28,11 @@ router.post('/register', (req, res) => {
     adminController.adminAuthRegister(req, res);
 });
 
-router.post('/permissions', [middleware.admin], (req, res) => {
+router.post('/permissions', (req, res) => {
   adminController.getPermissions(req, res);
 });
 
-router.get('/administrator', [middleware.admin], (req, res) => {
+router.get('/administrator', (req, res) => {
   adminController.getAdministrators(req, res);
 });
 
@@ -41,7 +41,7 @@ router.post('/administrator', (req, res) => {
 });
 
 
-router.get('/category', (req, res) => {
+router.get('/category', middleware.admin, (req, res) => {
   categoryController.listcategory(req, res);
 });
 router.post('/category', (req, res) => {

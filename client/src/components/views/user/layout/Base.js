@@ -17,6 +17,7 @@ import GigList from "../gigs/GigList";
 import AddGig from "../gigs/AddGig";
 import Pricing from "../gigs/Pricing";
 import Faq from "../gigs/faq";
+import CategoryGigList from "../CategoryGigList";
 import AddRequest from "../requests/AddRequest";
 import RequestList from "../requests/RequestList";
 import Requirement from "../gigs/Requirement";
@@ -45,31 +46,32 @@ const Base = () => {
                 <meta charSet="utf-8" />
                 <title>{site && site.title}</title>
                 <link rel="icon" href={site && site.favicon} />
-                
+
             </Helmet>
             <Header />
 
             <Nav />
             <Switch>
-                <Route exact={true} path="/" component={ auth.isAuthenticated ? Home : Landing } />
-                <ProtectedRoute exact={true} path="/gig/list" component={GigList} />
-                <ProtectedRoute exact={true} path="/gig/post" component={AddGig} />
-                <ProtectedRoute exact={true} path="/gig/post/pricing/:id" component={Pricing} />
-                <ProtectedRoute exact={true} path="/gig/post/faq/:id" component={Faq} />
-                <ProtectedRoute exact={true} path="/gig/post/requirements/:id" component={Requirement} />
-                <ProtectedRoute exact={true} path="/gig/post/gallery/:id" component={Gallery} />
-                <ProtectedRoute exact={true} path="/gig/post/approval/:id" component={GigApproval} />
-                <ProtectedRoute exact={true} path="/gig/:user/:gig" component={GigDetail} />
-                <ProtectedRoute exact={true} path="/cart" component={Cart} />
-                <ProtectedRoute exact={true} path="/cart-payment-option" component={CartPayment} />
-                <ProtectedRoute exact={true} path="/gig/:user/cart-payment-option/:id" component={CartPayment} />
-                <ProtectedRoute exact={true} path="/buyer-order-lists" component={BuyerOrderList} />
-                <ProtectedRoute exact={true} path="/order/details/:id" component={OrderDetails} />
-                <ProtectedRoute exact={true} path="/seller-order-lists" component={SellerOrderList} />
-                <ProtectedRoute exact={true} path="/seller-order/details/:id" component={SellerOrderDetails} />
-                <ProtectedRoute exact={true} path="/request/add" component={AddRequest} />
-                <ProtectedRoute exact={true} path="/request/manage" component={RequestList} />
-                <ProtectedRoute exact={true} path="/profile" component={Profile} />
+                <Route exact={true} path="/" component={auth.isAuthenticated ? Home : Landing} />
+                <ProtectedRoute path="/categories/:category/:subcategory" component={CategoryGigList} />
+                <ProtectedRoute path="/gig/list" component={GigList} />
+                <ProtectedRoute path="/gig/post/pricing/:id" component={Pricing} />
+                <ProtectedRoute path="/gig/post/faq/:id" component={Faq} />
+                <ProtectedRoute path="/gig/post/requirements/:id" component={Requirement} />
+                <ProtectedRoute path="/gig/post/gallery/:id" component={Gallery} />
+                <ProtectedRoute path="/gig/post/approval/:id" component={GigApproval} />
+                <ProtectedRoute path="/gig/post" component={AddGig} />
+                <ProtectedRoute path="/gig/:user/:gig" component={GigDetail} />
+                <ProtectedRoute path="/cart" component={Cart} />
+                <ProtectedRoute path="/cart-payment-option" component={CartPayment} />
+                <ProtectedRoute path="/gig/:user/cart-payment-option/:id" component={CartPayment} />
+                <ProtectedRoute path="/buyer-order-lists" component={BuyerOrderList} />
+                <ProtectedRoute path="/order/details/:id" component={OrderDetails} />
+                <ProtectedRoute path="/seller-order-lists" component={SellerOrderList} />
+                <ProtectedRoute path="/seller-order/details/:id" component={SellerOrderDetails} />
+                <ProtectedRoute path="/request/add" component={AddRequest} />
+                <ProtectedRoute path="/request/manage" component={RequestList} />
+                <ProtectedRoute path="/profile" component={Profile} />
 
             </Switch>
 

@@ -4,12 +4,13 @@ import { GET_PAGES, FIND_PAGE } from "./types";
 
 export const getPages = () => async dispatch => {
     try {
-        let response = await axios.get('/api/admin/page');
+        let token = localStorage.admin_token;
+        let response = await axios.get('/api/admin/page', { headers: { 'Authorization': `${token}` } });
         dispatch({
             type: GET_PAGES,
             payload: response.data
         })
-    } catch(e) {
+    } catch (e) {
         dispatch({
             type: GET_PAGES,
             payload: null
@@ -18,8 +19,9 @@ export const getPages = () => async dispatch => {
 };
 
 export const getPagebyId = (id) => dispatch => {
+    let token = localStorage.admin_token;
     axios
-        .get(`/api/admin/get/page/${id}`)
+        .get(`/api/admin/get/page/${id}`, { headers: { 'Authorization': `${token}` } })
         .then(res => {
             dispatch({
                 type: FIND_PAGE,
@@ -35,48 +37,52 @@ export const getPagebyId = (id) => dispatch => {
         );
 };
 
-export const addPage = (user) => async dispatch => {
+export const addPage = (data) => async dispatch => {
     try {
-        let response = await axios.post('/api/admin/page', user);
+        let token = localStorage.admin_token;
+        let response = await axios.post('/api/admin/page', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };
 
-export const updatePage = (user) => async dispatch => {
+export const updatePage = (data) => async dispatch => {
     try {
-        let response = await axios.patch('/api/admin/page', user);
+        let token = localStorage.admin_token;
+        let response = await axios.patch('/api/admin/page', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };
 
 export const deletePage = (id) => async dispatch => {
     try {
-        let response = await axios.delete(`/api/admin/page/${id}`);
+        let token = localStorage.admin_token;
+        let response = await axios.delete(`/api/admin/page/${id}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
         return e.response.data;
     }
-}; 
+};
 
 
 export const changePageStatus = (id, status) => async dispatch => {
     try {
-        let response = await axios.get(`/api/admin/page/changestatus/${id}/${status}`);
+        let token = localStorage.admin_token;
+        let response = await axios.get(`/api/admin/page/changestatus/${id}/${status}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
         return e.response.data;
     }

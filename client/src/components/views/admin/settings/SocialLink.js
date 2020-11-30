@@ -11,7 +11,7 @@ import { getSetting, updateSocialLinkSetting } from "../../../../_actions/admin/
 const SocialLink = (props) => {
     const { addToast } = useToasts()
     const dispatch = useDispatch();
-    
+
     useEffect(() => {
 
         dispatch(getSetting())
@@ -20,12 +20,12 @@ const SocialLink = (props) => {
 
     const settings = useSelector(state => state);
 
-    let socialLink = settings  && settings.adminsettings && settings.adminsettings.setting && settings.adminsettings.setting.socialLink;
+    let socialLink = settings && settings.adminsettings && settings.adminsettings.setting && settings.adminsettings.setting.socialLink;
 
     let initialvalues = {};
 
-    if(socialLink) {
-        for(let social of socialLink) {
+    if (socialLink) {
+        for (let social of socialLink) {
             initialvalues[social.name] = social.url;
         }
     }
@@ -44,8 +44,8 @@ const SocialLink = (props) => {
 
                 let data = {};
 
-                if(socialLink) {
-                    for(let social of socialLink) {
+                if (socialLink) {
+                    for (let social of socialLink) {
                         data[social.name] = values[social.name];
                     }
                 }
@@ -104,7 +104,7 @@ const SocialLink = (props) => {
                                         <div className="addFormBox">
                                             <form onSubmit={handleSubmit}>
 
-                                                { socialLink && socialLink.map((social, index) => ( 
+                                                {socialLink && socialLink.map((social, index) => (
                                                     <div key={index} className="form-group row">
                                                         <label className="col-md-4 control-label"> {(social.name).charAt(0).toUpperCase() + (social.name).slice(1).toLowerCase()} : </label>
                                                         <div className="col-md-6">
@@ -112,7 +112,7 @@ const SocialLink = (props) => {
                                                             <ErrorMessage name={social.name} component="div" className="invalid-feedback" />
                                                         </div>
                                                     </div>
-                                                )) }
+                                                ))}
 
                                                 <div className="form-group row">
                                                     <div className="col-md-4">

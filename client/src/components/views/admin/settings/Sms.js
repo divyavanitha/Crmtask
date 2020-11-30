@@ -21,11 +21,11 @@ const Sms = (props) => {
 
     const settings = useSelector(state => state);
 
-    let sms = settings  && settings.adminsettings && settings.adminsettings.setting && settings.adminsettings.setting.sms;
+    let sms = settings && settings.adminsettings && settings.adminsettings.setting && settings.adminsettings.setting.sms;
 
-    $('body').on('change', '.toggle_switch', function() {
+    $('body').on('change', '.toggle_switch', function () {
         var that = $(this);
-        if($(this).is(':checked')) {
+        if ($(this).is(':checked')) {
             that.closest('.main_container').find('.hide_container').show();
         } else {
             that.closest('.main_container').find('.hide_container').hide();
@@ -118,39 +118,39 @@ const Sms = (props) => {
                                         </div>
                                         <div className="addFormBox">
                                             <form onSubmit={handleSubmit} encType="multipart/form-data">
-                                            <div className="main_container">
-                                                <div className="form-group row">
-                                                    <label className="col-md-4 control-label"> {sms && sms.provider} : </label>
-                                                    <div className="col-md-6">
-                                                        <label className='switch' style={{ marginTop: '15px' }}>
-                                                        <input type='checkbox' className='toggle_switch' defaultChecked={sms && sms.status} onClick={ (e) => { setFieldValue('status', e.currentTarget.checked); } }   />
-                                                            <span className='slider round'></span></label>
+                                                <div className="main_container">
+                                                    <div className="form-group row">
+                                                        <label className="col-md-4 control-label"> {sms && sms.provider} : </label>
+                                                        <div className="col-md-6">
+                                                            <label className='switch' style={{ marginTop: '15px' }}>
+                                                                <input type='checkbox' className='toggle_switch' defaultChecked={sms && sms.status} onClick={(e) => { setFieldValue('status', e.currentTarget.checked); }} />
+                                                                <span className='slider round'></span></label>
+                                                        </div>
                                                     </div>
-                                                </div>
 
-                                                <div className="hide_container" style={ sms && sms.status == 1 ? { display:'block', paddingBottom: '15px'} : { display:'none', paddingBottom: '15px'}} >
-                                                    <div className="form-group row">
-                                                        <label className="col-md-4 control-label"> Account SID : </label>
-                                                        <div className="col-md-6">
-                                                            <Field type="text" id="sid" name="sid" value={values.sid} onChange={handleChange} maxLength={100} placeholder="SID" className={'form-control' + (errors.sid && touched.sid ? ' is-invalid' : '')} />
-                                                            <ErrorMessage name="sid" component="div" className="invalid-feedback" />
+                                                    <div className="hide_container" style={sms && sms.status == 1 ? { display: 'block', paddingBottom: '15px' } : { display: 'none', paddingBottom: '15px' }} >
+                                                        <div className="form-group row">
+                                                            <label className="col-md-4 control-label"> Account SID : </label>
+                                                            <div className="col-md-6">
+                                                                <Field type="text" id="sid" name="sid" value={values.sid} onChange={handleChange} maxLength={100} placeholder="SID" className={'form-control' + (errors.sid && touched.sid ? ' is-invalid' : '')} />
+                                                                <ErrorMessage name="sid" component="div" className="invalid-feedback" />
+                                                            </div>
+                                                        </div>
+                                                        <div className="form-group row">
+                                                            <label className="col-md-4 control-label"> Auth Token : </label>
+                                                            <div className="col-md-6">
+                                                                <Field type="text" id="token" name="token" value={values.token} onChange={handleChange} maxLength={100} placeholder="Token" className={'form-control' + (errors.token && touched.token ? ' is-invalid' : '')} />
+                                                                <ErrorMessage name="token" component="div" className="invalid-feedback" />
+                                                            </div>
+                                                        </div>
+                                                        <div className="form-group row">
+                                                            <label className="col-md-4 control-label"> Sender Number : </label>
+                                                            <div className="col-md-6">
+                                                                <Field type="text" id="sender" name="sender" value={values.sender} onChange={handleChange} maxLength={100} placeholder="Sender" className={'form-control' + (errors.sender && touched.sender ? ' is-invalid' : '')} />
+                                                                <ErrorMessage name="sender" component="div" className="invalid-feedback" />
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div className="form-group row">
-                                                        <label className="col-md-4 control-label"> Auth Token : </label>
-                                                        <div className="col-md-6">
-                                                            <Field type="text" id="token" name="token" value={values.token} onChange={handleChange} maxLength={100} placeholder="Token" className={'form-control' + (errors.token && touched.token ? ' is-invalid' : '')} />
-                                                            <ErrorMessage name="token" component="div" className="invalid-feedback" />
-                                                        </div>
-                                                    </div>
-                                                    <div className="form-group row">
-                                                        <label className="col-md-4 control-label"> Sender Number : </label>
-                                                        <div className="col-md-6">
-                                                            <Field type="text" id="sender" name="sender" value={values.sender} onChange={handleChange} maxLength={100} placeholder="Sender" className={'form-control' + (errors.sender && touched.sender ? ' is-invalid' : '')} />
-                                                            <ErrorMessage name="sender" component="div" className="invalid-feedback" />
-                                                        </div>
-                                                    </div>
-                                                </div>
                                                 </div>
 
                                                 <div className="form-group row">

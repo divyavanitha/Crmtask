@@ -10,7 +10,7 @@ import { getSetting, updateSellerSetting } from "../../../../_actions/admin/sett
 const Seller = (props) => {
     const { addToast } = useToasts()
     const dispatch = useDispatch();
-    
+
     useEffect(() => {
 
         dispatch(getSetting())
@@ -20,7 +20,7 @@ const Seller = (props) => {
     const settings = useSelector(state => state);
 
     const seller = settings && settings.adminsettings && settings.adminsettings.setting && settings.adminsettings.setting.seller;
-console.log(seller)
+    console.log(seller)
     return (
 
         <Formik
@@ -120,7 +120,7 @@ console.log(seller)
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Level One Completed Order : </label>
                                                     <div className="col-md-6">
-                                                        <Field type="text" id="level_one_completed_order" name="level_one_completed_order" value={values.level_one_completed_order} onChange={handleChange} maxLength={100} placeholder="Level One Completed Order" className={'form-control' + (errors.level_one_completed_order && touched.level_one_completed_order ? ' is-invalid' : '')}/>
+                                                        <Field type="text" id="level_one_completed_order" name="level_one_completed_order" value={values.level_one_completed_order} onChange={handleChange} maxLength={100} placeholder="Level One Completed Order" className={'form-control' + (errors.level_one_completed_order && touched.level_one_completed_order ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="level_one_completed_order" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
@@ -134,7 +134,7 @@ console.log(seller)
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Level Two Completed Order : </label>
                                                     <div className="col-md-6">
-                                                        <Field type="text" id="level_two_completed_order" name="level_two_completed_order" value={values.level_two_completed_order} onChange={handleChange} maxLength={100} placeholder="Level Two Completed Order" className={'form-control' + (errors.level_two_completed_order && touched.level_two_completed_order ? ' is-invalid' : '')}/>
+                                                        <Field type="text" id="level_two_completed_order" name="level_two_completed_order" value={values.level_two_completed_order} onChange={handleChange} maxLength={100} placeholder="Level Two Completed Order" className={'form-control' + (errors.level_two_completed_order && touched.level_two_completed_order ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="level_two_completed_order" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
@@ -148,7 +148,7 @@ console.log(seller)
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Top Rated Completed Order : </label>
                                                     <div className="col-md-6">
-                                                        <Field type="text" id="top_rated_completed_order" name="top_rated_completed_order" value={values.top_rated_completed_order} onChange={handleChange} maxLength={100} placeholder="Top Rated Completed Order" className={'form-control' + (errors.top_rated_completed_order && touched.top_rated_completed_order ? ' is-invalid' : '')}/>
+                                                        <Field type="text" id="top_rated_completed_order" name="top_rated_completed_order" value={values.top_rated_completed_order} onChange={handleChange} maxLength={100} placeholder="Top Rated Completed Order" className={'form-control' + (errors.top_rated_completed_order && touched.top_rated_completed_order ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="top_rated_completed_order" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>

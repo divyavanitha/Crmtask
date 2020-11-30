@@ -38,7 +38,7 @@ function Home() {
                         <center>
                            <img src={require('../../../assets/images/img-03.jpg')} className="img-fluid rounded-circle mb-3" />
                         </center>
-                        <h5>Welcome <span className="text-success">{ auth.user && auth.user.firstName  }</span> </h5>
+                        <h5>Welcome <span className="text-success">{auth.user && auth.user.firstName}</span> </h5>
                         <hr />
                         <p>Sell your services to millions of people all over the world.</p>
                         <Link to="/request/add" className="btn get_btn mt-0">Post A Request</Link>
@@ -52,7 +52,7 @@ function Home() {
                         {/* <!-- The slideshow --> */}
                         <div className="carousel-inner " role="listbox">
                            <div className="carousel-item active">
-                           <div className="proposal-card-base mp-proposal-card">
+                              <div className="proposal-card-base mp-proposal-card">
                                  {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
                                  <a href="proposals/Timiex/i-will-design-a-professional-wordpress-website-for-your-business">
                                     <img src={require('../../../assets/images/proposals/website-design-logo-png_1590561828.png')}
@@ -563,7 +563,7 @@ function Home() {
 
 
 
-                   <Gig /> </div>
+                     <Gig /> </div>
 
                   {/* <!-- If You have no gigs, show random gigs on homepage --> */}
                   <div className="row mb-3 mt-3">
@@ -625,7 +625,7 @@ function Home() {
                         </div>
                         {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
                      </div>
-                     
+
                   </div>
                   {/* <!-- If You have no gigs, show random gigs on homepage --> */}
                   <div className="row mb-3 mt-3">
@@ -637,7 +637,7 @@ function Home() {
                      </div>
                   </div>
                   <div className="row">
-                     
+
                      <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-3 pr-lg-1">
                         <div className="proposal-card-base mp-proposal-card">
                            {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
@@ -741,7 +741,7 @@ function Home() {
 
                         </script> */}
                                  </tr>
-                                
+
                               </tbody>
                            </table>
                            <center>
@@ -757,7 +757,7 @@ function Home() {
             </div>
 
          </div>
-         
+
 
 
       </Fragment>

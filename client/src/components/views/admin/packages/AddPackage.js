@@ -88,27 +88,27 @@ const AddPackage = (props) => {
                             </div>
                             <div className="row">
                                 <div className="col-lg-12">
-                                <div className="box box-block bg-white">
-                                    <h5 className="mb-1">{params.id ? "Edit Package" : "Add Package"} 
-                                    <div className="rightBtn-Group">
-                                        <Link className="addMoreBtn" to="/admin/package" ><span className="txt text-capitalize"><span className="amIcon"><i className="fa fa-arrow-left"></i></span> Back</span></Link>
-                                    </div>
-                                    </h5>
+                                    <div className="box box-block bg-white">
+                                        <h5 className="mb-1">{params.id ? "Edit Package" : "Add Package"}
+                                            <div className="rightBtn-Group">
+                                                <Link className="addMoreBtn" to="/admin/package" ><span className="txt text-capitalize"><span className="amIcon"><i className="fa fa-arrow-left"></i></span> Back</span></Link>
+                                            </div>
+                                        </h5>
 
-                                        
+
                                         <div className="addFormBox">
                                             <form onSubmit={handleSubmit} encType="multipart/form-data">
                                                 <div className="form-group row">
                                                     <div className="col-md-4">
                                                         <label className="control-label"> Title : </label>
                                                     </div>
-                                                    
+
                                                     <div className="col-md-6">
                                                         <Field type="text" id="name" name="name" value={values.name} onChange={handleChange} maxLength={100} placeholder="Name" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="name" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div className="form-group row">
                                                     <div className="col-md-4">
                                                         <label className="control-label"></label>
@@ -123,7 +123,7 @@ const AddPackage = (props) => {
                                     </div>
                                 </div>
 
-                                </div>
+                            </div>
                         </div>
                     </Fragment>
                 );

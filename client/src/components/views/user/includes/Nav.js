@@ -36,32 +36,32 @@ function Nav() {
                                 <a href="">
                                     {c_list.name} </a>
                             </li>))}
-                           
+
                         </ul>
                     </div>
                 </div>
                 <div className="position-absolute col-xs-12 col-centered z-index-4">
                     <div>
-                    {category_list && category_list.map((c_list) => (
-                        <div  key={ `s_${c_list._id}` }
-                            className="body-sub-width vertical-align-top sub-nav-container bg-white overflow-hidden bl-xs-1 bb-xs-1 br-xs-1 catnav-mott-control display-none"
-                            data-ui="sub-nav" aria-hidden="true" data-node-id={c_list._id}>
-                            <div className="width-full display-flex-xs">
-                            {c_list.subCategories && (
-                                <ul className="list-unstyled subcategory display-inline-block col-xs-3 p-xs-3 pl-xs-5" role="presentation">
-                                   
-                                {c_list.subCategories.map((subCategories) => (
-                                    <li key={subCategories._id}>
-                                        <a className="display-block text-gray text-body-larger pt-xs-1"
-                                            href="categories/graphics-design/logo-design">
-                                            {subCategories.name} </a>
-                                    </li>
-                                ))}
-                                   
-                                </ul>
-                            )}
+                        {category_list && category_list.map((c_list) => (
+                            <div key={`s_${c_list._id}`}
+                                className="body-sub-width vertical-align-top sub-nav-container bg-white overflow-hidden bl-xs-1 bb-xs-1 br-xs-1 catnav-mott-control display-none"
+                                data-ui="sub-nav" aria-hidden="true" data-node-id={c_list._id}>
+                                <div className="width-full display-flex-xs">
+                                    {c_list.subCategories && (
+                                        <ul className="list-unstyled subcategory display-inline-block col-xs-3 p-xs-3 pl-xs-5" role="presentation">
+
+                                            {c_list.subCategories.map((subCategories) => (
+                                                <li key={subCategories._id}>
+                                                    <a className="display-block text-gray text-body-larger pt-xs-1"
+                                                        href={`/categories/${c_list.name}/${subCategories.name}`}>
+                                                        {subCategories.name} </a>
+                                                </li>
+                                            ))}
+
+                                        </ul>
+                                    )}
+                                </div>
                             </div>
-                        </div>
                         ))}
                     </div>
                 </div>

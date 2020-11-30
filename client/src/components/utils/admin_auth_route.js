@@ -1,23 +1,3 @@
-/* import React from "react";
-import { Route, Redirect } from "react-router-dom";
-import { useSelector } from 'react-redux';
-
-
-const AdminRoute = ({ children, ...rest }) => {
-    const admin = useSelector((state) => state.admin);
-    return (
-        <Route
-            {...rest}
-            render={(props) => 
-                admin.isAuthenticated ? ( children ) : <Redirect to={{ pathname: "/admin/login", state: { from: props.location } }} />
-
-            }
-        />
-    );
-}
-
-export default AdminRoute; */
-
 import { Route, Redirect, RouteProps } from "react-router";
 import React from "react";
 import { useSelector } from "react-redux";

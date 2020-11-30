@@ -8,20 +8,20 @@ function Gig(props) {
 
     const dispatch = useDispatch();
 
-   useEffect(() => {
-      
-      dispatch(getGigWithoutAuth())
-   }, []);
+    useEffect(() => {
+
+        dispatch(getGigWithoutAuth())
+    }, []);
     const gig = useSelector((state) => state.user && state.user.gig && state.user.gig.responseData && state.user.gig.responseData.gigs);
-//console.log('gig',gig);
+    //console.log('gig',gig);
     return (
 
         <Fragment>
-            
-                {gig && gig.map((list) => (<div key={list._id} className={props.styles ? props.styles : "col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-3 pr-lg-1"}>
-                    <div className="proposal-card-base mp-proposal-card">
+
+            {gig && gig.map((list) => (<div key={list._id} className={props.styles ? props.styles : "col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-3 pr-lg-1"}>
+                <div className="proposal-card-base mp-proposal-card">
                     {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
-                    <Link to={list.user ? "/gig/"+list.user.firstName+"/"+list._id : ""}>
+                    <Link to={list.user ? "/gig/" + list.user.firstName + "/" + list._id : ""}>
                         <img src={list.photo[0] ? list.photo[0].photo : ""} className="img-fluid" />
                     </Link>
                     <div className="proposal-card-caption">
@@ -43,7 +43,7 @@ function Gig(props) {
                             </div>
                         </div>
                         {/* <!--- onePress-seller-info Ends ---> */}
-                        <Link to={list.user ? "/gig/"+list.user.firstName+"/"+list._id : ""} className="proposal-link-main js-proposal-card-imp-data">
+                        <Link to={list.user ? "/gig/" + list.user.firstName + "/" + list._id : ""} className="proposal-link-main js-proposal-card-imp-data">
                             <h3>{list.title}</h3>
                         </Link>
                         <div className="rating-badges-container">
@@ -65,9 +65,9 @@ function Gig(props) {
                     </footer>
                     {/* <!--- proposal-card-footer Ends ---> */}
                 </div>
-                </div>))}
-                {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
-            
+            </div>))}
+            {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
+
 
 
         </Fragment>

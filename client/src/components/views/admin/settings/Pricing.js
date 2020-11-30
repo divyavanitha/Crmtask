@@ -10,7 +10,7 @@ import { getSetting, updatePricingSetting } from "../../../../_actions/admin/set
 const GigSetting = (props) => {
     const { addToast } = useToasts()
     const dispatch = useDispatch();
-    
+
     useEffect(() => {
 
         dispatch(getSetting())

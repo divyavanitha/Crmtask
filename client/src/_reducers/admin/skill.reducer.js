@@ -11,7 +11,7 @@ const skillReducer = (state = intialState, action) => {
         ...state,
         skills: action.payload
       };
-     case FIND_SKILL:
+    case FIND_SKILL:
       return {
         ...state,
         skill: action.payload

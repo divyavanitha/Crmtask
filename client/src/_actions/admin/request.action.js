@@ -4,12 +4,13 @@ import { GET_REQUESTS } from "./types";
 
 export const getBuyerRequests = () => async dispatch => {
     try {
-        let response = await axios.get('/api/admin/requests');
+        let token = localStorage.admin_token;
+        let response = await axios.get('/api/admin/requests', { headers: { 'Authorization': `${token}` } });
         dispatch({
             type: GET_REQUESTS,
             payload: response.data
         })
-    } catch(e) {
+    } catch (e) {
         dispatch({
             type: GET_REQUESTS,
             payload: null
@@ -19,10 +20,11 @@ export const getBuyerRequests = () => async dispatch => {
 
 export const deleteRequest = (id) => async dispatch => {
     try {
-        let response = await axios.delete(`/api/admin/request/${id}`);
+        let token = localStorage.admin_token;
+        let response = await axios.delete(`/api/admin/request/${id}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
         return e.response.data;
     }
@@ -30,12 +32,13 @@ export const deleteRequest = (id) => async dispatch => {
 
 export const changeRequestStatus = (id, status) => async dispatch => {
     try {
-        let response = await axios.get(`/api/admin/request/changestatus/${id}/${status}`);
+        let token = localStorage.admin_token;
+        let response = await axios.get(`/api/admin/request/changestatus/${id}/${status}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
         return e.response.data;
     }
-};  
+};
 

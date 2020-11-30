@@ -11,7 +11,7 @@ const deliveryTimeReducer = (state = intialState, action) => {
         ...state,
         deliverytimes: action.payload
       };
-     case FIND_DELIVERY_TIME:
+    case FIND_DELIVERY_TIME:
       return {
         ...state,
         deliverytime: action.payload

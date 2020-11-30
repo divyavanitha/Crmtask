@@ -52,18 +52,18 @@ const Admin = () => {
       language: {
         searchPlaceholder: "Search"
       },
-      fnDrawCallback: function ( oSettings ){
-            if(oSettings.fnRecordsTotal() <= 10){     
-               $('.dataTables_length').hide();
-               $('.dataTables_paginate').hide();
-               $('.dataTables_filter').hide();
-               $('.dataTables_wrapper').addClass('noFilters');
-            } else {
-               $('.dataTables_length').show();
-               $('.dataTables_paginate').show(); 
-               $('.dataTables_filter').show();
-               $('.dataTables_wrapper.noFilters').removeClass('noFilters');
-            }
+      fnDrawCallback: function (oSettings) {
+        if (oSettings.fnRecordsTotal() <= 10) {
+          $('.dataTables_length').hide();
+          $('.dataTables_paginate').hide();
+          $('.dataTables_filter').hide();
+          $('.dataTables_wrapper').addClass('noFilters');
+        } else {
+          $('.dataTables_length').show();
+          $('.dataTables_paginate').show();
+          $('.dataTables_filter').show();
+          $('.dataTables_wrapper.noFilters').removeClass('noFilters');
+        }
       },
       "bLengthChange": false,
       "info": false,
@@ -113,14 +113,14 @@ const Admin = () => {
           "data": function (data, type, row) {
             let button = ``;
 
-            if(check('administrator:delete')) {
+            if (check('administrator:delete')) {
               button += `<a href="javascript:;" data-id=` + data._id + ` class="actionBtn delete">
                <i class="fa fa-trash" ></i>
              </a>`;
             }
 
-            if(check('administrator:edit')) {
-              button += `<a href="javascript:;" data-id=`+ data._id + ` class="actionBtn edit">
+            if (check('administrator:edit')) {
+              button += `<a href="javascript:;" data-id=` + data._id + ` class="actionBtn edit">
                <i class="fa fa-pencil-square-o"></i>
              </a>`;
             }
@@ -172,11 +172,11 @@ const Admin = () => {
         <div className="row">
           <div className="col-lg-12">
             <div className="box box-block bg-white">
-                <h5 className="mb-1">Admininstrators 
+              <h5 className="mb-1">Admininstrators
                 <div className="rightBtn-Group">
-                    <Can permission="administrator:create"><Link className="addMoreBtn" to="/admin/user/add" ><span className="txt text-capitalize"> Add New <span className="amIcon"><i className="fa fa-plus"></i></span></span></Link></Can>
+                  <Can permission="administrator:create"><Link className="addMoreBtn" to="/admin/user/add" ><span className="txt text-capitalize"> Add New <span className="amIcon"><i className="fa fa-plus"></i></span></span></Link></Can>
                 </div>
-                </h5>
+              </h5>
               <div className="">
                 <div className="tableContent">
                   <table className="table table-striped" id="datatable">
@@ -217,7 +217,7 @@ const Admin = () => {
         </div>
 
       </div>
-      
+
     </Fragment >
   );
 };

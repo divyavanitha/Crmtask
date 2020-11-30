@@ -3,8 +3,9 @@ import axios from "axios";
 import { GET_LANGUAGES, FIND_LANGUAGE } from "./types";
 
 export const getLanguages = () => dispatch => {
+    let token = localStorage.admin_token;
     axios
-        .get('/api/admin/language')
+        .get('/api/admin/language', { headers: { 'Authorization': `${token}` } })
         .then(res => {
             dispatch({
                 type: GET_LANGUAGES,
@@ -21,8 +22,9 @@ export const getLanguages = () => dispatch => {
 };
 
 export const getLanguagebyId = (id) => dispatch => {
+    let token = localStorage.admin_token;
     axios
-        .get(`/api/admin/get/language/${id}`)
+        .get(`/api/admin/get/language/${id}`, { headers: { 'Authorization': `${token}` } })
         .then(res => {
             dispatch({
                 type: FIND_LANGUAGE,
@@ -38,47 +40,51 @@ export const getLanguagebyId = (id) => dispatch => {
         );
 };
 
-export const addLanguage = (user) => async dispatch => {
+export const addLanguage = (data) => async dispatch => {
     try {
-        let response = await axios.post('/api/admin/language', user);
+        let token = localStorage.admin_token;
+        let response = await axios.post('/api/admin/language', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };
 
-export const updateLanguage = (user) => async dispatch => {
+export const updateLanguage = (data) => async dispatch => {
     try {
-        let response = await axios.patch('/api/admin/language', user);
+        let token = localStorage.admin_token;
+        let response = await axios.patch('/api/admin/language', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };
 
 export const deleteLanguage = (id) => async dispatch => {
     try {
-    let response = await axios.delete(`/api/admin/language/${id}`);
-    response.data.status = 'success';
-    return response.data;
-    } catch(e) {
+        let token = localStorage.admin_token;
+        let response = await axios.delete(`/api/admin/language/${id}`, { headers: { 'Authorization': `${token}` } });
+        response.data.status = 'success';
+        return response.data;
+    } catch (e) {
         e.response.data.status = 'error';
         return e.response.data;
     }
-}; 
+};
 
 export const changeLanguageStatus = (id, status) => async dispatch => {
     try {
-        let response = await axios.get(`/api/admin/language/changestatus/${id}/${status}`);
+        let token = localStorage.admin_token;
+        let response = await axios.get(`/api/admin/language/changestatus/${id}/${status}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
         return e.response.data;
     }

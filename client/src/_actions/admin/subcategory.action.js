@@ -3,6 +3,7 @@ import axios from "axios";
 import { GET_SUB_CATEGORIES, FIND_SUB_CATEGORY } from "./types";
 
 export const getSubCategories = () => dispatch => {
+    let token = localStorage.admin_token;
     axios
         .get('/api/admin/subcategory')
         .then(res => {
@@ -21,6 +22,7 @@ export const getSubCategories = () => dispatch => {
 };
 
 export const getSubCategorybyId = (id) => dispatch => {
+    let token = localStorage.admin_token;
     axios
         .get(`/api/admin/get/subcategory/${id}`)
         .then(res => {
@@ -38,47 +40,51 @@ export const getSubCategorybyId = (id) => dispatch => {
         );
 };
 
-export const addSubCategory = (user) => async dispatch => {
+export const addSubCategory = (data) => async dispatch => {
     try {
-        let response = await axios.post('/api/admin/subcategory', user);
+        let token = localStorage.admin_token;
+        let response = await axios.post('/api/admin/subcategory', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };
 
-export const updateSubCategory = (user) => async dispatch => {
+export const updateSubCategory = (data) => async dispatch => {
     try {
-        let response = await axios.patch('/api/admin/subcategory', user);
+        let token = localStorage.admin_token;
+        let response = await axios.patch('/api/admin/subcategory', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
-        if(e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
     }
 };
 
 export const deleteSubCategory = (id) => async dispatch => {
     try {
-        let response = await axios.delete(`/api/admin/subcategory/${id}`);
+        let token = localStorage.admin_token;
+        let response = await axios.delete(`/api/admin/subcategory/${id}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
         return e.response.data;
     }
-}; 
+};
 
 export const changeSubCategoryStatus = (id, status) => async dispatch => {
     try {
-        let response = await axios.get(`/api/admin/subcategory/changestatus/${id}/${status}`);
+        let token = localStorage.admin_token;
+        let response = await axios.get(`/api/admin/subcategory/changestatus/${id}/${status}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
-    } catch(e) {
+    } catch (e) {
         e.response.data.status = 'error';
         return e.response.data;
     }

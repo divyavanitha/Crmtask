@@ -10,35 +10,35 @@ const GigList = (props) => {
    const dispatch = useDispatch();
    let history = useHistory();
 
-    useEffect(() => {
-         dispatch(getGigList())
+   useEffect(() => {
+      dispatch(getGigList())
 
-         $('body').on('click', '.delete', function (e) {
-          //alert();
-          var that = $(this);
-          e.preventDefault();
-          const sid = that.data('id');
-          console.log('id',sid);
-          console.log(that.closest('tr'));
-          $('.delete-modal').modal("show");
-          $(".delete-modal-btn")
+      $('body').on('click', '.delete', function (e) {
+         //alert();
+         var that = $(this);
+         e.preventDefault();
+         const sid = that.data('id');
+         console.log('id', sid);
+         console.log(that.closest('tr'));
+         $('.delete-modal').modal("show");
+         $(".delete-modal-btn")
             .off()
             .on("click", function () {
-              dispatch(deleteGig(sid)).then(res => {
-                //addToast(res.message, { appearance: res.status, autoDismiss: true, })
-                that.closest('tr').remove();
-                $('.delete-modal').modal("hide");
+               dispatch(deleteGig(sid)).then(res => {
+                  //addToast(res.message, { appearance: res.status, autoDismiss: true, })
+                  that.closest('tr').remove();
+                  $('.delete-modal').modal("hide");
 
-              })
+               })
 
             });
-        });
+      });
 
-    }, []);
+   }, []);
 
-    const gig_list = useSelector((state) => state.gig && state.gig.gigs && state.gig.gigs.responseData && state.gig.gigs.responseData.gigs);
+   const gig_list = useSelector((state) => state.gig && state.gig.gigs && state.gig.gigs.responseData && state.gig.gigs.responseData.gigs);
 
-    console.log('list', gig_list);
+   console.log('list', gig_list);
    return (
 
 
@@ -107,8 +107,9 @@ const GigList = (props) => {
                               </thead>
                               <tbody className="gig-table">
                                  {gig_list && gig_list.map((list, index) => (<tr key={list._id}>
+                                 {console.log(list.pricing)}
                                     <td className="proposal-title"> {list.title} </td>
-                                    <td className="text-success"> &#036;{list.pricing[0].price} </td>
+                                     <td className="text-success"> &#036;{list.pricing.length ? list.pricing[0].price : 0} </td> 
                                     <td>21</td>
                                     <td>22</td>
                                     <td className="text-center">
@@ -127,7 +128,7 @@ const GigList = (props) => {
 
                                     </td>
                                  </tr>))}
-                                 
+
                               </tbody>
                            </table>
                         </div>
@@ -592,21 +593,21 @@ const GigList = (props) => {
          <div id="featured-proposal-modal"></div>
 
          <div className="modal delete-modal" tabIndex="-1" role="basic" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title">Confirm Delete</h4>
-            </div>
-            <div className="modal-body p-2"> Are you sure want to delete? </div>
-            <div className="modal-footer">
-              <button type="button" className="btn default" data-dismiss="modal">Close</button>
-              <button type="button" data-value="1" className="btn btn-danger delete-modal-btn">Delete</button>
-            </div>
-          </div>
+            <div className="modal-dialog">
+               <div className="modal-content">
+                  <div className="modal-header">
+                     <h4 className="modal-title">Confirm Delete</h4>
+                  </div>
+                  <div className="modal-body p-2"> Are you sure want to delete? </div>
+                  <div className="modal-footer">
+                     <button type="button" className="btn default" data-dismiss="modal">Close</button>
+                     <button type="button" data-value="1" className="btn btn-danger delete-modal-btn">Delete</button>
+                  </div>
+               </div>
 
-        </div>
+            </div>
 
-      </div>
+         </div>
 
       </Fragment>
 

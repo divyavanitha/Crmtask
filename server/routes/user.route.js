@@ -147,6 +147,9 @@ router.delete('/gig/delete/:id', middleware.user, function(req, res){
 router.get('/gig/cart', middleware.user, function(req, res){
   orderController.listcart(req, res);
 });
+router.get('/gig/cart/count', middleware.user, function(req, res){
+  orderController.cartCount(req, res);
+});
 router.post('/gig/cart', middleware.user, function(req, res){
   orderController.addcart(req, res);
 });
@@ -163,6 +166,9 @@ router.get('/find/cart/:id', middleware.user, function(req, res){
 /*Order*/
 router.post('/gig/checkout', middleware.user, function(req, res){
   orderController.checkout(req, res);
+});
+router.post('/gig/update/orderStatus',[middleware.user, middleware.upload( path.join(__dirname, '../storage/images/order/') ).fields([{ name: 'delivery_file', maxCount: 1 }]) ], function(req, res){
+  orderController.updateOrder(req, res);
 });
 router.post('/gig/rate', middleware.user, function(req, res){
   orderController.rating(req, res);
@@ -182,6 +188,10 @@ router.get('/seller/orderlist', middleware.user, function(req, res){
 
 router.get('/seller/orderdetails/:id', middleware.user, (req, res) => {
   orderController.sellerOrderDetails(req, res);
+});
+
+router.get('/delivery/status/:id', middleware.user, (req, res) => {
+  orderController.deliveryStatus(req, res);
 });
 
 router.post('/request', [middleware.user, middleware.upload( path.join(__dirname, '../storage/images/request/') ).fields([{ name: 'files[]', maxCount: 4 }]) ], (req, res) => {

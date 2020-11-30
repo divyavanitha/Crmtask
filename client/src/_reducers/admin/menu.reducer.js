@@ -12,12 +12,12 @@ const menuReducer = (state = intialState, action) => {
         ...state,
         menus: action.payload
       };
-     case FIND_MENU:
+    case FIND_MENU:
       return {
         ...state,
         menus: action.payload
       };
-      
+
     default:
       return state;
   }

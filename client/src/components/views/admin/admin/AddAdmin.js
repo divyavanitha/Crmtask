@@ -19,7 +19,7 @@ const AddAdmin = (props) => {
 
     }, [params.id]);
     const user = useSelector(state => state.users && state.users.user && state.users.user.responseData && state.users.user.responseData.user);
-console.log('user', user);
+
     return (
 
         <Formik
@@ -107,21 +107,21 @@ console.log('user', user);
                             </div>
                             <div className="row">
                                 <div className="col-lg-12">
-                                <div className="box box-block bg-white">
-                                    <h5 className="mb-1">{params.id ? "Edit User" : "Add User"} 
-                                    <div className="rightBtn-Group">
-                                        <Link className="addMoreBtn" to="/admin/user" ><span className="txt text-capitalize"><span className="amIcon"><i className="fa fa-arrow-left"></i></span> Back</span></Link>
-                                    </div>
-                                    </h5>
+                                    <div className="box box-block bg-white">
+                                        <h5 className="mb-1">{params.id ? "Edit User" : "Add User"}
+                                            <div className="rightBtn-Group">
+                                                <Link className="addMoreBtn" to="/admin/user" ><span className="txt text-capitalize"><span className="amIcon"><i className="fa fa-arrow-left"></i></span> Back</span></Link>
+                                            </div>
+                                        </h5>
 
-                                        
+
                                         <div className="addFormBox">
                                             <form onSubmit={handleSubmit} encType="multipart/form-data">
                                                 <div className="form-group row">
                                                     <div className="col-md-4">
                                                         <label className="control-label"> First Name : </label>
                                                     </div>
-                                                    
+
                                                     <div className="col-md-6">
                                                         <Field type="text" id="firstName" name="firstName" value={values.firstName} onChange={handleChange} maxLength={100} placeholder="First Name" className={'form-control' + (errors.firstName && touched.firstName ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="firstName" component="div" className="invalid-feedback" />
@@ -132,7 +132,7 @@ console.log('user', user);
                                                     <div className="col-md-4">
                                                         <label className="control-label"> Last Name : </label>
                                                     </div>
-                                                    
+
                                                     <div className="col-md-6">
                                                         <Field type="text" id="lastName" name="lastName" value={values.lastName} onChange={handleChange} maxLength={100} placeholder="Last Name" className={'form-control' + (errors.lastName && touched.lastName ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="lastName" component="div" className="invalid-feedback" />
@@ -142,7 +142,7 @@ console.log('user', user);
                                                     <div className="col-md-4">
                                                         <label className="control-label"> Email : </label>
                                                     </div>
-                                                    
+
                                                     <div className="col-md-6">
                                                         <Field type="text" id="email" name="email" value={values.email} onChange={handleChange} maxLength={100} placeholder="Email" className={'form-control' + (errors.email && touched.email ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="email" component="div" className="invalid-feedback" />
@@ -153,19 +153,19 @@ console.log('user', user);
                                                     <div className="col-md-4">
                                                         <label className="control-label"> Mobile : </label>
                                                     </div>
-                                                    
+
                                                     <div className="col-md-6">
                                                         <Field type="text" id="mobile" name="mobile" value={values.mobile} onChange={handleChange} maxLength={100} placeholder="Mobile" className={'form-control' + (errors.mobile && touched.mobile ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="mobile" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
 
-                                            
+
                                                 <div className="form-group row">
                                                     <div className="col-md-4">
                                                         <label className="control-label"> Password : </label>
                                                     </div>
-                                                    
+
                                                     <div className="col-md-6">
                                                         <Field type="password" name="password" value={values.password} onChange={handleChange} placeholder="Enter Your Password" className={'form-control' + (errors.password && touched.password ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="password" component="div" className="invalid-feedback" />
@@ -175,13 +175,13 @@ console.log('user', user);
                                                     <div className="col-md-4">
                                                         <label className="control-label"> Confirm Password : </label>
                                                     </div>
-                                                    
+
                                                     <div className="col-md-6">
                                                         <Field type="password" name="confirm_password" value={values.confirm_password} onChange={handleChange} placeholder="Enter Your Password Again" className={'form-control' + (errors.confirm_password && touched.confirm_password ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="confirm_password" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div className="form-group row">
                                                     <div className="col-md-4">
                                                         <label className="control-label"></label>
@@ -196,7 +196,7 @@ console.log('user', user);
                                     </div>
                                 </div>
 
-                                </div>
+                            </div>
                         </div>
                     </Fragment>
                 );

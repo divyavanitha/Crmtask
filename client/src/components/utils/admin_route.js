@@ -9,8 +9,8 @@ const AdminRoute = ({ children, ...rest }) => {
     return (
         <Route
             {...rest}
-            render={(props) => 
-                admin.isAuthenticated ? ( children ) : <Login />
+            render={(props) =>
+                admin.isAuthenticated ? (children) : <Login />
 
             }
         />

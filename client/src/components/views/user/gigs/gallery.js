@@ -61,18 +61,18 @@ const Gallery = (props) => {
       onSubmit={(values, { setSubmitting, resetForm }) => {
 
         const data = new FormData();
-        data.append( "id", params.id );
+        data.append("id", params.id);
 
         for (var i = 0; i < file.length; i++) {
-          data.append( "photo[]", file[i][0] );
+          data.append("photo[]", file[i][0]);
         }
 
         dispatch(updateImage(data)).then(res => {
-          console.log('id',res.responseData._id);
-          history.push('/gig/post/approval/'+res.responseData._id)
-            
+          console.log('id', res.responseData._id);
+          history.push('/gig/post/approval/' + res.responseData._id)
+
         })
-        
+
         resetForm();
         setSubmitting(false);
       }}>
@@ -119,7 +119,7 @@ const Gallery = (props) => {
                       Requirements      </a>
                     <a className="nav-link active" href="#gallery">
                       Gallery     </a>
-                      <a className="nav-link " href="#publish">Submit For Approval</a>
+                    <a className="nav-link " href="#publish">Submit For Approval</a>
                   </div>
                 </div>
 
@@ -154,7 +154,7 @@ const Gallery = (props) => {
                           {!isDragActive && <p style={{ textAlign: 'center', color: '#eaeaea' }}>Click here or drop a file to upload!</p>}
                           {isDragActive && !isDragReject && <p style={{ textAlign: 'center', color: '#eaeaea' }}>Drop it like it's hot!</p>}
                           {isDragReject && <p style={{ textAlign: 'center', color: '#eaeaea' }}>File type not accepted, sorry!</p>}
-                          {file.map( (f, i) => {
+                          {file.map((f, i) => {
                             let reader = new FileReader();
                             reader.readAsDataURL(f[0]);
 
@@ -165,17 +165,17 @@ const Gallery = (props) => {
                             };
 
                             reader.onload = () => {
-                              $('#'+i).attr('src', reader.result);
+                              $('#' + i).attr('src', reader.result);
                             };
-                          
-                            reader.onerror = function() {
+
+                            reader.onerror = function () {
                               console.log(reader.error);
                             };
 
-                            return (<img style={{padding: '10px', width: '150px' }} key={i} id={i} src={reader.result} alt={f[0].name} />)
-                            
+                            return (<img style={{ padding: '10px', width: '150px' }} key={i} id={i} src={reader.result} alt={f[0].name} />)
+
                           }
-                           )}
+                          )}
                         </div>
 
                         <div className="mb-5"></div>

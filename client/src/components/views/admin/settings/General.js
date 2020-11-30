@@ -10,7 +10,7 @@ import { getSetting, updateGeneralSetting } from "../../../../_actions/admin/set
 const General = (props) => {
     const { addToast } = useToasts()
     const dispatch = useDispatch();
-    
+
     useEffect(() => {
 
         dispatch(getSetting())
@@ -58,13 +58,13 @@ const General = (props) => {
                 }; */
 
                 const data = new FormData();
-                data.append( "title", values.title );
-                data.append( "description", values.description );
-                data.append( "logo", values.logo );
-                data.append( "favicon", values.favicon );
-                data.append( "mobile", values.mobile );
-                data.append( "email", values.email );
-                data.append( "copyright", values.copyright );
+                data.append("title", values.title);
+                data.append("description", values.description);
+                data.append("logo", values.logo);
+                data.append("favicon", values.favicon);
+                data.append("mobile", values.mobile);
+                data.append("email", values.email);
+                data.append("copyright", values.copyright);
 
                 dispatch(updateGeneralSetting(data)).then(res => {
                     addToast(res.message, { appearance: res.status, autoDismiss: true, })
@@ -133,7 +133,7 @@ const General = (props) => {
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Site Description : </label>
                                                     <div className="col-md-6">
-                                                        <Field as="textarea" name="description" value={values.description} onChange={handleChange} maxLength={100} placeholder="Description" className={'form-control' + (errors.description && touched.description ? ' is-invalid' : '')}/>
+                                                        <Field as="textarea" name="description" value={values.description} onChange={handleChange} maxLength={100} placeholder="Description" className={'form-control' + (errors.description && touched.description ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="description" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
@@ -146,7 +146,7 @@ const General = (props) => {
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Site Favicon : </label>
                                                     <div className="col-md-6">
-                                                        <input type="file" name="favicon" onChange={(e) => { setFieldValue("favicon", e.currentTarget.files[0]) }}  className={'form-control' + (errors.favicon && touched.favicon ? ' is-invalid' : '')} />
+                                                        <input type="file" name="favicon" onChange={(e) => { setFieldValue("favicon", e.currentTarget.files[0]) }} className={'form-control' + (errors.favicon && touched.favicon ? ' is-invalid' : '')} />
                                                     </div>
                                                 </div>
                                                 <div className="form-group row">

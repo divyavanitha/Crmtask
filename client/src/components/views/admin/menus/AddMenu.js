@@ -1,6 +1,6 @@
 import React, { Fragment, useState, FormEvent, Dispatch, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams, useHistory  } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import DatePicker from "../DatePicker";
 import { useToasts } from 'react-toast-notifications'
@@ -15,8 +15,8 @@ const AddMenu = (props) => {
     const dispatch = useDispatch();
     const [description, setDescription] = useState("");
     //console.log('param',props.match.params.id);
-    
-  let history = useHistory();
+
+    let history = useHistory();
     const params = useParams();
     useEffect(() => {
 
@@ -55,7 +55,7 @@ const AddMenu = (props) => {
                     .required('Category is required')
             })}
             onSubmit={(values, { setSubmitting, resetForm }) => {
-console.log('values', values);
+                console.log('values', values);
                 /*let data = {
                     id: values.id,
                     title: values.title,
@@ -64,15 +64,15 @@ console.log('values', values);
                 };*/
 
                 const data = new FormData();
-                data.append( "id", values.id );
-                data.append( "title", values.title );
-                data.append( "subTitle", values.subTitle );
-                data.append( "category", values.category );
-                data.append( "description", values.description );
-                data.append( "layoutPhoto", values.layoutPhoto );
+                data.append("id", values.id);
+                data.append("title", values.title);
+                data.append("subTitle", values.subTitle);
+                data.append("category", values.category);
+                data.append("description", values.description);
+                data.append("layoutPhoto", values.layoutPhoto);
 
                 if (params.id) {
-                    dispatch(updateMenu(data)).then(res => { 
+                    dispatch(updateMenu(data)).then(res => {
                         addToast(res.message, { appearance: res.status, autoDismiss: true, })
                         history.push('/admin/menu/')
                     })
@@ -129,9 +129,9 @@ console.log('values', values);
                                 <div className="col-lg-12">
                                     <div className="box box-block bg-white">
                                         <h5 className="mb-1">{params.id ? "Edit Menu" : "Add Menu"}
-                                        <div className="rightBtn-Group">
-                                            <Link className="addMoreBtn" to="/admin/menu" ><span className="txt text-capitalize"><span className="amIcon"><i className="fa fa-arrow-left"></i></span> Back</span></Link>
-                                        </div>
+                                            <div className="rightBtn-Group">
+                                                <Link className="addMoreBtn" to="/admin/menu" ><span className="txt text-capitalize"><span className="amIcon"><i className="fa fa-arrow-left"></i></span> Back</span></Link>
+                                            </div>
                                         </h5>
                                         {/* <div className="card-header">
                                             <h4 className="h4">{params.id ? "Edit Slide" : "Add Slide"}</h4>
@@ -141,14 +141,14 @@ console.log('values', values);
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Title : </label>
                                                     <div className="col-md-6">
-                                                        <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title"  className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')}  />
+                                                        <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="title" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Sub Title : </label>
                                                     <div className="col-md-6">
-                                                        <Field type="text" id="subTitle" name="subTitle" value={values.subTitle} onChange={handleChange} maxLength={100} placeholder="Sub Title"  className={'form-control' + (errors.subTitle && touched.subTitle ? ' is-invalid' : '')}  />
+                                                        <Field type="text" id="subTitle" name="subTitle" value={values.subTitle} onChange={handleChange} maxLength={100} placeholder="Sub Title" className={'form-control' + (errors.subTitle && touched.subTitle ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="subTitle" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
@@ -156,9 +156,9 @@ console.log('values', values);
                                                     <label className="col-md-4 control-label"> Category : </label>
                                                     <div className="col-md-6">
                                                         <Field as="select" id="category" name="category" onChange={handleChange} className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} >
-                                                        <option value="">Select Catagory</option>
+                                                            <option value="">Select Catagory</option>
 
-                                                        {categories && categories.map((c_list) => (<option key={c_list._id} value={c_list._id} onChange={handleChange}>{c_list.name}</option>))}
+                                                            {categories && categories.map((c_list) => (<option key={c_list._id} value={c_list._id} onChange={handleChange}>{c_list.name}</option>))}
 
                                                         </Field>
                                                         <ErrorMessage name="category" component="div" className="invalid-feedback" />
@@ -167,9 +167,9 @@ console.log('values', values);
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Image : </label>
                                                     <div className="col-md-6">
-                                                         <input type="file" name="layoutPhoto" onChange={(e) => { setFieldValue("layoutPhoto", e.currentTarget.files[0]) }} className={'form-control' + (errors.layoutPhoto && touched.layoutPhoto ? ' is-invalid' : '')} />
+                                                        <input type="file" name="layoutPhoto" onChange={(e) => { setFieldValue("layoutPhoto", e.currentTarget.files[0]) }} className={'form-control' + (errors.layoutPhoto && touched.layoutPhoto ? ' is-invalid' : '')} />
 
-                                                         {params.id ? <img id="target" src={values.layoutPhoto ? values.layoutPhoto : ""} /> : ""}
+                                                        {params.id ? <img id="target" src={values.layoutPhoto ? values.layoutPhoto : ""} /> : ""}
                                                     </div>
                                                 </div>
 

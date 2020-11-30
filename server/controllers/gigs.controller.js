@@ -108,7 +108,7 @@ return true;*/
         let data = {
                 user: req.user._id,
                 title: req.body.title,
-                category: req.body.sub_category_id,
+                category: req.body.category_id,
                 subCategory: req.body.sub_category_id,
                 tags: req.body.tags
             }

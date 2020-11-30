@@ -32,19 +32,19 @@ const Coupon = () => {
       e.preventDefault();
       const sid = $(this).data('id');
       console.log($(this).closest('tr'));
-       $('.delete-modal').modal("show");
+      $('.delete-modal').modal("show");
       $(".delete-modal-btn")
         .off()
         .on("click", function () {
-         dispatch(deleteCoupon(sid)).then(res => { 
-           addToast(res.message, { appearance: res.status, autoDismiss: true, })
-          $('#datatable').DataTable().row( $(this).closest('tr') ).remove().draw();
-          $('.delete-modal').modal("hide");
+          dispatch(deleteCoupon(sid)).then(res => {
+            addToast(res.message, { appearance: res.status, autoDismiss: true, })
+            $('#datatable').DataTable().row($(this).closest('tr')).remove().draw();
+            $('.delete-modal').modal("hide");
 
           })
-          
-         // 
-        }); 
+
+          // 
+        });
     });
 
 
@@ -54,18 +54,18 @@ const Coupon = () => {
       language: {
         searchPlaceholder: "Search"
       },
-      fnDrawCallback: function ( oSettings ){
-            if(oSettings.fnRecordsTotal() <= 10){     
-               $('.dataTables_length').hide();
-               $('.dataTables_paginate').hide();
-               $('.dataTables_filter').hide();
-               $('.dataTables_wrapper').addClass('noFilters');
-            } else {
-               $('.dataTables_length').show();
-               $('.dataTables_paginate').show(); 
-               $('.dataTables_filter').show();
-               $('.dataTables_wrapper.noFilters').removeClass('noFilters');
-            }
+      fnDrawCallback: function (oSettings) {
+        if (oSettings.fnRecordsTotal() <= 10) {
+          $('.dataTables_length').hide();
+          $('.dataTables_paginate').hide();
+          $('.dataTables_filter').hide();
+          $('.dataTables_wrapper').addClass('noFilters');
+        } else {
+          $('.dataTables_length').show();
+          $('.dataTables_paginate').show();
+          $('.dataTables_filter').show();
+          $('.dataTables_wrapper.noFilters').removeClass('noFilters');
+        }
       },
       "bLengthChange": false,
       "info": false,
@@ -105,16 +105,18 @@ const Coupon = () => {
         { "data": "code" },
         { "data": "percentage" },
         { "data": "maxAmount" },
-        { "data": "expiration","render": function (data) {
-                  var date = new Date(data);
-                var month = date.getMonth() + 1;
-                
-               return   date.getDate()+ "/" + (month.toString().length > 1 ? month : "0" + month) + "/" + date.getFullYear();
-        }},
+        {
+          "data": "expiration", "render": function (data) {
+            var date = new Date(data);
+            var month = date.getMonth() + 1;
+
+            return date.getDate() + "/" + (month.toString().length > 1 ? month : "0" + month) + "/" + date.getFullYear();
+          }
+        },
         {
           "data": function (data, type, row) {
 
-            return  "<label class='switch'><input "+ ((data.status == 1) ? "checked" :  "" ) +" type='checkbox' class='status_enable' value='true' data-id='"+data._id+"' data-value='"+ ((data.status == 1) ? "1" :  "0" ) +"'> <span class='slider round'></span></label>";
+            return "<label class='switch'><input " + ((data.status == 1) ? "checked" : "") + " type='checkbox' class='status_enable' value='true' data-id='" + data._id + "' data-value='" + ((data.status == 1) ? "1" : "0") + "'> <span class='slider round'></span></label>";
           }
         },
         {
@@ -135,23 +137,23 @@ const Coupon = () => {
       ]
     });
 
-    $('body').on('change', '.status_enable', function() {
+    $('body').on('change', '.status_enable', function () {
 
-        var id = $(this).data('id');
-        var value = 0;
-        var fail_status = true;
+      var id = $(this).data('id');
+      var value = 0;
+      var fail_status = true;
 
-        if($(this).is(":checked")){
-           value = 1; 
-           fail_status = false;
-        }
-       
-          console.log(id, value);
+      if ($(this).is(":checked")) {
+        value = 1;
+        fail_status = false;
+      }
 
-          dispatch(changeCouponStatus(id, value)).then(res => {
-               addToast(res.message, { appearance: res.status, autoDismiss: true, })
-                if (res.statusCode != 200) $(this).prop('checked', fail_status);
-          })
+      console.log(id, value);
+
+      dispatch(changeCouponStatus(id, value)).then(res => {
+        addToast(res.message, { appearance: res.status, autoDismiss: true, })
+        if (res.statusCode != 200) $(this).prop('checked', fail_status);
+      })
 
     });
 
@@ -192,9 +194,9 @@ const Coupon = () => {
         <div className="row">
           <div className="col-lg-12">
             <div className="box box-block bg-white">
-            <h5 className="mb-1">Promocodes
+              <h5 className="mb-1">Promocodes
                 <div className="rightBtn-Group">
-                    <Link className="addMoreBtn" to="/admin/promocode/add" ><span className="txt text-capitalize"> Add New <span className="amIcon"><i className="fa fa-plus"></i></span></span></Link>
+                  <Link className="addMoreBtn" to="/admin/promocode/add" ><span className="txt text-capitalize"> Add New <span className="amIcon"><i className="fa fa-plus"></i></span></span></Link>
                 </div>
               </h5>
               <div className="">

@@ -4,8 +4,8 @@ import jwt_decode from 'jwt-decode';
 export const check = (action, rules) => {
 
   const decoded = jwt_decode(localStorage.admin_token);
-  if(decoded && decoded.roles) {
-    for(var role of decoded.roles) {
+  if (decoded && decoded.roles) {
+    for (var role of decoded.roles) {
       const permissions = rules[role];
       if (!permissions) {
         // role is not present in the rules
@@ -24,12 +24,12 @@ export const check = (action, rules) => {
 const Can = props => {
   const admin = useSelector((state) => state.admin);
 
-  if(check(props.permission, admin.permissions)) {
+  if (check(props.permission, admin.permissions)) {
     return props.children;
   }
 
   return null;
 }
-  
+
 
 export default Can;

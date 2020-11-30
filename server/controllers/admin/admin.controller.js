@@ -109,25 +109,37 @@ exports.adminAuthRegister = async (req, res) => {
 exports.getPermissions = async (req, res) => {
     try {
 
-        let query = db._get(Role, { 'name': { $in: req.admin.roles } }, {}, {populate: { path: 'permissions.permission' } })
+        if(req.admin) {
+            let query = db._get(Role, { 'name': { $in: req.admin.roles } }, {}, {populate: { path: 'permissions.permission' } })
             
-        const roles = await query;
+            const roles = await query;
 
-        let obj = {};
+            let obj = {};
 
-        for(let role of roles) {
-            let rules = [];
-            for(let i in role.permissions) {
-                rules.push(role.permissions[i].permission.name);
+            for(let role of roles) {
+                let rules = [];
+                for(let i in role.permissions) {
+                    rules.push(role.permissions[i].permission.name);
+                }
+
+                obj[role.name] = rules
+                
             }
 
-            obj[role.name] = rules
-            
+            const response = helper.response({ data: obj });
+
+            return res.status(response.statusCode).json(response);
+        } else {
+            return res.status(200).json({
+                "statusCode": 200,
+                "title": "OK",
+                "message": "",
+                "responseData": {
+                },
+                "error": {}
+            });
         }
-
-        const response = helper.response({ data: obj });
-
-        return res.status(response.statusCode).json(response);
+        
 
     } catch (err) {
         console.log(err);

@@ -22,12 +22,12 @@ function App() {
       <div>
         <Switch>
 
-         <AdminRoute path="/admin"  > <Admin /> </AdminRoute>
+          <AdminRoute path="/admin"  > <Admin /> </AdminRoute>
 
-         <AdminAuthRoute exact={true} path="/admin/login"><AdminLogin /></AdminAuthRoute>
-          
-         <User />
-          
+          <AdminAuthRoute exact={true} path="/admin/login"><AdminLogin /></AdminAuthRoute>
+
+          <User />
+
         </Switch>
       </div>
     </Suspense>

@@ -12,12 +12,12 @@ const categoryReducer = (state = intialState, action) => {
         ...state,
         categories: action.payload
       };
-     case FIND_CATEGORY:
+    case FIND_CATEGORY:
       return {
         ...state,
         category: action.payload
       };
-      case DELETE_CATEGORY:
+    case DELETE_CATEGORY:
       return {
         ...state,
         deleteCategory: action.payload

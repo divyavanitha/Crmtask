@@ -21,7 +21,7 @@ const AddPage = (props) => {
 
     }, [params.id]);
     const pages = useSelector(state => state.pages && state.pages.page && state.pages.page.responseData && state.pages.page.responseData.page);
-console.log(pages);
+
     return (
 
         <Formik
@@ -94,21 +94,21 @@ console.log(pages);
                             </div>
                             <div className="row">
                                 <div className="col-lg-12">
-                                <div className="box box-block bg-white">
-                                    <h5 className="mb-1">{params.id ? "Edit Page" : "Add Page"} 
-                                    <div className="rightBtn-Group">
-                                        <Link className="addMoreBtn" to="/admin/page" ><span className="txt text-capitalize"><span className="amIcon"><i className="fa fa-arrow-left"></i></span> Back</span></Link>
-                                    </div>
-                                    </h5>
+                                    <div className="box box-block bg-white">
+                                        <h5 className="mb-1">{params.id ? "Edit Page" : "Add Page"}
+                                            <div className="rightBtn-Group">
+                                                <Link className="addMoreBtn" to="/admin/page" ><span className="txt text-capitalize"><span className="amIcon"><i className="fa fa-arrow-left"></i></span> Back</span></Link>
+                                            </div>
+                                        </h5>
 
-                                        
+
                                         <div className="addFormBox">
                                             <form onSubmit={handleSubmit} encType="multipart/form-data">
                                                 <div className="form-group row">
                                                     <div className="col-md-4">
                                                         <label className="control-label"> Title : </label>
                                                     </div>
-                                                    
+
                                                     <div className="col-md-6">
                                                         <Field type="text" id="title" name="title" value={values.title} onChange={handleChange} maxLength={100} placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="title" component="div" className="invalid-feedback" />
@@ -118,26 +118,26 @@ console.log(pages);
                                                     <div className="col-md-4">
                                                         <label className="control-label"> Content : </label>
                                                     </div>
-                                                    
+
                                                     <div className="col-md-6">
                                                         <CKEditor
-                                                            editor={ ClassicEditor }
+                                                            editor={ClassicEditor}
                                                             data={values.content}
-                                                            onReady={ editor => {
+                                                            onReady={editor => {
                                                                 // You can store the "editor" and use when it is needed.
-                                                                console.log( 'Editor is ready to use!', editor );
-                                                            } }
-                                                            onChange={ ( event, editor ) => {
+                                                                console.log('Editor is ready to use!', editor);
+                                                            }}
+                                                            onChange={(event, editor) => {
                                                                 const data = editor.getData();
                                                                 setFieldValue('content', data);
-                                                                console.log( { event, editor, data } );
-                                                            } }
-                                                            onBlur={ ( event, editor ) => {
-                                                                console.log( 'Blur.', editor );
-                                                            } }
-                                                            onFocus={ ( event, editor ) => {
-                                                                console.log( 'Focus.', editor );
-                                                            } }
+                                                                console.log({ event, editor, data });
+                                                            }}
+                                                            onBlur={(event, editor) => {
+                                                                console.log('Blur.', editor);
+                                                            }}
+                                                            onFocus={(event, editor) => {
+                                                                console.log('Focus.', editor);
+                                                            }}
                                                         />
                                                     </div>
                                                 </div>
@@ -146,13 +146,13 @@ console.log(pages);
                                                     <div className="col-md-4">
                                                         <label className="control-label"> Url : </label>
                                                     </div>
-                                                    
+
                                                     <div className="col-md-6">
                                                         <Field type="text" id="url" name="url" value={values.url} onChange={handleChange} maxLength={100} placeholder="Url" className={'form-control' + (errors.url && touched.url ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="url" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div className="form-group row">
                                                     <div className="col-md-4">
                                                         <label className="control-label"></label>
@@ -167,7 +167,7 @@ console.log(pages);
                                     </div>
                                 </div>
 
-                                </div>
+                            </div>
                         </div>
                     </Fragment>
                 );

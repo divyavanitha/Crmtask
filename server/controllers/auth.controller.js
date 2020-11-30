@@ -9,7 +9,6 @@ const { Skill } = require('./../models/skill');
 const Joi = require('@hapi/joi');
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
-const transporter = require('../config/mail');
 const dotenv = require('dotenv');
 const helper = require('../services/helper.js');
 const db = require('../services/model.js');
@@ -150,31 +149,6 @@ exports.register = async (req, res) => {
             THECODERANK I MAKE THIS TUTORIAL FOR MY SUBSCRIBERS AND OUR FRIENDS.</p>
             <br><a href="http://localhost:5000/api/auth/verification/?verify=${verify}&id=${user._id}">CLICK ME TO ACTIVATE YOUR ACCOUNT</a>`
                 }
-                transporter.sendMail(mailOption, (error, info) => {
-
-                    if (error) {
-                        console.log(error)
-                    } else {
-
-                        let userdata = {
-                            email: `${req.body.email}`,
-                        }
-
-                        let payload = _.pick(user, ['_id', 'name', 'email']);
-
-                        const token = user.generateAuthToken(payload);
-
-                        //const response = {success: true, user: payload, token: 'Bearer ' + token }
-
-                        return res.status(200).json({
-                            "success": true, message: "Check your Mail for verification ", user: payload, token: 'Bearer ' + token
-                        });
-
-
-                    }
-
-
-                })
 
 
             } */
@@ -215,6 +189,7 @@ exports.social = async (req, res) => {
             last_name: Joi.string().label("Last Name"),
             email: Joi.string().email().label("Email"),
             mobile: Joi.number().min(10).integer().label("Mobile"),
+            social_unique_id: Joi.string().required().label("Social Unique Id"),
         }).unknown(true);
 
         const { error } = schema.validate(req.body);
@@ -325,19 +300,7 @@ exports.forgetpassword = async (req, res) => {
                    To reset password , follow the link address</p>
                     <br><a href="http://localhost:5000/api/auth/passwordreset/?reset=${reset}&id=${user._id}">CLICK ME TO ACTIVATE YOUR ACCOUNT</a>`
                 }
-                transporter.sendMail(mailOption, (error, info) => {
-
-                    if (error) {
-                        console.log(error)
-                    } else {
-
-                        let userdata = {
-                            email: `${req.body.email}`,
-                        }
-                        res.send("Check your Mail to password reset")
-
-                    }
-                })
+                
             })
 
 
@@ -382,34 +345,6 @@ exports.passwordreset = async (req, res) => {
                                     html: `<h1>Password changed sucessfully</h1>
                             `
                                 }
-                                transporter.sendMail(mailOption, (error, info) => {
-
-                                    if (error) {
-                                        console.log(error)
-                                    } else {
-
-                                        let userdata = {
-                                            email: data.email
-                                        }
-
-                                        let payload = _.pick(user, ['_id', 'name', 'email']);
-
-                                        const token = user.generateAuthToken(payload);
-
-                                        const response = { success: true, user: payload, token: 'Bearer ' + token }
-                                        res.send(response);
-                                        return res.status(200).json({
-                                            message: "password changed sucessfully ", userdata, user
-                                        });
-
-
-                                    }
-
-
-                                }
-
-
-                                )
 
 
                             } else {
@@ -552,18 +487,6 @@ exports.register1 = async (req, res) => {
             THECODERANK I MAKE THIS TUTORIAL FOR MY SUBSCRIBERS AND OUR FRIENDS.</p>
             <br><a href="http://localhost:3000/verification/?verify=${verify}&id=${user._id}">CLICK ME TO ACTIVATE YOUR ACCOUNT</a>`
                 }
-                transporter.sendMail(mailOption, (error, info) => {
-                    if (error) {
-                        console.log(error)
-                    } else {
-
-                        let userdata = {
-                            email: `${req.body.Email}`,
-                        }
-                        res.json({ "success": "Your Mail Send Successfully", "UserInfo": userdata, data })
-
-                    }
-                })
             });
 
         // let payload = _.pick(user, ['_id', 'name', 'email']);
