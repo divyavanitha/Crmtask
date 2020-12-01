@@ -22,6 +22,19 @@ function Nav() {
     const category = useSelector(state => state.user.category);
     const category_list = category && category.responseData.categories;
 
+    const chunkArray = (array, size) => {
+    let result = []
+    for (let value of array){
+        let lastArray = result[result.length -1 ]
+        if(!lastArray || lastArray.length == size){
+            result.push([value])
+        } else{
+            lastArray.push(value)
+        }
+    }
+    return result
+}
+
     return (
 
         <Fragment>
@@ -47,10 +60,11 @@ function Nav() {
                                 className="body-sub-width vertical-align-top sub-nav-container bg-white overflow-hidden bl-xs-1 bb-xs-1 br-xs-1 catnav-mott-control display-none"
                                 data-ui="sub-nav" aria-hidden="true" data-node-id={c_list._id}>
                                 <div className="width-full display-flex-xs">
-                                    {c_list.subCategories && (
+                                    { c_list.subCategories && (chunkArray(c_list.subCategories, 10)).map((chunk) => (
+
                                         <ul className="list-unstyled subcategory display-inline-block col-xs-3 p-xs-3 pl-xs-5" role="presentation">
 
-                                            {c_list.subCategories.map((subCategories) => (
+                                            {chunk.map((subCategories) => (
                                                 <li key={subCategories._id}>
                                                     <a className="display-block text-gray text-body-larger pt-xs-1"
                                                         href={`/categories/${c_list.name}/${subCategories.name}`}>
@@ -59,7 +73,8 @@ function Nav() {
                                             ))}
 
                                         </ul>
-                                    )}
+
+                                    ) )}
                                 </div>
                             </div>
                         ))}
