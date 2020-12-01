@@ -24,7 +24,7 @@ function Landing() {
    const menus = useSelector((state) => state.menu);
    const menuList = menus && menus.menu.menus;
    const slide = useSelector((state) => state.user && state.user.slide && state.user.slide.responseData && state.user.slide.responseData.slides);
-   const gig = useSelector((state) => state.user && state.user.gig && state.user.gig.responseData && state.user.gig.responseData.gigs);
+   const gig = useSelector((state) => state.user && state.user.gigs && state.user.gigs.responseData && state.user.gigs.responseData.gigs);
 
    return (
 
@@ -225,15 +225,7 @@ function Landing() {
                   </div>
                </div>
                <div className="row mt-5">
-
-                  <Gig styles='col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-3 pr-lg-1' />
-                  <Gig styles='col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-3 pr-lg-1' />
-                  <Gig styles='col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-3 pr-lg-1' />
-                  <Gig styles='col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-3 pr-lg-1' />
-                  <Gig styles='col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-3 pr-lg-1' />
-                  <Gig styles='col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-3 pr-lg-1' />
-                  <Gig styles='col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-3 pr-lg-1' />
-                  <Gig styles='col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-3 pr-lg-1' />
+                  {gig && gig.map((list) => (<Gig key={list._id} list={list} styles='col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-3 pr-lg-1' />))}
 
                </div>
             </div>

@@ -4034,3 +4034,21 @@ display: none;
         width: 150px;
     }
 }
+
+.react-tagsinput-tag {
+    background-color: #5d87fc !important;
+    border-radius: 2px;
+    border: 1px solid #396CFF !important;
+    color: #fff !important;
+    display: inline-block;
+    font-family: sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    padding: 5px;
+}
+
+.react-tagsinput--focused {
+    border-color: #396CFF !important;
+}

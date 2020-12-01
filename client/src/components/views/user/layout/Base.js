@@ -53,9 +53,9 @@ const Base = () => {
             <Nav />
             <Switch>
                 <Route exact={true} path="/" component={auth.isAuthenticated ? Home : Landing} />
+                <Route path="/categories/:category/:subcategory" component={CategoryGigList} />
                 <ProtectedRoute path="/cart-payment-option/:id" component={CartPayment} />
                 <ProtectedRoute path="/cart-payment-option" component={CartPayment} />
-                <ProtectedRoute path="/categories/:category/:subcategory" component={CategoryGigList} />
                 <ProtectedRoute path="/gig/list" component={GigList} />
                 <ProtectedRoute path="/gig/post/pricing/:id" component={Pricing} />
                 <ProtectedRoute path="/gig/post/faq/:id" component={Faq} />
@@ -63,7 +63,7 @@ const Base = () => {
                 <ProtectedRoute path="/gig/post/gallery/:id" component={Gallery} />
                 <ProtectedRoute path="/gig/post/approval/:id" component={GigApproval} />
                 <ProtectedRoute path="/gig/post" component={AddGig} />
-                <ProtectedRoute path="/gig/:user/:gig" component={GigDetail} />
+                <Route path="/gig/:user/:gig" component={GigDetail} />
                 <ProtectedRoute path="/cart" component={Cart} />
                 <ProtectedRoute path="/buyer-order-lists" component={BuyerOrderList} />
                 <ProtectedRoute path="/order/details/:id" component={OrderDetails} />

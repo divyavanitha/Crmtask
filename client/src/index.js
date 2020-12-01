@@ -14,6 +14,7 @@ import { AUTH_USER } from './_actions/types';
 import { ADMIN_USER, RBA } from './_actions/admin/types';
 import { ADD_CART_COUNT } from './_actions/types';
 import store from "./store.js";
+import $ from 'jquery';
 
 import "popper.js/dist/popper.js";
 import "jquery/dist/jquery.js";
@@ -62,6 +63,24 @@ if (localStorage.admin_token) {
   })
 
 }
+
+$("body").on("keypress", ".phone", function(e) {
+        if (
+            e.which != 8 &&
+            e.which != 0 &&
+            e.which != 43 &&
+            e.which != 45 &&
+            (e.which < 48 || e.which > 57)
+        ) {
+            return false;
+        }
+    });
+
+  $("body").on("keypress", ".numbers", function(e) {
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+            return false;
+        }
+    });
 
 ReactDOM.render(
   <Provider store={store}>

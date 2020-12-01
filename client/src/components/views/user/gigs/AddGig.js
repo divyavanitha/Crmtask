@@ -2,6 +2,8 @@ import React, { Fragment, useState, FormEvent, Dispatch, useEffect } from "react
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
+import TagsInput from 'react-tagsinput';
+import 'react-tagsinput/react-tagsinput.css';
 import * as Yup from 'yup';
 //import { useToasts } from 'react-toast-notifications'
 
@@ -22,18 +24,31 @@ const AddGig = (props) => {
    //const category = useSelector(state => state.categories && state.categories.category && state.categories.category.responseData.category);
    const category = useSelector(state => state.user.category);
    const category_list = category && category.responseData.categories;
+   const [categorylist, setCategorylist] = useState('');
 
-   const [subCategory, setSubCategory] = useState([])
+   const [subCategory, setSubCategory] = useState([]);
+   const [tags, setTags] = useState([]);
 
-   const handleCategoryChange = async ({ target: input }) => {
-      console.log(input.value);
-      const sub_category = await dispatch(getSubCategory(input.value))
-      if (sub_category && sub_category.responseData.sub_categories) {
-
-         setSubCategory(sub_category.responseData.sub_categories)
+   const handleCategoryChange = async (value, setFieldValue) => {
+      setCategorylist(value);
+      if(value) {
+         setFieldValue('category_id', value);
+         const sub_category = await dispatch(getSubCategory(value));
+         if (sub_category && sub_category.responseData.sub_categories) {
+            setSubCategory(sub_category.responseData.sub_categories)
+         }
       }
+      
 
    }
+
+   const handleTagChange = (tag, setFieldValue) => {
+      setTags(tag);
+      setFieldValue('tags', tag);
+   }
+
+
+
    return (
 
       <Formik
@@ -42,28 +57,30 @@ const AddGig = (props) => {
          initialValues={{
             id: '',
             title: '',
+            category_id: '',
             sub_category_id: '',
-            tags: ''
+            tags: []
 
          }
          }
 
          validationSchema={Yup.object().shape({
-            /*title: Yup.string()
+            title: Yup.string()
                 .required('Title is required'),
             category_id: Yup.string()
                 .required('Category is required'),
             sub_category_id: Yup.string()
                 .required('Sub Category is required'),
             tags: Yup.string()
-                .required('Tags is required'),*/
+                .required('Tags is required'),
          })}
          onSubmit={(values, { setSubmitting, resetForm }) => {
+
             let data = {
                id: values.id,
                title: values.title,
-               sub_category_id: values.sub_category_id,
                category_id: values.category_id,
+               sub_category_id: values.sub_category_id,
                tags: values.tags
             };
 
@@ -74,7 +91,6 @@ const AddGig = (props) => {
                 })
             } else {*/
             dispatch(creategigs(data)).then(res => {
-               console.log('id', res.responseData._id);
                history.push('/gig/post/pricing/' + res.responseData._id)
                //addToast(res.message, { appearance: res.status, autoDismiss: true, })
             })
@@ -159,7 +175,7 @@ const AddGig = (props) => {
                                        {/* <!--- form-group row Starts ---> */}
                                        <div className="col-md-3"> Category </div>
                                        <div className="col-md-9">
-                                          <select name="category_id" className={'form-control mb-3' + (errors.category_id && touched.category_id ? ' is-invalid' : '')} onChange={handleCategoryChange}>
+                                          <select name="category_id" className={'form-control mb-3' + (errors.category_id && touched.category_id ? ' is-invalid' : '')} onChange={(e) => { handleCategoryChange(e.currentTarget.value, setFieldValue) }}>
                                              <option value="">Select Catagory</option>
 
                                              {category_list && category_list.map((c_list) => (<option key={c_list._id} value={c_list._id} onChange={handleCategoryChange}>{c_list.name}</option>))}
@@ -167,13 +183,15 @@ const AddGig = (props) => {
                                           </select>
                                           <ErrorMessage name="category_id" component="div" className="invalid-feedback" />
                                           <small className="form-text text-danger"></small>
-                                          <select name="sub_category_id" className={'form-control' + (errors.sub_category_id && touched.sub_category_id ? ' is-invalid' : '')} onChange={(e) => { console.log(e.currentTarget); setFieldValue('sub_category_id', e.currentTarget.value); }} >
+
+                                          {categorylist && (<Fragment><select name="sub_category_id" className={'form-control' + (errors.sub_category_id && touched.sub_category_id ? ' is-invalid' : '')} onChange={(e) => { setFieldValue('sub_category_id', e.currentTarget.value); }} >
 
                                              <option value="">Sub Catagory</option>
 
                                              {subCategory.map((s_list) => (<option key={s_list._id} value={s_list._id} >{s_list.name}</option>))}
                                           </select>
-                                          <ErrorMessage name="sub_category_id" component="div" className="invalid-feedback" />
+                                          <ErrorMessage name="sub_category_id" component="div" className="invalid-feedback" /></Fragment>) }
+
                                        </div>
                                     </div>
                                     {/* <!--- form-group row Ends ---> */}
@@ -182,7 +200,7 @@ const AddGig = (props) => {
                                        {/* <!--- form-group row Starts ---> */}
                                        <div className="col-md-3">Tags</div>
                                        <div className="col-md-9">
-                                          <input type="text" value={values.tags} onChange={handleChange} name="tags" className={'form-control' + (errors.tags && touched.tags ? ' is-invalid' : '')} data-role="tagsinput" />
+                                          <TagsInput value={tags} name="tags" onChange={(e) => handleTagChange(e, setFieldValue)} className={'form-control' + (errors.tags && touched.tags ? ' is-invalid' : '')} data-role="tagsinput" />
                                           <ErrorMessage name="tags" component="div" className="invalid-feedback" />
                                        </div>
                                        <small className="form-text text-danger"></small>
