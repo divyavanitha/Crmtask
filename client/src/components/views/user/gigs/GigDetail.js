@@ -158,7 +158,7 @@ const GigDetail = (props) => {
                     })
                 } else {
                     dispatch(addCart(data)).then(res => {
-                        history.push('cart-payment-option/' + res.responseData.carts._id)
+                        history.push('/cart-payment-option/' + res.responseData.carts._id)
                     })
                 }
                 resetForm();

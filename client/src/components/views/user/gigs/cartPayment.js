@@ -16,12 +16,12 @@ const Cart = (props) => {
    const dispatch = useDispatch();
    const params = useParams();
    let history = useHistory();
-
+console.log('id', params);
 
    const [total, setTotal] = useState(0);
 
    useEffect(() => {
-      console.log('id', params.id);
+      
       dispatch(getCartList())
       dispatch(getCartbyId(params.id))
 
@@ -148,7 +148,7 @@ const Cart = (props) => {
    const cart = useSelector((state) => state.user && state.user.cart_lists && state.user.cart_lists.carts);
 
    const cart_details = useSelector((state) => state.user && state.user.cart_details && state.user.cart_details.responseData && state.user.cart_details.responseData.carts);
-
+console.log('cart_details', cart_details);
    let cartCount = useSelector((state) => state.user.cart_count);
 
    $(document).ready(function () {
@@ -191,11 +191,21 @@ const Cart = (props) => {
             if (values.payment_mode == "WALLET") {
                wallet = true;
             }
-            let data = {
-               total: values.total,
-               payment_mode: values.payment_mode,
-               wallet: wallet
-            };
+            if(params.id){
+              var data = {
+                  id: params.id,
+                  total: values.total,
+                  payment_mode: values.payment_mode,
+                  wallet: wallet
+               }; 
+            }else{
+               var data = {
+                  total: values.total,
+                  payment_mode: values.payment_mode,
+                  wallet: wallet
+               };
+            }
+            
 
             dispatch(checkout(data)).then(res => {
                history.push('/buyer-order-lists')

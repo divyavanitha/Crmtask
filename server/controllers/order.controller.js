@@ -201,10 +201,21 @@ exports.checkout = async (req, res) => {
     if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {*/
+            if(req.body.id){
+              var carts = await db._get(Cart, {_id: req.body.id});  
+            }else{
+              var carts = await db._get(Cart, {user: req.user._id}, {}, { populate: "gig" }  ); 
+            }
+           let total = 0;
+           for(let i in carts) {
 
-           let carts = await db._get(Cart, {user: req.user._id}, {}, { populate: "gig" }  ); 
+                total = total + carts[i].price;
+            }
+     console.log(total);      
 
            for(let i in carts) {
+
+                total = total + carts[i].price;
 
                 let orderId = 'FIV'+Math.floor(100000 + Math.random() * 900000);
 
@@ -218,7 +229,7 @@ exports.checkout = async (req, res) => {
                     gig: carts[i].gig._id,
                     quantity: carts[i].quantity,
                     price: carts[i].price,
-                    total: req.body.total,
+                    total: total,
                     status: "Progress",
                     deliveryTime: carts[i].deliveryTime,
                     revisions: carts[i].revisions
@@ -373,6 +384,7 @@ exports.rating = async (req, res) => {
 exports.updateOrder = async(req, res) => {
     const schema = Joi.object().options({ abortEarly: false }).keys({
         id: Joi.string().required().label("Order Id"),
+        status: Joi.string().required().label("Status"),
     }).unknown(true);
 
     const { error } = schema.validate(req.body);
