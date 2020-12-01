@@ -6,7 +6,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import $ from 'jquery';
 import "./Gig.css";
-import { getBuyerOrderDetails, rating, getDeliveryStatus } from "../../../../_actions/user.action";
+import { getBuyerOrderDetails, rating, getDeliveryStatus, revisionRequest } from "../../../../_actions/user.action";
 
 import OwlCarousel from 'react-owl-carousel';
 
@@ -20,53 +20,11 @@ const Cart = (props) => {
    const [total, setTotal] = useState(0);
 
    useEffect(() => {
+
       dispatch(getBuyerOrderDetails(params.id))
+
       dispatch(getDeliveryStatus(params.id))
-      //$(document).ready(function () {
-
-         // Sticky Code start //
-         //$("#order-status-bar").sticky({ topSpacing:0,zIndex:500});
-         // Sticky code ends //
-         ////  Countdown Timer Code Starts  ////
-         // Set the date we're counting down to
-
-         /*var countDownDate = new Date("Nov 20, 2020 10:43:07").getTime();
-         // Update the count down every 1 second
-         var x = setInterval(function () {
-            var now = new Date();
-            var nowUTC = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-            var distance = countDownDate - nowUTC;
-            // Time calculations for days, hours, minutes and seconds
-            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            document.getElementById("days").innerHTML = days;
-            document.getElementById("hours").innerHTML = hours;
-            document.getElementById("minutes").innerHTML = minutes;
-            document.getElementById("seconds").innerHTML = seconds;
-            // If the count down is over, write some text 
-            if (distance < 0) {
-               clearInterval(x);
-               $("#countdown-timer .countdown-number").addClass("countdown-number-late");
-               document.getElementById("days").innerHTML = "<span class='red-color'>The</span>";
-               document.getElementById("hours").innerHTML = "<span class='red-color'>Order</span>";
-               document.getElementById("minutes").innerHTML = "<span class='red-color'>is</span>";
-               document.getElementById("seconds").innerHTML = "<span class='red-color'>Late!</span>";
-            }
-         }, 1000);
-
-      });
-*/
-
-         /*$(document).ready(function () {
-
-                  $('.rating-select').barrating({
-                      theme: 'fontawesome-stars'
-                  });
-
-              });*/
-
+      
 
       $("body").on("click", ".complete", function(){
 
@@ -97,14 +55,30 @@ const Cart = (props) => {
 
          });
 
+      $("body").on("click", ".submit_revison", function(){
+        var input = document.getElementById("revision_file");
+        console.log(input.files[0]);
+        const data = new FormData();
+        data.append("id", params.id);
+        data.append("revison_message", $("textarea[name^=revison_message]").val());
+        data.append("revision_file", input.files[0]);
+        dispatch(revisionRequest(data)).then(res => {
+          console.log('id',res.responseData);
+          //history.push('/buyer-order-lists')
+          window.location.reload();
+           
+        })
+
+      });
+
 
    }, [params.id]);
 
    const order_details = useSelector((state) => state.user && state.user.buyer_order_details && state.user.buyer_order_details.responseData && state.user.buyer_order_details.responseData.gig);
 
-   const delivery_status = useSelector((state) => state.user );
+   const delivery_status = useSelector((state) => state.user && state.user.delivery_status && state.user.delivery_status.responseData && state.user.delivery_status.responseData.delivery_status);
 
-   console.log('order', delivery_status);
+   console.log('order', delivery_status && delivery_status);
 
 
 
@@ -117,6 +91,7 @@ const Cart = (props) => {
             order_id: params.id,
             rating: "",
             comment: "",
+            type: "buyer"
          }
          }
 
@@ -133,7 +108,8 @@ const Cart = (props) => {
             let data = {
                 order_id: params.id,
                 rating: values.rating,
-                comment: values.comment
+                comment: values.comment,
+                type: "buyer"
             };
 
             
@@ -333,30 +309,54 @@ const Cart = (props) => {
 
                                     </div> : ""}
 
-                                    {/*<div className="message-div">
+                                    {delivery_status && delivery_status.map((list, index) => (<div className="message-div">
                                            <img src="https://www.gigtodo.com//user_images/ty_1574032240.png" width="50" height="50" className="message-image" />
 
                                              <h5>
 
-                                             <a href="#" className="seller-buyer-name"> tyrone </a>
+                                             <a href="#" className="seller-buyer-name"> {order_details && order_details.seller.firstName} </a>
 
                                              </h5>
 
                                              <p className="message-desc">
 
-                                             fdddfsdf
+                                             {list.deliveredMessage}
 
                                                  <a href='orderIncludes/download?order_id=1611&c_id=1376' className='d-block mt-2 ml-1' target='_blank'>
-                                                   <i className='fa fa-download'></i> download_1606746068.jpeg
+                                                   <i className='fa fa-download'></i> {list.delivery_file}
                                                  </a>
                                                
                                              </p>
 
-                                             <p className="text-right text-muted mb-0"> 08:11: November 30 2020 </p>
+                                             <p className="text-right text-muted mb-0"> {list.created_at}</p>
 
-                                       </div>*/}
+                                       </div>))}
 
-                                       {(order_details && order_details.status == "Delivered") ? <center className="pb-4 mt-4">
+                                      
+
+                                      <div class="card mt-4">
+                                        <div class="card-body">
+                                          <h5 class="text-center"><i class="fa fa-pencil-square-o"></i> Revison Requested By {order_details && order_details.buyer.firstName} </h5>
+                                        </div>
+                                      </div>
+                                      {order_details && order_details.used_revisions ? order_details && order_details.used_revisions.map((list, index) => (<div class="message-div-hover">
+                                        <img src="https://www.gigtodo.com//user_images/cool-profile-picastures-coo_1602176634.png" width="50" height="50" class="message-image" />
+                                              
+                                      <h5><a href="#" class="seller-buyer-name"> {order_details && order_details.buyer.firstName} </a></h5>
+
+                                      <p class="message-desc">
+
+                                      {list.revision_message}
+
+                                      <a href="orderIncludes/download?order_id=1608&c_id=1382" class="d-block mt-2 ml-1" target='_blank'>
+                                        <i class="fa fa-download"></i> {list.revision_file}</a>
+                                      </p>
+
+                                      <p class="text-right text-muted mb-0"> {list.updated_at} </p>
+
+                                      </div>)) : ""}
+
+                                       {(order_details && order_details.status == "Delivered" || order_details && order_details.status == "Revision Requested") ? <center className="pb-4 mt-4">
                                           <div>
                                              <button className="btn btn-success complete">Accept & Review Order</button>
                                              &nbsp;&nbsp;&nbsp;
@@ -366,8 +366,9 @@ const Cart = (props) => {
                                           </div>
                                        </center> : ""}
 
+                                     {/* <p>You have no more revision requests. Your Order revision is completed.</p> */}
 
-                                   {(order_details && order_details.status == "Completed" || order_details && order_details.user_rated == 0)  ? <div className="order-review-box mb-3 p-3">
+                                   {(order_details && order_details.status == "Completed" && order_details && order_details.seller_rated != 1)  ? <div className="order-review-box mb-3 p-3">
 
                                        <h3 className="text-center text-white"> Please Submit a Review For Your Seller</h3>
 
@@ -524,26 +525,28 @@ const Cart = (props) => {
                      {/* modal-dialog Ends */}
                   </div>
                   {/* report-modal modal fade Ends */}
-                  <div id="revision-request-modal" class="modal fade">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title"> Submit Your Revision Request Here </h5>
-                          <button class="close" data-dismiss="modal"> <span>&times;</span> </button>
+                  <div id="revision-request-modal" className="modal fade">
+                    <div className="modal-dialog">
+                      <div className="modal-content">
+                        <div className="modal-header">
+                          <h5 className="modal-title"> Submit Your Revision Request Here </h5>
+                          <button className="close" data-dismiss="modal"> <span>&times;</span> </button>
                         </div>
-                        <div class="modal-body">
+                        <div className="modal-body">
 
                           
-                          <form method="post" enctype="multipart/form-data">
-                            <div class="form-group">
-                              <label class="font-weight-bold" > Request Message </label>
-                              <textarea name="revison_message" placeholder="Type Your Message Here..." class="form-control mb-2" required=""></textarea>
+                          {/* <form method="post" enctype="multipart/form-data"> */}
+                            <div className="form-group">
+                              <label className="font-weight-bold" > Request Message </label>
+                              
+                              <textarea rows="2" id="revison_message" values="test" name="revison_message[]" onChange={handleChange} className='form-control mb-2'></textarea>
                             </div>
-                            <div class="form-group clearfix">
-                              <input type="file" name="revison_file" class="mt-1" />
-                              <input type="submit" name="submit_revison" value="Submit Request" class="btn btn-success float-right" />
+                            <div className="form-group clearfix">
+                              
+                              <input type="file" id="revision_file" name="revision_file" />
+                              <button name="submit_revison" className="btn btn-success float-right submit_revison" >Submit Request</button>
                             </div>
-                          </form>
+                         {/* </form> */}
 
                           
                                 </div>

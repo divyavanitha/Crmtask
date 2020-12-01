@@ -6,7 +6,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import $ from 'jquery';
 import "./Gig.css";
-import { getSellerOrderDetails,updateOrder } from "../../../../_actions/user.action";
+import { getSellerOrderDetails,updateOrder, rating, getDeliveryStatus } from "../../../../_actions/user.action";
 
 import OwlCarousel from 'react-owl-carousel';
 
@@ -22,6 +22,7 @@ const Cart = (props) => {
 
    useEffect(() => {
       dispatch(getSellerOrderDetails(params.id))
+      dispatch(getDeliveryStatus(params.id))
       //$(document).ready(function () {
 
          // Sticky Code start //
@@ -58,12 +59,31 @@ const Cart = (props) => {
 
       });*/
 
+      $("body").on("click", ".review", function(){
+
+         let data = {
+                order_id: params.id,
+                rating: $("#rating option:selected").val(),
+                comment: $("textarea[name=comment]").val(),
+                type: "seller"
+            };
+
+            dispatch(rating(data)).then(res => {
+                console.log('id',res.responseData);
+                //history.push('/buyer-order-lists')
+                window.location.reload();
+                 
+              })
+      });
+
 
    }, [params.id]);
 
    const order_details = useSelector((state) => state.user && state.user.seller_order_details && state.user.seller_order_details.responseData && state.user.seller_order_details.responseData.order);
 
-   console.log('order', order_details);
+   const delivery_status = useSelector((state) => state.user && state.user.delivery_status && state.user.delivery_status.responseData && state.user.delivery_status.responseData.delivery_status);
+
+   console.log('order', delivery_status && delivery_status);
 
    return (
 
@@ -100,6 +120,7 @@ const Cart = (props) => {
                   console.log('id',res.responseData);
                   setStatus(res.responseData.status);
                   $('#deliver-order-modal').modal("hide");
+                  window.location.reload();
                 })
             
             resetForm();
@@ -182,7 +203,8 @@ const Cart = (props) => {
                                              | <span className="font-weight-bold ml-1"> Status: </span>
                                                                {status ? status :  order_details && order_details.status}             | <span className="font-weight-bold ml-1"> Date: </span>
                                                                {order_details && order_details.created_at}             | <span className="font-weight-bold ml-1"> Order Revisions: </span>
-                                                               {order_details && order_details.revisions}
+                                                               {order_details && order_details.revisions} | <span className="font-weight-bold ml-1"> Revisions Used: </span>
+                                                               {order_details && order_details.used_revisions.length}
                                                             </p>
                                                          </div>
                                                       </div>
@@ -269,15 +291,104 @@ const Cart = (props) => {
                                  
                               </div>*/}
                                                 {/* message-div Ends */}
-                                                <center>
+
+                                       {delivery_status && delivery_status.map((list, index) => (<div className="message-div">
+                                           <img src="https://www.gigtodo.com//user_images/ty_1574032240.png" width="50" height="50" className="message-image" />
+
+                                             <h5>
+
+                                             <a href="#" className="seller-buyer-name"> {order_details && order_details.seller.firstName} </a>
+
+                                             </h5>
+
+                                             <p className="message-desc">
+
+                                             {list.deliveredMessage}
+
+                                                 <a href='orderIncludes/download?order_id=1611&c_id=1376' className='d-block mt-2 ml-1' target='_blank'>
+                                                   <i className='fa fa-download'></i> {list.delivery_file}
+                                                 </a>
+                                               
+                                             </p>
+
+                                             <p className="text-right text-muted mb-0"> {list.created_at}</p>
+
+                                       </div>))}
+
+                                       <div class="card mt-4">
+                                        <div class="card-body">
+                                          <h5 class="text-center"><i class="fa fa-pencil-square-o"></i> Revison Requested By {order_details && order_details.buyer.firstName} </h5>
+                                        </div>
+                                      </div>
+                                      {order_details && order_details.used_revisions ? order_details && order_details.used_revisions.map((list, index) => (<div class="message-div-hover">
+                                        <img src="https://www.gigtodo.com//user_images/cool-profile-picastures-coo_1602176634.png" width="50" height="50" class="message-image" />
+                                              
+                                      <h5><a href="#" class="seller-buyer-name"> {order_details && order_details.buyer.firstName} </a></h5>
+
+                                      <p class="message-desc">
+
+                                      {list.revision_message}
+
+                                      <a href="orderIncludes/download?order_id=1608&c_id=1382" class="d-block mt-2 ml-1" target='_blank'>
+                                        <i class="fa fa-download"></i> {list.revision_file}</a>
+                                      </p>
+
+                                      <p class="text-right text-muted mb-0"> {list.updated_at} </p>
+
+                                      </div>)) : ""}
+
+                                       
+
+                                                {(order_details && order_details.status != "Completed") ? <center>
                                                    <button className="btn btn-success btn-lg mt-5 mb-3" data-toggle="modal" data-target="#deliver-order-modal">
                                                    <i className="fa fa-upload"></i> Deliver Order
                                                    </button>
-                                                </center>
+                                                </center> : ""}
+
+                              {(order_details && order_details.status == "Completed" && order_details && order_details.buyer_rated  != 1)  ? <div className="order-review-box mb-3 p-3">
+
+                                       <h3 className="text-center text-white"> Please Submit a Review For Your Seller</h3>
+
+                                       <div className="row">
+
+                                           <div className="col-md-8 offset-md-2">
+
+                                               {/* <form onSubmit={handleSubmit} encType="multipart/form-data" align="center"> */}
+
+                                                   <div className="form-group">
+
+                                                       <label className="h6 text-white">Review Rating</label>
+
+                                                       <select name="rating" onChange={handleChange} id="rating" className="rating-select">
+
+                                                           <option value="1">1</option>
+                                                           <option value="2">2</option>
+                                                           <option value="3">3</option>
+                                                           <option value="4">4</option>
+                                                           <option value="5">5</option>
+
+                                                       </select>
+
+                                                   </div>
+
+                                                   <Field component="textarea" rows="5" id="comment" value={values.comment} name="comment" onChange={handleChange} maxLength={100} className='form-control mb-2' />
+
+                                                   <button className="btn btn-success review"> Submit Review </button>
+
+
+                                                {/* </form> */}
+
+                                               
+                                           </div>
+
+
+                                       </div>
+
+                                   </div> : ""}
 
                                                 <div className="proposal_reviews mt-5">
                                                 </div>
-                                                <div className="insert-message-box">
+                                                {(order_details && order_details.status != "Completed") ?<div className="insert-message-box">
                                                    <div className="float-right">
                                                       <p className="text-muted mt-1">
                                                          {order_details && order_details.seller.firstName}      <span className="text-success font-weight-bold"
@@ -303,7 +414,7 @@ const Cart = (props) => {
                                                       </div>
                                                       {/* form-row align-items-center message-attacment Ends */}
                                                    </form>
-                                                </div>
+                                                </div>: ""}
                                                 <div id="upload_file_div"></div>
                                                 <div id="message_data_div"></div>
                                              </div>

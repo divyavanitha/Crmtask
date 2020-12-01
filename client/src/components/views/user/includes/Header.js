@@ -325,7 +325,7 @@ function Header() {
                                         <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#selling">
                                             Selling   </a>
                                         <div id="selling" className="dropdown-submenu collapse">
-                                            <Link className="dropdown-item" to="/seller-order-lists">
+                                            <Link className="dropdown-item" to="/selling-order-lists">
                                                 Orders      </Link>
                                             <Link className="dropdown-item" to="/gig/list"> My Gigs </Link>
                                             <a className="dropdown-item" href="proposals/create_coupon">
@@ -340,7 +340,7 @@ function Header() {
                                         <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#buying">
                                             Buying   </a>
                                         <div id="buying" className="dropdown-submenu collapse">
-                                            <Link className="dropdown-item" to="/buyer-order-lists">
+                                            <Link className="dropdown-item" to="/buying-order-lists">
                                                 Orders      </Link>
                                             <a className="dropdown-item" href="purchases">
                                                 Purchases      </a>

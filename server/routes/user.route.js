@@ -170,6 +170,11 @@ router.post('/gig/checkout', middleware.user, function(req, res){
 router.post('/gig/update/orderStatus',[middleware.user, middleware.upload( path.join(__dirname, '../storage/images/order/') ).fields([{ name: 'delivery_file', maxCount: 1 }]) ], function(req, res){
   orderController.updateOrder(req, res);
 });
+
+router.post('/gig/revisionRequest',[middleware.user, middleware.upload( path.join(__dirname, '../storage/images/revision/') ).fields([{ name: 'revision_file', maxCount: 1 }]) ], function(req, res){
+  orderController.revisionRequest(req, res);
+});
+
 router.post('/gig/rate', middleware.user, function(req, res){
   orderController.rating(req, res);
 });

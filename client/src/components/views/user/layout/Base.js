@@ -65,9 +65,9 @@ const Base = () => {
                 <ProtectedRoute path="/gig/post" component={AddGig} />
                 <Route path="/gig/:user/:gig" component={GigDetail} />
                 <ProtectedRoute path="/cart" component={Cart} />
-                <ProtectedRoute path="/buyer-order-lists" component={BuyerOrderList} />
+                <ProtectedRoute path="/buying-order-lists" component={BuyerOrderList} />
                 <ProtectedRoute path="/order/details/:id" component={OrderDetails} />
-                <ProtectedRoute path="/seller-order-lists" component={SellerOrderList} />
+                <ProtectedRoute path="/selling-order-lists" component={SellerOrderList} />
                 <ProtectedRoute path="/seller-order/details/:id" component={SellerOrderDetails} />
                 <ProtectedRoute path="/request/add" component={AddRequest} />
                 <ProtectedRoute path="/request/manage" component={RequestList} />

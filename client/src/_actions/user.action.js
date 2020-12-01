@@ -429,7 +429,7 @@ export const updateOrder = (data) => async dispatch => {
 
 export const rating = (data) => async dispatch => {
     try {
-        let response = await axios.post('/api//gig/rate', data);
+        let response = await axios.post('/api/gig/rate', data);
         response.data.status = 'success';
         return response.data;
     } catch (e) {
@@ -446,4 +446,16 @@ export const getDeliveryStatus = (id) => async dispatch => {
         type: GET_DELIVERY_STATUS,
         payload: delivery_status.data
     });
+}
+
+export const revisionRequest = (data) => async dispatch => {
+    try {
+        let response = await axios.post('/api/gig/revisionRequest', data);
+        response.data.status = 'success';
+        return response.data;
+    } catch (e) {
+        e.response.data.status = 'error';
+        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        return e.response.data;
+    }
 }

@@ -202,7 +202,7 @@ exports.checkout = async (req, res) => {
 
     try {*/
             if(req.body.id){
-              var carts = await db._get(Cart, {_id: req.body.id});  
+              var carts = await db._get(Cart, {_id: req.body.id}, {}, { populate: "gig" });  
             }else{
               var carts = await db._get(Cart, {user: req.user._id}, {}, { populate: "gig" }  ); 
             }
@@ -262,9 +262,16 @@ exports.buyerOrderList = async (req, res) => {
 
         let orders = await db._get(Order, {buyer: req.user._id}, {}, {populate: "gig"});
 
-        const data = { orders };
+        let delivered_order = await db._get(Order, {buyer: req.user._id, status: "Delivered"}, {}, {populate: "gig"});
 
-        const response = helper.response({ data });
+        let completed_order = await db._get(Order, {buyer: req.user._id, status: "Completed"}, {}, {populate: "gig"});
+
+        let cancelled_order = await db._get(Order, {buyer: req.user._id, status: "Cancelled"}, {}, {populate: "gig"});
+
+        let active_order = await db._get(Order, {buyer: req.user._id, status:  {$in : ["Progress", "Cancellation Requested", "Revision Requested", "Delivered"]}  }, {}, {populate: "gig"});
+
+        const response = helper.response({ data: {"orders": orders, "delivered_order": delivered_order, "completed_order": completed_order, "cancelled_order": cancelled_order, "active_order": active_order } });
+
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -276,7 +283,7 @@ exports.buyerOrderList = async (req, res) => {
 exports.buyerOrderDetails = async (req, res) => {
     try {
 
-        let gig = await db._find(Order, {_id: req.params.id}, {}, { populate: ["gig","seller"] });
+        let gig = await db._find(Order, {_id: req.params.id}, {}, { populate: ["gig","seller","buyer"] });
 
 
         const data = { gig };
@@ -296,9 +303,15 @@ exports.sellerOrderList = async (req, res) => {
 
         let orders = await db._get(Order, {seller: req.user._id}, {}, {populate: "gig"});
 
-        const data = { orders };
+        let delivered_order = await db._get(Order, {seller: req.user._id, status: "Delivered"}, {}, {populate: "gig"});
 
-        const response = helper.response({ data });
+        let completed_order = await db._get(Order, {seller: req.user._id, status: "Completed"}, {}, {populate: "gig"});
+
+        let cancelled_order = await db._get(Order, {seller: req.user._id, status: "Cancelled"}, {}, {populate: "gig"});
+
+        let active_order = await db._get(Order, {seller: req.user._id, status:  {$in : ["Progress", "Cancellation Requested", "Revision Requested", "Delivered"]} }, {}, {populate: "gig"});
+
+        const response = helper.response({ data: {"orders": orders, "delivered_order": delivered_order, "completed_order": completed_order, "cancelled_order": cancelled_order, "active_order": active_order } });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -310,7 +323,7 @@ exports.sellerOrderList = async (req, res) => {
 exports.sellerOrderDetails = async (req, res) => {
     try {
 
-        let order = await db._find(Order, {_id: req.params.id}, {}, { populate: ["gig","buyer"] });
+        let order = await db._find(Order, {_id: req.params.id}, {}, { populate: ["gig","buyer","seller"] });
 
 
         const data = { order };
@@ -361,8 +374,12 @@ exports.rating = async (req, res) => {
         let ratings= await db._store(Rating, rating);
 
         let order = await Order.findById(req.body.order_id);
-
-        order.user_rated=1;
+        if(req.body.type == "buyer"){
+            order.seller_rated=1;
+        }else{
+            order.buyer_rated=1;
+        }
+        
 
         let orders = await db._update(Order, { _id: req.body.order_id }, order);
 
@@ -441,8 +458,7 @@ exports.updateOrder = async(req, res) => {
 exports.deliveryStatus = async (req, res) => {
     try {
 
-        let delivery_status = await db._find(DeliveryStatus, {order: req.params.id});
-
+        let delivery_status = await db._get(DeliveryStatus, {order: req.params.id});
 
         const data = { delivery_status };
 
@@ -454,5 +470,72 @@ exports.deliveryStatus = async (req, res) => {
         console.log(err);
     }
 
+}
+
+exports.revisionRequest = async(req, res) => {
+    const schema = Joi.object().options({ abortEarly: false }).keys({
+        id: Joi.string().required().label("Order Id"),
+        revison_message: Joi.string().required().label("Revision Message")
+    }).unknown(true);
+
+    const { error } = schema.validate(req.body);
+
+    let errorMessage = {};
+
+    if (error) {
+        error.details.forEach(err => {
+            errorMessage[err.context.key] = (err.message).replace(/"/g, "")
+        })
+    }
+
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
+
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
+
+    try {
+
+        let order = await Order.findById(req.body.id);
+        const arr = order.used_revisions;
+        let index = (arr.length - 1);
+
+        let revision = [];
+
+        if (index === -1) {
+           let data = { 
+            revison_message: req.body.revison_message,  
+            }
+            if(req.files['revision_file']) data.revision_file = req.protocol+ '://' +req.get('host')+"/images/revision/" + req.files['revision_file'][0].filename;
+
+            revision.push(data);
+            
+            order.used_revisions = revision; 
+
+        }else{
+            let data = { 
+            revison_message: req.body.revison_message,  
+            }
+            if(req.files['revision_file']) data.revision_file = req.protocol+ '://' +req.get('host')+"/images/revision/" + req.files['revision_file'][0].filename;
+            
+            arr[index+1] = data;
+            revision = arr[index];
+        }
+        console.log('revision', revision);
+        
+
+        order.status= "Revision Requested";
+
+        let orders = await db._update(Order, { _id: req.body.id }, order);
+        const response = helper.response({ message: res.__('updated'), data: order });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                return res.status(422).json(err.errors[i].message);
+            }
+        } else {
+            return res.status(422).json(err);
+        }
+    }
 }
 

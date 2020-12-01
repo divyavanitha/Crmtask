@@ -41,6 +41,10 @@ const orderSchema = mongoose.Schema({
         type: String, 
         required: true
     },
+    used_revisions: [{
+        revison_message: { type: String },
+        revision_file: { type: String }
+    }],
     deliveryTime: { 
         type: String, 
         required: false 
@@ -53,7 +57,11 @@ const orderSchema = mongoose.Schema({
         type: String, 
         required: true
     },
-    user_rated: {
+    buyer_rated: {
+        type: Number,
+        default: 0
+    },
+    seller_rated: {
         type: Number,
         default: 0
     },
