@@ -6,6 +6,7 @@ import {
     GET_SUBCATEGORY,
     GET_SLIDES,
     GET_GIGS,
+    GET_GIG,
     FIND_GIG,
     GET_DELIVERY_TIME,
     GET_PACKAGE,
@@ -47,6 +48,8 @@ const userReducer = (state = initialState, action) => {
         case GET_SLIDES:
             return { ...state, slide: action.payload }
         case GET_GIGS:
+            return { ...state, gigs: action.payload }
+        case GET_GIG:
             return { ...state, gig: action.payload }
         case FIND_GIG:
             return { ...state, gig_details: action.payload }

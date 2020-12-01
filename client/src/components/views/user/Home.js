@@ -22,7 +22,7 @@ function Home() {
    }, []);
 
    const slide = useSelector((state) => state.user && state.user.slide && state.user.slide.responseData && state.user.slide.responseData.slides);
-   const gig = useSelector((state) => state.user && state.user.gig && state.user.gig.responseData && state.user.gig.responseData.gigs);
+   const gig = useSelector((state) => state.user && state.user.gigs && state.user.gigs.responseData && state.user.gigs.responseData.gigs);
 
    return (
 
@@ -559,11 +559,7 @@ function Home() {
                         </div>
                      </div>
                   </div>
-                  <div className="row">
-
-
-
-                     <Gig /> </div>
+                  <div className="row"> {gig && gig.map((list) => (<Gig key={list._id} list={list} />))} </div>
 
                   {/* <!-- If You have no gigs, show random gigs on homepage --> */}
                   <div className="row mb-3 mt-3">

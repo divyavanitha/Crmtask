@@ -50,6 +50,8 @@ export const GET_SLIDES = 'GET_SLIDES';
 
 export const GET_GIGS = 'GET_GIGS';
 
+export const GET_GIG = 'GET_GIG';
+
 export const FIND_GIG = 'FIND_GIG';
 
 export const GET_DELIVERY_TIME = 'GET_DELIVERY_TIME';

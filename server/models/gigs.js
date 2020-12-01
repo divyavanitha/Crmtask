@@ -19,11 +19,7 @@ const gigSchema = mongoose.Schema({
     description: { type: String },
     category: { type: Schema.Types.ObjectId, ref: 'category' },
     subCategory : { type: Schema.Types.ObjectId, ref: 'SubCategory' },
-    tags: {
-        type: String,
-        required: true,
-        trim: true
-    },
+    tags: [],
     requirement: {
         type: String
     },

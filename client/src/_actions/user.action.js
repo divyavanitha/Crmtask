@@ -1,4 +1,5 @@
 import axios from 'axios';
+import queryString from 'query-string';
 import setToken from '../components/utils/set_token';
 import {
     AUTH_USER,
@@ -10,6 +11,7 @@ import {
     GET_CATEGORY,
     GET_SLIDES,
     GET_GIGS,
+    GET_GIG,
     FIND_GIG,
     GET_DELIVERY_TIME,
     GET_PACKAGE,
@@ -209,17 +211,6 @@ export const getSlide = (data) => async dispatch => {
 
 };
 
-export const getGigWithoutAuth = (data) => async dispatch => {
-
-    let gig = await axios.get("/api/list/gigs", data);
-
-    dispatch({
-        type: GET_GIGS,
-        payload: gig.data
-    });
-
-};
-
 export const getGigbyId = (id) => dispatch => {
     axios
         .get(`/api/get/gig/details/${id}`)
@@ -236,6 +227,17 @@ export const getGigbyId = (id) => dispatch => {
                 payload: null
             })
         );
+};
+
+export const getGigbyCategory = (data) => async dispatch => {
+
+    let gig = await axios.get( `/api/list/gigs?${ queryString.stringify(data) }` );
+
+    dispatch({
+        type: GET_GIG,
+        payload: gig.data
+    });
+
 };
 
 export const getCartbyId = (id) => dispatch => {
@@ -286,6 +288,17 @@ export const addCart = (data) => async dispatch => {
         return e.response.data;
     }
 }
+
+export const getGigWithoutAuth = (data) => async dispatch => {
+
+    let gig = await axios.get( `/api/list/gigs?${ queryString.stringify(data) }` );
+
+    dispatch({
+        type: GET_GIGS,
+        payload: gig.data
+    });
+
+};
 
 export const getCartList = (data) => async dispatch => {
 

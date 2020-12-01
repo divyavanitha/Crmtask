@@ -1,16 +1,30 @@
 const express = require("express");
 const { User } = require("../models/user");
 const { Gig } = require('../models/gigs');
+const { Category } = require('../models/category');
+const { SubCategory } = require('../models/SubCategory');
 const helper = require('../services/helper.js');
 const db = require('../services/model.js');
 const Joi = require('@hapi/joi');
 const _ = require('lodash');
 
 
-exports.withoutAuthgigs = async (req, res) => {
+exports.listgigs = async (req, res) => {
     try {
 
-        let gigs = await db._get(Gig, {}, {}, {populate: "user"});
+        let projection = {};
+
+        if(req.query.category) {
+            let category = await db._find( Category, {name: req.query.category}, {_id: 1} );
+            projection.category = category._id;
+        }
+
+        if(req.query.subcategory) {
+            let subcategory = await db._find(SubCategory, {name: req.query.subcategory}, {_id: 1} );
+            projection.subCategory = subcategory._id;
+        }
+
+        let gigs = await db._get(Gig, projection, {}, {populate: "user"});
 
         const data = { gigs };
 
@@ -59,7 +73,7 @@ exports.getPackage = async (req, res) => {
 
 }
 
-exports.listgigs = async (req, res) => {
+exports.usergigs = async (req, res) => {
     try {
 
         let gigs = await db._get(Gig, { user: req.user._id });
@@ -76,13 +90,12 @@ exports.listgigs = async (req, res) => {
 }
 
 exports.creategigs = async (req, res) => {
-/*console.log(req.user);
-return true;*/
+
     const schema = Joi.object().options({ abortEarly: false }).keys({
         title: Joi.string().required().label("Title"),
-        //category_id: Joi.string().required().label("Category Id"),
+        category_id: Joi.string().required().label("Category Id"),
         sub_category_id: Joi.string().required().label("Sub Category Id"),
-        tags: Joi.string().required().label("Tags")
+        tags: Joi.array().required().label("Tags")
 
     }).unknown(true);
 

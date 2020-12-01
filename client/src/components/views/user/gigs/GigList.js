@@ -149,7 +149,7 @@ const GigList = (props) => {
                               </tbody>
                            </table>
                            <center>
-                              <h3 class='pt-4 pb-4'><i class='fa fa-smile-o'></i> You currently have no paused proposals/services.</h3>
+                              <h3 className='pt-4 pb-4'><i className='fa fa-smile-o'></i> You currently have no paused proposals/services.</h3>
                            </center>
                         </div>
                      </div>
@@ -582,7 +582,7 @@ const GigList = (props) => {
                               </tbody>
                            </table>
                            <center>
-                              <h3 class='pt-4 pb-4'><i class='fa fa-smile-o'></i> You currently have no proposals/services declined.</h3>
+                              <h3 className='pt-4 pb-4'><i className='fa fa-smile-o'></i> You currently have no proposals/services declined.</h3>
                            </center>
                         </div>
                      </div>

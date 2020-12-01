@@ -53,7 +53,7 @@ const Pricing = (props) => {
    let package_id = [];
    if (packages) {
       for (let i in packages) {
-         descriptions.push("");
+         descriptions.push("sgh");
          delivery_times.push("");
          revisions.push("");
          prices.push("");
@@ -179,9 +179,9 @@ const Pricing = (props) => {
                                  <form onSubmit={handleSubmit} encType="multipart/form-data">
                                     <div className="float-right switch-box">
                                        <span className="text">Fixed Price :</span>
-                                       <label class='switch'>
+                                       <label className='switch'>
                                           <input type='checkbox' onClick={(e) => { setFieldValue(`fixed_price`, e.currentTarget.checked); }} value={values.fixed_price} name='fixed_price' />
-                                          <span class='slider round'></span>
+                                          <span className='slider round'></span>
                                        </label>
                                     </div>
                                     <div className="clearfix"></div>
@@ -263,7 +263,7 @@ const Pricing = (props) => {
                                              <tr>
                                                 <th></th>
                                                 {packages && packages.map((pack, index) => (
-                                                   <th>{pack.name}
+                                                   <th key={index}>{pack.name}
                                                       <Field name={`package_id.${index}`} onChange={handleChange} value={values.package_id} type="hidden" className="form-control" />
                                                    </th>
                                                 ))}
@@ -274,7 +274,7 @@ const Pricing = (props) => {
                                                 <td>Description</td>
 
                                                 {descriptions.map((description, index) => (
-                                                   <td className="p-0"><Field as="textarea" name={`description.${index}`} onChange={handleChange} className="form-control" values={values.description} placeholder="Description" rows="3" />
+                                                   <td className="p-0"><Field as="textarea" name={`description.${index}`} onChange={handleChange} className="form-control" values={`values.description.[index]`} placeholder="Description" rows="3" />
 
                                                    </td>
                                                 ))}
@@ -312,7 +312,7 @@ const Pricing = (props) => {
                                              <tr>
                                                 <td>Price</td>
                                                 {prices.map((price, index) => (
-                                                   <td className="p-0"><Field name={`price.${index}`} onChange={handleChange} className="form-control" values={values.price} placeholder="Price" rows="3" /></td>
+                                                   <td className="p-0"><Field name={`price.${index}`} onChange={handleChange} className="form-control numbers" values={values.price} placeholder="Price" rows="3" /></td>
                                                 ))}
                                              </tr>
                                           </tbody>
