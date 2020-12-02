@@ -179,16 +179,14 @@ exports.updatePricing = async(req, res) => {
         let gig = await Gig.findById(req.body.id);
 
         let pricing = [];
-console.log('gig',req.body);
+        console.log('gig',req.body);
         for(let i in req.body.price) {
             if(req.body.fixed_price == 1){
-                var price = {
-                    //package: req.body.package_id[i],
+                var price = {                  
                     description: req.body.description[i],
                     revisions: req.body.revisions[i],
                     price: req.body.price[i],
-                    DeliveryTime: req.body.delivery_time_id[i],
-                    //fixed_price: 1
+                    DeliveryTime: req.body.delivery_time_id[i],                   
                 }
             }else{
                 var price = {
@@ -197,7 +195,6 @@ console.log('gig',req.body);
                     revisions: req.body.revisions[i],
                     price: req.body.price[i],
                     DeliveryTime: req.body.delivery_time_id[i],
-                    //fixed_price: 0
                 }
             }
             pricing.push(price);
@@ -223,7 +220,7 @@ console.log('gig',req.body);
 }
 
 exports.Faq = async(req, res) => {
-    //console.log(req.body);
+
     if(req.body.action == "faq"){
         var schema = Joi.object().options({ abortEarly: false }).keys({
             question: Joi.array().required().label("Question"),
@@ -258,7 +255,7 @@ exports.Faq = async(req, res) => {
         const arr = gig.faq;
         let index = (arr.length - 1);//arr.findIndex((e) => e._id); //e.id === obj.id
         let faqs = [];
-console.log('index',index);
+        console.log('index',index);
         if (index === -1) {
             for(let i in req.body.question) {
                 let faq = {
@@ -406,10 +403,7 @@ exports.updateRequirement = async(req, res) => {
         let gig = await Gig.findById(req.body.id);
 
         gig.requirement = req.body.requirement;
-console.log(gig);
         let gigs = await db._update(Gig, { _id: req.body.id }, gig);
-//console.log(gigs);
-
         const response = helper.response({ message: res.__('updated'), data: gig });
         return res.status(response.statusCode).json(response);
 
@@ -449,7 +443,7 @@ exports.updateImage = async(req, res) => {
         let gig = await Gig.findById(req.body.id);
 
         let photos = [];
-console.log('files',req.files);
+        console.log('files',req.files);
         for(i in req.files['photo[]']) {
 
             let image = {
@@ -503,8 +497,6 @@ exports.updateConfirm = async(req, res) => {
         let gig = await Gig.findById(req.body.id);
          gig.proposal = req.body.proposal;
         let gigs = await db._update(Gig, { _id: req.body.id }, gig);
-//console.log(gigs);
-
         const response = helper.response({ message: res.__('updated'), data: gigs });
         return res.status(response.statusCode).json(response);
 
@@ -537,87 +529,6 @@ exports.deleteGig = async (req, res) => {
     }
 
 };
-exports.getallgigs = async (req, res) => {
-    const errors = {};
 
-    Gig.find()
-        .then(gigs => {
-            if (!gigs) {
-                errors.nogigs = 'There are no gigs';
-                return res.status(404).json(errors);
-            }
-
-            res.json({ gigs });
-        })
-        .catch(err => res.status(404).json({ gigs: 'There are no gigs' }));
-}
-exports.getallyourgigs = async (req, res) => {
-    const errors = {};
-    Gig.find()
-        .populate({
-            path: 'user',
-            match: { _id: { $eq: req.user._id } }
-        }
-        )
-        .then(gig => {
-            if (!gig) {
-
-                errors = 'There are no gig';
-                return res.status(404).json(errors);
-            }
-            for (let i = 0; i <= gig.length; i++) {
-                let gigs = gigs.filter(gigg => gigg.user !== null)
-            }
-            res.json({ gigs });
-        })
-        .catch(err => res.status(404).json({ gigs: 'There are no postjob for user' }));
-
-
-}
-exports.findgigbyid = async (req, res) => {
-    const errors = {};
- console.log("Findbyid");
-    Gig.findById(req.params.gigid)
-        // .populate('user')
-        .then(gigs => {
-            if (!gigs) {
-                errors.noprofile = 'There is no gigs';
-                return res.status(404).json(errors);
-            }
-            res.json(gigs);
-        })
-        .catch(err => res.status(404).json(err));
-}
-exports.Extragigs = async (req, res) => {
-    // const { errors, isValid } = validateExperienceInput(req.body);
-
-    // Check Validation
-    // if (!isValid) {
-    //   // Return any errors with 400 status
-    //   return res.status(400).json(errors);
-    // }
-    const gig = await Gig.findOne({ user: req.user.id })
-    const newExtragigs = req.body;
-    // console.log("newExtragigs",newExtragigs);
-    // console.log("gig",gig);
-    // Add to exp array
-    gig.myextragigs = [];
-    console.log("Extragigs: ", newExtragigs)
-    const gigextra = gig.myextragigs.unshift(newExtragigs);
-    // const gigextra=gig.myextragigs.unshift(newExtragigs);
-    console.log("gigextra", gigextra);
-    console.log("gig.myextragigs", gig.myextragigs
-    );
-
-    const gigexp = gig.myextragigs;
-
-    await Gig.findByIdAndUpdate(gig.id, { myextragigs: gigexp }).then((err, data) => {
-        if (err) return res.json({ err })
-        res.json(
-            { data })
-
-    }
-    );
-}
 
 

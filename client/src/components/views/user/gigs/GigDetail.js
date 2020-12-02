@@ -6,7 +6,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import $ from 'jquery';
 import "./Gig.css";
-import { getGigbyId, createOrder, getPackage, addCart } from "../../../../_actions/user.action";
+import { getGigbyId, getPackage, addCart } from "../../../../_actions/user.action";
 
 import OwlCarousel from 'react-owl-carousel';
 import {

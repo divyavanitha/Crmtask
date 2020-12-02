@@ -10,6 +10,7 @@ const profilecontroller = require('../controllers/profile.controller');
 const gigController = require('../controllers/gigs.controller');
 const orderController = require('../controllers/order.controller');
 const proposalController = require('../controllers/proposal.controller');
+const cartController = require('../controllers/cart.controller');
 
 
 router.post('/login', (req, res) => {
@@ -143,24 +144,25 @@ router.post('/gig/confirm', middleware.user, function(req, res){
 router.delete('/gig/delete/:id', middleware.user, function(req, res){
   gigController.deleteGig(req, res);
 });
+
 /*Cart*/
 router.get('/gig/cart', middleware.user, function(req, res){
-  orderController.listcart(req, res);
+  cartController.listcart(req, res);
 });
 router.get('/gig/cart/count', middleware.user, function(req, res){
-  orderController.cartCount(req, res);
+  cartController.cartCount(req, res);
 });
 router.post('/gig/cart', middleware.user, function(req, res){
-  orderController.addcart(req, res);
+  cartController.addcart(req, res);
 });
 router.patch('/update/cart', middleware.user, function(req, res){
-  orderController.updateCart(req, res);
+  cartController.updateCart(req, res);
 });
 router.delete('/gig/cart/:id', middleware.user, function(req, res){
-  orderController.removecart(req, res);
+  cartController.removecart(req, res);
 });
 router.get('/find/cart/:id', middleware.user, function(req, res){
-  orderController.findcart(req, res);
+  cartController.findcart(req, res);
 });
 
 /*Order*/
@@ -179,26 +181,7 @@ router.post('/gig/rate', middleware.user, function(req, res){
   orderController.rating(req, res);
 });
 
-router.get('/buyer/orderlist', middleware.user, function(req, res){
-  orderController.buyerOrderList(req, res);
-});
-
-router.get('/buyer/orderdetails/:id', middleware.user, (req, res) => {
-  orderController.buyerOrderDetails(req, res);
-});
-
-router.get('/seller/orderlist', middleware.user, function(req, res){
-  orderController.sellerOrderList(req, res);
-});
-
-router.get('/seller/orderdetails/:id', middleware.user, (req, res) => {
-  orderController.sellerOrderDetails(req, res);
-});
-
-router.get('/delivery/status/:id', middleware.user, (req, res) => {
-  orderController.deliveryStatus(req, res);
-});
-
+/*Proposal Request*/
 router.post('/request', [middleware.user, middleware.upload( path.join(__dirname, '../storage/images/request/') ).fields([{ name: 'files[]', maxCount: 4 }]) ], (req, res) => {
   proposalController.createrequest(req, res);
 });
@@ -214,6 +197,26 @@ router.post('/send_sms', (req, res) => {
 
 router.post('/send_mail', (req, res) => {
   homeController.sendMail(req, res);
+});
+
+router.get('/buyer/orderlist', middleware.user, function(req, res){
+  homeController.buyerOrderList(req, res);
+});
+
+router.get('/buyer/orderdetails/:id', middleware.user, (req, res) => {
+  homeController.buyerOrderDetails(req, res);
+});
+
+router.get('/seller/orderlist', middleware.user, function(req, res){
+  homeController.sellerOrderList(req, res);
+});
+
+router.get('/seller/orderdetails/:id', middleware.user, (req, res) => {
+  homeController.sellerOrderDetails(req, res);
+});
+
+router.get('/delivery/status/:id', middleware.user, (req, res) => {
+  homeController.deliveryStatus(req, res);
 });
 
 /* //const auth = require("../middlewares/auth");

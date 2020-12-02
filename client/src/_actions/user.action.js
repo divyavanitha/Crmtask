@@ -260,18 +260,6 @@ export const getCartbyId = (id) => dispatch => {
         );
 };
 
-export const createOrder = (data) => async dispatch => {
-    try {
-        let response = await axios.post('/api/gig/checkout', data);
-        console.log('data', response);
-        response.data.status = 'success';
-        return response.data;
-    } catch (e) {
-        e.response.data.status = 'error';
-        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
-        return e.response.data;
-    }
-}
 
 export const addCart = (data) => async dispatch => {
     try {
@@ -333,17 +321,7 @@ export const deleteCart = (id) => async dispatch => {
     }
 };
 
-export const checkout = (data) => async dispatch => {
-    try {
-        let response = await axios.post('/api/gig/checkout', data);
-        response.data.status = 'success';
-        return response.data;
-    } catch (e) {
-        e.response.data.status = 'error';
-        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
-        return e.response.data;
-    }
-}
+
 
 export const buyerOrderList = (data) => async dispatch => {
 
@@ -415,29 +393,7 @@ export const getSellerOrderDetails = (id) => async dispatch => {
 
 };
 
-export const updateOrder = (data) => async dispatch => {
-    try {
-        let response = await axios.post('/api/gig/update/orderStatus', data);
-        response.data.status = 'success';
-        return response.data;
-    } catch (e) {
-        e.response.data.status = 'error';
-        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
-        return e.response.data;
-    }
-}
 
-export const rating = (data) => async dispatch => {
-    try {
-        let response = await axios.post('/api/gig/rate', data);
-        response.data.status = 'success';
-        return response.data;
-    } catch (e) {
-        e.response.data.status = 'error';
-        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
-        return e.response.data;
-    }
-}
 
 export const getDeliveryStatus = (id) => async dispatch => {
     console.log('id', id);
@@ -448,14 +404,3 @@ export const getDeliveryStatus = (id) => async dispatch => {
     });
 }
 
-export const revisionRequest = (data) => async dispatch => {
-    try {
-        let response = await axios.post('/api/gig/revisionRequest', data);
-        response.data.status = 'success';
-        return response.data;
-    } catch (e) {
-        e.response.data.status = 'error';
-        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
-        return e.response.data;
-    }
-}

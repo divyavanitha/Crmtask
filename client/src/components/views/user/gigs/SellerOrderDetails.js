@@ -6,7 +6,8 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import $ from 'jquery';
 import "./Gig.css";
-import { getSellerOrderDetails,updateOrder, rating, getDeliveryStatus } from "../../../../_actions/user.action";
+import { getSellerOrderDetails, getDeliveryStatus } from "../../../../_actions/user.action";
+import { updateOrder, rating } from "../../../../_actions/order.action";
 
 import OwlCarousel from 'react-owl-carousel';
 
@@ -191,9 +192,12 @@ const Cart = (props) => {
                                                          <div className="col-md-10">
                                                             <h1 className="text-success float-right d-lg-block d-md-block d-none">&#036;{order_details && order_details.price}</h1>
                                                             <h4>
-                                                               Order Number {order_details && order_details.orderId}              <small>
-                                                                  <a href="" target="_blank" className="text-success">
-                                                                     View Proposal/Service               </a>
+                                                               Order Number {order_details && order_details.orderId}              
+                                                               <small>
+                                                               {console.log('text',order_details && order_details)}
+                                                                 
+                                                                  <Link to={order_details && order_details.seller ? "/gig/" + order_details.seller.firstName + "/" + order_details.gig._id : ""} target="_blank" className="text-success">
+                                                                     View Proposal/Service               </Link>
                                                                </small>
                                                             </h4>
                                                             <p className="text-muted">
@@ -315,11 +319,11 @@ const Cart = (props) => {
 
                                        </div>))}
 
-                                       <div class="card mt-4">
+                                       {(order_details && order_details.used_revisions.length > 0) ? (<div class="card mt-4">
                                         <div class="card-body">
                                           <h5 class="text-center"><i class="fa fa-pencil-square-o"></i> Revison Requested By {order_details && order_details.buyer.firstName} </h5>
                                         </div>
-                                      </div>
+                                      </div>) : "" }
                                       {order_details && order_details.used_revisions ? order_details && order_details.used_revisions.map((list, index) => (<div class="message-div-hover">
                                         <img src="https://www.gigtodo.com//user_images/cool-profile-picastures-coo_1602176634.png" width="50" height="50" class="message-image" />
                                               
@@ -345,7 +349,7 @@ const Cart = (props) => {
                                                    </button>
                                                 </center> : ""}
 
-                              {(order_details && order_details.status == "Completed" && order_details && order_details.buyer_rated  != 1)  ? <div className="order-review-box mb-3 p-3">
+                              {(order_details && order_details.status == "Completed" && order_details.buyer_rated  != 1)  ? <div className="order-review-box mb-3 p-3">
 
                                        <h3 className="text-center text-white"> Please Submit a Review For Your Seller</h3>
 
