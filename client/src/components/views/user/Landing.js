@@ -5,8 +5,6 @@ import { useEffect } from 'react';
 import { getMenu, getSlide, getGigWithoutAuth } from "../../../_actions/user.action";
 import Gig from "./gigs/Gig"
 
-
-
 import OwlCarousel from 'react-owl-carousel';
 
 
@@ -42,9 +40,9 @@ function Landing() {
                   <div className="row justify-content-center">
                      <div className="">
                         <form action="" method="post">
-                           <div className="input-group space20 bannerFormBox">
-                              <input type="text" name="search_query" className="form-control" value="" placeholder="Find Services" />
-                              <div className="input-group-append move-icon-up">
+                           <div className="input-group space20 bannerFormBox" style={{ top: '-80px' }}>
+                              <input type="text" name="search_query" className="form-control" value="" placeholder="Find Services" style={{ top: 0 }} />
+                              <div className="input-group-append move-icon-up" style={{ top: 0 }}>
                                  <button name="search" type="submit" className="search_button">
                                     <img src={require('../../../assets/images/srch.png')} className="srch2" />
                                  </button>

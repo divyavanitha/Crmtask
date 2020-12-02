@@ -4052,3 +4052,9 @@ display: none;
 .react-tagsinput--focused {
     border-color: #396CFF !important;
 }
+
+.error-message {
+    margin-top: .25rem;
+    font-size: .875rem;
+    color: #dc3545;
+}

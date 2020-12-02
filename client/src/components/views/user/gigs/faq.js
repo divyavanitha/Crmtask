@@ -25,6 +25,9 @@ const AddGig = (props) => {
       $.ajax({
         url: "/api/gig/faq",
         type: "post",
+        headers: {
+          Authorization: localStorage.token
+        },
         data: {
           question: $("input[name^=question]").map(function () { return $(this).val(); }).get(),
           answer: $("input[name^=answer]").map(function () { return $(this).val(); }).get(),
@@ -49,42 +52,25 @@ const AddGig = (props) => {
             html += `<div class="tab rounded border-1">
 
               <div class="tab-header" data-toggle="collapse" href="#faq-58">
-
                     <a class="float-left"> <i class="fa fa-bars mr-2"></i>`+ result[i].question + `</a>
-
                     <a class="float-right text-muted"><i class="fa fa-sort-down"></i></a>
-
                     <div class="clearfix"></div>
-
               </div>
 
                 <div class="tab-body p-3 pb-0 collapse" id="faq-58" data-parent="#faqTabs">
+                      <div class="form-group mb-2">
+                            <input type="hidden" name="faq_id" value=`+ result[i]._id + `>
+                            <input type="text" name="title" placeholder="Title" class="form-control form-control-sm" required value=`+ result[i].question + `>
+                      </div>
 
-                     
+                      <div class="form-group mb-2">
+                            <input name="content" rows="3" class="form-control form-control-sm" value=`+ result[i].answer + ` />
+                      </div>
 
-                            <div class="form-group mb-2">
-
-                                  <input type="hidden" name="faq_id" value=`+ result[i]._id + `>
-
-                                  <input type="text" name="title" placeholder="Title" class="form-control form-control-sm" required value=`+ result[i].question + `>
-
-                            </div>
-
-                            <div class="form-group mb-2">
-
-                                  <input name="content" rows="3" class="form-control form-control-sm" value=`+ result[i].answer + ` />
-
-                            </div>
-
-                            <div class="form-group mb-0">
-
-                                  <a href="#" class="btn btn-danger btn-sm delete-faq">Delete</a>
-
-                                  <button type="submit" class="btn btn-success btn-sm float-right update">Update</button>
-
-                            </div>
-
-                      
+                      <div class="form-group mb-0">
+                            <a href="#" class="btn btn-danger btn-sm delete-faq">Delete</a>
+                            <button type="submit" class="btn btn-success btn-sm float-right update">Update</button>
+                      </div>   
                 </div>
               </div>`;
 
@@ -178,12 +164,8 @@ const AddGig = (props) => {
       }
 
       validationSchema={Yup.object().shape({
-        /*description: Yup.string()
-            .required('Title is required'),
-        question: Yup.string()
-            .required('Sub Category is required'),
-        answer: Yup.string()
-            .required('Tags is required'),*/
+        description: Yup.string()
+            .required('Description is required')
       })}
 
       onSubmit={(values, { setSubmitting, resetForm }) => {
@@ -271,7 +253,41 @@ const AddGig = (props) => {
 
                   <div className="tab-content card card-body">
                     {/* <!--- tab-content Starts ---> */}
+                    <form onSubmit={handleSubmit} encType="multipart/form-data" className="proposal-form">
+                    <div className="tab-pane fade show active" id="description">
+                      <h5 className="font-weight-normal">Description</h5>
+                      <hr />
+                      <p className="small mb-2"> Project Details </p>
+                      
+                        {/* <!--- form Starts --> */}
+                        <div className="form-group">
+                          <CKEditor
+                            editor={ClassicEditor}
+                            data={values.description}
+                            onReady={editor => {
+                              // You can store the "editor" and use when it is needed.
+                              console.log('Editor is ready to use!', editor);
+                            }}
+                            onChange={(event, editor) => {
+                              const data = editor.getData();
+                              setFieldValue('description', data);
+                              console.log({ event, editor, data });
+                            }}
+                            onBlur={(event, editor) => {
+                              console.log('Blur.', editor);
+                            }}
+                            onFocus={(event, editor) => {
+                              console.log('Focus.', editor);
+                            }}
+                          />
+                          <ErrorMessage name="description" component="div" className="error-message" />
+                          <small className="form-text text-danger"></small>
+                        </div>
+                      
+                    </div>
 
+                    <hr  />
+                    
                     <h5 className="font-weight-normal"> Frequently Asked Questions  <small className="float-right"><a data-toggle="collapse" href="#insert-faq" className="text-success">+ Add Faq</a></small></h5>
                     <hr />
                     <div className="tabs accordion mt-2" id="faTabs">
@@ -306,49 +322,18 @@ const AddGig = (props) => {
 
                     </div>
                     {/* <!--- All Tabs Ends ---> */}
-                    <hr className="mt-0" />
-                    <div className="tab-pane fade show active" id="description">
-                      <h5 className="font-weight-normal">Description</h5>
-                      <hr />
-                      <p className="small mb-2"> Project Details </p>
-                      <form onSubmit={handleSubmit} encType="multipart/form-data" className="proposal-form">
-                        {/* <!--- form Starts --> */}
-                        <div className="form-group">
-                          <CKEditor
-                            editor={ClassicEditor}
-                            data={values.description}
-                            onReady={editor => {
-                              // You can store the "editor" and use when it is needed.
-                              console.log('Editor is ready to use!', editor);
-                            }}
-                            onChange={(event, editor) => {
-                              const data = editor.getData();
-                              setFieldValue('description', data);
-                              console.log({ event, editor, data });
-                            }}
-                            onBlur={(event, editor) => {
-                              console.log('Blur.', editor);
-                            }}
-                            onFocus={(event, editor) => {
-                              console.log('Focus.', editor);
-                            }}
-                          />
-                          <small className="form-text text-danger"></small>
-                        </div>
-
-                        {/* <!--- form Ends --> */}
-
-                        <div className="form-group mb-0">
-                          {/* <!--- form-group Starts ---> */}
-                          <a href="#" className="btn btn-secondary float-left backButton">Back</a>
-                          <button type="submit" onClick={() => setFieldValue("action", "desc")} className="btn btn-success mr-3 float-right">Save & Continue</button>
-                        </div>
-                        {/* <!--- form-group Starts ---> */}
-                      </form>
-                    </div>
 
                     <input type="hidden" name="section" value="instant_delivery" />
+
+                    <div className="form-group mb-0">
+                          {/* <!--- form-group Starts ---> */}
+                          <a href="#" className="btn btn-secondary float-left backButton">Back</a>
+                          <button type="submit" onClick={() => setFieldValue("action", "desc")} className="btn btn-success float-right">Save & Continue</button>
+                    </div>
+
+                    </form>
                   </div>
+                  
                   {/* <!--- tab-content Ends ---> */}
                 </div>
                 {/* <!--- col-md-8 Ends ---> */}

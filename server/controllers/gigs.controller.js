@@ -38,11 +38,15 @@ exports.listgigs = async (req, res) => {
 }
 
 exports.getGigDetails = async (req, res) => {
+
     try {
 
-        //let gig = await db._find(Gig, {_id: req.params.id}, {}, { populate: [ { path: "user", populate: { path: 'country', model: 'Country' } } ] } );
-        let gig = await db._find(Gig, {_id: req.params.id}, {}, { populate: [ { path: "gig", populate:[{path: "category", model: "category"}, {path: "subCategory", model: "SubCategory"}] } ] });
-
+        let gig = await db._find(Gig, {_id: req.params.id}, {}, { populate: [ 
+            { path: "user", populate: { path: 'country', model: 'Country', select: 'name' } }, 
+            { path: "user", populate: { path: 'city', model: 'city', select: 'name' } }, 
+            { path: "category", select: 'name'}, 
+            { path: "subCategory", select: 'name'}
+            ] });
 
         const data = { gig };
 

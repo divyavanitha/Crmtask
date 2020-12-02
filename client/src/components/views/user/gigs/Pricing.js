@@ -53,7 +53,7 @@ const Pricing = (props) => {
    let package_id = [];
    if (packages) {
       for (let i in packages) {
-         descriptions.push("sgh");
+         descriptions.push("");
          delivery_times.push("");
          revisions.push("");
          prices.push("");

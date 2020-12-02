@@ -46,7 +46,7 @@ const userSchema = mongoose.Schema({
         type: String
     },
     country: { type: String, ref: 'Country' },
-    city: { type: Schema.Types.ObjectId, ref: 'City' },
+    city: { type: String, ref: 'City' },
     language: [{
         language: { type: Schema.Types.ObjectId, ref: 'Language' },
         level: { type: String },

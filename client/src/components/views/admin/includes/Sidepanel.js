@@ -28,9 +28,9 @@ const Sidepanel = () => {
                         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu">
                             <i className="fa fa-bars"></i>
                         </button>
-                        <a className="navbar-brand" href="index?dashboard">
+                        <Link className="navbar-brand" to="/admin/dashboard">
                             <img className="desktop" src={site && site.logo} width="150" />
-                        </a>
+                        </Link>
                         <a className="navbar-brand hidden" href="./"><span className="badge badge-success pt-2 pb-2">A</span></a>
                     </div>
                     <div id="main-menu" className="main-menu collapse navbar-collapse">

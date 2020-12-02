@@ -60,9 +60,9 @@ function Nav() {
                                 className="body-sub-width vertical-align-top sub-nav-container bg-white overflow-hidden bl-xs-1 bb-xs-1 br-xs-1 catnav-mott-control display-none"
                                 data-ui="sub-nav" aria-hidden="true" data-node-id={c_list._id}>
                                 <div className="width-full display-flex-xs">
-                                    { c_list.subCategories && (chunkArray(c_list.subCategories, 10)).map((chunk) => (
+                                    { c_list.subCategories && (chunkArray(c_list.subCategories, 10)).map((chunk, i) => (
 
-                                        <ul className="list-unstyled subcategory display-inline-block col-xs-3 p-xs-3 pl-xs-5" role="presentation">
+                                        <ul key={i} className="list-unstyled subcategory display-inline-block col-xs-3 p-xs-3 pl-xs-5" role="presentation">
 
                                             {chunk.map((subCategories) => (
                                                 <li key={subCategories._id}>

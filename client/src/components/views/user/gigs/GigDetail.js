@@ -116,7 +116,7 @@ const GigDetail = (props) => {
     }, [params.gig]);
     const gig = useSelector((state) => state.user && state.user.gig_details && state.user.gig_details.responseData && state.user.gig_details.responseData.gig);
     const packages = useSelector(state => state.user && state.user.packages && state.user.packages.responseData && state.user.packages.responseData.packages);
-    //console.log('gig', gig);
+    console.log('gig', gig);
 
     return (
 
@@ -226,31 +226,43 @@ const GigDetail = (props) => {
                                                     <h3>{gig && gig.title}</h3>
                                                     <hr />
                                                     <nav className="breadcrumbs h-text-truncate mb-2">
-                                                        <a href="../../">Home</a>
-                                                        <a href="../../categories/video-animation"> Video &amp; Animation </a>
-                                                        <a href="../../categories/video-animation/whiteboard-explainer-videos">
-                                                            Whiteboard & Explainer Videos          </a>
+                                                        <Link to="/">Home</Link>
+                                                        <Link to="/">Video &amp; Animation</Link>
+                                                        <Link to="/">Whiteboard & Explainer Videos</Link>
                                                     </nav>
-                                                    <img className='mb-1' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='mb-1' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='mb-1' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='mb-1' src={require('../../../../assets/images/user_rate_full.png')} />  <img className='mb-1' src={require('../../../../assets/images/user_rate_blank.png')} />         <span className="text-muted span"> (22) &nbsp;309 Order(s) In Queue.</span>
-                                                    <div className="sharethis-inline-share-buttons  st-right  st-inline-share-buttons st-animated" style={{ marginTop: "-36px" }} id="st-1"><div className="st-btn st-first" data-network="whatsapp" style={{ display: "inline-block" }}>
+                                                    <img className='mb-1' src={require('../../../../assets/images/user_rate_full.png')} />  
+                                                    <img className='mb-1' src={require('../../../../assets/images/user_rate_full.png')} />  
+                                                    <img className='mb-1' src={require('../../../../assets/images/user_rate_full.png')} />  
+                                                    <img className='mb-1' src={require('../../../../assets/images/user_rate_full.png')} />  
+                                                    <img className='mb-1' src={require('../../../../assets/images/user_rate_blank.png')} />
+
+                                                    <span className="text-muted span"> (22) &nbsp;309 Order(s) In Queue.</span>
+                                                    <div className="sharethis-inline-share-buttons  st-right  st-inline-share-buttons st-animated" style={{ marginTop: "-36px" }} id="st-1">
+
+                                                    {/*<div className="st-btn st-first" data-network="whatsapp" style={{ display: "inline-block" }}>
                                                         <img alt="whatsapp sharing button" src="https://platform-cdn.sharethis.com/img/whatsapp.svg" />
+                                                    </div>
 
-                                                    </div><div className="st-btn" data-network="facebook" style={{ display: "inline-block" }}>
-                                                            <img alt="facebook sharing button" src="https://platform-cdn.sharethis.com/img/facebook.svg" />
+                                                    <div className="st-btn" data-network="facebook" style={{ display: "inline-block" }}>
+                                                        <img alt="facebook sharing button" src="https://platform-cdn.sharethis.com/img/facebook.svg" />
+                                                    </div>
 
-                                                        </div><div className="st-btn" data-network="twitter" style={{ display: "inline-block" }}>
-                                                            <img alt="twitter sharing button" src="https://platform-cdn.sharethis.com/img/twitter.svg" />
+                                                    <div className="st-btn" data-network="twitter" style={{ display: "inline-block" }}>
+                                                        <img alt="twitter sharing button" src="https://platform-cdn.sharethis.com/img/twitter.svg" />
+                                                    </div>
 
-                                                        </div><div className="st-btn" data-network="linkedin" style={{ display: "inline-block" }}>
-                                                            <img alt="linkedin sharing button" src="https://platform-cdn.sharethis.com/img/linkedin.svg" />
+                                                    <div className="st-btn" data-network="linkedin" style={{ display: "inline-block" }}>
+                                                        <img alt="linkedin sharing button" src="https://platform-cdn.sharethis.com/img/linkedin.svg" />
+                                                    </div>
 
-                                                        </div><div className="st-btn" data-network="pinterest" style={{ display: "inline-block" }}>
-                                                            <img alt="pinterest sharing button" src="https://platform-cdn.sharethis.com/img/pinterest.svg" />
+                                                    <div className="st-btn" data-network="pinterest" style={{ display: "inline-block" }}>
+                                                        <img alt="pinterest sharing button" src="https://platform-cdn.sharethis.com/img/pinterest.svg" />
+                                                    </div>
 
-                                                        </div><div className="st-btn st-last" data-network="sharethis" style={{ display: "inline-block" }}>
-                                                            <img alt="sharethis sharing button" src="https://platform-cdn.sharethis.com/img/sharethis.svg" />
-
-                                                        </div></div>
+                                                    <div className="st-btn st-last" data-network="sharethis" style={{ display: "inline-block" }}>
+                                                        <img alt="sharethis sharing button" src="https://platform-cdn.sharethis.com/img/sharethis.svg" />
+                                                    </div>*/}
+                                                    </div>
                                                 </div>
 
                                                 <div id="myCarousel" className="carousel slide">
@@ -435,15 +447,8 @@ const GigDetail = (props) => {
                                             </div>
                                         </div>
                                         <div className="proposal-tags-container mt-2 ">
-                                            {/* <!--- proposal-tags-container Starts ---> */}
-                                            <div className="proposal-tag mb-3" ><a href="../../tags/explainer-video"><span>explainer video</span></a></div>
-                                            <div className="proposal-tag mb-3" ><a href="../../tags/-whiteboard-animation"><span> whiteboard animation</span></a></div>
-                                            <div className="proposal-tag mb-3" ><a href="../../tags/-sales-video"><span> sales video</span></a></div>
-                                            <div className="proposal-tag mb-3" ><a href="../../tags/-Animated-video"><span> Animated video</span></a></div>
-                                            <div className="proposal-tag mb-3" ><a href="../../tags/-video-marketing"><span> video marketing</span></a></div>
-                                            <div className="proposal-tag mb-3" ><a href="../../tags/-video"><span> video</span></a></div>
+                                            { gig && gig.tags.map((tag, index) => <div key={index} className="proposal-tag mb-3" ><Link to={"/tags/"+tag} ><span>{ tag }</span></Link></div> ) }
                                         </div>
-                                        {/* <!--- proposal-tags-container Ends ---> */}
                                     </div>
 
                                 </div>
@@ -453,7 +458,7 @@ const GigDetail = (props) => {
                                     <div className="card mb-5 rounded-0 gigPlanType">
                                         <div className="card-header pt-0 pl-3 tabs-header">
                                             <ul className="nav nav-tabs card-header-tabs rounded-0 justify-content-center">
-                                                {packages && packages.map((pack, index) => (<li className="nav-item">
+                                                {packages && packages.map((pack, index) => (<li key={index} className="nav-item">
                                                     <a className="nav-link  " href="#tab_2506" data-toggle="tab" formid="checkoutForm1" data-node-id={pack.name}>
                                                         {pack.name}   </a>
                                                 </li>))}
