@@ -181,6 +181,24 @@ router.post('/gig/rate', middleware.user, function(req, res){
   orderController.rating(req, res);
 });
 
+/*Proposal Request*/
+router.post('/request', [middleware.user, middleware.upload( path.join(__dirname, '../storage/images/request/') ).fields([{ name: 'files[]', maxCount: 4 }]) ], (req, res) => {
+  proposalController.createrequest(req, res);
+});
+
+router.post('/offer', middleware.user, function(req, res){
+  proposalController.request_offer(req, res);
+});
+
+
+router.post('/send_sms', (req, res) => {
+  homeController.sendSms(req, res);
+});
+
+router.post('/send_mail', (req, res) => {
+  homeController.sendMail(req, res);
+});
+
 router.get('/buyer/orderlist', middleware.user, function(req, res){
   homeController.buyerOrderList(req, res);
 });
@@ -199,23 +217,6 @@ router.get('/seller/orderdetails/:id', middleware.user, (req, res) => {
 
 router.get('/delivery/status/:id', middleware.user, (req, res) => {
   homeController.deliveryStatus(req, res);
-});
-
-router.post('/request', [middleware.user, middleware.upload( path.join(__dirname, '../storage/images/request/') ).fields([{ name: 'files[]', maxCount: 4 }]) ], (req, res) => {
-  proposalController.createrequest(req, res);
-});
-
-router.post('/offer', middleware.user, function(req, res){
-  proposalController.request_offer(req, res);
-});
-
-
-router.post('/send_sms', (req, res) => {
-  homeController.sendSms(req, res);
-});
-
-router.post('/send_mail', (req, res) => {
-  homeController.sendMail(req, res);
 });
 
 /* //const auth = require("../middlewares/auth");

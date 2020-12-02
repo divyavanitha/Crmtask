@@ -90,66 +90,6 @@ exports.checkout = async (req, res) => {
 
 
 
-exports.rating = async (req, res) => {
-
-     const schema = Joi.object().options({ abortEarly: false }).keys({
-        order_id: Joi.string().required().label("Order Id"),
-        rating: Joi.string().required().label("Rating"),
-        comment: Joi.string().required().label("Comment"),
-
-    }).unknown(true);
-
-    const { error } = schema.validate(req.body);
-
-    let errorMessage = {};
-
-    if (error) {
-        error.details.forEach(err => {
-            errorMessage[err.context.key] = (err.message).replace(/"/g, "")
-        })
-    }
-
-    const errorResponse = helper.response({ status: 422, error:errorMessage });
-
-    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
-
-    try {
-
-        
-
-            let rating = {
-                orderId: req.body.order_id,
-                rating: req.body.rating,
-                comment: req.body.comment
-            }
-
-        let ratings= await db._store(Rating, rating);
-
-        let order = await Order.findById(req.body.order_id);
-        if(req.body.type == "buyer"){
-            order.seller_rated=1;
-        }else{
-            order.buyer_rated=1;
-        }
-        
-
-        let orders = await db._update(Order, { _id: req.body.order_id }, order);
-
-        const response = helper.response({ message: res.__('inserted') });
-        return res.status(response.statusCode).json(response);
-
-    } catch (err) {
-        if (err[0] != undefined) {
-            for (i in err.errors) {
-                return res.status(422).json(err.errors[i].message);
-            }
-        } else {
-            return res.status(422).json(err);
-        }
-    }
-
-}
-
 exports.updateOrder = async(req, res) => {
     const schema = Joi.object().options({ abortEarly: false }).keys({
         id: Joi.string().required().label("Order Id"),
@@ -276,3 +216,62 @@ exports.revisionRequest = async(req, res) => {
     }
 }
 
+exports.rating = async (req, res) => {
+
+     const schema = Joi.object().options({ abortEarly: false }).keys({
+        order_id: Joi.string().required().label("Order Id"),
+        rating: Joi.string().required().label("Rating"),
+        comment: Joi.string().required().label("Comment"),
+
+    }).unknown(true);
+
+    const { error } = schema.validate(req.body);
+
+    let errorMessage = {};
+
+    if (error) {
+        error.details.forEach(err => {
+            errorMessage[err.context.key] = (err.message).replace(/"/g, "")
+        })
+    }
+
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
+
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
+
+    try {
+
+        
+
+            let rating = {
+                orderId: req.body.order_id,
+                rating: req.body.rating,
+                comment: req.body.comment
+            }
+
+        let ratings= await db._store(Rating, rating);
+
+        let order = await Order.findById(req.body.order_id);
+        if(req.body.type == "buyer"){
+            order.seller_rated=1;
+        }else{
+            order.buyer_rated=1;
+        }
+        
+
+        let orders = await db._update(Order, { _id: req.body.order_id }, order);
+
+        const response = helper.response({ message: res.__('inserted') });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                return res.status(422).json(err.errors[i].message);
+            }
+        } else {
+            return res.status(422).json(err);
+        }
+    }
+
+}
