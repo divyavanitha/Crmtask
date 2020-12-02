@@ -83,7 +83,16 @@ const userSchema = mongoose.Schema({
         certifier: { type: String },
         year: { type: Number },
     }],
+    wallet: {
+        type: Number
+    },
     rating: {
+        type: Number
+    },
+    ratingPercent: {
+        type: Number
+    },
+    completedOrder: {
         type: Number
     },
     referralId: {

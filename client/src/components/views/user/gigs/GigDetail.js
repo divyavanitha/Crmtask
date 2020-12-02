@@ -9,6 +9,19 @@ import "./Gig.css";
 import { getGigbyId, createOrder, getPackage, addCart } from "../../../../_actions/user.action";
 
 import OwlCarousel from 'react-owl-carousel';
+import {
+  EmailShareButton,
+  FacebookShareButton,
+  InstapaperShareButton,
+  LinkedinShareButton,
+  PinterestShareButton,
+  RedditShareButton,
+  TelegramShareButton,
+  TumblrShareButton,
+  TwitterShareButton,
+  ViberShareButton,
+  WhatsappShareButton
+} from "react-share";
 
 
 const GigDetail = (props) => {
@@ -16,6 +29,7 @@ const GigDetail = (props) => {
     const dispatch = useDispatch();
     const params = useParams();
     let history = useHistory();
+
 
     const [price, setPrice] = useState(0);
     const [package_id, setPackage] = useState("");
@@ -45,6 +59,7 @@ const GigDetail = (props) => {
         /*$(".nav-link").removeClass("active");
         var node_id = $(this).data('node-id');*/
         console.log(params.gig);
+
 
         $.ajax({
             url: "/api/gig/package/" + params.gig,
@@ -116,7 +131,24 @@ const GigDetail = (props) => {
     }, [params.gig]);
     const gig = useSelector((state) => state.user && state.user.gig_details && state.user.gig_details.responseData && state.user.gig_details.responseData.gig);
     const packages = useSelector(state => state.user && state.user.packages && state.user.packages.responseData && state.user.packages.responseData.packages);
-    console.log('gig', gig);
+    const settings = useSelector((state) => state.settings);
+
+    let level = 'New Seller';
+
+    if(gig && gig.user.ratingPercent >= 70 && gig.user.completedOrder >= 50) {
+        level = 'Level One';
+    }
+
+    if(gig && gig.user.ratingPercent >= 50 && gig.user.completedOrder >= 30) {
+        level = 'Level Two';
+    }
+
+    if(gig && gig.user.ratingPercent >= 95 && gig.user.completedOrder >= 100) {
+        level = 'Top Rated';
+    }
+
+    const shareUrl = window.location.origin;
+    const title = settings && settings.settings && settings.settings.site.title;
 
     return (
 
@@ -227,8 +259,8 @@ const GigDetail = (props) => {
                                                     <hr />
                                                     <nav className="breadcrumbs h-text-truncate mb-2">
                                                         <Link to="/">Home</Link>
-                                                        <Link to="/">Video &amp; Animation</Link>
-                                                        <Link to="/">Whiteboard & Explainer Videos</Link>
+                                                        <Link to={"/categories/" + (gig && gig.category.name) }>{ gig && gig.category.name }</Link>
+                                                        <Link to={"/categories/" + (gig && gig.category.name) + "/" + (gig && gig.subCategory.name) }>{gig && gig.subCategory.name}</Link>
                                                     </nav>
                                                     <img className='mb-1' src={require('../../../../assets/images/user_rate_full.png')} />  
                                                     <img className='mb-1' src={require('../../../../assets/images/user_rate_full.png')} />  
@@ -238,30 +270,28 @@ const GigDetail = (props) => {
 
                                                     <span className="text-muted span"> (22) &nbsp;309 Order(s) In Queue.</span>
                                                     <div className="sharethis-inline-share-buttons  st-right  st-inline-share-buttons st-animated" style={{ marginTop: "-36px" }} id="st-1">
-
-                                                    {/*<div className="st-btn st-first" data-network="whatsapp" style={{ display: "inline-block" }}>
+                                                    
+                                                    <WhatsappShareButton url={shareUrl} title={title} className="st-btn st-first" style={{ display: "inline-block", background: "#25d366"  }} >
                                                         <img alt="whatsapp sharing button" src="https://platform-cdn.sharethis.com/img/whatsapp.svg" />
-                                                    </div>
-
-                                                    <div className="st-btn" data-network="facebook" style={{ display: "inline-block" }}>
+                                                    </WhatsappShareButton>
+                                                    
+                                                    <FacebookShareButton url={shareUrl} quote={title} className="st-btn st-first" style={{ display: "inline-block", background: "#4267B2" }} >
                                                         <img alt="facebook sharing button" src="https://platform-cdn.sharethis.com/img/facebook.svg" />
-                                                    </div>
-
-                                                    <div className="st-btn" data-network="twitter" style={{ display: "inline-block" }}>
+                                                    </FacebookShareButton>
+                                                    
+                                                    <TwitterShareButton url={shareUrl} title={title} className="st-btn st-first" style={{ display: "inline-block", background: "#55acee" }} >
                                                         <img alt="twitter sharing button" src="https://platform-cdn.sharethis.com/img/twitter.svg" />
-                                                    </div>
-
-                                                    <div className="st-btn" data-network="linkedin" style={{ display: "inline-block" }}>
+                                                    </TwitterShareButton>
+                                                    
+                                                    <LinkedinShareButton url={shareUrl} className="st-btn st-first" style={{ display: "inline-block", background: "#0077b5" }} >
                                                         <img alt="linkedin sharing button" src="https://platform-cdn.sharethis.com/img/linkedin.svg" />
-                                                    </div>
-
-                                                    <div className="st-btn" data-network="pinterest" style={{ display: "inline-block" }}>
+                                                    </LinkedinShareButton>
+                                                    
+                                                    <PinterestShareButton url={shareUrl} className="st-btn st-first" style={{ display: "inline-block", background: "#CB2027" }} >
                                                         <img alt="pinterest sharing button" src="https://platform-cdn.sharethis.com/img/pinterest.svg" />
-                                                    </div>
+                                                    </PinterestShareButton>
+                                                    
 
-                                                    <div className="st-btn st-last" data-network="sharethis" style={{ display: "inline-block" }}>
-                                                        <img alt="sharethis sharing button" src="https://platform-cdn.sharethis.com/img/sharethis.svg" />
-                                                    </div>*/}
                                                     </div>
                                                 </div>
 
@@ -601,7 +631,7 @@ const GigDetail = (props) => {
                                             </center>
                                             <h3 className="text-center h3">
                                                 <a className="text-success" href={gig && gig.user.firstName} >
-                                                    {gig && gig.user.firstName} {gig && gig.user.lastName}  </a> <span className="divider"> </span> <span className="text-muted">Level Two</span>
+                                                    {gig && gig.user.firstName} {gig && gig.user.lastName}  </a> <span className="divider"> </span> <span className="text-muted">{level}</span>
                                             </h3>
                                             <a href="../../conversations/message?seller_id=2" className="btn btn-lg btn-block btn-success rounded-0">Message me</a>
                                             <hr />
@@ -610,7 +640,7 @@ const GigDetail = (props) => {
                                                     <p className="text-muted"><i className="fa fa-check pr-1"></i> From</p>
                                                 </div>
                                                 <div className="col-md-6">
-                                                    <p> Ecuador</p>
+                                                    <p>{ gig && gig.user.city && gig.user.city.name } <b>{ gig && gig.user.country && gig.user.country.name }</b> </p>
                                                 </div>
                                                 <div className="col-md-6">
                                                     <p className="text-muted"><i className="fa fa-check pr-1"></i>  Speaks</p>
@@ -625,7 +655,7 @@ const GigDetail = (props) => {
                                                     <p className="text-muted"><i className="fa fa-check pr-1"></i> Recent Delivery</p>
                                                 </div>
                                                 <div className="col-md-6">
-                                                    <p> 7% </p>
+                                                    <p> { gig && gig.user.ratingPercent }% </p>
                                                     <p> July 31, 2020 </p>
                                                 </div>
                                             </div>

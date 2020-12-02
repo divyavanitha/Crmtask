@@ -286,11 +286,19 @@ function Header() {
                      </a></li></ul>)
                         }
                         {auth.isAuthenticated && (<ul className="account-nav apply-nav-height">
-                            {/*<li className="logged-in-link d-none d-sm-block d-md-block d-lg-block">
-                            <a className="menuItem" href="" title="Blog">
+                            <li className="logged-in-link d-none d-sm-block d-md-block d-lg-block">
+                            <a className="menuItem" href="" title="Freelancers">
                                 <span className="onePress-icon nav-icon onePress-icon-relative">
-                                    <i className="fa fa-rss fa-lg" style={{ fontSize: "1.4em" }}></i>
+                                    <i className="fa  fa-user-o fa-lg" style={{ fontSize: "1.4em" }}></i>
                                 </span>
+                            </a>
+                        </li>
+                            <li className="logged-in-link d-none d-sm-block d-md-block d-lg-block">
+                            <a className="menuItem" href="" title="Notifications">
+                                <span className="onePress-icon nav-icon onePress-icon-relative">
+                                    <i className="fa fa-bell-o fa-lg" style={{ fontSize: "1.4em" }}></i>
+                                </span>
+                                {/*<span className="total-user-count count">1</span>*/}
                             </a>
                         </li>
                             <li className="logged-in-link">
@@ -298,14 +306,22 @@ function Header() {
                                     <span className="onePress-icon nav-icon onePress-icon-relative">
                                         <i className="fa fa-envelope-o" style={{ fontSize: "1.4em" }} aria-hidden="true"></i>
                                     </span>
-                                    <span className="total-user-count count">1</span>
+                                    {/*<span className="total-user-count count">1</span>*/}
                                 </a>
-                            </li>*/}
+                            </li>
+
+                            <li className="logged-in-link d-none d-sm-block d-md-block d-lg-block">
+                            <a className="menuItem" href="" title="Favourites">
+                                <span className="onePress-icon nav-icon onePress-icon-relative">
+                                    <i className="fa fa-heart-o fa-lg" style={{ fontSize: "1.4em" }}></i>
+                                </span>
+                            </a>
+                        </li>
 
                             <li className="logged-in-link">
                                 <Link to="/cart" className="menuItem" title="Cart">
                                     <span className="onePress-icon nav-icon onePress-icon-relative">
-                                        <i className="fa fa-shopping-cart" style={{ fontSize: "1.4em" }} aria-hidden="true"></i>
+                                        <i className="fa fa-shopping-basket" style={{ fontSize: "1.4em" }} aria-hidden="true"></i>
                                     </span>
                                     {console.log(cartCount != 0)}
                                     <span className="total-user-count count cart-count">{cartCount != 0 ? cartCount : ''}</span>
@@ -387,7 +403,11 @@ function Header() {
                                     </div>
 
                                 </div>
-                            </li></ul>)}
+                            </li>
+                            <li class="logged-in-link mr-lg-0 mr-2 d-none d-sm-block d-md-block d-lg-block">
+                              <a class="menuItem btn btn-success text-white">$4,248.50</a>
+                            </li>
+                            </ul>)}
 
 
                     </div>
