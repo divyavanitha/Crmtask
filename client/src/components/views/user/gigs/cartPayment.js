@@ -208,7 +208,7 @@ console.log('cart_details', cart_details);
             
 
             dispatch(checkout(data)).then(res => {
-               history.push('/buyer-order-lists')
+               history.push('/buying-order-lists')
             })
 
             resetForm();

@@ -42,9 +42,17 @@ const orderSchema = mongoose.Schema({
         required: true
     },
     used_revisions: [{
-        revison_message: { type: String },
+        revision_message: { type: String },
         revision_file: { type: String }
     }],
+    tips: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    tip_message: { 
+        type: String 
+    },
     deliveryTime: { 
         type: String, 
         required: false 

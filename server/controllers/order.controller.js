@@ -8,181 +8,12 @@ const db = require('../services/model.js');
 const Joi = require('@hapi/joi');
 const _ = require('lodash');
 
-exports.listcart = async (req, res) => {
-    try {
-
-        let carts = await db._get(Cart, {user: req.user._id}, {}, { populate: [ { path: "gig", populate:[{path: "category", model: "category"}, {path: "subCategory", model: "SubCategory"}] }, "Package" ] } );
-
-        const data = { carts };
-
-        const response = helper.response({ data });
-        return res.status(response.statusCode).json(response);
-
-    } catch (err) {
-        console.log(err);
-    }
-
-}
-
-exports.cartCount = async (req, res) => {
-    try {
-
-        let count = await db._count(Cart, {user: req.user._id} );
-
-        const data = { count };
-
-        const response = helper.response({ data });
-        return res.status(response.statusCode).json(response);
-
-    } catch (err) {
-        console.log(err);
-    }
-
-}
-
-exports.addcart = async (req, res) => {
-
-     const schema = Joi.object().options({ abortEarly: false }).keys({
-        gig_id: Joi.string().required().label("Gig Id"),
-        quantity: Joi.number().required().label("Quantity"),
-        price: Joi.number().required().label("Price")
-
-    }).unknown(true);
-
-    const { error } = schema.validate(req.body);
-
-    let errorMessage = {};
-
-    if (error) {
-        error.details.forEach(err => {
-            errorMessage[err.context.key] = (err.message).replace(/"/g, "")
-        })
-    }
-
-    const errorResponse = helper.response({ status: 422, error:errorMessage });
-
-    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
-
-    try {
-        let cart_length = await db._get(Cart, {user: req.user._id} );
-            var cart = {
-                user: req.user._id,
-                gig: req.body.gig_id,
-                quantity: req.body.quantity,
-                price: req.body.price,
-                package: req.body.package_id,
-                deliveryTime: req.body.deliveryTime,
-                revisions: req.body.revision
-            }
-
-        let carts= await db._store(Cart, cart);
-        /*carts.count = cart_length.length;
-        console.log(carts.count);*/
-
-        let count = await db._count(Cart, {user: req.user._id} );
-
-        const response = helper.response({ message: res.__('inserted'), data: {"carts": carts, "count": count } });
-        return res.status(response.statusCode).json(response);
-
-    } catch (err) {
-        if (err[0] != undefined) {
-            for (i in err.errors) {
-                return res.status(422).json(err.errors[i].message);
-            }
-        } else {
-            return res.status(422).json(err);
-        }
-    }
-
-}
-
-exports.updateCart = async (req, res) => {
-
-     const schema = Joi.object().options({ abortEarly: false }).keys({
-        id: Joi.string().required().label("Cart Id"),
-        quantity: Joi.number().required().label("Quantity")
-
-    }).unknown(true);
-
-    const { error } = schema.validate(req.body);
-
-    let errorMessage = {};
-
-    if (error) {
-        error.details.forEach(err => {
-            errorMessage[err.context.key] = (err.message).replace(/"/g, "")
-        })
-    }
-
-    const errorResponse = helper.response({ status: 422, error:errorMessage });
-
-    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
-
-    try {
-           
-            var cart = {
-                quantity: req.body.quantity
-            }
-
-        let carts= await db._update(Cart, { _id: req.body.id }, cart);
-
-         const response = helper.response({ message: res.__('updated') });
-        return res.status(response.statusCode).json(response);
-
-    } catch (err) {
-        if (err[0] != undefined) {
-            for (i in err.errors) {
-                return res.status(422).json(err.errors[i].message);
-            }
-        } else {
-            return res.status(422).json(err);
-        }
-    }
-
-}
-
-exports.removecart = async (req, res) => {
-
-	 try {
-
-        let carts = await db._delete(Cart, {"_id":req.params.id});
-
-        let cart_length = await db._get(Cart, {user: req.user._id} );
-
-        const response = helper.response({ message: res.__('deleted'), data: cart_length });
-        return res.status(response.statusCode).json(response);
-
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-exports.findcart = async (req, res) => {
-
-     try {
-
-        let carts = await db._find(Cart, {"_id":req.params.id});
-        const data = { carts };
-
-        const response = helper.response({ data });
-       
-        return res.status(response.statusCode).json(response);
-
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-
 exports.checkout = async (req, res) => {
 
      const schema = Joi.object().options({ abortEarly: false }).keys({
         //coupon_id: Joi.string().required().label("Coupon Id"),
         wallet: Joi.boolean().required().label("wallet"),
-        payment_mode: Joi.string().required().label("Payment Mode"),
-        //gig_id: Joi.string().required().label("Gig Id"),
-        //quantity: Joi.number().required().label("Quantity"),
-        total: Joi.number().required().label("total")
+        payment_mode: Joi.string().required().label("Payment Mode")
 
     }).unknown(true);
 
@@ -196,11 +27,11 @@ exports.checkout = async (req, res) => {
         })
     }
 
-    /*const errorResponse = helper.response({ status: 422, error:errorMessage });
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
 
     if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
-    try {*/
+    try {
             if(req.body.id){
               var carts = await db._get(Cart, {_id: req.body.id}, {}, { populate: "gig" });  
             }else{
@@ -245,7 +76,7 @@ exports.checkout = async (req, res) => {
         const response = helper.response({ message: res.__('inserted'), data: tot_carts });
         return res.status(response.statusCode).json(response);
 
-   /* } catch (err) {
+    } catch (err) {
         if (err[0] != undefined) {
             for (i in err.errors) {
                 return res.status(422).json(err.errors[i].message);
@@ -253,90 +84,11 @@ exports.checkout = async (req, res) => {
         } else {
             return res.status(422).json(err);
         }
-    }*/
-
-}
-
-exports.buyerOrderList = async (req, res) => {
-    try {
-
-        let orders = await db._get(Order, {buyer: req.user._id}, {}, {populate: "gig"});
-
-        let delivered_order = await db._get(Order, {buyer: req.user._id, status: "Delivered"}, {}, {populate: "gig"});
-
-        let completed_order = await db._get(Order, {buyer: req.user._id, status: "Completed"}, {}, {populate: "gig"});
-
-        let cancelled_order = await db._get(Order, {buyer: req.user._id, status: "Cancelled"}, {}, {populate: "gig"});
-
-        let active_order = await db._get(Order, {buyer: req.user._id, status:  {$in : ["Progress", "Cancellation Requested", "Revision Requested", "Delivered"]}  }, {}, {populate: "gig"});
-
-        const response = helper.response({ data: {"orders": orders, "delivered_order": delivered_order, "completed_order": completed_order, "cancelled_order": cancelled_order, "active_order": active_order } });
-
-        return res.status(response.statusCode).json(response);
-
-    } catch (err) {
-        console.log(err);
     }
 
 }
 
-exports.buyerOrderDetails = async (req, res) => {
-    try {
 
-        let gig = await db._find(Order, {_id: req.params.id}, {}, { populate: ["gig","seller","buyer"] });
-
-
-        const data = { gig };
-
-        const response = helper.response({ data: data });
-
-        return res.status(response.statusCode).json(response);
-
-    } catch (err) {
-        console.log(err);
-    }
-
-}
-
-exports.sellerOrderList = async (req, res) => {
-    try {
-
-        let orders = await db._get(Order, {seller: req.user._id}, {}, {populate: "gig"});
-
-        let delivered_order = await db._get(Order, {seller: req.user._id, status: "Delivered"}, {}, {populate: "gig"});
-
-        let completed_order = await db._get(Order, {seller: req.user._id, status: "Completed"}, {}, {populate: "gig"});
-
-        let cancelled_order = await db._get(Order, {seller: req.user._id, status: "Cancelled"}, {}, {populate: "gig"});
-
-        let active_order = await db._get(Order, {seller: req.user._id, status:  {$in : ["Progress", "Cancellation Requested", "Revision Requested", "Delivered"]} }, {}, {populate: "gig"});
-
-        const response = helper.response({ data: {"orders": orders, "delivered_order": delivered_order, "completed_order": completed_order, "cancelled_order": cancelled_order, "active_order": active_order } });
-        return res.status(response.statusCode).json(response);
-
-    } catch (err) {
-        console.log(err);
-    }
-
-}
-
-exports.sellerOrderDetails = async (req, res) => {
-    try {
-
-        let order = await db._find(Order, {_id: req.params.id}, {}, { populate: ["gig","buyer","seller"] });
-
-
-        const data = { order };
-
-        const response = helper.response({ data: data });
-
-        return res.status(response.statusCode).json(response);
-
-    } catch (err) {
-        console.log(err);
-    }
-
-}
 
 exports.rating = async (req, res) => {
 
@@ -455,22 +207,7 @@ exports.updateOrder = async(req, res) => {
     }
 }
 
-exports.deliveryStatus = async (req, res) => {
-    try {
 
-        let delivery_status = await db._get(DeliveryStatus, {order: req.params.id});
-
-        const data = { delivery_status };
-
-        const response = helper.response({ data: data });
-
-        return res.status(response.statusCode).json(response);
-
-    } catch (err) {
-        console.log(err);
-    }
-
-}
 
 exports.revisionRequest = async(req, res) => {
     const schema = Joi.object().options({ abortEarly: false }).keys({

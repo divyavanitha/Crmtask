@@ -189,8 +189,8 @@ const Cart = (props) => {
                                                             <h1 className="text-success float-right d-lg-block d-md-block d-none">&#036;{order_details && order_details.price}</h1>
                                                             <h4>
                                                                Order Number {order_details && order_details.orderId}              <small>
-                                                                  <a href="" target="_blank" className="text-success">
-                                                                     View Proposal/Service               </a>
+                                                                  <Link to={order_details && order_details.seller ? "/gig/" + order_details.seller.firstName + "/" + order_details.gig._id : ""} target="_blank" className="text-success">
+                                                                     View Proposal/Service               </Link>
                                                                </small>
                                                             </h4>
                                                             <p className="text-muted">
@@ -334,25 +334,25 @@ const Cart = (props) => {
 
                                       
 
-                                      <div class="card mt-4">
-                                        <div class="card-body">
-                                          <h5 class="text-center"><i class="fa fa-pencil-square-o"></i> Revison Requested By {order_details && order_details.buyer.firstName} </h5>
+                                      {(order_details && order_details.used_revisions.length > 0) ? ( <div className="card mt-4">
+                                        <div className="card-body">
+                                          <h5 className="text-center"><i className="fa fa-pencil-square-o"></i> Revison Requested By {order_details && order_details.buyer.firstName} </h5>
                                         </div>
-                                      </div>
-                                      {order_details && order_details.used_revisions ? order_details && order_details.used_revisions.map((list, index) => (<div class="message-div-hover">
-                                        <img src="https://www.gigtodo.com//user_images/cool-profile-picastures-coo_1602176634.png" width="50" height="50" class="message-image" />
+                                      </div> ) : "" }
+                                      {order_details && order_details.used_revisions ? order_details && order_details.used_revisions.map((list, index) => (<div className="message-div-hover">
+                                        <img src="https://www.gigtodo.com//user_images/cool-profile-picastures-coo_1602176634.png" width="50" height="50" className="message-image" />
                                               
-                                      <h5><a href="#" class="seller-buyer-name"> {order_details && order_details.buyer.firstName} </a></h5>
+                                      <h5><a href="#" className="seller-buyer-name"> {order_details && order_details.buyer.firstName} </a></h5>
 
-                                      <p class="message-desc">
+                                      <p className="message-desc">
 
                                       {list.revision_message}
 
-                                      <a href="orderIncludes/download?order_id=1608&c_id=1382" class="d-block mt-2 ml-1" target='_blank'>
-                                        <i class="fa fa-download"></i> {list.revision_file}</a>
+                                      <a href="orderIncludes/download?order_id=1608&c_id=1382" className="d-block mt-2 ml-1" target='_blank'>
+                                        <i className="fa fa-download"></i> {list.revision_file}</a>
                                       </p>
 
-                                      <p class="text-right text-muted mb-0"> {list.updated_at} </p>
+                                      <p className="text-right text-muted mb-0"> {list.updated_at} </p>
 
                                       </div>)) : ""}
 
@@ -366,9 +366,89 @@ const Cart = (props) => {
                                           </div>
                                        </center> : ""}
 
-                                     {/* <p>You have no more revision requests. Your Order revision is completed.</p> */}
+                                     {(order_details && order_details.tips > 0) ? (<div className="card mt-4 mb-0">
+                                      <div className="card-body">
+                                        <center>
+                                          <h4>  
+                                            <img src="images/svg/tip.svg" className="order-icon" /> Your buyer has given you a tip        
+                                            </h4>
+                                          <p className="text-muted">Congrats! You've just received a tip of</p>
+                                          <h3 className="text-success mb-1">&#036;1.00</h3>
+                                        </center>
+                                              
+                                          <div className="message-div mt-3">
 
-                                   {(order_details && order_details.status == "Completed" && order_details && order_details.seller_rated != 1)  ? <div className="order-review-box mb-3 p-3">
+                                            <img src="https://www.gigtodo.com//user_images/ty_1574032240.png" width="50" height="50" className="message-image" />
+                                                          
+                                            <h5><a href="#" className="seller-buyer-name"> tyrone </a></h5>
+
+                                            <p className="message-desc">uhkjnh</p>
+                                            <p className="text-right text-muted mb-0"> December 02, 2020 </p>
+
+                                          </div>
+
+                                        
+                                       </div>
+                                      </div>) : ""}
+
+                              <div className="proposal_reviews mt-5">
+              
+                                <div className="card rounded-0 mt-3">
+
+                                    <div className="card-header bg-fivGrey">
+
+                                        <h5 className="text-center mt-2">
+                                            <img src="images/svg/reviews.svg" className="mr-1 order-icon"/> Order Reviews
+                                        </h5>
+
+                                    </div>
+
+                                    <div className="card-body">
+
+                                        <div className="proposal-reviews">
+
+                                            <ul className="reviews-list">
+
+                                              <li className="star-rating-row">
+                                                  <span className="user-picture">
+                                                      <img src="https://www.gigtodo.com/user_images/ty_1574032240.png" width="60" height="60" />
+                                                  </span>
+                                                  <h4>
+                                                      <a href="#" className="mr-1 text-success">tyrone </a>
+                                                      <img src='images/user_rate_full.png' /><img src='images/user_rate_full.png' /><img src='images/user_rate_full.png' />
+                                                      <img src='images/user_rate_full.png' /><img src='images/user_rate_full.png' />
+                                                  </h4>
+                                                  <div className="msg-body">
+                                                      eyr6utgjhgdtfygj
+                                                  </div>
+                                                  <span className="rating-date">Dec 02 2020 </span>
+                                               </li>
+                                                 <hr />
+                                                    <li className="rating-seller">
+                                                        <h4>
+                                                            <span className="mr-1">Seller's Feedback</span>
+                                                            <img src='images/user_rate_full.png' /><img src='images/user_rate_full.png' /><img src='images/user_rate_full.png' /><img src='images/user_rate_full.png' /><img src='images/user_rate_blank.png' />
+                                                        </h4>
+                                                <span className="user-picture">
+                                                    <img src="https://www.gigtodo.com//user_images/cool-profile-picastures-coo_1602176634.png" width="40" height="40" />
+                                                </span>
+                                                  <div className="msg-body">
+                                                      ghghhg
+                                                  </div>
+                                              </li>
+                                            </ul>
+
+                                        </div>
+
+                                    </div>
+
+                              </div>
+                              </div>
+
+
+                                    
+
+                                   {(order_details && order_details.status == "Completed" && order_details.seller_rated != 1)  ? <div className="order-review-box mb-3 p-3">
 
                                        <h3 className="text-center text-white"> Please Submit a Review For Your Seller</h3>
 
@@ -532,10 +612,14 @@ const Cart = (props) => {
                           <h5 className="modal-title"> Submit Your Revision Request Here </h5>
                           <button className="close" data-dismiss="modal"> <span>&times;</span> </button>
                         </div>
-                        <div className="modal-body">
-
-                          
-                          {/* <form method="post" enctype="multipart/form-data"> */}
+                       
+                        {(order_details && order_details.used_revisions.length == order_details.revisions) ? 
+                          (<div className="modal-body">
+                            <div className="form-group">
+                              <p>You have no more revision requests. Your Order revision is completed.</p>
+                            </div>
+                            
+                        </div>) : (<div className="modal-body">
                             <div className="form-group">
                               <label className="font-weight-bold" > Request Message </label>
                               
@@ -546,10 +630,7 @@ const Cart = (props) => {
                               <input type="file" id="revision_file" name="revision_file" />
                               <button name="submit_revison" className="btn btn-success float-right submit_revison" >Submit Request</button>
                             </div>
-                         {/* </form> */}
-
-                          
-                                </div>
+                        </div>)}
                       </div>
                     </div>
                   </div>
