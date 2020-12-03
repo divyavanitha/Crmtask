@@ -27,11 +27,11 @@ exports.checkout = async (req, res) => {
         })
     }
 
-    const errorResponse = helper.response({ status: 422, error:errorMessage });
+    /*const errorResponse = helper.response({ status: 422, error:errorMessage });
 
     if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
-    try {
+    try {*/
             if(req.body.id){
               var carts = await db._get(Cart, {_id: req.body.id}, {}, { populate: "gig" });  
             }else{
@@ -65,6 +65,11 @@ exports.checkout = async (req, res) => {
                     let orders= await db._store(Order, order);
 
                     await db._delete(Cart, {"_id":carts[i]._id});
+
+                    let tot_carts = await db._get(Cart, {user: req.user._id}); 
+
+                    const response = helper.response({ message: res.__('inserted'), data: tot_carts });
+                    return res.status(response.statusCode).json(response);
                 }
             }else{
                 const response = helper.response({ message: res.__('cart_empty') });
@@ -72,20 +77,17 @@ exports.checkout = async (req, res) => {
             }
 
             
-            let tot_carts = await db._get(Cart, {user: req.user._id}); 
+            
 
-        const response = helper.response({ message: res.__('inserted'), data: tot_carts });
-        return res.status(response.statusCode).json(response);
-
-    } catch (err) {
-        if (err[0] != undefined) {
-            for (i in err.errors) {
-                return res.status(422).json(err.errors[i].message);
-            }
-        } else {
-            return res.status(422).json(err);
-        }
-    }
+    // } catch (err) {
+    //     if (err[0] != undefined) {
+    //         for (i in err.errors) {
+    //             return res.status(422).json(err.errors[i].message);
+    //         }
+    //     } else {
+    //         return res.status(422).json(err);
+    //     }
+    // }
 
 }
 
