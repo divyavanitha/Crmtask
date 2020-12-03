@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import $ from 'jquery';
 import "./Gig.css";
 import { getBuyerOrderDetails, getDeliveryStatus} from "../../../../_actions/user.action";
-import { rating, revisionRequest } from "../../../../_actions/order.action";
+import { rating, updateOrder } from "../../../../_actions/order.action";
 
 import OwlCarousel from 'react-owl-carousel';
 
@@ -28,33 +28,15 @@ const Cart = (props) => {
       
 
       $("body").on("click", ".complete", function(){
-
-            $.ajax({
-              url: "/api/gig/update/orderStatus",
-              type: "post",
-              data: {
-                  id: params.id,
+            let data = {
+                id: params.id,
                 status: "Completed"
-              },
-
-              headers: {
-                  Authorization: localStorage.token
-              },
-              beforeSend: function (request) {
-                //showInlineLoader();
-              },
-              success: function (response, textStatus, jqXHR) {
-
-               console.log(response);
-               window.location.reload();
-
-              },
-              error: function (jqXHR, textStatus, errorThrown) {
-                  //
-              }
-            });
-
-         });
+            };
+            dispatch(updateOrder(data)).then(res => {
+              console.log('id',res.responseData);
+              window.location.reload();              
+            })
+      });
 
       $("body").on("click", ".submit_revison", function(){
         var input = document.getElementById("revision_file");
@@ -63,11 +45,10 @@ const Cart = (props) => {
         data.append("id", params.id);
         data.append("revison_message", $("textarea[name^=revison_message]").val());
         data.append("revision_file", input.files[0]);
-        dispatch(revisionRequest(data)).then(res => {
+        data.append("status", "Revision Requested");
+        dispatch(updateOrder(data)).then(res => {
           console.log('id',res.responseData);
-          //history.push('/buyer-order-lists')
-          window.location.reload();
-           
+          window.location.reload();           
         })
 
       });
@@ -230,7 +211,7 @@ const Cart = (props) => {
                                                                      </td>
                                                                   </tr>
                                                                   <tr>
-                                                                     <td colspan="4">
+                                                                     <td>
                                                                         <span className="float-right mr-4">
                                                                            <strong>Total : </strong>
                                                       &#036;{order_details && order_details.price}                                   </span>
@@ -310,7 +291,7 @@ const Cart = (props) => {
 
                                     </div> : ""}
 
-                                    {delivery_status && delivery_status.map((list, index) => (<div className="message-div">
+                                    {delivery_status && delivery_status.map((list, index) => (<div key={list._id} className="message-div">
                                            <img src="https://www.gigtodo.com//user_images/ty_1574032240.png" width="50" height="50" className="message-image" />
 
                                              <h5>
@@ -340,7 +321,7 @@ const Cart = (props) => {
                                           <h5 className="text-center"><i className="fa fa-pencil-square-o"></i> Revison Requested By {order_details && order_details.buyer.firstName} </h5>
                                         </div>
                                       </div> ) : "" }
-                                      {order_details && order_details.used_revisions ? order_details && order_details.used_revisions.map((list, index) => (<div className="message-div-hover">
+                                      {order_details && order_details.used_revisions ? order_details && order_details.used_revisions.map((list, index) => (<div key={list._id} className="message-div-hover">
                                         <img src="https://www.gigtodo.com//user_images/cool-profile-picastures-coo_1602176634.png" width="50" height="50" className="message-image" />
                                               
                                       <h5><a href="#" className="seller-buyer-name"> {order_details && order_details.buyer.firstName} </a></h5>
@@ -501,7 +482,7 @@ const Cart = (props) => {
                                                       </p>
                                                    </div>
                                                    <form id="insert-message-form" className="clearfix">
-                                                      <textarea name="message" rows="5" placeholder="Type your Message Here" className="form-control mb-2" onkeyup="matchWords(this)"></textarea>
+                                                      <textarea name="message" rows="5" placeholder="Type your Message Here" className="form-control mb-2"></textarea>
                                                       <div className="float-left b-2">
                                                          <p id="spamWords" className="mt-1 text-danger d-none"><i className="fa fa-warning"></i> You seem to have typed word(s) that are in violation of our policy. No direct payments or emails allowed.</p>
                                                       </div>

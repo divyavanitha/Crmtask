@@ -75,35 +75,39 @@ router.post('/profile/certification', middleware.user, (req, res) => {
 });
 
 router.get('/category', (req, res) => {
-  profilecontroller.listcategory(req, res);
+  homeController.listcategory(req, res);
 });
 
 router.get('/subcategory/:id', (req, res) => {
-  profilecontroller.listbycategoryToSubCategory(req, res);
+  homeController.listbycategoryToSubCategory(req, res);
 });
 
 router.get('/delivery/time', (req, res) => {
-  profilecontroller.listDeliveryTime(req, res);
+  homeController.listDeliveryTime(req, res);
 });
 
 router.get('/coupon', middleware.user, (req, res) => {
-  profilecontroller.listCoupon(req, res);
+  homeController.listCoupon(req, res);
 });
 
 router.post('/coupon', middleware.user, function(req, res){
-  profilecontroller.createCoupon(req, res);
+  homeController.createCoupon(req, res);
 });
 
 router.get('/slide', (req, res) => {
-  profilecontroller.listSlide(req, res);
+  homeController.listSlide(req, res);
 });
 
 router.get('/menu', (req, res) => {
-  profilecontroller.listMenu(req, res);
+  homeController.listMenu(req, res);
 });
 
 router.get('/package', (req, res) => {
-  profilecontroller.listPackage(req, res);
+  homeController.listPackage(req, res);
+});
+
+router.get('/cancel/reason/:type', (req, res) => {
+  homeController.listCancelReason(req, res);
 });
 
 /*Gig*/
@@ -169,16 +173,16 @@ router.get('/find/cart/:id', middleware.user, function(req, res){
 router.post('/gig/checkout', middleware.user, function(req, res){
   orderController.checkout(req, res);
 });
-router.post('/gig/update/orderStatus',[middleware.user, middleware.upload( path.join(__dirname, '../storage/images/order/') ).fields([{ name: 'delivery_file', maxCount: 1 }]) ], function(req, res){
+router.post('/gig/update/orderStatus',[middleware.user, middleware.upload( path.join(__dirname, '../storage/images/order/') ).fields([{ name: 'delivery_file', maxCount: 1 }, { name: 'revision_file', maxCount: 1 }]) ], function(req, res){
   orderController.updateOrder(req, res);
-});
-
-router.post('/gig/revisionRequest',[middleware.user, middleware.upload( path.join(__dirname, '../storage/images/revision/') ).fields([{ name: 'revision_file', maxCount: 1 }]) ], function(req, res){
-  orderController.revisionRequest(req, res);
 });
 
 router.post('/gig/rate', middleware.user, function(req, res){
   orderController.rating(req, res);
+});
+
+router.post('/cancel', middleware.user, function(req, res){
+  orderController.cancel(req, res);
 });
 
 /*Proposal Request*/

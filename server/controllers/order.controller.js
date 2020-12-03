@@ -3,6 +3,7 @@ const { Cart } = require('../models/Cart');
 const { Order } = require('../models/Order');
 const { Rating } = require('../models/Rating');
 const { DeliveryStatus } = require('../models/DeliveryStatus');
+const { CancellationRequest } = require('../models/CancellationRequest');
 const helper = require('../services/helper.js');
 const db = require('../services/model.js');
 const Joi = require('@hapi/joi');
@@ -94,10 +95,34 @@ exports.checkout = async (req, res) => {
 
 
 exports.updateOrder = async(req, res) => {
-    const schema = Joi.object().options({ abortEarly: false }).keys({
-        id: Joi.string().required().label("Order Id"),
-        status: Joi.string().required().label("Status"),
-    }).unknown(true);
+
+    if(req.body.status == "Delivered"){
+        var schema = Joi.object().options({ abortEarly: false }).keys({
+            id: Joi.string().required().label("Order Id"),
+            status: Joi.string().required().label("Status"),
+            delivered_message: Joi.string().required().label("Delivery Message"),
+        }).unknown(true);
+    }else if(req.body.status == "Revision Requested"){
+        var schema = Joi.object().options({ abortEarly: false }).keys({
+            id: Joi.string().required().label("Order Id"),
+            status: Joi.string().required().label("Status"),
+            revison_message: Joi.string().required().label("revison_message")
+        }).unknown(true); 
+    }else if(req.body.status == "Cancellation Requested"){
+        var schema = Joi.object().options({ abortEarly: false }).keys({
+            id: Joi.string().required().label("Order Id"),
+            status: Joi.string().required().label("Status"),
+            cancellation_reason: Joi.string().required().label("Cancellation Reason"),
+            cancellation_message: Joi.string().required().label("Cancellation Message"),
+            cancelled_by: Joi.string().required().label("Cancelled by")
+        }).unknown(true); 
+    }else{
+        var schema = Joi.object().options({ abortEarly: false }).keys({
+            id: Joi.string().required().label("Order Id"),
+            status: Joi.string().required().label("Status")
+        }).unknown(true);
+    }
+    
 
     const { error } = schema.validate(req.body);
 
@@ -133,6 +158,43 @@ exports.updateOrder = async(req, res) => {
             order.status= req.body.status;
             
 
+        }else if(req.body.status == "Revision Requested"){
+
+            const arr = order.used_revisions;
+            let index = (arr.length - 1);
+
+            let revision = [];
+
+            if (index === -1) {
+               let data = { 
+                revison_message: req.body.revison_message,  
+                }
+                if(req.files['revision_file']) data.revision_file = req.protocol+ '://' +req.get('host')+"/images/order/" + req.files['revision_file'][0].filename;
+
+                revision.push(data);
+                
+                order.used_revisions = revision; 
+
+            }else{
+                let data = { 
+                revison_message: req.body.revison_message,  
+                }
+                if(req.files['revision_file']) data.revision_file = req.protocol+ '://' +req.get('host')+"/images/order/" + req.files['revision_file'][0].filename;
+                
+                arr[index+1] = data;
+                revision = arr[index];
+        }
+        console.log('revision', revision);
+        
+
+        order.status= req.body.status;
+
+        }else if(req.body.status == "Cancellation Requested"){
+
+            order.status= req.body.status;
+            order.cancellation_reason= req.body.cancellation_reason;
+            order.cancellation_message= req.body.cancellation_message;
+            order.cancelled_by= req.body.cancelled_by;
         }
 
         let orders = await db._update(Order, { _id: req.body.id }, order);
@@ -150,12 +212,12 @@ exports.updateOrder = async(req, res) => {
     }
 }
 
+exports.cancel = async (req, res) => {
 
-
-exports.revisionRequest = async(req, res) => {
-    const schema = Joi.object().options({ abortEarly: false }).keys({
+     const schema = Joi.object().options({ abortEarly: false }).keys({
         id: Joi.string().required().label("Order Id"),
-        revison_message: Joi.string().required().label("Revision Message")
+        cancel_status: Joi.string().required().label("Cancel Status")
+
     }).unknown(true);
 
     const { error } = schema.validate(req.body);
@@ -174,38 +236,20 @@ exports.revisionRequest = async(req, res) => {
 
     try {
 
-        let order = await Order.findById(req.body.id);
-        const arr = order.used_revisions;
-        let index = (arr.length - 1);
+            let order = await Order.findById(req.body.id);
 
-        let revision = [];
-
-        if (index === -1) {
-           let data = { 
-            revison_message: req.body.revison_message,  
+            if(req.body.cancel_status == "Accepted"){
+                order.CancelRequestStatus = req.body.cancel_status;
+                order.status = "Cancelled";
+            }else{
+                order.CancelRequestStatus = req.body.cancel_status;
+                order.status = "Progress";
             }
-            if(req.files['revision_file']) data.revision_file = req.protocol+ '://' +req.get('host')+"/images/revision/" + req.files['revision_file'][0].filename;
-
-            revision.push(data);
             
-            order.used_revisions = revision; 
-
-        }else{
-            let data = { 
-            revison_message: req.body.revison_message,  
-            }
-            if(req.files['revision_file']) data.revision_file = req.protocol+ '://' +req.get('host')+"/images/revision/" + req.files['revision_file'][0].filename;
-            
-            arr[index+1] = data;
-            revision = arr[index];
-        }
-        console.log('revision', revision);
-        
-
-        order.status= "Revision Requested";
 
         let orders = await db._update(Order, { _id: req.body.id }, order);
-        const response = helper.response({ message: res.__('updated'), data: order });
+
+        const response = helper.response({ message: res.__('inserted') });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -217,6 +261,7 @@ exports.revisionRequest = async(req, res) => {
             return res.status(422).json(err);
         }
     }
+
 }
 
 exports.rating = async (req, res) => {

@@ -19,6 +19,7 @@ const slideController = require('../controllers/admin/slide.controller');
 const homeController = require('../controllers/home.controller');
 const userController = require('../controllers/admin/user.controller');
 const proposalController = require('../controllers/proposal.controller');
+const cancelReasonController = require('../controllers/admin/cancelReason.controller');
 
 router.post('/login', (req, res) => {
     adminController.adminAuth(req, res);
@@ -224,6 +225,25 @@ router.get('/get/page/:id', (req, res) => {
 });
 router.get('/page/changestatus/:id/:status', (req, res) => {
   pageController.changeStatus(req, res);
+});
+
+router.get('/cancel/reason', middleware.admin, (req, res) => {
+  cancelReasonController.listCancelReason(req, res);
+});
+router.post('/cancel/reason', (req, res) => {
+  cancelReasonController.createCancelReason(req, res);
+});
+router.patch('/cancel/reason', (req, res) => {
+  cancelReasonController.updateCancelReason(req, res);
+});
+router.delete('/cancel/reason/:id', (req, res) => {
+  cancelReasonController.deleteCancelReason(req, res);
+});
+router.get('/get/cancel/reason/:id', (req, res) => {
+  cancelReasonController.listCancelReasonbyid(req, res);
+});
+router.get('/cancel/reason/changestatus/:id/:status', (req, res) => {
+  cancelReasonController.changeStatus(req, res);
 });
 
 router.get('/user/:id/id', (req, res) => {

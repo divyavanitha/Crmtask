@@ -524,10 +524,10 @@ const Cart = (props) => {
                                  
                                     <Field component="textarea" rows="2" id="delivered_message" value={values.delivered_message} name="delivered_message" onChange={handleChange} maxLength={100} className='form-control mb-2' />
                                  </div>
-                                 <div className="form-group">
+                                 {/* <div className="form-group">
                                     <label for="">Enable Watermark : </label>
                                     <input type="checkbox" name="enable_watermark" onClick={(e) => { setFieldValue(`enable_watermark`, e.currentTarget.checked); }} value={values.enable_watermark} style={{ position: "relative", top: "2px" }} />
-                                 </div>
+                                 </div> */}
                                  <div className="form-group mb-0">
                                     <input type="file" name="delivery_file" onChange={(e) => { setFieldValue("delivery_file", e.currentTarget.files[0]) }} className='form-control' />
                                     <button type="submit" name="submit_delivered" className="btn btn-success float-right submit_delivered" > Deliver Order </button>

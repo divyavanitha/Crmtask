@@ -73,6 +73,10 @@ const orderSchema = mongoose.Schema({
         type: Number,
         default: 0
     },
+    CancelRequestStatus: { type: String },
+    cancellation_reason: { type: String },
+    cancellation_message: { type: String },
+    cancelled_by: { type: String },
     created_at: {
         type: Date,
         default: Date.now

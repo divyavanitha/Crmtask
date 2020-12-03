@@ -121,6 +121,10 @@ const Sidepanel = () => {
                             </li>
 
                             <li>
+                                <Link to="/admin/cancel/reason"> <i className="menu-icon fa fa-picture-o"></i>Cancel Reason </Link>
+                            </li>
+
+                            <li>
                                 <Link to="/admin/user"> <i className="menu-icon fa fa-users"></i>Users </Link>
                             </li>
 
