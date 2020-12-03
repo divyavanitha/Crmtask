@@ -38,38 +38,39 @@ exports.checkout = async (req, res) => {
               var carts = await db._get(Cart, {user: req.user._id}, {}, { populate: "gig" }  ); 
             }
            let total = 0;
-           for(let i in carts) {
 
-                total = total + carts[i].price;
-            }
-     console.log(total);      
+           if(carts.length > 0){
+               for(let i in carts) {
 
-           for(let i in carts) {
+                    total = total + carts[i].price;
 
-                total = total + carts[i].price;
+                    let orderId = 'FIV'+Math.floor(100000 + Math.random() * 900000);
 
-                let orderId = 'FIV'+Math.floor(100000 + Math.random() * 900000);
+                    var order = {
+                        orderId: orderId,
+                        coupon: req.body.coupon_id,
+                        wallet: req.body.wallet,
+                        payment_mode: req.body.payment_mode,
+                        buyer: req.user._id,
+                        seller: carts[i].gig.user,
+                        gig: carts[i].gig._id,
+                        quantity: carts[i].quantity,
+                        price: carts[i].price,
+                        total: total,
+                        status: "Progress",
+                        deliveryTime: carts[i].deliveryTime,
+                        revisions: carts[i].revisions
+                    }
 
-                var order = {
-                    orderId: orderId,
-                    coupon: req.body.coupon_id,
-                    wallet: req.body.wallet,
-                    payment_mode: req.body.payment_mode,
-                    buyer: req.user._id,
-                    seller: carts[i].gig.user,
-                    gig: carts[i].gig._id,
-                    quantity: carts[i].quantity,
-                    price: carts[i].price,
-                    total: total,
-                    status: "Progress",
-                    deliveryTime: carts[i].deliveryTime,
-                    revisions: carts[i].revisions
+                    let orders= await db._store(Order, order);
+
+                    await db._delete(Cart, {"_id":carts[i]._id});
                 }
-
-                let orders= await db._store(Order, order);
-
-                await db._delete(Cart, {"_id":carts[i]._id});
+            }else{
+                const response = helper.response({ message: res.__('cart_empty') });
+                return res.status(response.statusCode).json(response);
             }
+
             
             let tot_carts = await db._get(Cart, {user: req.user._id}); 
 

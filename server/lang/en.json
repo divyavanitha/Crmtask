@@ -6,5 +6,6 @@
 	"updated": "Successfully updated!",
 	"deleted": "Successfully removed!",
 	"inserted": "Successfully inserted!",
-	"created": "Successfully created!"
+	"created": "Successfully created!",
+	"cart_empty": "Your Cart is empty",
  }
