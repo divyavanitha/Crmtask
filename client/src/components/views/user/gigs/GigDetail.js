@@ -129,21 +129,29 @@ const GigDetail = (props) => {
 
         // });
     }, [params.gig]);
+
     const gig = useSelector((state) => state.user && state.user.gig_details && state.user.gig_details.responseData && state.user.gig_details.responseData.gig);
     const packages = useSelector(state => state.user && state.user.packages && state.user.packages.responseData && state.user.packages.responseData.packages);
     const settings = useSelector((state) => state.settings);
 
+    const levelOneRating = settings && settings.settings && settings.settings.seller.levelOneRating;
+    const levelOneCompletedOrder = settings && settings.settings && settings.settings.seller.levelOneCompletedOrder;
+    const levelTwoRating = settings && settings.settings && settings.settings.seller.levelOneRating;
+    const levelTwoCompletedOrder = settings && settings.settings && settings.settings.seller.levelOneCompletedOrder;
+    const topRatedRating = settings && settings.settings && settings.settings.seller.levelOneRating;
+    const topRatedCompletedOrder = settings && settings.settings && settings.settings.seller.levelOneCompletedOrder;
+
     let level = 'New Seller';
 
-    if(gig && gig.user.ratingPercent >= 70 && gig.user.completedOrder >= 50) {
+    if((gig && gig.user.ratingPercent) >= levelOneRating && gig.user.completedOrder >= levelOneCompletedOrder) {
         level = 'Level One';
     }
 
-    if(gig && gig.user.ratingPercent >= 50 && gig.user.completedOrder >= 30) {
+    if(gig && gig.user.ratingPercent >= levelTwoRating && gig.user.completedOrder >= levelTwoCompletedOrder) {
         level = 'Level Two';
     }
 
-    if(gig && gig.user.ratingPercent >= 95 && gig.user.completedOrder >= 100) {
+    if(gig && gig.user.ratingPercent >= topRatedRating && gig.user.completedOrder >= topRatedCompletedOrder) {
         level = 'Top Rated';
     }
 
