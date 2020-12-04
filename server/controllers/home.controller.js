@@ -87,7 +87,6 @@ exports.buyerOrderDetails = async (req, res) => {
 
         let gig = await db._find(Order, {_id: req.params.id}, {}, { populate: ["gig","seller","buyer"] });
 
-
         const data = { gig };
 
         const response = helper.response({ data: data });
@@ -372,6 +371,23 @@ exports.listCancelReason = async (req, res) => {
         const data = { CancelReasons };
 
         const response = helper.response({ data });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.orderRating = async (req, res) => {
+    try {
+
+        let ratings = await db._find(Rating, {orderId: req.params.id});
+
+        const data = { ratings };
+
+        const response = helper.response({ data: data });
 
         return res.status(response.statusCode).json(response);
 

@@ -6,7 +6,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import $ from 'jquery';
 import "./Gig.css";
-import { getSellerOrderDetails, getDeliveryStatus } from "../../../../_actions/user.action";
+import { getSellerOrderDetails, getDeliveryStatus, getRating } from "../../../../_actions/user.action";
 import { updateOrder, rating } from "../../../../_actions/order.action";
 
 import OwlCarousel from 'react-owl-carousel';
@@ -24,6 +24,7 @@ const Cart = (props) => {
    useEffect(() => {
       dispatch(getSellerOrderDetails(params.id))
       dispatch(getDeliveryStatus(params.id))
+      dispatch(getRating(params.id))
       //$(document).ready(function () {
 
          // Sticky Code start //
@@ -64,8 +65,8 @@ const Cart = (props) => {
 
          let data = {
                 order_id: params.id,
-                rating: $("#rating option:selected").val(),
-                comment: $("textarea[name=comment]").val(),
+                seller_rating: $("#rating option:selected").val(),
+                seller_comment: $("textarea[name=comment]").val(),
                 type: "seller"
             };
 
@@ -84,7 +85,12 @@ const Cart = (props) => {
 
    const delivery_status = useSelector((state) => state.user && state.user.delivery_status && state.user.delivery_status.responseData && state.user.delivery_status.responseData.delivery_status);
 
-   console.log('order', delivery_status && delivery_status);
+   const ratings = useSelector((state) => state.user && state.user.rating  && state.user.rating.responseData && state.user.rating.responseData.ratings);
+
+   console.log('order', ratings);
+
+   let buyer_rating = new Array(ratings && ratings.buyerRating).fill(0);
+   let seller_rating = new Array(ratings && ratings.sellerRating).fill(0);
 
    return (
 
@@ -349,7 +355,9 @@ const Cart = (props) => {
                                                    </button>
                                                 </center> : ""}
 
-                              {(order_details && order_details.status == "Completed" && order_details.buyer_rated  != 1)  ? <div className="order-review-box mb-3 p-3">
+
+
+                              {(order_details && order_details.status == "Completed" && order_details.seller_rated  != 1)  ? <div className="order-review-box mb-3 p-3">
 
                                        <h3 className="text-center text-white"> Please Submit a Review For Your Seller</h3>
 
@@ -389,6 +397,61 @@ const Cart = (props) => {
                                        </div>
 
                                    </div> : ""}
+
+                                   {(order_details && order_details.seller_rated == 1 || order_details && order_details.buyer_rated == 1) ? <div className="proposal_reviews mt-5">
+              
+                                <div className="card rounded-0 mt-3">
+
+                                    <div className="card-header bg-fivGrey">
+
+                                        <h5 className="text-center mt-2">
+                                            <img src="images/svg/reviews.svg" className="mr-1 order-icon"/> Order Reviews
+                                        </h5>
+
+                                    </div>
+
+                                    <div className="card-body">
+
+                                        <div className="proposal-reviews">
+
+                                            <ul className="reviews-list">
+
+                                              {(order_details && order_details.buyer_rated == 1) ? <li className="star-rating-row">
+                                                  <span className="user-picture">
+                                                      <img src="https://www.gigtodo.com/user_images/ty_1574032240.png" width="60" height="60" />
+                                                  </span>
+                                                  <h4>
+                                                      <a href="#" className="mr-1 text-success">{order_details && order_details.buyer.firstName} </a>
+                                                      
+                                                        {buyer_rating.map((list, index) => (<span key = {index} className="fa fa-star checked" style={{color: "#EEBD01"}}></span>))}
+                                                      
+                                                  </h4>
+                                                  <div className="msg-body">
+                                                      {ratings && ratings.buyerComment}
+                                                  </div>
+                                                  <span className="rating-date">Dec 02 2020 </span>
+                                               </li> : ""}
+                                                 <hr />
+                                                    {(order_details && order_details.seller_rated == 1) ? <li className="rating-seller">
+                                                        <h4>
+                                                            <span className="mr-1">Seller's Feedback</span>
+                                                            {seller_rating.map((list, index) => (<span key = {index} className="fa fa-star checked" style={{color: "#EEBD01"}}></span>))}
+                                                        </h4>
+                                                      <span className="user-picture">
+                                                          <img src="https://www.gigtodo.com//user_images/cool-profile-picastures-coo_1602176634.png" width="40" height="40" />
+                                                      </span>
+                                                      <div className="msg-body">
+                                                          {ratings && ratings.sellerComment}
+                                                      </div>
+                                                    </li> : ""}
+                                            </ul>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                              </div>: ""}
 
                                                 <div className="proposal_reviews mt-5">
                                                 </div>

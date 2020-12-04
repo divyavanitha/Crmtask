@@ -22,7 +22,8 @@ import {
     SELLER_ORDER_LIST,
     SELLER_ORDER_DETAILS,
     FIND_CART,
-    GET_DELIVERY_STATUS
+    GET_DELIVERY_STATUS,
+    GET_RATING
 } from './types';
 
 
@@ -393,14 +394,21 @@ export const getSellerOrderDetails = (id) => async dispatch => {
 
 };
 
-
-
 export const getDeliveryStatus = (id) => async dispatch => {
     console.log('id', id);
     const delivery_status = await axios.get(`/api/delivery/status/${id}`)
     dispatch({
         type: GET_DELIVERY_STATUS,
         payload: delivery_status.data
+    });
+}
+
+export const getRating = (id) => async dispatch => {
+    console.log('id', id);
+    const ratings = await axios.get(`/api/rating/${id}`)
+    dispatch({
+        type: GET_RATING,
+        payload: ratings.data
     });
 }
 

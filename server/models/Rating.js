@@ -9,13 +9,20 @@ It's a convenient helper for building MongoDB unique indexes. */
 const ratingSchema = mongoose.Schema({
     orderId : {
         type: Schema.Types.ObjectId,
-        ref: 'gigs'
+        ref: 'Order'
     },
-    rating: {
+    sellerRating: {
         type: Number,
         default: 1
     },
-    comment: {
+    buyerRating: {
+        type: Number,
+        default: 1
+    },
+    sellerComment: {
+        type: String
+    },
+    buyerComment: {
         type: String
     },
     created_at: {

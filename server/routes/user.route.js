@@ -223,6 +223,10 @@ router.get('/delivery/status/:id', middleware.user, (req, res) => {
   homeController.deliveryStatus(req, res);
 });
 
+router.get('/rating/:id', middleware.user, (req, res) => {
+  homeController.orderRating(req, res);
+});
+
 /* //const auth = require("../middlewares/auth");
 const passport = require('passport');
 // require('../config/passport')(passport)

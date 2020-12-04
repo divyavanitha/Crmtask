@@ -230,19 +230,19 @@ router.get('/page/changestatus/:id/:status', (req, res) => {
 router.get('/cancel/reason', middleware.admin, (req, res) => {
   cancelReasonController.listCancelReason(req, res);
 });
-router.post('/cancel/reason', (req, res) => {
+router.post('/cancel/reason', middleware.admin, (req, res) => {
   cancelReasonController.createCancelReason(req, res);
 });
-router.patch('/cancel/reason', (req, res) => {
+router.patch('/cancel/reason', middleware.admin, (req, res) => {
   cancelReasonController.updateCancelReason(req, res);
 });
-router.delete('/cancel/reason/:id', (req, res) => {
+router.delete('/cancel/reason/:id', middleware.admin, (req, res) => {
   cancelReasonController.deleteCancelReason(req, res);
 });
-router.get('/get/cancel/reason/:id', (req, res) => {
+router.get('/get/cancel/reason/:id', middleware.admin, (req, res) => {
   cancelReasonController.listCancelReasonbyid(req, res);
 });
-router.get('/cancel/reason/changestatus/:id/:status', (req, res) => {
+router.get('/cancel/reason/changestatus/:id/:status', middleware.admin, (req, res) => {
   cancelReasonController.changeStatus(req, res);
 });
 

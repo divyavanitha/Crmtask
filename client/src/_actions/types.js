@@ -60,6 +60,8 @@ export const GET_DELIVERY_STATUS = 'GET_DELIVERY_STATUS';
 
 export const GET_PACKAGE = 'GET_PACKAGE';
 
+export const GET_RATING = 'GET_RATING';
+
 export const SITE = 'SITE';
 
 export const CREATE_GIGS = 'CREATE_GIGS';

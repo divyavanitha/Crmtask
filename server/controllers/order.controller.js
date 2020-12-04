@@ -28,11 +28,11 @@ exports.checkout = async (req, res) => {
         })
     }
 
-    /*const errorResponse = helper.response({ status: 422, error:errorMessage });
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
 
     if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
-    try {*/
+    try {
             if(req.body.id){
               var carts = await db._get(Cart, {_id: req.body.id}, {}, { populate: "gig" });  
             }else{
@@ -80,15 +80,15 @@ exports.checkout = async (req, res) => {
             
             
 
-    // } catch (err) {
-    //     if (err[0] != undefined) {
-    //         for (i in err.errors) {
-    //             return res.status(422).json(err.errors[i].message);
-    //         }
-    //     } else {
-    //         return res.status(422).json(err);
-    //     }
-    // }
+    } catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                return res.status(422).json(err.errors[i].message);
+            }
+        } else {
+            return res.status(422).json(err);
+        }
+    }
 
 }
 
@@ -266,12 +266,27 @@ exports.cancel = async (req, res) => {
 
 exports.rating = async (req, res) => {
 
-     const schema = Joi.object().options({ abortEarly: false }).keys({
-        order_id: Joi.string().required().label("Order Id"),
-        rating: Joi.string().required().label("Rating"),
-        comment: Joi.string().required().label("Comment"),
+    if(req.body.type == "buyer"){
+         var schema = Joi.object().options({ abortEarly: false }).keys({
+            order_id: Joi.string().required().label("Order Id"),
+            seller_rating: Joi.string().required().label("Seller Rating"),
+            seller_comment: Joi.string().required().label("Seller Comment")
 
-    }).unknown(true);
+        }).unknown(true);
+    }else if(req.body.type == "seller"){
+        var schema = Joi.object().options({ abortEarly: false }).keys({
+            order_id: Joi.string().required().label("Order Id"),
+            buyer_rating: Joi.string().required().label("Buyer Rating"),
+            buyer_comment: Joi.string().required().label("Buyer Comment")
+
+        }).unknown(true);
+    }else{
+       var schema = Joi.object().options({ abortEarly: false }).keys({
+            order_id: Joi.string().required().label("Order Id"),
+            type: Joi.string().required().label("Type")
+
+        }).unknown(true); 
+    }
 
     const { error } = schema.validate(req.body);
 
@@ -289,23 +304,50 @@ exports.rating = async (req, res) => {
 
     try {
 
-        
-
-            let rating = {
-                orderId: req.body.order_id,
-                rating: req.body.rating,
-                comment: req.body.comment
-            }
-
-        let ratings= await db._store(Rating, rating);
+        let rate = await db._find(Rating, {orderId: req.body.order_id});
 
         let order = await Order.findById(req.body.order_id);
-        if(req.body.type == "buyer"){
-            order.seller_rated=1;
+
+        if(rate != null){
+
+            if(req.body.type == "buyer"){
+                var rating ={
+                   buyerRating: req.body.buyer_rating,
+                   buyerComment: req.body.buyer_comment
+                }
+
+                order.buyer_rated=1;
+            }else{
+                var rating ={
+                    sellerRating: req.body.seller_rating,
+                    sellerComment: req.body.seller_comment 
+                }
+
+                order.seller_rated=1;
+            }
+            await db._update(Rating, { _id: rate._id }, rating);
+
         }else{
-            order.buyer_rated=1;
+            if(req.body.type == "buyer"){
+                var rating = {
+                    orderId: req.body.order_id,
+                    buyerRating: req.body.buyer_rating,
+                    buyerComment: req.body.buyer_comment
+                } 
+
+                order.buyer_rated=1;
+            }else{
+               var rating = {
+                    orderId: req.body.order_id,
+                    sellerRating: req.body.seller_rating,
+                    sellerComment: req.body.seller_comment
+                }
+
+                order.seller_rated=1;  
+            }
+
+           await db._store(Rating, rating); 
         }
-        
 
         let orders = await db._update(Order, { _id: req.body.order_id }, order);
 

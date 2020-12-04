@@ -6,7 +6,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import $ from 'jquery';
 import "./Gig.css";
-import { getBuyerOrderDetails, getDeliveryStatus} from "../../../../_actions/user.action";
+import { getBuyerOrderDetails, getDeliveryStatus, getRating} from "../../../../_actions/user.action";
 import { rating, updateOrder } from "../../../../_actions/order.action";
 
 import OwlCarousel from 'react-owl-carousel';
@@ -19,6 +19,7 @@ const Cart = (props) => {
    let history = useHistory();
 
    const [total, setTotal] = useState(0);
+   const [buyerRating, setBuyerRating] = useState("");
 
    useEffect(() => {
 
@@ -26,6 +27,7 @@ const Cart = (props) => {
 
       dispatch(getDeliveryStatus(params.id))
       
+      dispatch(getRating(params.id))
 
       $("body").on("click", ".complete", function(){
             let data = {
@@ -60,9 +62,12 @@ const Cart = (props) => {
 
    const delivery_status = useSelector((state) => state.user && state.user.delivery_status && state.user.delivery_status.responseData && state.user.delivery_status.responseData.delivery_status);
 
-   console.log('order', delivery_status && delivery_status);
+   const ratings = useSelector((state) => state.user && state.user.rating  && state.user.rating.responseData && state.user.rating.responseData.ratings);
 
+   console.log('order', ratings);
 
+   let buyer_rating = new Array(ratings && ratings.buyerRating).fill(0);
+   let seller_rating = new Array(ratings && ratings.sellerRating).fill(0);
 
    return (
 
@@ -89,8 +94,8 @@ const Cart = (props) => {
             console.log('values', values);
             let data = {
                 order_id: params.id,
-                rating: values.rating,
-                comment: values.comment,
+                buyer_rating: values.rating,
+                buyer_comment: values.comment,
                 type: "buyer"
             };
 
@@ -373,64 +378,12 @@ const Cart = (props) => {
                                        </div>
                                       </div>) : ""}
 
-                              <div className="proposal_reviews mt-5">
-              
-                                <div className="card rounded-0 mt-3">
-
-                                    <div className="card-header bg-fivGrey">
-
-                                        <h5 className="text-center mt-2">
-                                            <img src="images/svg/reviews.svg" className="mr-1 order-icon"/> Order Reviews
-                                        </h5>
-
-                                    </div>
-
-                                    <div className="card-body">
-
-                                        <div className="proposal-reviews">
-
-                                            <ul className="reviews-list">
-
-                                              <li className="star-rating-row">
-                                                  <span className="user-picture">
-                                                      <img src="https://www.gigtodo.com/user_images/ty_1574032240.png" width="60" height="60" />
-                                                  </span>
-                                                  <h4>
-                                                      <a href="#" className="mr-1 text-success">tyrone </a>
-                                                      <img src='images/user_rate_full.png' /><img src='images/user_rate_full.png' /><img src='images/user_rate_full.png' />
-                                                      <img src='images/user_rate_full.png' /><img src='images/user_rate_full.png' />
-                                                  </h4>
-                                                  <div className="msg-body">
-                                                      eyr6utgjhgdtfygj
-                                                  </div>
-                                                  <span className="rating-date">Dec 02 2020 </span>
-                                               </li>
-                                                 <hr />
-                                                    <li className="rating-seller">
-                                                        <h4>
-                                                            <span className="mr-1">Seller's Feedback</span>
-                                                            <img src='images/user_rate_full.png' /><img src='images/user_rate_full.png' /><img src='images/user_rate_full.png' /><img src='images/user_rate_full.png' /><img src='images/user_rate_blank.png' />
-                                                        </h4>
-                                                <span className="user-picture">
-                                                    <img src="https://www.gigtodo.com//user_images/cool-profile-picastures-coo_1602176634.png" width="40" height="40" />
-                                                </span>
-                                                  <div className="msg-body">
-                                                      ghghhg
-                                                  </div>
-                                              </li>
-                                            </ul>
-
-                                        </div>
-
-                                    </div>
-
-                              </div>
-                              </div>
+                            
 
 
                                     
 
-                                   {(order_details && order_details.status == "Completed" && order_details.seller_rated != 1)  ? <div className="order-review-box mb-3 p-3">
+                                   {(order_details && order_details.status == "Completed" && order_details.buyer_rated != 1)  ? <div className="order-review-box mb-3 p-3">
 
                                        <h3 className="text-center text-white"> Please Submit a Review For Your Seller</h3>
 
@@ -470,6 +423,61 @@ const Cart = (props) => {
                                        </div>
 
                                    </div> : ""}
+
+                                     {(order_details && order_details.seller_rated == 1 || order_details && order_details.buyer_rated == 1) ? <div className="proposal_reviews mt-5">
+              
+                                <div className="card rounded-0 mt-3">
+
+                                    <div className="card-header bg-fivGrey">
+
+                                        <h5 className="text-center mt-2">
+                                            <img src="images/svg/reviews.svg" className="mr-1 order-icon"/> Order Reviews
+                                        </h5>
+
+                                    </div>
+
+                                    <div className="card-body">
+
+                                        <div className="proposal-reviews">
+
+                                            <ul className="reviews-list">
+
+                                              <li className="star-rating-row">
+                                                  <span className="user-picture">
+                                                      <img src="https://www.gigtodo.com/user_images/ty_1574032240.png" width="60" height="60" />
+                                                  </span>
+                                                  <h4>
+                                                      <a href="#" className="mr-1 text-success">{order_details && order_details.buyer.firstName} </a>
+                                                      
+                                                        {buyer_rating.map((list, index) => (<span key = {index} className="fa fa-star checked" style={{color: "#EEBD01"}}></span>))}
+                                                      
+                                                  </h4>
+                                                  <div className="msg-body">
+                                                      {ratings && ratings.buyerComment}
+                                                  </div>
+                                                  <span className="rating-date">Dec 02 2020 </span>
+                                               </li>
+                                                 <hr />
+                                                    <li className="rating-seller">
+                                                        <h4>
+                                                            <span className="mr-1">Seller's Feedback</span>
+                                                            {seller_rating.map((list, index) => (<span key = {index} className="fa fa-star checked" style={{color: "#EEBD01"}}></span>))}
+                                                        </h4>
+                                                      <span className="user-picture">
+                                                          <img src="https://www.gigtodo.com//user_images/cool-profile-picastures-coo_1602176634.png" width="40" height="40" />
+                                                      </span>
+                                                      <div className="msg-body">
+                                                          {ratings && ratings.sellerComment}
+                                                      </div>
+                                                    </li>
+                                            </ul>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                              </div>: ""}
                                        <div className="proposal_reviews mt-5"></div>
                                                 {(order_details && order_details.status != "Completed") ? <div className="insert-message-box">
                                                    <div className="float-right">
