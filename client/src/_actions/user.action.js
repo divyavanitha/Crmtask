@@ -23,7 +23,8 @@ import {
     SELLER_ORDER_DETAILS,
     FIND_CART,
     GET_DELIVERY_STATUS,
-    GET_RATING
+    GET_RATING,
+    GET_CANCEL_REASON
 } from './types';
 
 
@@ -199,6 +200,14 @@ export const getSubCategory = (id) => async dispatch => {
     });*/
 
     return subcategory.data;
+}
+
+export const getCancelReason = (type) => async dispatch => {
+    const cancel_readon = await axios.get(`/api/cancel/reason/${type}`)
+    dispatch({
+        type: GET_CANCEL_REASON,
+        payload: cancel_readon.data
+    });
 }
 
 export const getSlide = (data) => async dispatch => {

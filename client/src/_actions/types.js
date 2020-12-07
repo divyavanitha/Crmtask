@@ -62,6 +62,8 @@ export const GET_PACKAGE = 'GET_PACKAGE';
 
 export const GET_RATING = 'GET_RATING';
 
+export const GET_CANCEL_REASON = 'GET_CANCEL_REASON';
+
 export const SITE = 'SITE';
 
 export const CREATE_GIGS = 'CREATE_GIGS';

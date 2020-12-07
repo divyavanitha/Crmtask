@@ -6,8 +6,8 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import $ from 'jquery';
 import "./Gig.css";
-import { getSellerOrderDetails, getDeliveryStatus, getRating } from "../../../../_actions/user.action";
-import { updateOrder, rating } from "../../../../_actions/order.action";
+import { getSellerOrderDetails, getDeliveryStatus, getRating, getCancelReason } from "../../../../_actions/user.action";
+import { updateOrder, rating, cancel } from "../../../../_actions/order.action";
 
 import OwlCarousel from 'react-owl-carousel';
 
@@ -25,6 +25,7 @@ const Cart = (props) => {
       dispatch(getSellerOrderDetails(params.id))
       dispatch(getDeliveryStatus(params.id))
       dispatch(getRating(params.id))
+      dispatch(getCancelReason("seller"))
       //$(document).ready(function () {
 
          // Sticky Code start //
@@ -81,12 +82,42 @@ const Cart = (props) => {
 
    }, [params.id]);
 
+   const sendCancelRequest = async () => {
+
+        let data = {
+                id: params.id,
+                cancellation_message: $("textarea[name=cancellation_message]").val(),
+                cancellation_reason: $("select[name=cancellation_reason] option:selected").val(),
+                cancelled_by: "seller",
+                status: "Cancellation Requested"
+        };
+        
+        dispatch(updateOrder(data)).then(res => {
+          console.log('id',res.responseData);
+          window.location.reload();           
+        })
+    }
+
+   const sendCancel = async (status) => {
+      
+        let data = {
+                id: params.id,
+                cancel_status: status,
+                
+         };
+        dispatch(cancel(data)).then(res => {
+          console.log('id',res.responseData);
+          window.location.reload();           
+        })
+    }
+
    const order_details = useSelector((state) => state.user && state.user.seller_order_details && state.user.seller_order_details.responseData && state.user.seller_order_details.responseData.order);
 
    const delivery_status = useSelector((state) => state.user && state.user.delivery_status && state.user.delivery_status.responseData && state.user.delivery_status.responseData.delivery_status);
 
    const ratings = useSelector((state) => state.user && state.user.rating  && state.user.rating.responseData && state.user.rating.responseData.ratings);
 
+   const cancel_reason = useSelector((state) => state.user && state.user.cancel_reason && state.user.cancel_reason.responseData && state.user.cancel_reason.responseData.CancelReasons);
    console.log('order', ratings);
 
    let buyer_rating = new Array(ratings && ratings.buyerRating).fill(0);
@@ -176,9 +207,9 @@ const Cart = (props) => {
                                     <li className="nav-item">
                                        <a href="#order-activity" data-toggle="tab" className="nav-link active make-black ">Order Activity</a>
                                     </li>
-                                    <li className="nav-item">
-                                       <a href="#resolution-center" data-toggle="tab" className="nav-link make-black">Resolution Center</a>
-                                    </li>
+                                    {(order_details && order_details.status == "Progress") ? <li className="nav-item">
+                                       <a href="#resolution-center" data-toggle="tab" className="nav-link make-black">Resolution Center</a> 
+                                    </li> : ""}
                                  </ul>
                               </div>
                               <div className="card-body">
@@ -347,13 +378,45 @@ const Cart = (props) => {
 
                                       </div>)) : ""}
 
-                                       
+                                    {(order_details && order_details.status == "Cancellation Requested" && order_details && order_details.cancelled_by == "buyer") ? <div>
+                                      <div className="card mt-4">
+                                        <div className="card-body">
+                                          <h5 className="text-center">
+                                            <img src="images/svg/cancellation.svg" className="order-icon"/>
+                                            Cancellation Requested By {order_details && order_details.buyer.firstName} 
+                                          </h5>
+                                        </div>
+                                      </div>
 
-                                                {(order_details && order_details.status != "Completed") ? <center>
+
+                                      <div className="message-div">
+                                        <img src="https://www.gigtodo.com//user_images/cool-profile-picastures-coo_1602176634.png" width="50" height="50" className="message-image" />            
+                                      <h5><a href="#" className="seller-buyer-name"> {order_details && order_details.buyer.firstName} </a></h5>
+
+                                      <p className="message-desc">{order_details && order_details.cancellation_message}</p>
+                                      
+
+                                          <center>
+
+                                            <button name="accept_request" onClick={() =>  sendCancel('Accepted')} className="btn btn-success btn-sm">Accept Request</button>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <button name="decline_request" onClick={() =>  sendCancel('Rejected')} className="btn btn-success btn-sm">Decline Request</button>
+
+                                           </center>
+
+                                      
+                                      <p className="text-right text-muted mb-0"> 06:39: Dec 07, 2020 </p>
+
+                                    </div>
+                                 </div> : ""}
+
+                                                {(order_details && order_details.status == "Progress" || order_details && order_details.status == "Revision Requested" || order_details && order_details.status == "Delivered") ? <center>
                                                    <button className="btn btn-success btn-lg mt-5 mb-3" data-toggle="modal" data-target="#deliver-order-modal">
                                                    <i className="fa fa-upload"></i> Deliver Order
                                                    </button>
                                                 </center> : ""}
+
+
 
 
 
@@ -453,9 +516,45 @@ const Cart = (props) => {
                                 </div>
                               </div>: ""}
 
+                              {(order_details && order_details.status == "Cancellation Requested" || order_details && order_details.status == "Cancelled") ? <div>
+
+                                <div className="card mt-4">
+                                    <div className="card-body">
+                                      <h5 className="text-center">
+                                        <img src="images/svg/cancellation.svg" className="order-icon" />
+                                        Cancellation Requested By {(order_details && order_details.cancelled_by == "buyer") ? order_details && order_details.buyer.firstName : order_details && order_details.seller.firstName} 
+                                      </h5>
+                                    </div>
+                              </div>
+                              <div className="message-div-hover">
+
+                                  <img src="https://www.gigtodo.com//user_images/ty_1574032240.png" width="50" height="50" className="message-image" />
+
+                                          
+                              <h5><a href="#" className="seller-buyer-name"> {(order_details && order_details.cancelled_by == "buyer") ? order_details && order_details.buyer.firstName : order_details && order_details.seller.firstName} </a></h5>
+
+                              <p className="message-desc">{order_details && order_details.cancellation_message}</p>
+                              </div> </div> : ""}
+
+                              {(order_details && order_details.status == "Cancelled") ? <div className="order-status-message">
+
+                                    <i className="fa fa-times fa-3x text-danger"></i>
+
+                                    <h5 className="text-danger"> Order Cancelled By Mutual Agreement. </h5>
+
+                                    <p>
+
+                                    Order was cancelled by a mutual agreement between you and your buyer.<br />
+
+                                    The order funds have been refunded to your buyer Shopping Balance.
+
+                                    </p>
+
+                                </div> : ""}
+
                                                 <div className="proposal_reviews mt-5">
                                                 </div>
-                                                {(order_details && order_details.status != "Completed") ?<div className="insert-message-box">
+                                                {(order_details && order_details.status == "Progress" || order_details && order_details.status == "Revision Requested" || order_details && order_details.status == "Delivered") ? <div className="insert-message-box">
                                                    <div className="float-right">
                                                       <p className="text-muted mt-1">
                                                          {order_details && order_details.seller.firstName}      <span className="text-success font-weight-bold"
@@ -497,22 +596,18 @@ const Cart = (props) => {
                                                       <div className="row">
                                                          <div className="col-md-12">
                                                             <h3 className="text-center mb-3"> Order Cancellation Request</h3>
-                                                            <form method="post">
                                                                <div className="form-group">
-                                                                  <textarea name="cancellation_message" placeholder="Please be as detailed as possible..." rows="10" className="form-control" required></textarea>
+                                                                  <textarea name="cancellation_message" placeholder="Please be as detailed as possible..." rows="10" onChange={handleChange} className="form-control" required></textarea>
                                                                </div>
                                                                <div className="form-group">
                                                                   <label className="font-weight-bold"> Cancellation Request Reason </label>
-                                                                  <select name="cancellation_reason" className="form-control">
+                                                                  <select name="cancellation_reason" onChange={handleChange} className="form-control">
                                                                      <option className="hidden"> Select Cancellation Reason </option>
-                                                                     <option> Buyer is not responding. </option>
-                                                                     <option> Buyer is extremely rude. </option>
-                                                                     <option> Buyer requested that I cancel this order.</option>
-                                                                     <option> Buyer expects more than what this proposal can offer.</option>
+                                                                     {cancel_reason && cancel_reason.map((list, index) => (<option value={list.reason}> {list.reason}. </option>))}
+                                                                     
                                                                   </select>
                                                                </div>
-                                                               <input type="submit" name="submit_cancellation_request" value="Submit Cancellation Request" className="btn btn-success float-right" />
-                                                            </form>
+                                                               <button name="submit_cancellation_request" className="btn btn-success float-right submit_cancellation_request" onClick={sendCancelRequest}> Submit Cancellation Request </button>
                                                          </div>
                                                       </div>
                                                    </div>

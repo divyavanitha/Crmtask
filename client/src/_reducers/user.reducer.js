@@ -18,7 +18,8 @@ import {
     SELLER_ORDER_DETAILS,
     FIND_CART,
     GET_DELIVERY_STATUS,
-    GET_RATING
+    GET_RATING,
+    GET_CANCEL_REASON
 } from '../_actions/types';
 
 let initialState = {
@@ -78,6 +79,8 @@ const userReducer = (state = initialState, action) => {
             return { ...state, delivery_status: action.payload }
         case GET_RATING:
             return { ...state, rating: action.payload }
+        case GET_CANCEL_REASON:
+            return { ...state, cancel_reason: action.payload }
         default:
             return state;
     }

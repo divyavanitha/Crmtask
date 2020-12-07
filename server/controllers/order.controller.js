@@ -266,14 +266,14 @@ exports.cancel = async (req, res) => {
 
 exports.rating = async (req, res) => {
 
-    if(req.body.type == "buyer"){
+    if(req.body.type == "seller"){
          var schema = Joi.object().options({ abortEarly: false }).keys({
             order_id: Joi.string().required().label("Order Id"),
             seller_rating: Joi.string().required().label("Seller Rating"),
             seller_comment: Joi.string().required().label("Seller Comment")
 
         }).unknown(true);
-    }else if(req.body.type == "seller"){
+    }else if(req.body.type == "buyer"){
         var schema = Joi.object().options({ abortEarly: false }).keys({
             order_id: Joi.string().required().label("Order Id"),
             buyer_rating: Joi.string().required().label("Buyer Rating"),

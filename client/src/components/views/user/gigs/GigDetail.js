@@ -267,8 +267,8 @@ const GigDetail = (props) => {
                                                     <hr />
                                                     <nav className="breadcrumbs h-text-truncate mb-2">
                                                         <Link to="/">Home</Link>
-                                                        <Link to={"/categories/" + (gig && gig.category.name) }>{ gig && gig.category.name }</Link>
-                                                        <Link to={"/categories/" + (gig && gig.category.name) + "/" + (gig && gig.subCategory.name) }>{gig && gig.subCategory.name}</Link>
+                                                        <Link to={"/categories/" + (gig && gig.category ? gig && gig.category.name : "") }>{gig && gig.category ? gig && gig.category.name : "" }</Link>
+                                                        <Link to={"/categories/" + (gig && gig.category ? gig && gig.category.name : "") + "/" + (gig && gig.subCategory ? gig && gig.subCategory.name : "") }>{gig && gig.subCategory ? gig && gig.subCategory.name : ""}</Link>
                                                     </nav>
                                                     <img className='mb-1' src={require('../../../../assets/images/user_rate_full.png')} />  
                                                     <img className='mb-1' src={require('../../../../assets/images/user_rate_full.png')} />  
