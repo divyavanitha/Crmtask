@@ -9,7 +9,7 @@ const homeController = require('../controllers/home.controller');
 const profilecontroller = require('../controllers/profile.controller');
 const gigController = require('../controllers/gigs.controller');
 const orderController = require('../controllers/order.controller');
-const proposalController = require('../controllers/proposal.controller');
+const requestController = require('../controllers/request.controller');
 const cartController = require('../controllers/cart.controller');
 
 
@@ -24,6 +24,7 @@ router.post('/register', (req, res) => {
 router.post('/social', (req, res) => {
   authController.social(req, res);
 });
+
 
 router.get('/countries', (req, res) => {
   authController.country(req, res);
@@ -177,6 +178,10 @@ router.post('/gig/update/orderStatus',[middleware.user, middleware.upload( path.
   orderController.updateOrder(req, res);
 });
 
+router.post('/tips', middleware.user, function(req, res){
+  orderController.tips(req, res);
+});
+
 router.post('/gig/rate', middleware.user, function(req, res){
   orderController.rating(req, res);
 });
@@ -187,11 +192,11 @@ router.post('/cancel', middleware.user, function(req, res){
 
 /*Proposal Request*/
 router.post('/request', [middleware.user, middleware.upload( path.join(__dirname, '../storage/images/request/') ).fields([{ name: 'files[]', maxCount: 4 }]) ], (req, res) => {
-  proposalController.createrequest(req, res);
+  requestController.createrequest(req, res);
 });
 
 router.post('/offer', middleware.user, function(req, res){
-  proposalController.request_offer(req, res);
+  requestController.request_offer(req, res);
 });
 
 

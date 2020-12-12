@@ -264,6 +264,55 @@ exports.cancel = async (req, res) => {
 
 }
 
+exports.tips = async (req, res) => {
+
+     const schema = Joi.object().options({ abortEarly: false }).keys({
+        id: Joi.string().required().label("Order Id"),
+        tips: Joi.number().required().label("Tip Amount"),
+        tip_message: Joi.string().required().label("Tip Message")
+
+    }).unknown(true);
+
+    const { error } = schema.validate(req.body);
+
+    let errorMessage = {};
+
+    if (error) {
+        error.details.forEach(err => {
+            errorMessage[err.context.key] = (err.message).replace(/"/g, "")
+        })
+    }
+
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
+
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
+
+    try {
+
+            
+            let order = {
+                tips: req.body.tips,
+                tip_message: req.body.tip_message
+            }
+           
+
+        let orders = await db._update(Order, { _id: req.body.id }, order);
+
+        const response = helper.response({ message: res.__('inserted') });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                return res.status(422).json(err.errors[i].message);
+            }
+        } else {
+            return res.status(422).json(err);
+        }
+    }
+
+}
+
 exports.rating = async (req, res) => {
 
     if(req.body.type == "seller"){

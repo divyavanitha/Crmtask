@@ -32,3 +32,5 @@ export const GET_REQUESTS = 'ADMIN_REQUESTS';
 export const GET_ADMIN_SETTINGS = 'GET_ADMIN_SETTINGS';
 export const UPDATE_ADMIN_GENERAL = 'UPDATE_ADMIN_GENERAL';
 export const RBA = 'ROLE_BASED_ACCESS';
+export const FIND_GIG = 'ADMIN_FIND_GIG';
+export const GET_GIGS = 'ADMIN_GIGS';

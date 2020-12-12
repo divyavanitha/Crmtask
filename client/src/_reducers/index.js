@@ -20,6 +20,8 @@ import pages from './admin/page.reducer';
 import cancel_reasons from './admin/cancelReason.reducer';
 import requests from './admin/request.reducer';
 import users from './admin/user.reducer';
+import gigs from './admin/gig.reducer';
+
 
 const rootReducer = combineReducers({
     user,
@@ -42,7 +44,8 @@ const rootReducer = combineReducers({
     pages,
     cancel_reasons,
     gig,
-    requests
+    requests,
+    gigs
 
 });
 

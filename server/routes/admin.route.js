@@ -18,8 +18,9 @@ const languageController = require('../controllers/admin/language.controller');
 const slideController = require('../controllers/admin/slide.controller');
 const homeController = require('../controllers/home.controller');
 const userController = require('../controllers/admin/user.controller');
-const proposalController = require('../controllers/proposal.controller');
 const cancelReasonController = require('../controllers/admin/cancelReason.controller');
+const requestController = require('../controllers/request.controller');
+const gigController = require('../controllers/admin/gigs.controller');
 
 router.post('/login', (req, res) => {
     adminController.adminAuth(req, res);
@@ -266,13 +267,17 @@ router.get('/user/changestatus/:id/:status', (req, res) => {
 });
 
 router.get('/requests', (req, res) => {
-  proposalController.listRequests(req, res);
+  requestController.listRequests(req, res);
 });
 router.delete('/request/:id', (req, res) => {
-  proposalController.deleteRequest(req, res);
+  requestController.deleteRequest(req, res);
 });
 router.get('/request/changestatus/:id/:status', (req, res) => {
-  proposalController.changeStatus(req, res);
+  requestController.changeStatus(req, res);
+});
+
+router.get('/gigs', (req, res) => {
+  gigController.listgigs(req, res);
 });
 
 

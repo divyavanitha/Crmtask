@@ -284,6 +284,10 @@ div#form {
     font-weight: 300
 }
 
+.react-datepicker-wrapper .react-datepicker__input-container input #expiration {
+    width: 556px;
+}
+
 #userform #signup .form-group label .req {
     margin: 2px;
     color: #F7CA18;

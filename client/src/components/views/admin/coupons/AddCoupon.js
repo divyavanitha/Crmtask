@@ -52,7 +52,6 @@ const AddCategory = (props) => {
                 maxAmount: coupon ? coupon.maxAmount : '',
                 expiration: coupon ? coupon.expiration : '',
                 description: coupon ? coupon.description : ''
-
             }
             }
 
@@ -169,7 +168,7 @@ const AddCategory = (props) => {
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Expiration : </label>
                                                     <div className="col-md-6">
-                                                        <DatePicker id="expiration" name="expiration" value={values.expiration} onChange={handleChange} className={'form-control' + (errors.expiration && touched.expiration ? ' is-invalid' : '')} />
+                                                        <DatePicker id="expiration"  name="expiration" value={values.expiration} onChange={handleChange} className={'form-control expiration' + (errors.expiration && touched.expiration ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="expiration" component="div" className="invalid-feedback" />
                                                     </div>
                                                 </div>
