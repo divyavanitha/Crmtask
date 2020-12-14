@@ -41,8 +41,7 @@ exports.addcart = async (req, res) => {
 
      const schema = Joi.object().options({ abortEarly: false }).keys({
         gig_id: Joi.string().required().label("Gig Id"),
-        quantity: Joi.number().required().label("Quantity"),
-        price: Joi.number().required().label("Price")
+        quantity: Joi.number().required().label("Quantity")
 
     }).unknown(true);
 
@@ -66,6 +65,7 @@ exports.addcart = async (req, res) => {
                 user: req.user._id,
                 gig: req.body.gig_id,
                 quantity: req.body.quantity,
+                proposals: req.body.proposals,
                 price: req.body.price,
                 package: req.body.package_id,
                 deliveryTime: req.body.deliveryTime,

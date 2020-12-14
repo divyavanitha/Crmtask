@@ -10,8 +10,8 @@ import setToken from './components/utils/set_token';
 import jwt_decode from 'jwt-decode';
 import axios from "axios";
 
-import { AUTH_USER } from './_actions/types';
-import { ADMIN_USER, RBA } from './_actions/admin/types';
+import { AUTH_USER, LOGOUT_USER } from './_actions/types';
+import { ADMIN_USER, RBA, LOG_OUT } from './_actions/admin/types';
 import { ADD_CART_COUNT } from './_actions/types';
 import store from "./store.js";
 import $ from 'jquery';
@@ -42,17 +42,16 @@ if (localStorage.token) {
 
 
 }
-if (localStorage.admin_token) {
+if (localStorage.adminToken) {
 
-  const decoded = jwt_decode(localStorage.admin_token);
+  const decoded = jwt_decode(localStorage.adminToken);
   if (decoded) {
-    axios.post("/api/admin/permissions", {}, { headers: { 'Authorization': `${localStorage.admin_token}` } }).then((response) => {
+    axios.post("/api/admin/permissions", {}, { headers: { 'Authorization': `${localStorage.adminToken}` } }).then((response) => {
       store.dispatch({
         type: RBA,
         payload: response.data.responseData
       });
     }).catch((err) => {
-
     });
   }
 
@@ -63,6 +62,83 @@ if (localStorage.admin_token) {
   })
 
 }
+
+$( document ).ajaxError(function( event, jqXHR, settings, exception ) {
+    if (jqXHR.status == 401 && localStorage.adminToken != null && localStorage.adminToken != 'false') {
+        refreshToken(true);
+    } else if (jqXHR.status == 401) {
+         window.location.replace("/admin/login");
+    }
+});
+
+function refreshToken(isAdmin = false) {
+
+  if(isAdmin) {
+
+    if(localStorage.adminToken) {
+        axios.post("/api/admin/refresh", {refresh_token: localStorage.adminRefreshToken} ).then((response) => {
+        const { token, refreshToken } = response.data.responseData.user;
+        localStorage.setItem('adminToken', token);
+        localStorage.setItem('adminRefreshToken', refreshToken);
+      }).catch((err) => {
+
+        store.dispatch({
+          type: LOG_OUT,
+          payload: ""
+        })
+
+        localStorage.removeItem("adminToken");
+        localStorage.removeItem("adminRefreshToken");
+        
+      });
+    } else {
+
+    }
+    
+  } else {
+    if(localStorage.token) {
+      axios.post("/api/refresh", {refresh_token: localStorage.refreshToken} ).then((response) => {
+        const { token, refreshToken } = response.data.responseData.user;
+        setToken(token);
+        localStorage.setItem('token', token);
+        localStorage.setItem('refreshToken', refreshToken);
+      }).catch((err) => {
+
+       store.dispatch({
+          type: LOGOUT_USER,
+          payload: ""
+       })
+
+       setToken(false);
+
+       localStorage.removeItem("token");
+       localStorage.removeItem('refreshToken');
+        
+      });
+    }
+    
+
+  }
+  
+  
+}
+
+axios.interceptors.response.use((response) => {
+    return response;
+}, (error) => {
+      if(error.response.status == 401) {
+        let url = (error.response.config.url).split("/");
+
+        if(!(url.indexOf('admin') > -1)) refreshToken( url.indexOf('admin') > -1 );
+
+
+        if( (window.location.href).includes('/admin/login') ) refreshToken( 'admin' );
+        else if(window.location.pathname != '/') refreshToken();
+      }
+
+      throw error;
+      
+});
 
 $("body").on("keypress", ".phone", function(e) {
         if (

@@ -3,7 +3,7 @@ import jwt_decode from 'jwt-decode';
 
 export const check = (action, rules) => {
 
-  const decoded = jwt_decode(localStorage.admin_token);
+  const decoded = jwt_decode(localStorage.adminToken);
   if (decoded && decoded.roles) {
     for (var role of decoded.roles) {
       const permissions = rules[role];

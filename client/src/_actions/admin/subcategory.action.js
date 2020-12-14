@@ -3,7 +3,7 @@ import axios from "axios";
 import { GET_SUB_CATEGORIES, FIND_SUB_CATEGORY } from "./types";
 
 export const getSubCategories = () => dispatch => {
-    let token = localStorage.admin_token;
+    let token = localStorage.adminToken;
     axios
         .get('/api/admin/subcategory')
         .then(res => {
@@ -22,7 +22,7 @@ export const getSubCategories = () => dispatch => {
 };
 
 export const getSubCategorybyId = (id) => dispatch => {
-    let token = localStorage.admin_token;
+    let token = localStorage.adminToken;
     axios
         .get(`/api/admin/get/subcategory/${id}`)
         .then(res => {
@@ -42,7 +42,7 @@ export const getSubCategorybyId = (id) => dispatch => {
 
 export const addSubCategory = (data) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.post('/api/admin/subcategory', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -55,7 +55,7 @@ export const addSubCategory = (data) => async dispatch => {
 
 export const updateSubCategory = (data) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.patch('/api/admin/subcategory', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -68,7 +68,7 @@ export const updateSubCategory = (data) => async dispatch => {
 
 export const deleteSubCategory = (id) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.delete(`/api/admin/subcategory/${id}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -80,7 +80,7 @@ export const deleteSubCategory = (id) => async dispatch => {
 
 export const changeSubCategoryStatus = (id, status) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.get(`/api/admin/subcategory/changestatus/${id}/${status}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;

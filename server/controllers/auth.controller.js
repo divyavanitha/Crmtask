@@ -7,12 +7,14 @@ const { Language } = require('./../models/language');
 const { Skill } = require('./../models/skill');
 
 const Joi = require('@hapi/joi');
+const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
 const helper = require('../services/helper.js');
 const db = require('../services/model.js');
 dotenv.config({ path: __dirname + '/../../.env' });
+const tokenList = {};
 
 exports.login = async (req, res) => {
 
@@ -42,11 +44,15 @@ exports.login = async (req, res) => {
         user.deviceToken = req.body.device_token;
         const result = await user.save();
 
-        let payload = _.pick(user, ['_id', 'firstName', 'lastName', 'email', 'mobile']);
+        let payload = _.pick(user, ['_id', 'firstName', 'lastName', 'email', 'mobile', 'wallet']);
 
         const token = user.generateAuthToken(payload);
+        const refreshToken = user.generateRefreshToken(payload);
 
         payload.token = 'Bearer ' + token;
+        tokenList[refreshToken] = payload;
+
+        payload.refreshToken =  refreshToken;
 
         const data = { user: payload };
 
@@ -111,7 +117,7 @@ exports.register = async (req, res) => {
         let verify = Math.floor((Math.random() * 10000000) + 1);
         const result = await user.save();
 
-        let payload = _.pick(user, ['_id', 'firstName', 'lastName', 'email', 'mobile']);
+        let payload = _.pick(user, ['_id', 'firstName', 'lastName', 'email', 'mobile', 'wallet']);
 
         const token = user.generateAuthToken(payload);
 
@@ -205,7 +211,7 @@ exports.social = async (req, res) => {
         let socialUniqueId = await User.findOne({ socialUniqueId: req.body.social_unique_id });
         if (socialUniqueId) {
 
-            let payload = _.pick(socialUniqueId, ['_id', 'firstName', 'lastName', 'email', 'mobile']);
+            let payload = _.pick(socialUniqueId, ['_id', 'firstName', 'lastName', 'email', 'mobile', 'wallet']);
 
             const token = socialUniqueId.generateAuthToken(payload);
 
@@ -367,145 +373,6 @@ exports.passwordreset = async (req, res) => {
     }
 };
 
-exports.admin = async (UserDetails, role, res) => {
-
-    try {
-
-        const schema = Joi.object().options({ abortEarly: false }).keys({
-            email: Joi.string().required().label("Email"),
-            password: Joi.string().required().min(6).label("Password")
-        });
-
-        const { error } = schema.validate(UserDetails);
-        const errors = { 'statusCode': 200, 'title': '', 'message': '', 'data': [], 'error': [] };
-        if (error) {
-            for (let err of error.details) {
-                errors.data[err.path[0]] = (err.message).replace(/"/g, "");
-            }
-        }
-
-        if (error) return res.status(422).json(errors);
-
-        let user = await User.findOne({ email: UserDetails.email });
-        if (!user) res.status(422).send({ 'email': 'Invalid email' });
-
-        const validPassword = await bcrypt.compare(UserDetails.password, user.password);
-        if (!validPassword) res.status(422).send({ password: 'password error' });
-
-        let payload = _.pick(user, ['_id', 'name', 'email']);
-
-        const token = user.generateAuthToken(payload);
-
-        const response = { success: true, user: payload, token: 'Bearer ' + token, role }
-
-        res.send(response);
-    } catch (err) {
-        if (err[0] != undefined) {
-            for (i in err.errors) {
-                res.status(422).send(err.errors[i].message);
-            }
-        } else {
-            res.status(422).send(err);
-        }
-    }
-
-};
-
-exports.adminregister = async (UserDetails, role, res) => {
-    console.log("adminregister");
-    try {
-        const { error } = validate(UserDetails);
-        const errors = {};
-        if (error) {
-            for (let err of error.details) {
-                errors[err.path[0]] = (err.message).replace(/"/g, "");
-            }
-        }
-
-        if (error) return res.status(422).json(errors);
-
-        const user = new User({
-            name: UserDetails.name,
-            email: UserDetails.email,
-            password: UserDetails.password
-        })
-
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(UserDetails.password, salt);
-
-        await user.save();
-
-        let payload = _.pick(user, ['_id', 'name', 'email']);
-
-        const token = user.generateAuthToken(payload);
-
-        const response = { success: true, user: payload, token: 'Bearer ' + token, role }
-
-        res.send(response);
-
-    } catch (err) {
-        if (err[0] != undefined) {
-            for (i in err.errors) {
-                res.status(422).send(err.errors[i].message);
-            }
-        } else {
-            res.status(500).send({ error: err.name });
-        }
-    }
-
-};
-
-exports.register1 = async (req, res) => {
-
-    try {
-        const { error } = validate(req.body);
-        const errors = {};
-        if (error) {
-            for (let err of error.details) {
-                errors[err.path[0]] = (err.message).replace(/"/g, "");
-            }
-        }
-        if (error) return res.status(422).json(errors);
-        const user = new User({
-            name: req.body.name,
-            email: req.body.email,
-            mobile: req.body.mobile,
-            password: req.body.password
-        })
-
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(req.body.password, salt);
-        console.log("User is here" + user)
-        let verify = Math.floor((Math.random() * 10000000) + 1);
-        await user.save()
-            .then(data => {
-                let mailOption = {
-                    from: 'skumaran449@gmail.com', // sender this is your email here
-                    to: `${req.body.Email}`, // receiver email2
-                    subject: "Account Verification",
-                    html: `<h1>Hello Friend Please Click on this link<h1><br><hr><p>HELLO I AM 
-            THECODERANK I MAKE THIS TUTORIAL FOR MY SUBSCRIBERS AND OUR FRIENDS.</p>
-            <br><a href="http://localhost:3000/verification/?verify=${verify}&id=${user._id}">CLICK ME TO ACTIVATE YOUR ACCOUNT</a>`
-                }
-            });
-
-        // let payload = _.pick(user, ['_id', 'name', 'email']);
-        // const token = user.generateAuthToken(payload);
-        // const response = { success: true, user: payload, token: 'Bearer ' + token,role }
-
-        // res.send(userdata);
-
-    } catch (err) {
-        if (err[0] != undefined) {
-            for (i in err.errors) {
-                res.status(422).send(err.errors[i].message);
-            }
-        } else {
-            res.status(500).send({ error: err.name });
-        }
-    }
-
-};
 
 exports.verification = async (req, res) => {
 
@@ -535,17 +402,56 @@ exports.verification = async (req, res) => {
 
 };
 
-exports.googleOAuth = async (req, res, next) => {
-    // Generate token
-    console.log('got here');
-    const token = signToken(req.user);
-    res.status(200).json({ token });
+
+exports.refresh = async (req, res) => {
+
+    try {
+
+        let refresh_token = req.body.refresh_token;
+
+        if( refresh_token && (refresh_token in tokenList)) {
+            let user = await User.findOne({ email: tokenList[refresh_token]['email'] });
+
+            const result = await user.save();
+
+            let payload = _.pick(user, ['_id', 'firstName', 'lastName', 'email', 'mobile', 'wallet']);
+
+            const token = user.generateAuthToken(payload);
+            const refreshToken = user.generateRefreshToken(payload);
+
+            payload.token = 'Bearer ' + token;
+            tokenList[refreshToken] = payload;
+
+            payload.refreshToken =  refreshToken;
+
+            const data = { user: payload };
+
+            const response = helper.response({ data });
+            return res.status(response.statusCode).json(response);
+
+        } else {
+            return res.status(401).json({
+                "statusCode": 401,
+                "title": "Unauthorised",
+                "message": "Unauthorised",
+                "data": {},
+                "error": {}
+            });
+        }
+
+    } catch (err) {
+        
+        return res.status(401).json({
+            "statusCode": 401,
+            "title": "Unauthorised",
+            "message": "Unauthorised",
+            "data": {},
+            "error": {}
+        });
+    }
+
 };
 
-exports.secret = async (req, res, next) => {
-    console.log('I managed to get here!');
-    res.json({ secret: "resource" });
-}
 
 exports.country = async (req, res) => {
     try {

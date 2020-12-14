@@ -34,7 +34,6 @@ function auth(req, res, next) {
 }
 
 async function admin(req, res, next) {
-console.log(req.header("Authorization"))
     let token = req.header("Authorization");
     if (token && token.startsWith('Bearer ')) {
         // Remove Bearer from string

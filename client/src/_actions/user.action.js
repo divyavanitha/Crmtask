@@ -31,11 +31,13 @@ import {
 export const login = (data) => async dispatch => {
 
     try {
+        
         const response = await axios.post(`/api/login`, data);
 
-        const { token } = response.data.responseData.user;
+        const { token, refreshToken } = response.data.responseData.user;
 
         localStorage.setItem('token', token);
+        localStorage.setItem('refreshToken', refreshToken);
 
         setToken(token);
 
@@ -56,9 +58,10 @@ export const register = (data) => async dispatch => {
     try {
         const response = await axios.post(`/api/register`, data);
 
-        const { token } = response.data.responseData.user;
+        const { token, refreshToken } = response.data.responseData.user;
 
         localStorage.setItem('token', token);
+        localStorage.setItem('refreshToken', refreshToken);
 
         setToken(token);
 
@@ -113,6 +116,7 @@ export function auth() {
 export const logout = () => dispatch => {
 
     localStorage.removeItem("token");
+    localStorage.removeItem('refreshToken');
 
     setToken(false);
 
@@ -223,7 +227,7 @@ export const getSlide = (data) => async dispatch => {
 
 export const getGigbyId = (id) => dispatch => {
     axios
-        .get(`/api/get/gig/details/${id}`)
+        .get(`/api/gig/details/${id}`)
         .then(res => {
             dispatch({
                 type: FIND_GIG,
@@ -237,6 +241,22 @@ export const getGigbyId = (id) => dispatch => {
                 payload: null
             })
         );
+};
+
+export const getGigbyName = (name) => async dispatch => {
+    try {
+        let response = await axios.get(`/api/gig/detail/${name}`);
+        dispatch({
+            type: FIND_GIG,
+            payload: response.data
+        });
+        response.data.status = 'success';
+        return response.data;
+    } catch (e) {
+        e.response.data.status = 'error';
+        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        return e.response.data;
+    }
 };
 
 export const getGigbyCategory = (data) => async dispatch => {
@@ -253,7 +273,7 @@ export const getGigbyCategory = (data) => async dispatch => {
 export const getCartbyId = (id) => dispatch => {
     console.log('id', id);
     axios
-        .get(`/api/find/cart/${id}`)
+        .get(`/api/cart/${id}`)
         .then(res => {
 
             dispatch({
@@ -273,7 +293,7 @@ export const getCartbyId = (id) => dispatch => {
 
 export const addCart = (data) => async dispatch => {
     try {
-        let response = await axios.post('/api/gig/cart', data);
+        let response = await axios.post('/api/cart', data);
         dispatch({
             type: ADD_CART_COUNT,
             payload: response.data.responseData.count
@@ -283,7 +303,7 @@ export const addCart = (data) => async dispatch => {
     } catch (e) {
         e.response.data.status = 'error';
         if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
-        return e.response.data;
+        throw new Error(e.response.data);
     }
 }
 
@@ -301,7 +321,7 @@ export const getGigWithoutAuth = (data) => async dispatch => {
 export const getCartList = (data) => async dispatch => {
 
     try {
-        let cart = await axios.get("/api/gig/cart", data);
+        let cart = await axios.get("/api/cart", data);
 
         dispatch({
             type: GET_CART_LIST,
@@ -316,7 +336,7 @@ export const getCartList = (data) => async dispatch => {
 
 export const deleteCart = (id) => async dispatch => {
     try {
-        let response = await axios.delete(`/api/gig/cart/${id}`);
+        let response = await axios.delete(`/api/cart/${id}`);
 
         dispatch({
             type: ADD_CART_COUNT,

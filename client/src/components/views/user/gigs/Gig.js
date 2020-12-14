@@ -21,7 +21,7 @@ function Gig(props) {
             <div className={props.styles ? props.styles : "col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-3 pr-lg-1"}>
                 <div className="proposal-card-base mp-proposal-card">
                     {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
-                    <Link to={props.list.user ? "/gig/" + props.list.user.firstName + "/" + props.list._id : ""}>
+                    <Link to={props.list.user ? "/gig/" + props.list.user.firstName + "/" + props.list.title : ""}>
                         <img src={props.list.photo[0] ? props.list.photo[0].photo : ""} className="img-fluid" />
                     </Link>
                     <div className="proposal-card-caption">
@@ -43,7 +43,7 @@ function Gig(props) {
                             </div>
                         </div>
                         {/* <!--- onePress-seller-info Ends ---> */}
-                        <Link to={props.list.user ? "/gig/" + props.list.user.firstName + "/" + props.list._id : ""} className="proposal-link-main js-proposal-card-imp-data">
+                        <Link to={props.list.user ? "/gig/" + props.list.user.firstName + "/" + props.list.title : ""} className="proposal-link-main js-proposal-card-imp-data">
                             <h3>{props.list.title}</h3>
                         </Link>
                         <div className="rating-badges-container">

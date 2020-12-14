@@ -23,7 +23,6 @@ const gigSchema = mongoose.Schema({
     requirement: {
         type: String
     },
-    
     pricing: [{
         package: { type: Schema.Types.ObjectId, ref: 'Package', required: false },
         name: { type: String },
@@ -34,7 +33,11 @@ const gigSchema = mongoose.Schema({
         
     }],
     fixed_price: { type: Boolean },
-    proposal: { type: Boolean },
+    proposals: [{
+        name: { type: String },
+        price: { type: Number }
+        
+    }],
     status: { type: Boolean },
     faq: [{
         question: { type: String },

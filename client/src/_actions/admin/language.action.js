@@ -3,7 +3,7 @@ import axios from "axios";
 import { GET_LANGUAGES, FIND_LANGUAGE } from "./types";
 
 export const getLanguages = () => dispatch => {
-    let token = localStorage.admin_token;
+    let token = localStorage.adminToken;
     axios
         .get('/api/admin/language', { headers: { 'Authorization': `${token}` } })
         .then(res => {
@@ -22,7 +22,7 @@ export const getLanguages = () => dispatch => {
 };
 
 export const getLanguagebyId = (id) => dispatch => {
-    let token = localStorage.admin_token;
+    let token = localStorage.adminToken;
     axios
         .get(`/api/admin/get/language/${id}`, { headers: { 'Authorization': `${token}` } })
         .then(res => {
@@ -42,7 +42,7 @@ export const getLanguagebyId = (id) => dispatch => {
 
 export const addLanguage = (data) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.post('/api/admin/language', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -55,7 +55,7 @@ export const addLanguage = (data) => async dispatch => {
 
 export const updateLanguage = (data) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.patch('/api/admin/language', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -68,7 +68,7 @@ export const updateLanguage = (data) => async dispatch => {
 
 export const deleteLanguage = (id) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.delete(`/api/admin/language/${id}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -80,7 +80,7 @@ export const deleteLanguage = (id) => async dispatch => {
 
 export const changeLanguageStatus = (id, status) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.get(`/api/admin/language/changestatus/${id}/${status}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;

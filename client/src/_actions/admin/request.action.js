@@ -4,7 +4,7 @@ import { GET_REQUESTS } from "./types";
 
 export const getBuyerRequests = () => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.get('/api/admin/requests', { headers: { 'Authorization': `${token}` } });
         dispatch({
             type: GET_REQUESTS,
@@ -20,7 +20,7 @@ export const getBuyerRequests = () => async dispatch => {
 
 export const deleteRequest = (id) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.delete(`/api/admin/request/${id}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -32,7 +32,7 @@ export const deleteRequest = (id) => async dispatch => {
 
 export const changeRequestStatus = (id, status) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.get(`/api/admin/request/changestatus/${id}/${status}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;

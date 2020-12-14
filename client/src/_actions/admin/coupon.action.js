@@ -3,7 +3,7 @@ import axios from "axios";
 import { GET_COUPONS, FIND_COUPON } from "./types";
 
 export const getCoupons = () => dispatch => {
-    let token = localStorage.admin_token;
+    let token = localStorage.adminToken;
     axios
         .get('/api/admin/coupon', { headers: { 'Authorization': `${token}` } })
         .then(res => {
@@ -22,7 +22,7 @@ export const getCoupons = () => dispatch => {
 };
 
 export const getCouponbyId = (id) => dispatch => {
-    let token = localStorage.admin_token;
+    let token = localStorage.adminToken;
     axios
         .get(`/api/admin/get/coupon/${id}`, { headers: { 'Authorization': `${token}` } })
         .then(res => {
@@ -42,7 +42,7 @@ export const getCouponbyId = (id) => dispatch => {
 
 export const addCoupon = (data) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.post('/api/admin/coupon', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -55,7 +55,7 @@ export const addCoupon = (data) => async dispatch => {
 
 export const updateCoupon = (data) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.patch('/api/admin/coupon', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -68,7 +68,7 @@ export const updateCoupon = (data) => async dispatch => {
 
 export const deleteCoupon = (id) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.delete(`/api/admin/coupon/${id}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -80,7 +80,7 @@ export const deleteCoupon = (id) => async dispatch => {
 
 export const changeCouponStatus = (id, status) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.get(`/api/admin/coupon/changestatus/${id}/${status}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;

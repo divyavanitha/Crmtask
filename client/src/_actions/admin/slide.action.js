@@ -3,7 +3,7 @@ import axios from "axios";
 import { GET_SLIDES, FIND_SLIDE } from "./types";
 
 export const getSlides = () => dispatch => {
-    let token = localStorage.admin_token;
+    let token = localStorage.adminToken;
     axios
         .get('/api/admin/slide', { headers: { 'Authorization': `${token}` } })
         .then(res => {
@@ -22,7 +22,7 @@ export const getSlides = () => dispatch => {
 };
 
 export const getSlidebyId = (id) => dispatch => {
-    let token = localStorage.admin_token;
+    let token = localStorage.adminToken;
     axios
         .get(`/api/admin/get/slide/${id}`, { headers: { 'Authorization': `${token}` } })
         .then(res => {
@@ -42,7 +42,7 @@ export const getSlidebyId = (id) => dispatch => {
 
 export const addSlide = (data) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.post('/api/admin/slide', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -55,7 +55,7 @@ export const addSlide = (data) => async dispatch => {
 
 export const updateSlide = (data) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.patch('/api/admin/slide', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -68,7 +68,7 @@ export const updateSlide = (data) => async dispatch => {
 
 export const deleteSlide = (id) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.delete(`/api/admin/slide/${id}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -80,7 +80,7 @@ export const deleteSlide = (id) => async dispatch => {
 
 export const changeSlideStatus = (id, status) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.get(`/api/admin/slide/changestatus/${id}/${status}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;

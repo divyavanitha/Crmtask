@@ -4,7 +4,7 @@ import { GET_PAGES, FIND_PAGE } from "./types";
 
 export const getPages = () => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.get('/api/admin/page', { headers: { 'Authorization': `${token}` } });
         dispatch({
             type: GET_PAGES,
@@ -19,7 +19,7 @@ export const getPages = () => async dispatch => {
 };
 
 export const getPagebyId = (id) => dispatch => {
-    let token = localStorage.admin_token;
+    let token = localStorage.adminToken;
     axios
         .get(`/api/admin/get/page/${id}`, { headers: { 'Authorization': `${token}` } })
         .then(res => {
@@ -39,7 +39,7 @@ export const getPagebyId = (id) => dispatch => {
 
 export const addPage = (data) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.post('/api/admin/page', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -52,7 +52,7 @@ export const addPage = (data) => async dispatch => {
 
 export const updatePage = (data) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.patch('/api/admin/page', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -65,7 +65,7 @@ export const updatePage = (data) => async dispatch => {
 
 export const deletePage = (id) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.delete(`/api/admin/page/${id}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -78,7 +78,7 @@ export const deletePage = (id) => async dispatch => {
 
 export const changePageStatus = (id, status) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.get(`/api/admin/page/changestatus/${id}/${status}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;

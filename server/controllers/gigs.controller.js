@@ -1,6 +1,8 @@
 const express = require("express");
 const { User } = require("../models/user");
 const { Gig } = require('../models/gigs');
+const { Order } = require('../models/Order');
+const { Rating } = require('../models/Rating');
 const { Category } = require('../models/category');
 const { SubCategory } = require('../models/SubCategory');
 const helper = require('../services/helper.js');
@@ -48,7 +50,11 @@ exports.getGigDetails = async (req, res) => {
             { path: "subCategory", select: 'name'}
             ] });
 
-        const data = { gig };
+        let orderCount = await db._count(Order, {gig: gig._id, status:  {$in : ["Progress", "Cancellation Requested", "Revision Requested"]}  });
+
+        let reviews = await db._get(Rating, {gig: gig._id }, { sellerRating: 1, buyerRating: 1, buyerComment: 1, sellerComment: 1} );
+
+        const data = { gig, orderCount, reviews };
 
         const response = helper.response({ data: data });
 
@@ -59,6 +65,34 @@ exports.getGigDetails = async (req, res) => {
     }
 
 }
+
+exports.getGigDetailByName = async (req, res) => {
+
+    try {
+
+        let gig = await db._find(Gig, {title: req.params.title}, {}, { populate: [ 
+            { path: "user", populate: { path: 'country', model: 'Country', select: 'name' } }, 
+            { path: "user", populate: { path: 'city', model: 'city', select: 'name' } }, 
+            { path: "category", select: 'name'}, 
+            { path: "subCategory", select: 'name'}
+            ] });
+
+        let orderCount = await db._count(Order, {gig: gig._id, status:  {$in : ["Progress", "Cancellation Requested", "Revision Requested"]}  });
+
+        let reviews = await db._get(Rating, {gig: gig._id }, { sellerRating: 1, buyerRating: 1, buyerComment: 1, sellerComment: 1, seller_at: 1, buyer_at: 1}, { populate: [{path: 'seller', select: 'firstName lastName profilePhoto -_id'}, {path: 'buyer', select: 'firstName lastName profilePhoto -_id'}] } );
+
+        const data = { gig, orderCount, reviews };
+
+        const response = helper.response({ data: data });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
 
 exports.getPackage = async (req, res) => {
     try {
@@ -183,7 +217,6 @@ exports.updatePricing = async(req, res) => {
         for(let i in req.body.price) {
             if(req.body.fixed_price == 1){
                 var price = {                  
-                    description: req.body.description[i],
                     revisions: req.body.revisions[i],
                     price: req.body.price[i],
                     DeliveryTime: req.body.delivery_time_id[i],                   

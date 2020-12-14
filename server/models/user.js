@@ -84,7 +84,8 @@ const userSchema = mongoose.Schema({
         year: { type: Number },
     }],
     wallet: {
-        type: Number
+        type: Number,
+        default: 0
     },
     rating: {
         type: Number
@@ -122,7 +123,17 @@ userSchema.methods.generateAuthToken = function (payload) {
 
     const token = jwt.sign(payload, process.env.SECRET_KEY, {
         algorithm: "HS512",
-        expiresIn: 43000,
+        expiresIn: '15m', 
+    });
+
+    return token;
+}
+
+userSchema.methods.generateRefreshToken = function (payload) {
+
+    const token = jwt.sign(payload, process.env.SECRET_REFRESH_KEY, {
+        algorithm: "HS512",
+        expiresIn: '1h', 
     });
 
     return token;

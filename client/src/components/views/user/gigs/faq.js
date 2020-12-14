@@ -20,8 +20,6 @@ const AddGig = (props) => {
   useEffect(() => {
 
     $(".insert").on("click", function () {
-      console.log('data', $("input[name^=question]").map(function () { return $(this).val(); }).get());
-
       $.ajax({
         url: "/api/gig/faq",
         type: "post",
@@ -34,22 +32,19 @@ const AddGig = (props) => {
           id: params.id,
           action: "faq"
         },
-        /*processData: false,
-        contentType: false,
-        headers: {
-            Authorization: "Bearer " + getToken(guard)
-        },*/
         beforeSend: function (request) {
           //showInlineLoader();
         },
         success: function (response, textStatus, jqXHR) {
 
-          console.log(response.responseData.faq);
+          $("#faqTabs").find("input[name^=question]").val("");
+          $("#faqTabs").find("input[name^=answer]").val("");
+          
           var result = response.responseData.faq;
           var html = "";
           for (var i in result) {
 
-            html += `<div class="tab rounded border-1">
+            html += `<div class="tab rounded border-1 faq_container">
 
               <div class="tab-header" data-toggle="collapse" href="#faq-58">
                     <a class="float-left"> <i class="fa fa-bars mr-2"></i>`+ result[i].question + `</a>
@@ -68,7 +63,7 @@ const AddGig = (props) => {
                       </div>
 
                       <div class="form-group mb-0">
-                            <a href="#" class="btn btn-danger btn-sm delete-faq">Delete</a>
+                            <a class="btn btn-danger btn-sm delete-faq delete">Delete</a>
                             <button type="submit" class="btn btn-success btn-sm float-right update">Update</button>
                       </div>   
                 </div>
@@ -80,11 +75,12 @@ const AddGig = (props) => {
           $('#faTabs').html(html);
 
           $(".update").on('click', function (e) {
-            alert();
             $.ajax({
               url: "/api/gig/update/faq",
               type: 'post',
-              //dataType: 'application/json',
+              headers: {
+                Authorization: localStorage.token
+              },
               data: {
                 question: $("input[name=title]").val(),
                 answer: $("input[name=content]").val(),
@@ -97,52 +93,30 @@ const AddGig = (props) => {
               }
             });
           });
-          /*var data = parseData(response);
-          if (table != null) {
-          var info = $('#data-table').DataTable().page.info();
-          table.order([[ 0, 'asc' ]] ).draw( false );
-          }
 
-          $(".crud-modal").modal("hide");
-          alertMessage("Success", data.message, "success");
-          hideInlineLoader();
-         
-          if(page!=undefined){
-              if(page=='/admin/dashboard'){
-                  if(data.responseData.length != 0){
-                      localStorage.setItem('admin', JSON.stringify(data.responseData));
-                  }
-               }
-               if(page=='store/order'){
-                  page = '/home/';
-               }
+          $(".delete").on('click', function (e) {
+            $(this).closest('.faq_container').remove();
+            /*$.ajax({
+              url: "/api/gig/update/faq",
+              type: 'delete',
+              headers: {
+                Authorization: localStorage.token
+              },
+              data: {
+                question: $("input[name=title]").val(),
+                answer: $("input[name=content]").val(),
+                faq_id: $("input[name=faq_id]").val(),
+                action: "faq",
+                id: params.id
+              },
+              success: function (data) {
 
-              setTimeout(function(){
-                  window.location.replace(page);
-                }, 1000);
-          }*/
+              }
+            });*/
+          });
 
         },
         error: function (jqXHR, textStatus, errorThrown) {
-
-          /*if (jqXHR.status == 401 && getToken(guard) != null) {
-              refreshToken(guard);
-          } else if (jqXHR.status == 401) {
-              window.location.replace("/admin/login");
-          } else if (jqXHR.status == 403) {
-              window.location.replace("/access-denied");
-          }
-
-          if (jqXHR.responseJSON) {
-              if(page=='store/order'){
-                  $('.commentLength').html(jqXHR.responseJSON.message);
-                  hideInlineLoader();
-                  return false;
-              }else{
-                  alertMessage(textStatus, jqXHR.responseJSON.message, "danger");
-                  hideInlineLoader();
-              }
-          }*/
 
         }
       });
@@ -169,7 +143,6 @@ const AddGig = (props) => {
       })}
 
       onSubmit={(values, { setSubmitting, resetForm }) => {
-        console.log('values', values);
         let data = {
           id: values.id,
           description: values.description,
@@ -178,7 +151,6 @@ const AddGig = (props) => {
 
         if (values.action == "desc") {
           dispatch(updateFaq(data)).then(res => {
-            console.log('id', res.responseData._id);
             history.push('/gig/post/requirements/' + res.responseData._id)
             //addToast(res.message, { appearance: res.status, autoDismiss: true, })
           })
@@ -301,13 +273,13 @@ const AddGig = (props) => {
                           <div className="form-group mb-2">
                             <div className="col-md-12">Question</div>
 
-                            <input name="question[]" placeholeder="Question" onChange={handleChange} className="form-control form-control-sm" values="test" />
+                            <input name="question[]" placeholeder="Question" className="form-control form-control-sm" values="test" />
 
                           </div>
                           <div className="form-group mb-2">
                             <div className="col-md-12">Answer</div>
 
-                            <input name="answer[]" placeholeder="Answer" onChange={handleChange} className="form-control form-control-sm" values="" />
+                            <input name="answer[]" placeholeder="Answer" className="form-control form-control-sm" values="" />
 
 
                           </div>

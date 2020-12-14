@@ -72,7 +72,7 @@ const Category = () => {
         "url": '/api/admin/category',
         "type": "GET",
             "headers": {
-                "Authorization": localStorage.admin_token
+                "Authorization": localStorage.adminToken
             },
         data: function (data) {
 

@@ -5,8 +5,9 @@ export const login = (data) => async dispatch => {
     try {
         let login = await axios.post("/api/admin/login", data);
 
-        const { token } = login.data.responseData.user;
-        localStorage.setItem("admin_token", token);
+        const { token, refreshToken } = login.data.responseData.user;
+        localStorage.setItem("adminToken", token);
+        localStorage.setItem("adminRefreshToken", refreshToken);
 
         let permissions = await axios.post("/api/admin/permissions", {}, { headers: { 'Authorization': `${token}` } });
 
@@ -31,7 +32,8 @@ export const login = (data) => async dispatch => {
 
 export const logout = (data) => async dispatch => {
 
-    localStorage.removeItem("admin_token");
+    localStorage.removeItem("adminToken");
+    localStorage.removeItem("adminRefreshToken");
 
     dispatch({
         type: LOG_OUT,

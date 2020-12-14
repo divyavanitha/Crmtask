@@ -3,7 +3,7 @@ import axios from "axios";
 import { GET_DELIVERY_TIMES, FIND_DELIVERY_TIME } from "./types";
 
 export const getDeliveryTimes = () => dispatch => {
-    let token = localStorage.admin_token;
+    let token = localStorage.adminToken;
     axios
         .get('/api/admin/delivery/time', { headers: { 'Authorization': `${token}` } })
         .then(res => {
@@ -22,7 +22,7 @@ export const getDeliveryTimes = () => dispatch => {
 };
 
 export const getDeliveryTimebyId = (id) => dispatch => {
-    let token = localStorage.admin_token;
+    let token = localStorage.adminToken;
     axios
         .get(`/api/admin/get/delivery/time/${id}`, { headers: { 'Authorization': `${token}` } })
         .then(res => {
@@ -42,7 +42,7 @@ export const getDeliveryTimebyId = (id) => dispatch => {
 
 export const addDeliveryTime = (data) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.post('/api/admin/delivery/time', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -55,7 +55,7 @@ export const addDeliveryTime = (data) => async dispatch => {
 
 export const updateDeliveryTime = (data) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.patch('/api/admin/delivery/time', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -68,7 +68,7 @@ export const updateDeliveryTime = (data) => async dispatch => {
 
 export const deleteDeliveryTime = (id) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.delete(`/api/admin/delivery/time/${id}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -80,7 +80,7 @@ export const deleteDeliveryTime = (id) => async dispatch => {
 
 export const changeDeliveryTimeStatus = (id, status) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.get(`/api/admin/delivery/time/changestatus/${id}/${status}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;

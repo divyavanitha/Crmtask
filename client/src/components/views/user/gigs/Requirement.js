@@ -31,12 +31,8 @@ const AddGig = (props) => {
       }
 
       validationSchema={Yup.object().shape({
-        /* title: Yup.string()
-             .required('Title is required'),
-         sub_category_id: Yup.string()
-             .required('Sub Category is required'),
-         tags: Yup.string()
-             .required('Tags is required'),*/
+        requirement: Yup.string()
+             .required('Requirement is required')
       })}
       onSubmit={(values, { setSubmitting, resetForm }) => {
         let data = {
@@ -135,6 +131,7 @@ const AddGig = (props) => {
                         <div className="form-group requirements">
                           <p className="mb-1">Requirements</p>
                           <textarea onChange={handleChange} name="requirement" value={values.requirement} placeholder="If you need to obtain information, files or other items from the buyer prior to starting your work, please add your instructions here. For example: Please send me your company name or Please send me the photo you need me to edit." rows="4" className="form-control"></textarea>
+                          <ErrorMessage name="requirement" component="div" className="error-message" />
                         </div>
                         <div className="form-group mb-0">
                           {/* <!--- form-group Starts ---> */}

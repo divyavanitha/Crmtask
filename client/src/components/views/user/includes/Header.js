@@ -323,7 +323,6 @@ function Header() {
                                     <span className="onePress-icon nav-icon onePress-icon-relative">
                                         <i className="fa fa-shopping-basket" style={{ fontSize: "1.4em" }} aria-hidden="true"></i>
                                     </span>
-                                    {console.log(cartCount != 0)}
                                     <span className="total-user-count count cart-count">{cartCount != 0 ? cartCount : ''}</span>
                                 </Link>
                             </li>
@@ -331,7 +330,7 @@ function Header() {
                                 <div className="dropdown user-menu">
                                     <a href="#" id="usermenu" className="user dropdown-toggle menuItem" style={{ marginTop: "17px" }}
                                         data-toggle="dropdown">
-                                        <img src={require('../../../../assets/images/userlisting/img-03.jpg')} width="27" height="27" className="rounded-circle" />
+                                        <img src={require('../../../../assets/images/userlisting/img-03.jpg')} width="27" height="27" className="rounded-circle" /> &nbsp;
                                         <span className="name">{auth.user && auth.user.firstName}</span>
                                     </a>
 
@@ -404,8 +403,8 @@ function Header() {
 
                                 </div>
                             </li>
-                            <li class="logged-in-link mr-lg-0 mr-2 d-none d-sm-block d-md-block d-lg-block">
-                              <a class="menuItem btn btn-success text-white">$4,248.50</a>
+                            <li className="logged-in-link mr-lg-0 mr-2 d-none d-sm-block d-md-block d-lg-block">
+                              <a className="menuItem btn btn-success text-white">${auth.user.wallet}</a>
                             </li>
                             </ul>)}
 

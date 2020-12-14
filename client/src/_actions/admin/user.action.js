@@ -4,7 +4,7 @@ import { GET_USERS, FIND_USER } from "./types";
 
 export const getUsers = () => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.get('/api/admin/user', { headers: { 'Authorization': `${token}` } });
         dispatch({
             type: GET_USERS,
@@ -19,7 +19,7 @@ export const getUsers = () => async dispatch => {
 };
 
 export const getUserbyId = (id) => dispatch => {
-    let token = localStorage.admin_token;
+    let token = localStorage.adminToken;
     axios
         .get(`/api/admin/get/user/${id}`, { headers: { 'Authorization': `${token}` } })
         .then(res => {
@@ -39,7 +39,7 @@ export const getUserbyId = (id) => dispatch => {
 
 export const addUser = (data) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.post('/api/admin/user', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -52,7 +52,7 @@ export const addUser = (data) => async dispatch => {
 
 export const updateUser = (data) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.patch('/api/admin/user', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -65,7 +65,7 @@ export const updateUser = (data) => async dispatch => {
 
 export const deleteUser = (id) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.delete(`/api/admin/user/${id}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -78,7 +78,7 @@ export const deleteUser = (id) => async dispatch => {
 
 export const changeUserStatus = (id, status) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.get(`/api/admin/user/changestatus/${id}/${status}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;

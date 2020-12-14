@@ -110,12 +110,19 @@ router.get('/cancel/reason/:type', (req, res) => {
   homeController.listCancelReason(req, res);
 });
 
+router.post('/refresh', (req, res) => {
+  authController.refresh(req, res);
+});
+
 /*Gig*/
 router.get('/list/gigs', (req, res) => {
   gigController.listgigs(req, res);
 });
-router.get('/get/gig/details/:id', middleware.user, (req, res) => {
+router.get('/gig/details/:id', middleware.user, (req, res) => {
   gigController.getGigDetails(req, res);
+});
+router.get('/gig/detail/:title', (req, res) => {
+  gigController.getGigDetailByName(req, res);
 });
 router.get('/gig/package/:id', (req, res) => {
   gigController.getPackage(req, res);
@@ -150,34 +157,34 @@ router.delete('/gig/delete/:id', middleware.user, function(req, res){
 });
 
 /*Cart*/
-router.get('/gig/cart', middleware.user, function(req, res){
+router.get('/cart', middleware.user, function(req, res){
   cartController.listcart(req, res);
 });
-router.get('/gig/cart/count', middleware.user, function(req, res){
+router.get('/cart/count', middleware.user, function(req, res){
   cartController.cartCount(req, res);
 });
-router.post('/gig/cart', middleware.user, function(req, res){
+router.post('/cart', middleware.user, function(req, res){
   cartController.addcart(req, res);
 });
-router.patch('/update/cart', middleware.user, function(req, res){
+router.patch('/cart', middleware.user, function(req, res){
   cartController.updateCart(req, res);
 });
-router.delete('/gig/cart/:id', middleware.user, function(req, res){
+router.delete('/cart/:id', middleware.user, function(req, res){
   cartController.removecart(req, res);
 });
-router.get('/find/cart/:id', middleware.user, function(req, res){
+router.get('/cart/:id', middleware.user, function(req, res){
   cartController.findcart(req, res);
 });
 
 /*Order*/
-router.post('/gig/checkout', middleware.user, function(req, res){
+router.post('/checkout', middleware.user, function(req, res){
   orderController.checkout(req, res);
 });
-router.post('/gig/update/orderStatus',[middleware.user, middleware.upload( path.join(__dirname, '../storage/images/order/') ).fields([{ name: 'delivery_file', maxCount: 1 }, { name: 'revision_file', maxCount: 1 }]) ], function(req, res){
+router.post('/update/orderStatus',[middleware.user, middleware.upload( path.join(__dirname, '../storage/images/order/') ).fields([{ name: 'delivery_file', maxCount: 1 }, { name: 'revision_file', maxCount: 1 }]) ], function(req, res){
   orderController.updateOrder(req, res);
 });
 
-router.post('/gig/rate', middleware.user, function(req, res){
+router.post('/rate', middleware.user, function(req, res){
   orderController.rating(req, res);
 });
 
@@ -227,52 +234,11 @@ router.get('/rating/:id', middleware.user, (req, res) => {
   homeController.orderRating(req, res);
 });
 
-/* //const auth = require("../middlewares/auth");
-const passport = require('passport');
-// require('../config/passport')(passport)
-
-router.post('/login', (req, res) => {
-  authController.login(req, res);
-});
-
-router.post('/register', authController.register)
-
-router.post('/reset-password', authController.forgetpassword)
+/*router.post('/reset-password', authController.forgetpassword)
 
 router.post('/passwordreset',authController.passwordreset)
 
-router.use('/verification', authController.verification)
+router.use('/verification', authController.verification);*/
 
-// router.post('/login', authController.login);
-
-// router.post('/register', authController.register);
-
-router.get(
-  '/user',
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-    res.json({
-      id: req.user.id,
-      name: req.user.name,
-      email: req.user.email
-    });
-  }
-);
-
-router.get('/google', passport.authenticate('google', { scope: ["profile"] }), authController.googleOAuth);
-
-router.get('/google/callback',
-  passport.authenticate('google', { failureRedirect: '/', session: false }),
-  function (req, res) {
-    res.redirect('/');
-  });
-
-router.get('/facebook', passport.authenticate('facebook'));
-
-router.get('/facebook/callback',
-  passport.authenticate('facebook', {
-    successRedirect: '/',
-    failureRedirect: '/login'
-  })); */
 
 module.exports = router;

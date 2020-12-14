@@ -4,7 +4,7 @@ import { GET_PACKAGES, FIND_PACKAGE } from "./types";
 
 export const getPackages = () => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.get('/api/admin/package', { headers: { 'Authorization': `${token}` } });
         dispatch({
             type: GET_PACKAGES,
@@ -19,7 +19,7 @@ export const getPackages = () => async dispatch => {
 };
 
 export const getPackagebyId = (id) => dispatch => {
-    let token = localStorage.admin_token;
+    let token = localStorage.adminToken;
     axios
         .get(`/api/admin/get/package/${id}`, { headers: { 'Authorization': `${token}` } })
         .then(res => {
@@ -39,7 +39,7 @@ export const getPackagebyId = (id) => dispatch => {
 
 export const addPackage = (data) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.post('/api/admin/package', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -52,7 +52,7 @@ export const addPackage = (data) => async dispatch => {
 
 export const updatePackage = (data) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.patch('/api/admin/package', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -65,7 +65,7 @@ export const updatePackage = (data) => async dispatch => {
 
 export const deletePackage = (id) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.delete(`/api/admin/package/${id}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -78,7 +78,7 @@ export const deletePackage = (id) => async dispatch => {
 
 export const changePackageStatus = (id, status) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.get(`/api/admin/package/changestatus/${id}/${status}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;

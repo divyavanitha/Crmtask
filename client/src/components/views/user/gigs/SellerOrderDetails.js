@@ -356,25 +356,25 @@ const Cart = (props) => {
 
                                        </div>))}
 
-                                       {(order_details && order_details.used_revisions.length > 0) ? (<div class="card mt-4">
-                                        <div class="card-body">
-                                          <h5 class="text-center"><i class="fa fa-pencil-square-o"></i> Revison Requested By {order_details && order_details.buyer.firstName} </h5>
+                                       {(order_details && order_details.used_revisions.length > 0) ? (<div className="card mt-4">
+                                        <div className="card-body">
+                                          <h5 className="text-center"><i className="fa fa-pencil-square-o"></i> Revison Requested By {order_details && order_details.buyer.firstName} </h5>
                                         </div>
                                       </div>) : "" }
-                                      {order_details && order_details.used_revisions ? order_details && order_details.used_revisions.map((list, index) => (<div class="message-div-hover">
-                                        <img src="https://www.gigtodo.com//user_images/cool-profile-picastures-coo_1602176634.png" width="50" height="50" class="message-image" />
+                                      {order_details && order_details.used_revisions ? order_details && order_details.used_revisions.map((list, index) => (<div className="message-div-hover">
+                                        <img src="https://www.gigtodo.com//user_images/cool-profile-picastures-coo_1602176634.png" width="50" height="50" className="message-image" />
                                               
-                                      <h5><a href="#" class="seller-buyer-name"> {order_details && order_details.buyer.firstName} </a></h5>
+                                      <h5><a href="#" className="seller-buyer-name"> {order_details && order_details.buyer.firstName} </a></h5>
 
-                                      <p class="message-desc">
+                                      <p className="message-desc">
 
                                       {list.revision_message}
 
-                                      <a href="orderIncludes/download?order_id=1608&c_id=1382" class="d-block mt-2 ml-1" target='_blank'>
-                                        <i class="fa fa-download"></i> {list.revision_file}</a>
+                                      <a href="orderIncludes/download?order_id=1608&c_id=1382" className="d-block mt-2 ml-1" target='_blank'>
+                                        <i className="fa fa-download"></i> {list.revision_file}</a>
                                       </p>
 
-                                      <p class="text-right text-muted mb-0"> {list.updated_at} </p>
+                                      <p className="text-right text-muted mb-0"> {list.updated_at} </p>
 
                                       </div>)) : ""}
 

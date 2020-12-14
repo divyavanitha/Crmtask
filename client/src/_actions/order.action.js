@@ -4,7 +4,7 @@ import setToken from '../components/utils/set_token';
 
 export const checkout = (data) => async dispatch => {
     try {
-        let response = await axios.post('/api/gig/checkout', data);
+        let response = await axios.post('/api/checkout', data);
         response.data.status = 'success';
         return response.data;
     } catch (e) {
@@ -16,7 +16,7 @@ export const checkout = (data) => async dispatch => {
 
 export const updateOrder = (data) => async dispatch => {
     try {
-        let response = await axios.post('/api/gig/update/orderStatus', data);
+        let response = await axios.post('/api/update/orderStatus', data);
         response.data.status = 'success';
         return response.data;
     } catch (e) {
@@ -28,7 +28,7 @@ export const updateOrder = (data) => async dispatch => {
 
 export const rating = (data) => async dispatch => {
     try {
-        let response = await axios.post('/api/gig/rate', data);
+        let response = await axios.post('/api/rate', data);
         response.data.status = 'success';
         return response.data;
     } catch (e) {

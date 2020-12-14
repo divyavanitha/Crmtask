@@ -12,6 +12,7 @@ const cartSchema = mongoose.Schema({
         ref: 'gigs'
     },
     user: { type: Schema.Types.ObjectId, ref: 'users' },
+    proposals: [{ type: Schema.Types.ObjectId }],
     quantity: {
         type: Number,
         required: true

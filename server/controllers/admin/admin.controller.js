@@ -4,12 +4,14 @@ const { Role } = require('../../models/Role');
 const { User} = require('../../models/user');
 const mongoose = require('mongoose');
 const Joi = require('@hapi/joi');
+const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const helper = require('../../services/helper');
 const db = require('../../services/model.js');
 const dotenv = require('dotenv');
 dotenv.config({ path: __dirname + '/../../.env' });
+const adminTokenList = {};
 
 exports.adminAuth = async (req, res) => {
 
@@ -44,8 +46,12 @@ exports.adminAuth = async (req, res) => {
         payload.roles = role;
         
         const token = user.generateAuthToken(payload);
+        const refreshToken = user.generateRefreshToken(payload);
 
         payload.token = 'Bearer ' + token;
+        adminTokenList[refreshToken] = payload;
+
+        payload.refreshToken =  refreshToken;
 
         const data = { user: payload };
 
@@ -174,6 +180,62 @@ exports.getAdministrators = async (req, res) => {
     }
       
 };
+
+
+
+
+exports.refresh = async (req, res) => {
+
+    try {
+
+        let refresh_token = req.body.refresh_token;
+
+        if( refresh_token && (refresh_token in adminTokenList)) {
+            let user = await Admin.findOne({ email: adminTokenList[refresh_token]['email'] }).populate('roles.role');
+
+            let payload = _.pick(user, ['_id', 'name', 'email', 'roles']);
+
+            let roleList = _.map(payload.roles, 'role');
+            let role = _.map(roleList, 'name');
+            
+            payload.roles = role;
+
+            const token = user.generateAuthToken(payload);
+            const refreshToken = user.generateRefreshToken(payload);
+
+            payload.token = 'Bearer ' + token;
+            adminTokenList[refreshToken] = payload;
+
+            payload.refreshToken =  refreshToken;
+
+            const data = { user: payload };
+
+            const response = helper.response({ data });
+            return res.status(response.statusCode).json(response);
+
+        } else {
+            return res.status(401).json({
+                "statusCode": 401,
+                "title": "Unauthorised",
+                "message": "Unauthorised",
+                "data": {},
+                "error": {}
+            });
+        }
+
+    } catch (err) {
+        
+        return res.status(401).json({
+            "statusCode": 401,
+            "title": "Unauthorised",
+            "message": "Unauthorised",
+            "data": {},
+            "error": {}
+        });
+    }
+
+};
+
 
 exports.addAdministrator = async (req, res) => {
 

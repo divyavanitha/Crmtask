@@ -11,6 +11,18 @@ const ratingSchema = mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'Order'
     },
+    gig : {
+        type: Schema.Types.ObjectId,
+        ref: 'gigs'
+    },
+    seller : {
+        type: Schema.Types.ObjectId,
+        ref: 'users'
+    },
+    buyer : {
+        type: Schema.Types.ObjectId,
+        ref: 'users'
+    },
     sellerRating: {
         type: Number,
         default: 1
@@ -24,6 +36,12 @@ const ratingSchema = mongoose.Schema({
     },
     buyerComment: {
         type: String
+    },
+    seller_at: {
+        type: Date
+    },
+    buyer_at: {
+        type: Date
     },
     created_at: {
         type: Date,

@@ -4,7 +4,7 @@ import { GET_CATEGORIES, FIND_CATEGORY } from "./types";
 
 export const getCategories = () => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.get('/api/admin/category', { headers: { 'Authorization': `${token}` } });
         dispatch({
             type: GET_CATEGORIES,
@@ -19,7 +19,7 @@ export const getCategories = () => async dispatch => {
 };
 
 export const getCategorybyId = (id) => dispatch => {
-    let token = localStorage.admin_token;
+    let token = localStorage.adminToken;
     axios
         .get(`/api/admin/get/category/${id}`, { headers: { 'Authorization': `${token}` } })
         .then(res => {
@@ -39,7 +39,7 @@ export const getCategorybyId = (id) => dispatch => {
 
 export const addCategory = (data) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.post('/api/admin/category', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -52,7 +52,7 @@ export const addCategory = (data) => async dispatch => {
 
 export const updateCategory = (data) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.patch('/api/admin/category', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -65,7 +65,7 @@ export const updateCategory = (data) => async dispatch => {
 
 export const deleteCategory = (id) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.delete(`/api/admin/category/${id}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -78,7 +78,7 @@ export const deleteCategory = (id) => async dispatch => {
 
 export const changeCategoryStatus = (id, status) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.get(`/api/admin/category/changestatus/${id}/${status}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;

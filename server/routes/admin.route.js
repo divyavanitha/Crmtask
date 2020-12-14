@@ -41,6 +41,9 @@ router.post('/administrator', (req, res) => {
   adminController.addAdministrator(req, res);
 });
 
+router.post('/refresh', (req, res) => {
+  adminController.refresh(req, res);
+});
 
 router.get('/category', middleware.admin, (req, res) => {
   categoryController.listcategory(req, res);
