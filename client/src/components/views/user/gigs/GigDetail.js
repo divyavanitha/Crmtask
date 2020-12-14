@@ -310,7 +310,7 @@ const GigDetail = (props) => {
 
                                                         <span className="text-muted ml-2"> { gig && gig.rating } </span>
                                                     </div>
-                                                    <div className="float-right">
+                                                    {/*<div className="float-right">
                                                         <button id="dropdown-button" className="btn btn-success dropdown-toggle" data-toggle="dropdown">
                                                             Most Recent        </button>
                                                         <ul className="dropdown-menu proposalDropdown" style={{ width: "auto !important" }}>
@@ -318,7 +318,7 @@ const GigDetail = (props) => {
                                                             <li className="dropdown-item good">Positive Reviews</li>
                                                             <li className="dropdown-item bad">Negative Reviews</li>
                                                         </ul>
-                                                    </div>
+                                                    </div>*/}
                                                 </h4>
                                             </div>
                                             <div className="card-body ">

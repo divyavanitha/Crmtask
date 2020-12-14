@@ -18,7 +18,7 @@ const Pricing = (props) => {
    let history = useHistory();
    const params = useParams();
 
-   const [price, setPrice] = useState(1);
+   const [price, setPrice] = useState(0);
 
    const changePrice = e => {
       e.preventDefault();
@@ -28,16 +28,6 @@ const Pricing = (props) => {
          setPrice(0);
       }
    };
-
-   /*$('body').on('change', 'input[name=fixed_price]', function () {
-
-         if ($(this).is(":checked")) {
-            setPrice(1);
-         } else {
-            setPrice(0);
-         }
-
-      });*/
 
    return (
       (price == 1) ? <FixedPricing price={price} changePrice={changePrice} /> : <PackagePricing price={price} changePrice={changePrice} /> 
