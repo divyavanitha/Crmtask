@@ -114,11 +114,17 @@ exports.getPackage = async (req, res) => {
 exports.usergigs = async (req, res) => {
     try {
 
-        let gigs = await db._get(Gig, { user: req.user._id });
+        let active_gigs = await db._get(Gig, { user: req.user._id, status: "ACTIVE" });
+        let inactive_gigs = await db._get(Gig, { user: req.user._id, status: "INACTIVE" });
+        let draft_gigs = await db._get(Gig, { user: req.user._id, status: "DRAFT" });
+        let pending_gigs = await db._get(Gig, { user: req.user._id, status: "PENDING" });
+        let modification_gigs = await db._get(Gig, { user: req.user._id, status: "MODIFICATION" });
+        let paused_gigs = await db._get(Gig, { user: req.user._id, status: "PAUSED" });
+        let featured_gigs = await db._get(Gig, { user: req.user._id, featured: true });
 
-        const data = { gigs };
+        //const data = { gigs };
 
-        const response = helper.response({ data });
+        const response = helper.response({ data: {"active": active_gigs, "inactive": inactive_gigs, "draft": draft_gigs, "pending": pending_gigs, "modification": modification_gigs, "paused": paused_gigs, "featured": featured_gigs } });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -155,14 +161,27 @@ exports.creategigs = async (req, res) => {
     if (existingGig) return res.status(422).json( helper.response(  { status: 422, message: 'Gig name already exists'  }   ));
 
     try {
-
+        console.log('files',req.body.tags);
         let data = {
                 user: req.user._id,
                 title: req.body.title,
                 category: req.body.category_id,
                 subCategory: req.body.sub_category_id,
-                tags: req.body.tags
+                tags: req.body.tags,
+                status: "DRAFT"
             }
+
+        let tags = [];
+        
+        for(i in req.body.tags) {
+
+            let tag = req.body.tags[i]
+            
+            tags.push(tag);
+             
+        }
+
+        if(tags.length > 0) data.tags = tags;
 
         let gig = await db._store(Gig, data);
 
@@ -529,6 +548,7 @@ exports.updateConfirm = async(req, res) => {
 
         let gig = await Gig.findById(req.body.id);
          gig.proposal = req.body.proposal;
+         gig.status = "PENDING";
         let gigs = await db._update(Gig, { _id: req.body.id }, gig);
         const response = helper.response({ message: res.__('updated'), data: gigs });
         return res.status(response.statusCode).json(response);

@@ -39,6 +39,9 @@ const gigSchema = mongoose.Schema({
         
     }],
     status: { type: Boolean },
+    status: { type: String},
+    featured: { type: Boolean , default: false},
+    top_rated: { type: Boolean , default: false},
     faq: [{
         question: { type: String },
         answer: { type: String }

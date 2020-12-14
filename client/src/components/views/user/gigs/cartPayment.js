@@ -162,7 +162,6 @@ console.log('cart_details', cart_details);
          $.each(len, function (index, value) {
             total = total + value.price;
          });
-
       }
       setTotal(total);
    });

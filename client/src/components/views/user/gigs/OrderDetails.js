@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import $ from 'jquery';
 import "./Gig.css";
 import { getBuyerOrderDetails, getDeliveryStatus, getRating, getCancelReason} from "../../../../_actions/user.action";
-import { rating, updateOrder, cancel } from "../../../../_actions/order.action";
+import { rating, updateOrder, cancel, tips } from "../../../../_actions/order.action";
 
 import OwlCarousel from 'react-owl-carousel';
 
@@ -88,6 +88,20 @@ const Cart = (props) => {
         })
     }
 
+    const Tips = async () => {
+
+        let data = {
+                id: params.id,
+                tip_message: $("textarea[name=tip_message]").val(),
+                tips: $("input[name=tips]").val()
+        };
+        
+        dispatch(tips(data)).then(res => {
+          console.log('id',res.responseData);
+          window.location.reload();           
+        })
+    }
+
 
    const order_details = useSelector((state) => state.user && state.user.buyer_order_details && state.user.buyer_order_details.responseData && state.user.buyer_order_details.responseData.gig);
 
@@ -102,7 +116,9 @@ const Cart = (props) => {
    let buyer_rating = new Array(ratings && ratings.buyerRating).fill(0);
    let seller_rating = new Array(ratings && ratings.sellerRating).fill(0);
 
-    if(order_details && order_details.tips == 0 && order_details && order_details.status == "Completed" && order_details && order_details.buyer_rated == 1){
+        $("#tipModal").modal('hide');
+
+     if(order_details && order_details.tips == 0 && order_details && order_details.status == "Completed" && order_details && order_details.buyer_rated == 1){
         $("#tipModal").modal('show');
      }else{
         $("#tipModal").modal('hide');
@@ -427,30 +443,27 @@ const Cart = (props) => {
                                           </div>
                                        </center> : ""}
 
-                                     {(order_details && order_details.tips > 0) ? (<div className="card mt-4 mb-0">
-                                      <div className="card-body">
-                                        <center>
-                                          <h4>  
-                                            <img src="images/svg/tip.svg" className="order-icon" /> Your buyer has given you a tip        
-                                            </h4>
-                                          <p className="text-muted">Congrats! You've just received a tip of</p>
-                                          <h3 className="text-success mb-1">&#036;1.00</h3>
-                                        </center>
-                                              
-                                          <div className="message-div mt-3">
+                                     
 
-                                            <img src="https://www.gigtodo.com//user_images/ty_1574032240.png" width="50" height="50" className="message-image" />
-                                                          
-                                            <h5><a href="#" className="seller-buyer-name"> tyrone </a></h5>
-
-                                            <p className="message-desc">uhkjnh</p>
-                                            <p className="text-right text-muted mb-0"> December 02, 2020 </p>
-
-                                          </div>
+                                      {(order_details && order_details.tips > 0) ? <div><div className="card mt-4 mb-0">
+                                        <div className="card-body text-center">
+                                          <h4> 
+                                            <img src="images/svg/tip.svg" className="order-icon" width="15" height="15" />
+                                            You have given &#036;{order_details && order_details.tips} tip to seller.       
+                                          </h4>
+                                        </div>
+                                      </div>
 
                                         
-                                       </div>
-                                      </div>) : ""}
+                                        <div className="message-div">
+
+                                        <img src="https://www.gigtodo.com//user_images/ty_1574032240.png" width="50" height="50" className="message-image" />
+                                          <h5><a href="#" className="seller-buyer-name"> {order_details && order_details.buyer.firstName} </a></h5>
+                                          <p className="message-desc">{order_details && order_details.tip_message}</p>
+                                          <p className="text-right text-muted mb-0"> December 08, 2020 </p>
+
+                                        </div>
+                                        </div> : ""}
 
 
 
@@ -760,26 +773,20 @@ const Cart = (props) => {
                           </button>
                         </div>
                         <div className="modal-body text-center">
-                          
-                           <form action="" className="tip-form" method="post" align="center">
-
                               <div className="form-group row justify-content-center mt-2">
 
                                  <div className="input-group col-md-6">
                                     <span className="input-group-addon">
                                        <b><i className="fa fa-dollar"></i></b>
                                     </span>
-                                    <input type="number" name="amount" className="form-control" placeholder="Amount" min="1" required=""/>
+                                    <input type="number" name="tips" onChange={handleChange} className="form-control" placeholder="Amount" min="1" required=""/>
                                  </div>
 
                               </div>
 
-                              <textarea name="message" className="form-control mb-3" rows="4" placeholder="Leave Your Seller A Message."></textarea>
+                              <textarea name="tip_message" onChange={handleChange} className="form-control mb-3" rows="4" placeholder="Leave Your Seller A Message."></textarea>
 
-                              <input type="submit" name="submit_tip" className="btn btn-success" value="Submit Tip" />
-
-                           </form>
-
+                              <button onClick={Tips} className="btn btn-success"> Submit Tip </button>     
                         </div>
                       </div>
                     </div>

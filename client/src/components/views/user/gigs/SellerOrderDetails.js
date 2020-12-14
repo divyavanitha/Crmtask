@@ -417,6 +417,30 @@ const Cart = (props) => {
                                                 </center> : ""}
 
 
+                                {(order_details && order_details.tips > 0) ? (<div className="card mt-4 mb-0">
+                                      <div className="card-body">
+                                        <center>
+                                          <h4>  
+                                            <img src="images/svg/tip.svg" className="order-icon" /> Your buyer has given you a tip        
+                                            </h4>
+                                          <p className="text-muted">Congrats! You've just received a tip of</p>
+                                          <h3 className="text-success mb-1">&#036;{order_details && order_details.tips}</h3>
+                                        </center>
+                                              
+                                          <div className="message-div mt-3">
+
+                                            <img src="https://www.gigtodo.com//user_images/ty_1574032240.png" width="50" height="50" className="message-image" />
+                                                          
+                                            <h5><a href="#" className="seller-buyer-name"> {order_details && order_details.buyer.firstName} </a></h5>
+
+                                            <p className="message-desc">{order_details && order_details.tip_message}</p>
+                                            <p className="text-right text-muted mb-0"> December 02, 2020 </p>
+
+                                          </div>
+
+                                        
+                                       </div>
+                                      </div>) : ""}
 
 
 

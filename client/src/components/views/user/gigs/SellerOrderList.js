@@ -59,8 +59,7 @@ const GigList = (props) => {
                            <li className="nav-item">
                               <a href="#all" data-toggle="tab" className="nav-link make-black">
                                  ALL <span className="badge badge-success">{seller_order_list && seller_order_list.orders.length}</span>
-                              </a>
-                            
+                              </a> 
                            </li>
                         </ul>
                      </div>
@@ -82,7 +81,7 @@ const GigList = (props) => {
                                        {seller_order_list && seller_order_list.active_order.map((list, index) => (<tr key={list._id}>
                                           <td>
                                              <Link to={"/seller-order/details/" + list._id} className="make-black order-proposal-link">
-                                                {list.gig.title}
+                                                {list.gig ? list.gig.title : ""}
                                              </Link>
                                           </td>
                                           <td>
@@ -113,7 +112,7 @@ const GigList = (props) => {
                                     {seller_order_list && seller_order_list.delivered_order.map((list, index) => (<tr key={list._id}>
                                           <td>
                                              <Link to={"/seller-order/details/" + list._id} className="make-black order-proposal-link">
-                                                {list.gig.title}
+                                                {list.gig ? list.gig.title : ""}
                                              </Link>
                                           </td>
                                           <td>
@@ -146,7 +145,7 @@ const GigList = (props) => {
                                        {seller_order_list && seller_order_list.completed_order.map((list, index) => (<tr key={list._id}>
                                           <td>
                                              <Link to={"/seller-order/details/" + list._id} className="make-black order-proposal-link">
-                                                {list.gig.title}
+                                                {list.gig ? list.gig.title : ""}
                                              </Link>
                                           </td>
                                           <td>
@@ -176,7 +175,7 @@ const GigList = (props) => {
                                        {seller_order_list && seller_order_list.cancelled_order.map((list, index) => (<tr key={list._id}>
                                           <td>
                                              <Link to={"/seller-order/details/" + list._id} className="make-black order-proposal-link">
-                                                {list.gig.title}
+                                                {list.gig ? list.gig.title : ""}
                                              </Link>
                                           </td>
                                           <td>
@@ -206,7 +205,7 @@ const GigList = (props) => {
                                        {seller_order_list && seller_order_list.orders.map((list, index) => (<tr key={list._id}>
                                           <td>
                                              <Link to={"/seller-order/details/" + list._id} className="make-black order-proposal-link">
-                                                {list.gig.title}
+                                                {list.gig ? list.gig.title : ""}
                                              </Link>
                                           </td>
                                           <td>

@@ -42,7 +42,7 @@ const Sidepanel = () => {
                             </Can>
 
                             <li>
-                                <Link to="/admin/request"> <i className="menu-icon fa fa-table"></i>Proposals/Services <span className="badge badge-success">18</span> </Link>
+                                <Link to="/admin/gigs"> <i className="menu-icon fa fa-table"></i>Proposals/Services <span className="badge badge-success">18</span> </Link>
                             </li>
 
                             <li className="menu-item-has-children dropdown">

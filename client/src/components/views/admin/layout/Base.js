@@ -43,6 +43,11 @@ import AddUser from "../users/AddUser";
 import User from "../users/User";
 import Request from "../requests/Request";
 import Dashboard from "../Dashboard";
+import Gigs from "../gigs/Gigs";
+import ActiveGigs from "../gigs/ActiveGigs";
+import FeatureGigs from "../gigs/FeatureGigs";
+import PendingGigs from "../gigs/PendingGigs";
+import PausedGigs from "../gigs/PausedGigs";
 import SocialLink from "../settings/SocialLink";
 import Application from "../settings/Application";
 import GigSetting from "../settings/GigSetting";
@@ -82,6 +87,11 @@ const Base = () => {
 
           <Switch>
             <Route path="/admin/dashboard" component={Dashboard}></Route>
+            <Route path="/admin/gigs" component={Gigs}></Route>
+            <Route path="/admin/active/gigs" component={ActiveGigs}></Route>
+            <Route path="/admin/feature/gigs" component={FeatureGigs}></Route>
+            <Route path="/admin/pending/gigs" component={PendingGigs}></Route>
+            <Route path="/admin/paused/gigs" component={PausedGigs}></Route>
             <Route path="/admin/category/add" component={AddCategory}></Route>
             <Route path="/admin/category/:id/edit" component={AddCategory}></Route>
             <Route path="/admin/category" component={Category}></Route>
