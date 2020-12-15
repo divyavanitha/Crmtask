@@ -73,6 +73,7 @@ const GigDetail = (props) => {
 
 
     const gig = useSelector((state) => state.user && state.user.gig_details && state.user.gig_details.responseData && state.user.gig_details.responseData.gig);
+    console.log('gig', gig);
     const orderCount = useSelector((state) => state.user && state.user.gig_details && state.user.gig_details.responseData && state.user.gig_details.responseData.orderCount);
     const reviews = useSelector((state) => state.user && state.user.gig_details && state.user.gig_details.responseData && state.user.gig_details.responseData.reviews);
 

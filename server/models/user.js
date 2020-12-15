@@ -123,7 +123,7 @@ userSchema.methods.generateAuthToken = function (payload) {
 
     const token = jwt.sign(payload, process.env.SECRET_KEY, {
         algorithm: "HS512",
-        expiresIn: '15m', 
+        expiresIn: '1h', 
     });
 
     return token;
@@ -133,7 +133,7 @@ userSchema.methods.generateRefreshToken = function (payload) {
 
     const token = jwt.sign(payload, process.env.SECRET_REFRESH_KEY, {
         algorithm: "HS512",
-        expiresIn: '1h', 
+        expiresIn: '1d', 
     });
 
     return token;

@@ -23,11 +23,11 @@ const requestController = require('../controllers/request.controller');
 const gigController = require('../controllers/admin/gigs.controller');
 
 router.post('/login', (req, res) => {
-    adminController.adminAuth(req, res);
+  adminController.adminAuth(req, res);
 });
 
 router.post('/register', (req, res) => {
-    adminController.adminAuthRegister(req, res);
+  adminController.adminAuthRegister(req, res);
 });
 
 router.post('/permissions', (req, res) => {

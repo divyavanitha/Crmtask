@@ -46,6 +46,10 @@ const Gigs = () => {
         });
     });*/
 
+    $('body').on('click', '#view-proposal', function(e){
+      window.open('/gig/' + $(this).data('name') + '/'+$(this).data('title'), '_blank');
+    });
+
 
     $('#datatable').DataTable({
       language: {
@@ -128,29 +132,30 @@ const Gigs = () => {
         {
           "data": function (data, type, row) {
             console.log('data', data);
-            var button = `<a title="View Proposal" href="../proposals/Rocks/add-seo-200000-gsa-dofollow-high-quality-backlinks-for-google-first-page" target="_blank"> <i class="fa fa-eye"></i> </a> &nbsp;`
+            var button = `<a title="View Proposal" id="view-proposal" data-name=`+data.user.firstName+` data-title=`+data.title+` target="_blank"> <i class="fa fa-eye"></i> </a> &nbsp;`
              if(data.featured == false){
                 button += `<a href="index?feature_proposal=1133" title="Make Your Proposal Featured"><i class="fa fa-star"></i></a> &nbsp;`
              }else{
                 button += `<a href="index?feature_proposal=1133" title="Remove Proposal From Featured Listing"><i class="fa fa-star-half-o"></i></a> &nbsp`;
              }
              if(data.top_rated == true){
-                button += `<a class="text-danger" href="index?removetoprated_proposal=1133" title="Remove Proposal From Top Rated Listing."><i class="fa fa-heartbeat" aria-hidden="true"></i></a> &nbsp;`
+                button += `<a class="text-danger" href="index?removetoprated_proposal=1133" title="Remove Proposal From Top Rated Listing."><i class="fa fa-heartbeat" aria-hidden="true"></i></a> &nbsp`;
              }else{
                 button += `<a href="index?toprated_proposal=1131" title="Make Your Proposal Top Rated"><i class="fa fa-heart" aria-hidden="true"></i></a> &nbsp`;
              }
 
              if(data.status != "PAUSED"){
-                button += `<a title="Pause/Deactivate Proposal" href="index?pause_proposal=1133"><i class="fa fa-pause-circle"></i></a> &nbsp;`
+                button += `<a title="Pause/Deactivate Proposal" href="index?pause_proposal=1133"><i class="fa fa-pause-circle"></i></a> &nbsp`;
              }else{
-                button += `<a title="Unpause Proposal" href="index?unpause_proposal=623"><i class="fa fa-refresh"></i> </a> &nbsp;`
+                button += `<a title="Unpause Proposal" href="index?unpause_proposal=623"><i class="fa fa-refresh"></i> </a> &nbsp`;
              }
-           
-           button += `
-           <a title="Submit For Modification" href="index?submit_modification=1130"><i class="fa fa-edit"></i> </a>&nbsp;
-           <a title="Approve" href="index?approve_proposal=1129"><i class="fa fa-check-square-o"></i> </a> &nbsp;
+             
+             if(data.status != "MODIFICATION"){
+                button += `<a title="Submit For Modification" href="index?submit_modification=1130"><i class="fa fa-edit"></i> </a>&nbsp`;
+             }
+           button += `<a title="Approve" href="index?approve_proposal=1129"><i class="fa fa-check-square-o"></i> </a> &nbsp;
            <a title="Decline" href="index?payouts&status=declined"><i class="fa fa-ban"></i></a> &nbsp;
-           <a title="Delete Proposal" href="index?move_to_trash=1133"><i class="fa fa-trash"></i></a>`
+           <a title="Delete Proposal" href="index?move_to_trash=1133"><i class="fa fa-trash"></i></a>`;
 
             return button;
 

@@ -27,19 +27,19 @@ exports.listgigs = async (req, res) => {
         let all_count = await db._count(Gig, {status: {$ne : "DRAFT"}});
 
         if((req.query.type).toUpperCase() == "ACTIVE"){
-            gigs = await db._get(Gig, {status: "ACTIVE"}, {}, {populate: "category"});
+            gigs = await db._get(Gig, {status: "ACTIVE"}, {}, {populate: ["category", "user"]});
             count = active_count;
         }else if((req.query.type).toUpperCase() == "PENDING"){
-            gigs = await db._get(Gig, {status: "PENDING" }, {}, {populate: "category"});
+            gigs = await db._get(Gig, {status: "PENDING" }, {}, {populate: ["category", "user"]});
             count = pending_count;
         }else if((req.query.type).toUpperCase() == "PAUSED"){
-            gigs = await db._get(Gig, {status: "PAUSED" }, {}, {populate: "category"});
+            gigs = await db._get(Gig, {status: "PAUSED" }, {}, {populate: ["category", "user"]});
             count = paused_count;
         }else if((req.query.type).toUpperCase() == "FEATURED"){
-            gigs = await db._get(Gig, { featured: true }, {}, {populate: "category"});
+            gigs = await db._get(Gig, { featured: true }, {}, {populate: ["category", "user"]});
             count = featured_count;
         }else{
-            gigs = await db._get(Gig, {status:  {$ne : "DRAFT"} }, {} , {populate: "category"});
+            gigs = await db._get(Gig, {status:  {$nin : ["DRAFT", "MODIFICATION"]} }, {} , {populate: ["category", "user"]});
             count = all_count;
         }
 

@@ -31,7 +31,7 @@ if (localStorage.token) {
     payload: decoded
   })
 
-  axios.get("/api/gig/cart/count").then((response) => {
+  axios.get("/api/cart/count").then((response) => {
     store.dispatch({
       type: ADD_CART_COUNT,
       payload: response.data.responseData.count
@@ -39,8 +39,6 @@ if (localStorage.token) {
   }).catch((err) => {
 
   });
-
-
 }
 if (localStorage.adminToken) {
 
