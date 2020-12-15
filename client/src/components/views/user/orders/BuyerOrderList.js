@@ -49,7 +49,7 @@ const GigList = (props) => {
          <div className="container view-proposals proposals-container">
             <div className="row mt-5 mb-3">
                <div className="col-md-12">
-                  <h1 className="">Manage Proposal/Service Orders</h1>
+                  <h1 className="">Manage Orders</h1>
                </div>
             </div>
             <div className="row mb-5">

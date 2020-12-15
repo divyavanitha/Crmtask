@@ -5,7 +5,6 @@ import { useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import $ from 'jquery';
-import "./Gig.css";
 import { getBuyerOrderDetails, getDeliveryStatus, getRating, getCancelReason} from "../../../../_actions/user.action";
 import { rating, updateOrder, cancel, tips } from "../../../../_actions/order.action";
 

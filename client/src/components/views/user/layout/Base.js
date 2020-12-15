@@ -25,11 +25,20 @@ import Gallery from "../gigs/gallery";
 import GigApproval from "../gigs/GigApproval";
 import Cart from "../gigs/cart";
 import CartPayment from "../gigs/cartPayment";
-import BuyerOrderList from "../gigs/BuyerOrderList";
-import OrderDetails from "../gigs/OrderDetails";
-import SellerOrderList from "../gigs/SellerOrderList";
-import SellerOrderDetails from "../gigs/SellerOrderDetails";
+import BuyerOrderList from "../orders/BuyerOrderList";
+import OrderDetails from "../orders/OrderDetails";
+import SellerOrderList from "../orders/SellerOrderList";
+import SellerOrderDetails from "../orders/SellerOrderDetails";
 import Profile from "../Profile";
+import Dashboard from "../Dashboard";
+import Revenue from "../Revenue";
+import CouponCreate from "../CouponCreate";
+import BuyerRequest from "../BuyerRequest";
+import WithdrawalRequest from "../WithdrawalRequest";
+import Purchase from "../Purchase";
+import Favourite from "../Favourite";
+import Contact from "../Contact";
+import Referral from "../Referral";
 
 import "../../../../assets/css/custom.css";
 
@@ -72,6 +81,15 @@ const Base = () => {
                 <ProtectedRoute path="/request/add" component={AddRequest} />
                 <ProtectedRoute path="/request/manage" component={RequestList} />
                 <ProtectedRoute path="/profile" component={Profile} />
+                <ProtectedRoute path="/dashboard" component={Dashboard} />
+                <ProtectedRoute path="/revenues" component={Revenue} />
+                <ProtectedRoute path="/coupon/create" component={CouponCreate} />
+                <ProtectedRoute path="/buyer/requests" component={BuyerRequest} />
+                <ProtectedRoute path="/withdrawal/requests" component={WithdrawalRequest} />
+                <ProtectedRoute path="/purchases" component={Purchase} />
+                <ProtectedRoute path="/favourites" component={Favourite} />
+                <ProtectedRoute path="/contacts" component={Contact} />
+                <ProtectedRoute path="/referrals" component={Referral} />
 
             </Switch>
 
