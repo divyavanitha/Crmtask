@@ -127,6 +127,8 @@ exports.register = async (req, res) => {
 
         const response = helper.response({ data });
 
+        //await helper.sendMail({to: req.body.to, subject: req.body.subject, message: req.body.message});
+
         return res.status(response.statusCode).json(response);
 
             /*function (error, user) {

@@ -311,11 +311,12 @@ function Header() {
                             </li>
 
                             <li className="logged-in-link d-none d-sm-block d-md-block d-lg-block">
-                            <a className="menuItem" href="" title="Favourites">
+
+                            <Link className="menuItem" title="Favourites" to="/favourites">
                                 <span className="onePress-icon nav-icon onePress-icon-relative">
                                     <i className="fa fa-heart-o fa-lg" style={{ fontSize: "1.4em" }}></i>
                                 </span>
-                            </a>
+                            </Link>
                         </li>
 
                             <li className="logged-in-link">
@@ -335,66 +336,38 @@ function Header() {
                                     </a>
 
                                     <div className="dropdown-menu" style={{ minWidth: '200px', width: 'auto!important', zIndex: '2000' }} >
-                                        <a className="dropdown-item" href="dashboard">
-                                            Dashboard   </a>
-                                        <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#selling">
-                                            Selling   </a>
+                                        <Link className="dropdown-item" to="/dashboard"> Dashboard </Link>
+                                        <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#selling"> Selling </a>
                                         <div id="selling" className="dropdown-submenu collapse">
-                                            <Link className="dropdown-item" to="/selling-order-lists">
-                                                Orders      </Link>
+                                            <Link className="dropdown-item" to="/selling-order-lists"> Orders </Link>
                                             <Link className="dropdown-item" to="/gig/list"> My Gigs </Link>
-                                            <a className="dropdown-item" href="proposals/create_coupon">
-                                                Create A Coupon      </a>
-                                            <a className="dropdown-item" href="requests/buyer_requests">
-                                                Buyer Requests      </a>
-                                            <a className="dropdown-item" href="revenue">
-                                                Revenues      </a>
-                                            <a className="dropdown-item" href="withdrawal_requests">
-                                                Withdrawal Requests      </a>
+                                            <Link className="dropdown-item" to="/coupon/create"> Create A Coupon </Link>
+                                            <Link className="dropdown-item" to="/buyer/requests"> Buyer Requests </Link>
+                                            <Link className="dropdown-item" to="/revenues"> Revenues </Link>
+                                            <Link className="dropdown-item" to="/withdrawal/requests"> Withdrawal Requests </Link>
                                         </div>
-                                        <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#buying">
-                                            Buying   </a>
+                                        <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#buying"> Buying </a>
                                         <div id="buying" className="dropdown-submenu collapse">
-                                            <Link className="dropdown-item" to="/buying-order-lists">
-                                                Orders      </Link>
-                                            <a className="dropdown-item" href="purchases">
-                                                Purchases      </a>
-                                            <a className="dropdown-item" href="favorites">
-                                                Favorites      </a>
+                                            <Link className="dropdown-item" to="/buying-order-lists"> Orders </Link>
+                                            <Link className="dropdown-item" to="/purchases"> Purchases </Link>
+                                            <Link className="dropdown-item" to="/favourites"> Favorites </Link>
                                         </div>
-                                        <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#requests">
-                                            Requests   </a>
+                                        <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#requests"> Requests </a>
                                         <div id="requests" className="dropdown-submenu collapse">
                                             <Link className="dropdown-item" to="/request/add"> Post A Request </Link>
                                             <Link className="dropdown-item" to="/request/manage"> Manage Requests </Link>
                                         </div>
-                                        <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#contacts">
-                                            Contacts   </a>
-                                        <div id="contacts" className="dropdown-submenu collapse">
-                                            <a className="dropdown-item" href="manage_contacts?my_buyers">
-                                                My Buyers      </a>
-                                            <a className="dropdown-item" href="manage_contacts?my_sellers">
-                                                My Sellers      </a>
-                                        </div>
-                                        <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#referrals">
-                                            My Referrals   </a>
+                                        <Link className="dropdown-item" to="/contacts"> Contacts </Link>
+                                        <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#referrals"> My Referrals </a>
                                         <div id="referrals" className="dropdown-submenu collapse">
-                                            <a className="dropdown-item" href="my_referrals" data-target="#referrals">
-                                                User Referrals      </a>
-                                            <a className="dropdown-item" href="proposal_referrals" data-target="#referrals">
-                                                Proposal Referrals      </a>
+                                            <Link className="dropdown-item" to="/referrals"> User Referrals </Link>
+                                            <a className="dropdown-item" href="proposal_referrals" data-target="#referrals"> Proposal Referrals  </a>
                                         </div>
-                                        <a className="dropdown-item" href="conversations/inbox">
-                                            Inbox Messages   </a>
-                                        <Link className="dropdown-item" to="/profile">
-                                            My Profile   </Link>
-                                        <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#settings">
-                                            Settings   </a>
+                                        <Link className="dropdown-item" to="/profile"> My Profile </Link>
+                                        <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#settings"> Settings </a>
                                         <div id="settings" className="dropdown-submenu collapse">
-                                            <a className="dropdown-item" href="settings?profile_settings">
-                                                Profile Settings      </a>
-                                            <a className="dropdown-item" href="settings?account_settings">
-                                                Account Settings      </a>
+                                            <a className="dropdown-item" href="settings?profile_settings"> Profile Settings </a>
+                                            <a className="dropdown-item" href="settings?account_settings"> Account Settings </a>
                                         </div>
                                         <div className="dropdown-divider"></div>
                                         <a onClick={() => dispatch(logout())} className="dropdown-item">

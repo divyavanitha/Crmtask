@@ -16,7 +16,7 @@ export const checkout = (data) => async dispatch => {
 
 export const updateOrder = (data) => async dispatch => {
     try {
-        let response = await axios.post('/api/update/orderStatus', data);
+        let response = await axios.post('/api/update/order/status', data);
         response.data.status = 'success';
         return response.data;
     } catch (e) {
