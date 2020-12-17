@@ -38,7 +38,7 @@ const gigSchema = mongoose.Schema({
         price: { type: Number }
         
     }],
-    status: { type: Boolean },
+    modify_description: { type: String},
     status: { type: String},
     featured: { type: Boolean , default: false},
     top_rated: { type: Boolean , default: false},
@@ -49,6 +49,7 @@ const gigSchema = mongoose.Schema({
     photo: {
         type: Array   
     },
+    rating: { type: Number },
     created_at: {
         type: Date,
         default: Date.now
@@ -57,6 +58,9 @@ const gigSchema = mongoose.Schema({
     updated_at: {
         type: Date,
         default: Date.now
+    },
+    deleted_at: {
+        type: Date
     }
 })
 

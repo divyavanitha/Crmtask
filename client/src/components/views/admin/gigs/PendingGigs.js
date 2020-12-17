@@ -128,29 +128,14 @@ const Gigs = () => {
         {
           "data": function (data, type, row) {
             console.log('data', data);
-            var button = `<a title="View Proposal" href="../proposals/Rocks/add-seo-200000-gsa-dofollow-high-quality-backlinks-for-google-first-page" target="_blank"> <i class="fa fa-eye"></i> </a> &nbsp;`
-             if(data.featured == false){
-                button += `<a href="index?feature_proposal=1133" title="Make Your Proposal Featured"><i class="fa fa-star"></i></a> &nbsp;`
-             }else{
-                button += `<a href="index?feature_proposal=1133" title="Remove Proposal From Featured Listing"><i class="fa fa-star-half-o"></i></a> &nbsp`;
-             }
-             if(data.top_rated == true){
-                button += `<a class="text-danger" href="index?removetoprated_proposal=1133" title="Remove Proposal From Top Rated Listing."><i class="fa fa-heartbeat" aria-hidden="true"></i></a> &nbsp;`
-             }else{
-                button += `<a href="index?toprated_proposal=1131" title="Make Your Proposal Top Rated"><i class="fa fa-heart" aria-hidden="true"></i></a> &nbsp`;
-             }
+            var button = `<a title="View Proposal" id="view-proposal" data-name=`+data.user.firstName+` data-title=`+data.title+` target="_blank"> <i class="fa fa-eye"></i> </a> &nbsp;`
+             
+            button += `<a title="Submit For Modification" data-id=`+data._id+`><i class="fa fa-edit"></i> </a>&nbsp`;
+            
 
-             if(data.status != "PAUSED"){
-                button += `<a title="Pause/Deactivate Proposal" href="index?pause_proposal=1133"><i class="fa fa-pause-circle"></i></a> &nbsp;`
-             }else{
-                button += `<a title="Unpause Proposal" href="index?unpause_proposal=623"><i class="fa fa-refresh"></i> </a> &nbsp;`
-             }
-           
-           button += `
-           <a title="Submit For Modification" href="index?submit_modification=1130"><i class="fa fa-edit"></i> </a>&nbsp;
-           <a title="Approve" href="index?approve_proposal=1129"><i class="fa fa-check-square-o"></i> </a> &nbsp;
-           <a title="Decline" href="index?payouts&status=declined"><i class="fa fa-ban"></i></a> &nbsp;
-           <a title="Delete Proposal" href="index?move_to_trash=1133"><i class="fa fa-trash"></i></a>`
+            button += `<a title="Approve" class="change-status" data-id=`+data._id+` data-status="APPROVE"><i class="fa fa-check-square-o"></i> </a> &nbsp`;
+            button +=  `<a title="Decline" class="change-status" data-id=`+data._id+` data-status="DECLINE"><i class="fa fa-ban"></i></a> &nbsp`;
+             
 
             return button;
 
@@ -160,24 +145,6 @@ const Gigs = () => {
 
       ]
     });
-
-    /*$('body').on('change', '.status_enable', function () {
-
-      var id = $(this).data('id');
-      var value = 0;
-      var fail_status = true;
-
-      if ($(this).is(":checked")) {
-        value = 1;
-        fail_status = false;
-      }
-
-      dispatch(changeRequestStatus(id, value)).then(res => {
-
-        addToast(res.message, { appearance: res.status, autoDismiss: true, })
-        if (res.statusCode != 200) $(this).prop('checked', fail_status);
-      })
-    });*/
 
   }, []);
 

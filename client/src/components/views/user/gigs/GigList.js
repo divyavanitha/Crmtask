@@ -223,7 +223,7 @@ const GigList = (props) => {
                                  {gig_list && gig_list.modification.map((list, index) => (<tr key={list._id}>
                                  {console.log(list.pricing)}
                                     <td className="proposal-title"> {list.title} </td>
-                                     <td className="text-success"> &#036;{list.pricing.length ? list.pricing[0].price : 0} </td> 
+                                     <td className="text-success"> {list.modify_description ? list.modify_description : ""} </td> 
                                     
                                     <td className="text-center">
                                        <div className="dropdown">

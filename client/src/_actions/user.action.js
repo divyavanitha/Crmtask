@@ -244,7 +244,7 @@ export const getGigbyId = (id) => dispatch => {
 };
 
 export const getGigbyName = (name) => async dispatch => {
-    try {
+    //try {
         let response = await axios.get(`/api/gig/detail/${name}`);
         dispatch({
             type: FIND_GIG,
@@ -252,11 +252,12 @@ export const getGigbyName = (name) => async dispatch => {
         });
         response.data.status = 'success';
         return response.data;
-    } catch (e) {
+    /*} catch (e) {
+        console.log(e);
         e.response.data.status = 'error';
         if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
-    }
+    }*/
 };
 
 export const getGigbyCategory = (data) => async dispatch => {

@@ -48,6 +48,7 @@ import ActiveGigs from "../gigs/ActiveGigs";
 import FeatureGigs from "../gigs/FeatureGigs";
 import PendingGigs from "../gigs/PendingGigs";
 import PausedGigs from "../gigs/PausedGigs";
+import ModifyGigs from "../gigs/Modification";
 import SocialLink from "../settings/SocialLink";
 import Application from "../settings/Application";
 import GigSetting from "../settings/GigSetting";
@@ -92,6 +93,7 @@ const Base = () => {
             <Route path="/admin/feature/gigs" component={FeatureGigs}></Route>
             <Route path="/admin/pending/gigs" component={PendingGigs}></Route>
             <Route path="/admin/paused/gigs" component={PausedGigs}></Route>
+            <Route path="/admin/modify/:id" component={ModifyGigs}></Route>
             <Route path="/admin/category/add" component={AddCategory}></Route>
             <Route path="/admin/category/:id/edit" component={AddCategory}></Route>
             <Route path="/admin/category" component={Category}></Route>

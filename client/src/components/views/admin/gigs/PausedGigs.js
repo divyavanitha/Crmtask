@@ -2,7 +2,7 @@ import React, { Fragment, Dispatch, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { useToasts } from 'react-toast-notifications';
-import { getGigs } from "../../../../_actions/admin/gig.action";
+import { getGigs, changeGigStatus, deleteGig } from "../../../../_actions/admin/gig.action";
 
 import $ from 'jquery';
 import 'datatables.net';
@@ -26,9 +26,7 @@ const Gigs = () => {
 
   useEffect(() => {
 
-    //dispatch(getGigs())
-
-    /*$('body').on('click', '.delete', function (e) {
+    $('body').on('click', '.delete', function (e) {
       e.preventDefault();
       const sid = $(this).data('id');
       console.log($(this).closest('tr'));
@@ -36,7 +34,7 @@ const Gigs = () => {
       $(".delete-modal-btn")
         .off()
         .on("click", function () {
-          dispatch(deleteRequest(sid)).then(res => {
+          dispatch(deleteGig(sid)).then(res => {
             addToast(res.message, { appearance: res.status, autoDismiss: true, })
             $('#datatable').DataTable().row($(this).closest('tr')).remove().draw(false);
             $('.delete-modal').modal("hide");
@@ -44,7 +42,11 @@ const Gigs = () => {
           })
 
         });
-    });*/
+    });
+
+    $('body').on('click', '#view-proposal', function(e){
+      window.open('/gig/' + $(this).data('name') + '/'+$(this).data('title'), '_blank');
+    });
 
 
     $('#datatable').DataTable({
@@ -70,7 +72,7 @@ const Gigs = () => {
       "serverSide": true,
       "autoWidth": false,
       "ajax": {
-        "url": '/api/admin/gigs?type=paused',
+        "url": '/api/admin/gigs?type=pause',
         "type": "GET",
         data: function (data) {
 
@@ -128,30 +130,14 @@ const Gigs = () => {
         {
           "data": function (data, type, row) {
             console.log('data', data);
-            var button = `<a title="View Proposal" href="../proposals/Rocks/add-seo-200000-gsa-dofollow-high-quality-backlinks-for-google-first-page" target="_blank"> <i class="fa fa-eye"></i> </a> &nbsp;`
-             if(data.featured == false){
-                button += `<a href="index?feature_proposal=1133" title="Make Your Proposal Featured"><i class="fa fa-star"></i></a> &nbsp;`
-             }else{
-                button += `<a href="index?feature_proposal=1133" title="Remove Proposal From Featured Listing"><i class="fa fa-star-half-o"></i></a> &nbsp`;
-             }
-             if(data.top_rated == true){
-                button += `<a class="text-danger" href="index?removetoprated_proposal=1133" title="Remove Proposal From Top Rated Listing."><i class="fa fa-heartbeat" aria-hidden="true"></i></a> &nbsp;`
-             }else{
-                button += `<a href="index?toprated_proposal=1131" title="Make Your Proposal Top Rated"><i class="fa fa-heart" aria-hidden="true"></i></a> &nbsp`;
-             }
+            
+            var button = `<a title="View Proposal" id="view-proposal" data-name=`+data.user.firstName+` data-title=`+data.title+` target="_blank"> <i class="fa fa-eye"></i> </a> &nbsp;`
 
-             if(data.status != "PAUSED"){
-                button += `<a title="Pause/Deactivate Proposal" href="index?pause_proposal=1133"><i class="fa fa-pause-circle"></i></a> &nbsp;`
-             }else{
-                button += `<a title="Unpause Proposal" href="index?unpause_proposal=623"><i class="fa fa-refresh"></i> </a> &nbsp;`
+             if(data.status == "PAUSE"){
+                  button += `<a title="Unpause Proposal" class="change-status" data-id=`+data._id+` data-status="UNPAUSE"><i class="fa fa-refresh"></i> </a> &nbsp`;
              }
-           
-           button += `
-           <a title="Submit For Modification" href="index?submit_modification=1130"><i class="fa fa-edit"></i> </a>&nbsp;
-           <a title="Approve" href="index?approve_proposal=1129"><i class="fa fa-check-square-o"></i> </a> &nbsp;
-           <a title="Decline" href="index?payouts&status=declined"><i class="fa fa-ban"></i></a> &nbsp;
-           <a title="Delete Proposal" href="index?move_to_trash=1133"><i class="fa fa-trash"></i></a>`
-
+            
+             button += `<a title="Delete Proposal" data-id=`+data._id+` class="delete"><i class="fa fa-trash"></i></a>`;
             return button;
 
 
@@ -159,6 +145,17 @@ const Gigs = () => {
         }
 
       ]
+    });
+
+$('body').on('click', '.change-status', function(){
+        var id = $(this).data('id');
+        var status = $(this).data('status');
+
+        dispatch(changeGigStatus(id, status)).then(res => {
+          addToast(res.message, { appearance: res.status, autoDismiss: true, })
+          window.location.reload(); 
+          
+        });
     });
 
     /*$('body').on('change', '.status_enable', function () {

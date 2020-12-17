@@ -200,7 +200,7 @@ const FixedPricing = (props) => {
                                              <div>
                                                 <Field component="select" name={`delivery_time_id.${0}`} className={'form-control' + (errors.delivery_time_id && errors.delivery_time_id[0] && errors.delivery_time_id && errors.delivery_time_id[0] ? ' is-invalid' : '')}>
                                                    <option value="">Select Delivery Time</option>
-                                                   {delivery && delivery.deliveryTime.map((deliveryTime) => (<option key={deliveryTime._id} value={deliveryTime._id} >{deliveryTime.name}</option>))}
+                                                   {delivery && delivery.deliveryTime.map((deliveryTime) => (<option key={deliveryTime._id} value={deliveryTime.name} >{deliveryTime.name}</option>))}
                                                 </Field>
                                              </div>
 

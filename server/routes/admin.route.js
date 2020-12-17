@@ -282,6 +282,18 @@ router.get('/request/changestatus/:id/:status', (req, res) => {
 router.get('/gigs', (req, res) => {
   gigController.listgigs(req, res);
 });
+router.get('/change/gigstatus/:id/:status', (req, res) => {
+  gigController.gigStatus(req, res);
+});
+router.delete('/gig/delete/:id', function(req, res){
+  gigController.deleteGig(req, res);
+});
+router.get('/gig/details/:id', (req, res) => {
+  gigController.getGigDetails(req, res);
+});
+router.post('/gig/request/modification',  (req, res) => {
+  gigController.requestModification(req, res);
+});
 
 
 router.get('/settings', (req, res) => {

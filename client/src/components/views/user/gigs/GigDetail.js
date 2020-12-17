@@ -86,6 +86,7 @@ const GigDetail = (props) => {
     const levelTwoCompletedOrder = settings && settings.settings && settings.settings.seller.levelOneCompletedOrder;
     const topRatedRating = settings && settings.settings && settings.settings.seller.levelOneRating;
     const topRatedCompletedOrder = settings && settings.settings && settings.settings.seller.levelOneCompletedOrder;
+    const gigRating = gig && gig.rating ? gig.rating : 0;
 
     let level = 'New Seller';
     let description = '';
@@ -219,9 +220,9 @@ const GigDetail = (props) => {
                                                         <Link to={"/categories/" + (gig && gig.category ? gig && gig.category.name : "") + "/" + (gig && gig.subCategory ? gig && gig.subCategory.name : "") }>{gig && gig.subCategory ? gig && gig.subCategory.name : ""}</Link>
                                                     </nav>
 
-                                                    { gig && new Array(Math.ceil(gig.rating)).fill(Math.ceil(gig.rating)).map(() => <img className='mb-1' src={require('../../../../assets/images/user_rate_full.png')} />  ) }
+                                                     { new Array(Math.ceil(gigRating)).fill(Math.ceil(gigRating)).map(() => <img className='mb-1' src={require('../../../../assets/images/user_rate_full.png')} />  ) }
 
-                                                    { gig && new Array(5 - Math.ceil(gig.rating)).fill(0).map(() => <img className='mb-1' src={require('../../../../assets/images/user_rate_blank.png')} />  ) }
+                                                    { new Array(5 - Math.ceil(gigRating)).fill(0).map(() => <img className='mb-1' src={require('../../../../assets/images/user_rate_blank.png')} />  ) } 
 
                                                     <span className="text-muted span"> {reviews && reviews.length > 0 ? "("+ reviews.length +")" : '' } &nbsp;{ orderCount != 0 ? orderCount + " Order "+(orderCount > 1 ? 's' : '' ) + " In Queue" : '' }.</span>
                                                     <div className="sharethis-inline-share-buttons  st-right  st-inline-share-buttons st-animated" style={{ marginTop: "-36px" }} id="st-1">
@@ -303,9 +304,9 @@ const GigDetail = (props) => {
                                                     <div className="float-left">
                                                         <span className="mr-2"> { orderCount != 0 ? orderCount +' Reviews' : '' } </span>
 
-                                                        { gig && new Array(Math.ceil(gig.rating)).fill(Math.ceil(gig.rating)).map(() => <img className='mb-2' src={require('../../../../assets/images/user_rate_full_big.png')} />  ) }
+                                                        { new Array(Math.ceil(gigRating)).fill(Math.ceil(gigRating)).map(() => <img className='mb-2' src={require('../../../../assets/images/user_rate_full_big.png')} />  ) }
 
-                                                        { gig && new Array(5 - Math.ceil(gig.rating)).fill(0).map(() => <img className='mb-2' src={require('../../../../assets/images/user_rate_blank_big.png')} />  ) }
+                                                        { new Array(5 - Math.ceil(gigRating)).fill(0).map(() => <img className='mb-2' src={require('../../../../assets/images/user_rate_blank_big.png')} />  ) }
 
                                                         
 
