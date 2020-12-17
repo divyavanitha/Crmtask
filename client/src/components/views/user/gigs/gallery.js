@@ -40,7 +40,7 @@ const Gallery = (props) => {
 
   const { isDragActive, getRootProps, getInputProps, isDragReject, acceptedFiles, rejectedFiles } = useDropzone({
     onDrop,
-    accept: 'image/png',
+    accept: "image/jpeg, image/png",
     minSize: 0,
     maxSize,
   });

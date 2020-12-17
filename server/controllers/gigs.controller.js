@@ -26,6 +26,8 @@ exports.listgigs = async (req, res) => {
             projection.subCategory = subcategory._id;
         }
 
+        projection.status = 'ACTIVE';
+
         let gigs = await db._get(Gig, projection, {}, {populate: "user"});
 
         const data = { gigs };

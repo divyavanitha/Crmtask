@@ -117,7 +117,7 @@ const GigDetail = (props) => {
             enableReinitialize
             initialValues={{
                 gig_id: gig && gig._id,
-                price: price,
+                price: gig && gig.pricing[0].price ,
                 package_id: package_id,
                 deliveryTime: deliveryTime,
                 revision: revision,
@@ -379,7 +379,7 @@ const GigDetail = (props) => {
                                 <div className="col-lg-4 col-md-5 proposal-sidebar">
 
                                     <div className="card mb-5 rounded-0 gigPlanType">
-                                        { gig && gig.fixed_price && (<div className="card-header pt-0 pl-3 tabs-header">
+                                        { gig && !gig.fixed_price && (<div className="card-header pt-0 pl-3 tabs-header">
                                             <ul className="nav nav-tabs card-header-tabs rounded-0 justify-content-center">
                                                 {packages && packages.map((pack, index) => (<li key={index} className="nav-item">
                                                     <a className="nav-link  " href="#tab_2506" data-toggle="tab" formid="checkoutForm1" data-node-id={pack.name}>

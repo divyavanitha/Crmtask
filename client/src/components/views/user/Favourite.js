@@ -37,43 +37,52 @@ function Favourite() {
                <div class="my_proposal_listing">
                   <div class="row">
                      <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-3">
-                        <div class="proposal-card-base mp-proposal-card">
-                           <a href="">
-                           <img src="assets/images/postImg/img-03.jpg" class="img-fluid" />
+                        <div className="proposal-card-base mp-proposal-card">
+                           {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
+                           <a href="proposals/volarex/i-will-design-and-code-android-apps">
+                              <img src={require('../../../assets/images/proposals/andorid-1_1571118714.png')} className="img-fluid" />
                            </a>
-                           <div class="proposal-card-caption">
-                              <div class="proposal-seller-info">
-                                 <span class="fit-avatar s24">
-                                 <img src="images/userlisting/img-02.jpg" class="rounded-circle" width="32" height="32" />
+                           <div className="proposal-card-caption">
+                              {/* <!--- proposal-card-caption Starts ---> */}
+                              <div className="proposal-seller-info">
+                                 {/* <!--- onePress-seller-info Starts ---> */}
+                                 <span className="fit-avatar s24">
+                                    <img src={require('../../../assets/images/userlisting/img-05.jpg')} className="rounded-circle" width="32" height="32" />
                                  </span>
-                                 <div class="seller-info-wrapper">
-                                    <a href="" class="seller-name">mir_digimarket</a>
-                                    <div class="onePress-seller-tooltip">
-                                       Level Two       
+                                 <div className="seller-info-wrapper">
+                                    <a href="volarex" className="seller-name">volarex</a>
+                                    <div className="onePress-seller-tooltip">
+                                       New Seller
                                     </div>
                                  </div>
-                                 <div class="favoriteIcon">
-                                    <i data-id="4" href="#" class="fa fa-heart proposal-unfavorite" data-toggle="tooltip" data-placement="top" title="Favorite"></i>
+                                 <div className="favoriteIcon">
+                                    <i data-id="6" href="#" className="fa fa-heart proposal-favorite" data-toggle="tooltip"
+                                       data-placement="top" title="Favorite"></i>
                                  </div>
                               </div>
-                              <a href="" class="proposal-link-main js-proposal-card-imp-data">
-                                 <h3>I Will Create A Professional Custom Explainer Video</h3>
+                              {/* <!--- onePress-seller-info Ends ---> */}
+                              <a href="proposals/volarex/i-will-design-and-code-android-apps"
+                                 className="proposal-link-main js-proposal-card-imp-data">
+                                 <h3>I Will Design And Code Android Apps</h3>
                               </a>
-                              <div class="rating-badges-container">
-                                 <span class="proposal-rating">
-                                 <i class="fa fa-star"></i>
-                                 <span>
-                                 <strong>4.8</strong> (22)
-                                 </span>
+                              <div className="rating-badges-container">
+                                 <span className="proposal-rating">
+                                    <i className="fa fa-star"></i>
+                                    <span>
+                                       <strong>4.5</strong> (2)
+                                    </span>
                                  </span>
                               </div>
                            </div>
-                           <footer class="proposal-card-footer">
-                              <div class="proposal-price">
+                           {/* <!--- proposal-card-caption Ends ---> */}
+                           <footer className="proposal-card-footer">
+                              {/* <!--- proposal-card-footer Starts ---> */}
+                              <div className="proposal-price">
                                  <a>
-                                 <small>STARTING AT</small>&#036;10.00     </a>
+                                    <small>STARTING AT</small>&#036;20.00 </a>
                               </div>
                            </footer>
+                           {/* <!--- proposal-card-footer Ends ---> */}
                         </div>
                      </div>
                   </div>
