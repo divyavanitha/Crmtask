@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useHistory } from "react-router-dom";
 //import { useToasts } from 'react-toast-notifications'
 
-import { getGigList, deleteGig } from "../../../../_actions/gigs.action";
+import { getGigList, deleteGig, submitApproval } from "../../../../_actions/gigs.action";
 import $ from 'jquery';
 
 const GigList = (props) => {
@@ -34,11 +34,23 @@ const GigList = (props) => {
             });
       });
 
+      
+
    }, []);
 
    const gig_list = useSelector((state) => state.gig && state.gig.gigs && state.gig.gigs.responseData);
 
    console.log('list', gig_list);
+
+   const sendApproval = async (id) => {
+      
+           
+           dispatch(submitApproval(id)).then(res => {
+             console.log('id',res.responseData);
+             window.location.reload();           
+           })
+   }
+
    return (
 
 
@@ -229,9 +241,9 @@ const GigList = (props) => {
                                        <div className="dropdown">
                                           <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
                                           <div className="dropdown-menu">
-                                             <a href="" className="dropdown-item"> Submit For Approval </a>
-                                             <a href="" className="dropdown-item"> Preview </a>
-                                             <a href="" className="dropdown-item"> Edit </a>
+                                             <button onClick={() =>  sendApproval(list._id)} className="dropdown-item"> Submit For Approval </button>
+                                             <a className="dropdown-item"> Preview </a>
+                                             <a className="dropdown-item"> Edit </a>
                                              <button data-id={list._id} className="dropdown-item delete"> Delete </button>
                                           </div>
                                        </div>

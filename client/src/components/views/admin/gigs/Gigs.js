@@ -182,23 +182,7 @@ const Gigs = () => {
         });
     });
 
-    /*$('body').on('change', '.status_enable', function () {
-
-      var id = $(this).data('id');
-      var value = 0;
-      var fail_status = true;
-
-      if ($(this).is(":checked")) {
-        value = 1;
-        fail_status = false;
-      }
-
-      dispatch(changeRequestStatus(id, value)).then(res => {
-
-        addToast(res.message, { appearance: res.status, autoDismiss: true, })
-        if (res.statusCode != 200) $(this).prop('checked', fail_status);
-      })
-    });*/
+    
 
   }, []);
 

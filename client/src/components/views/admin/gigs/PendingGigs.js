@@ -2,7 +2,7 @@ import React, { Fragment, Dispatch, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { useToasts } from 'react-toast-notifications';
-import { getGigs } from "../../../../_actions/admin/gig.action";
+import { getGigs, changeGigStatus } from "../../../../_actions/admin/gig.action";
 
 import $ from 'jquery';
 import 'datatables.net';
@@ -45,7 +45,10 @@ const Gigs = () => {
 
         });
     });*/
-
+    $('body').on('click', '.modification', function(e){
+      e.preventDefault();
+      history.push('/admin/modify/' + $(this).data('id'))
+    });
 
     $('#datatable').DataTable({
       language: {
@@ -130,7 +133,7 @@ const Gigs = () => {
             console.log('data', data);
             var button = `<a title="View Proposal" id="view-proposal" data-name=`+data.user.firstName+` data-title=`+data.title+` target="_blank"> <i class="fa fa-eye"></i> </a> &nbsp;`
              
-            button += `<a title="Submit For Modification" data-id=`+data._id+`><i class="fa fa-edit"></i> </a>&nbsp`;
+            button += `<a title="Submit For Modification" class="modification" data-id=`+data._id+`><i class="fa fa-edit"></i> </a>&nbsp`;
             
 
             button += `<a title="Approve" class="change-status" data-id=`+data._id+` data-status="APPROVE"><i class="fa fa-check-square-o"></i> </a> &nbsp`;
@@ -145,6 +148,18 @@ const Gigs = () => {
 
       ]
     });
+
+    $('body').on('click', '.change-status', function(){
+        var id = $(this).data('id');
+        var status = $(this).data('status');
+
+        dispatch(changeGigStatus(id, status)).then(res => {
+          addToast(res.message, { appearance: res.status, autoDismiss: true, })
+          window.location.reload(); 
+          
+        });
+    });
+
 
   }, []);
 

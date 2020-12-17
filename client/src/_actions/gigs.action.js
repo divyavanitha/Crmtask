@@ -98,6 +98,19 @@ export const getGigList = (data) => async dispatch => {
   });
 }
 
+export const submitApproval = (id) => async dispatch => {
+  try {
+    let response = await axios.get(`/api/gig/submit/approval/${id}`);
+    console.log('data', response);
+    response.data.status = 'success';
+    return response.data;
+  } catch (e) {
+    e.response.data.status = 'error';
+    if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
+    return e.response.data;
+  }
+}
+
 // Get Posts 
 export const getmyallgigs = () => dispatch => {
   // dispatch(setPostLoading());
