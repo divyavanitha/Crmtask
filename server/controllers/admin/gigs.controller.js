@@ -157,7 +157,8 @@ exports.requestModification = async (req, res) => {
     try {
         const gig = {
             modify_description: req.body.modify_description,
-            status: "MODIFICATION" 
+            status: "MODIFICATION",
+            submit_proposal:false
         }
 
          await db._update(Gig, { _id: req.body.id }, gig);

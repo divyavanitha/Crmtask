@@ -134,13 +134,19 @@ const Gigs = () => {
           "data": function (data, type, row) {
             console.log('data', data);
             var button = `<a title="View Proposal" id="view-proposal" data-name=`+data.user.firstName+` data-title=`+data.title+` target="_blank"> <i class="fa fa-eye"></i> </a> &nbsp;`
-            if(data.status != "PENDING"){
-             if(data.featured == false){
-                button += `<a class="change-status" data-id=`+data._id+` data-status="ADD_FEATURE" title="Make Your Proposal Featured"><i class="fa fa-star"></i></a> &nbsp;`
-             }else{
-                button += `<a class="change-status" data-id=`+data._id+` data-status="REMOVE_FEATURE" title="Remove Proposal From Featured Listing"><i style="color:green;" class="fa fa-star-half-o"></i></a> &nbsp`;
-             }
-           }
+            if(data.status == "PAUSE" || data.status == "PENDING"){
+               if(data.featured == false){
+                  button += `<a class="change-status d-none" data-id=`+data._id+` data-status="ADD_FEATURE" title="Make Your Proposal Featured"><i class="fa fa-star"></i></a> &nbsp;`
+               }else{
+                  button += `<a class="change-status d-none" data-id=`+data._id+` data-status="REMOVE_FEATURE" title="Remove Proposal From Featured Listing"><i style="color:green;" class="fa fa-star-half-o"></i></a> &nbsp`;
+               }
+            }else{
+               if(data.featured == false){
+                  button += `<a class="change-status" data-id=`+data._id+` data-status="ADD_FEATURE" title="Make Your Proposal Featured"><i class="fa fa-star"></i></a> &nbsp;`
+               }else{
+                  button += `<a class="change-status" data-id=`+data._id+` data-status="REMOVE_FEATURE" title="Remove Proposal From Featured Listing"><i style="color:green;" class="fa fa-star-half-o"></i></a> &nbsp`;
+               }
+            }
           
              if(data.status == "ACTIVE"){
                 button += `<a title="Pause/Deactivate Proposal" class="change-status" data-id=`+data._id+` data-status="PAUSE"><i class="fa fa-pause-circle"></i></a> &nbsp`;              

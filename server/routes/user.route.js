@@ -152,9 +152,14 @@ router.post('/gig/upload', [middleware.user, middleware.upload( path.join(__dirn
 router.post('/gig/confirm', middleware.user, function(req, res){
   gigController.updateConfirm(req, res);
 });
-
 router.delete('/gig/delete/:id', middleware.user, function(req, res){
   gigController.deleteGig(req, res);
+});
+router.get('/gig/submit/approval/:id', middleware.user, function(req, res){
+  gigController.submitApproval(req, res);
+});
+router.post('/change/gigstatus', (req, res) => {
+  gigController.gigStatus(req, res);
 });
 
 /*Cart*/

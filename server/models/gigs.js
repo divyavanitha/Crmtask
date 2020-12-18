@@ -38,6 +38,12 @@ const gigSchema = mongoose.Schema({
         price: { type: Number }
         
     }],
+    feature_payment: [{
+        payment_option: { type: String },
+        price: { type: Number },
+        duration: { type: String }
+    }],
+    submit_proposal: { type: Boolean, default:false },
     modify_description: { type: String},
     status: { type: String},
     featured: { type: Boolean , default: false},

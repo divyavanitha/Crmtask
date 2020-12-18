@@ -111,6 +111,17 @@ export const submitApproval = (id) => async dispatch => {
   }
 }
 
+export const changeGigStatus = (data) => async dispatch => {
+    try {
+        let response = await axios.post('/api/change/gigstatus', data);
+        response.data.status = 'success';
+        return response.data;
+    } catch (e) {
+        e.response.data.status = 'error';
+        return e.response.data;
+    }
+}; 
+
 // Get Posts 
 export const getmyallgigs = () => dispatch => {
   // dispatch(setPostLoading());
