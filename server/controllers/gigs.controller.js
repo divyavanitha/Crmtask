@@ -616,7 +616,7 @@ console.log(req.body);
             gig.featured = true;
             let features = [];
             data ={
-                payment_method: req.body.payment,
+                payment_option: (req.body.payment_option).toUpperCase(),
                 price: req.body.feature_price,
                 duration: req.body.feature_duration
             }
@@ -626,10 +626,6 @@ console.log(req.body);
             gig.status = "PAUSE";
         }else if((req.body.status).toUpperCase() == "UNPAUSE"){
             gig.status = "ACTIVE";
-        }else if((req.body.status).toUpperCase() == "APPROVE"){
-            gig.status = "ACTIVE";
-        }else if((req.body.status).toUpperCase() == "DECLINE"){
-            gig.status = "INACTIVE";
         }
 
         let gigs = await db._update(Gig, { _id: req.body.id }, gig);
