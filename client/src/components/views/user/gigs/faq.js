@@ -9,14 +9,57 @@ import $ from 'jquery';
 //import { useToasts } from 'react-toast-notifications'
 
 import { updateFaq } from "../../../../_actions/gigs.action";
+import { getGigbyId } from "../../../../_actions/user.action";
 
 
-const AddGig = (props) => {
+const Faq = (props) => {
   //const { addToast } = useToasts()
   const dispatch = useDispatch();
 
   let history = useHistory();
   const params = useParams();
+   useEffect(() => {
+
+      dispatch(getGigbyId(params.id)).then( async (res) => {
+      });
+
+   }, [params.id]);
+
+   const gig = useSelector((state) => state.user && state.user.gig_details && state.user.gig_details.responseData && state.user.gig_details.responseData.gig);
+
+   let htmlData = '';
+   if(gig) {
+    for(let i in gig.faq) {
+      htmlData += `<div class="tab rounded border-1 faq_container">
+
+              <div class="tab-header" data-toggle="collapse" href="#faq-58">
+                    <a class="float-left"> <i class="fa fa-bars mr-2"></i>`+ gig.faq[i].question + `</a>
+                    <a class="float-right text-muted"><i class="fa fa-sort-down"></i></a>
+                    <div class="clearfix"></div>
+              </div>
+
+                <div class="tab-body p-3 pb-0 collapse" id="faq-58" data-parent="#faqTabs">
+                      <div class="form-group mb-2">
+                            <input type="hidden" name="faq_id" value=`+ gig.faq[i]._id + `>
+                            <input type="text" name="title" placeholder="Title" class="form-control form-control-sm" required value=`+ gig.faq[i].question + `>
+                      </div>
+
+                      <div class="form-group mb-2">
+                            <input name="content" rows="3" class="form-control form-control-sm" value=`+ gig.faq[i].answer + ` />
+                      </div>
+
+                      <div class="form-group mb-0">
+                            <a class="btn btn-danger btn-sm delete-faq delete">Delete</a>
+                            <button type="submit" class="btn btn-success btn-sm float-right update">Update</button>
+                      </div>   
+                </div>
+              </div>`;
+    }
+   }
+
+   $('#faTabs').html(htmlData);
+   
+
   useEffect(() => {
 
     $(".insert").on("click", function () {
@@ -94,25 +137,22 @@ const AddGig = (props) => {
             });
           });
 
-          $(".delete").on('click', function (e) {
-            $(this).closest('.faq_container').remove();
-            /*$.ajax({
+          $("body").on('click', '.delete', function (e) {
+            let faq_id = $(this).closest('.faq_container').find('input[name=faq_id]');
+            alert();
+            $.ajax({
               url: "/api/gig/update/faq",
               type: 'delete',
               headers: {
                 Authorization: localStorage.token
               },
               data: {
-                question: $("input[name=title]").val(),
-                answer: $("input[name=content]").val(),
-                faq_id: $("input[name=faq_id]").val(),
-                action: "faq",
-                id: params.id
+                id: faq_id
               },
               success: function (data) {
-
+                $(this).closest('.faq_container').remove();
               }
-            });*/
+            });
           });
 
         },
@@ -132,7 +172,7 @@ const AddGig = (props) => {
       enableReinitialize
       initialValues={{
         id: params.id,
-        description: ''
+        description: gig ? gig.description : ''
 
       }
       }
@@ -151,13 +191,13 @@ const AddGig = (props) => {
 
         if (values.action == "desc") {
           dispatch(updateFaq(data)).then(res => {
-            history.push('/gig/post/requirements/' + res.responseData._id)
+            history.push('/gig/requirements/' + res.responseData._id)
             //addToast(res.message, { appearance: res.status, autoDismiss: true, })
           })
         } else {
           dispatch(updateFaq(data)).then(res => {
 
-            history.push('/gig/post/faq/' + params.id)
+            history.push('/gig/faq/' + params.id)
             //addToast(res.message, { appearance: res.status, autoDismiss: true, })
           })
         }
@@ -320,4 +360,4 @@ const AddGig = (props) => {
   );
 };
 
-export default AddGig;
+export default Faq;

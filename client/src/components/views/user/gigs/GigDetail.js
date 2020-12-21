@@ -3,6 +3,7 @@ import { withRouter, useParams, Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { Formik, Field, Form, FieldArray, ErrorMessage } from 'formik';
+import Loader from 'react-loader-spinner'
 import parse from 'html-react-parser';
 import moment from 'moment';
 import * as Yup from 'yup';
@@ -32,6 +33,7 @@ const GigDetail = (props) => {
     const params = useParams();
     let history = useHistory();
     const auth = useSelector((state) => state.user);
+    let isLoading = false;
 
     const [price, setPrice] = useState(0);
     const [package_id, setPackage] = useState("");
@@ -39,17 +41,24 @@ const GigDetail = (props) => {
     const [proposal, setProposal] = useState([]);
     const [deliveryTime, setDeliveryTime] = useState(0);
     const [revision, setRevision] = useState(0);
+    const [totalPrice, setTotalPrice] = useState(0);
 
     const addQuantity = () => {
-        setQuantity(quantity+1)
+        let quantityValue = quantity+1;
+        setQuantity(quantityValue)
+        setTotalPrice(quantityValue*price)
     }
 
     const removeQuantity = () => {
-        setQuantity(quantity-1 != 0 ? quantity-1 : quantity)
+        let quantityValue = quantity-1 != 0 ? quantity-1 : quantity;
+        setQuantity(quantityValue)
+        setTotalPrice(quantityValue*price)
     }
 
     const updateQuantity = ({currentTarget: input}) => {
-        setQuantity(input.value != 0 ? parseInt(input.value) : 1)
+        let quantityValue = input.value != 0 ? parseInt(input.value) : 1;
+        setQuantity(quantityValue)
+        setTotalPrice(quantityValue*price)
     }
 
     const updateProposal = (value, status, setFieldValue) => {
@@ -65,15 +74,31 @@ const GigDetail = (props) => {
     }
 
     useEffect(() => {
+        dispatch(getGigbyName(params.gig)).then((response) => {
+            setPrice(response.responseData.gig.pricing[0].price)
+            setDeliveryTime(response.responseData.gig.pricing[0].DeliveryTime)
+            setRevision(response.responseData.gig.pricing[0].revisions)
+            setTotalPrice(response.responseData.gig.pricing[0].price)
 
-        dispatch(getGigbyName(params.gig))
+        })
         dispatch(getPackage());
 
     }, []);
 
 
     const gig = useSelector((state) => state.user && state.user.gig_details && state.user.gig_details.responseData && state.user.gig_details.responseData.gig);
-    console.log('gig', gig);
+
+
+
+    const changePackage = (pack) => {
+        let priceData = gig.pricing.find( (p) => { return p.package == pack._id } );
+        setPrice(priceData.price)
+        setDeliveryTime(priceData.DeliveryTime)
+        setRevision(priceData.revisions)
+        setTotalPrice(quantity*priceData.price)
+    }
+
+
     const orderCount = useSelector((state) => state.user && state.user.gig_details && state.user.gig_details.responseData && state.user.gig_details.responseData.orderCount);
     const reviews = useSelector((state) => state.user && state.user.gig_details && state.user.gig_details.responseData && state.user.gig_details.responseData.reviews);
 
@@ -117,7 +142,7 @@ const GigDetail = (props) => {
             enableReinitialize
             initialValues={{
                 gig_id: gig && gig._id,
-                price: price,
+                price: gig && gig.pricing[0].price ,
                 package_id: package_id,
                 deliveryTime: deliveryTime,
                 revision: revision,
@@ -143,11 +168,15 @@ const GigDetail = (props) => {
                 if(values.package_id == ""); delete data["package_id"]; 
 
                 if (values.action == "cart") {
+                    isLoading = true;
                     dispatch(addCart(data)).then(res => {
+                        isLoading = false;
                     }).catch(e => {})
                 } else {
+                    isLoading = true;
                     dispatch(addCart(data)).then(res => {
                         history.push('/cart-payment-option/' + res.responseData.carts._id)
+                        isLoading = false;
                     }).catch(e => {})
                 }
                 resetForm();
@@ -171,6 +200,10 @@ const GigDetail = (props) => {
                 return (
 
                     <Fragment>
+
+                    {isLoading && <div style={{position: 'fixed', opacity: 0.7, top: 0, width: '100%', height: '100%', background: '#000', zIndex: 99 }} >
+                    <Loader style={{position: 'absolute', zIndex: 99, top: '30%', left: '45%' }} visible={isLoading} type="Rings" color="#00BFFF" height={100} width={100} />
+                    </div>}
 
 
                         <div className="mp-gig-top-nav">
@@ -379,10 +412,12 @@ const GigDetail = (props) => {
                                 <div className="col-lg-4 col-md-5 proposal-sidebar">
 
                                     <div className="card mb-5 rounded-0 gigPlanType">
-                                        { gig && gig.fixed_price && (<div className="card-header pt-0 pl-3 tabs-header">
+                                        { gig && !gig.fixed_price && (<div className="card-header pt-0 pl-3 tabs-header">
                                             <ul className="nav nav-tabs card-header-tabs rounded-0 justify-content-center">
-                                                {packages && packages.map((pack, index) => (<li key={index} className="nav-item">
-                                                    <a className="nav-link  " href="#tab_2506" data-toggle="tab" formid="checkoutForm1" data-node-id={pack.name}>
+                                                {packages && packages.map((pack, index) => (
+                                                    <li key={index} className="nav-item" >
+                                                    { console.log(index) }
+                                                    <a className={index == 0 ? "nav-link active" : "nav-link"} onClick={() => changePackage(pack)}  href="#tab_2506" data-toggle="tab" formid="checkoutForm1" data-node-id={pack.name}>
                                                         {pack.name}   </a>
                                                 </li>))}
 
@@ -395,11 +430,11 @@ const GigDetail = (props) => {
                                                     <Field type="hidden" onChange={handleChange} name="package_id" value={values.package_id} />
                                                     <Field type="hidden" onChange={handleChange} name="price" value={values.price} />
                                                     <h3 className="package-price"> Price
-                                                        <span className="float-right font-weight-normal"> &#036;<span className='total-price-1'>{ gig && gig.pricing[0].price }</span> </span>
+                                                        <span className="float-right font-weight-normal"> &#036;<span className='total-price-1'>{ price }</span> </span>
                                                         <span className="total-price-1-num d-none">40</span>
                                                     </h3>
                                                     <h6 className="mb-3">
-                                                        <i className="fa fa-clock-o delivery"> { gig && gig.pricing[0].DeliveryTime } Delivery </i> &nbsp; &nbsp; <i className="fa fa-refresh revision"> { gig && gig.pricing[0].revisions } Revisions </i>
+                                                        <i className="fa fa-clock-o delivery"> { deliveryTime} Delivery </i> &nbsp; &nbsp; <i className="fa fa-refresh revision"> { revision } Revisions </i>
                                                     </h6>
                                                     <hr />
                                                     <ul className="buyables m-b-25 list-unstyled ">
@@ -434,7 +469,7 @@ const GigDetail = (props) => {
                                                         <i className="fa fa-shopping-cart"></i> &nbsp;<strong>Add to cart</strong>
                                                     </button>
                                                     <button type="submit" onClick={() => setFieldValue("action", "order")} name="add_order" value="1" className="btn btn-order">
-                                                        <strong>Order Now (&#036;<span className='total-price-1'>{ gig && gig.pricing[0].price * quantity }</span>)</strong>
+                                                        <strong>Order Now (&#036;<span className='total-price-1'>{ totalPrice }</span>)</strong>
                                                     </button></Fragment>) : '' }
 
                                                 </form>

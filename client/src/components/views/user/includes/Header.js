@@ -287,26 +287,24 @@ function Header() {
                         }
                         {auth.isAuthenticated && (<ul className="account-nav apply-nav-height">
                             <li className="logged-in-link d-none d-sm-block d-md-block d-lg-block">
-                            <a className="menuItem" href="" title="Freelancers">
-                                <span className="onePress-icon nav-icon onePress-icon-relative">
-                                    <i className="fa  fa-user-o fa-lg" style={{ fontSize: "1.4em" }}></i>
-                                </span>
-                            </a>
-                        </li>
-                            <li className="logged-in-link d-none d-sm-block d-md-block d-lg-block">
-                            <a className="menuItem" href="" title="Notifications">
-                                <span className="onePress-icon nav-icon onePress-icon-relative">
-                                    <i className="fa fa-bell-o fa-lg" style={{ fontSize: "1.4em" }}></i>
-                                </span>
-                                {/*<span className="total-user-count count">1</span>*/}
-                            </a>
-                        </li>
+                                <a className="menuItem" href="" title="Freelancers">
+                                    <span className="onePress-icon nav-icon onePress-icon-relative">
+                                        <i className="fa  fa-user-o fa-lg" style={{ fontSize: "1.4em" }}></i>
+                                    </span>
+                                </a>
+                            </li>
+                                <li className="logged-in-link d-none d-sm-block d-md-block d-lg-block">
+                                <a className="menuItem" href="" title="Notifications">
+                                    <span className="onePress-icon nav-icon onePress-icon-relative">
+                                        <i className="fa fa-bell-o fa-lg" style={{ fontSize: "1.4em" }}></i>
+                                    </span>
+                                </a>
+                            </li>
                             <li className="logged-in-link">
                                 <a className="menuItem" href="message" title="Cart">
                                     <span className="onePress-icon nav-icon onePress-icon-relative">
                                         <i className="fa fa-envelope-o" style={{ fontSize: "1.4em" }} aria-hidden="true"></i>
                                     </span>
-                                    {/*<span className="total-user-count count">1</span>*/}
                                 </a>
                             </li>
 
@@ -340,7 +338,7 @@ function Header() {
                                         <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#selling"> Selling </a>
                                         <div id="selling" className="dropdown-submenu collapse">
                                             <Link className="dropdown-item" to="/selling-order-lists"> Orders </Link>
-                                            <Link className="dropdown-item" to="/gig/list"> My Gigs </Link>
+                                            <Link className="dropdown-item" to="/gigs"> My Gigs </Link>
                                             <Link className="dropdown-item" to="/coupon/create"> Create A Coupon </Link>
                                             <Link className="dropdown-item" to="/buyer/requests"> Buyer Requests </Link>
                                             <Link className="dropdown-item" to="/revenues"> Revenues </Link>

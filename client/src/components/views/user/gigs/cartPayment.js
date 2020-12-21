@@ -17,7 +17,8 @@ const Cart = (props) => {
    const dispatch = useDispatch();
    const params = useParams();
    let history = useHistory();
-console.log('id', params);
+
+    const auth = useSelector((state) => state.user);
 
    const [total, setTotal] = useState(0);
 
@@ -273,7 +274,7 @@ console.log('cart_details', cart_details);
                                              </div>
                                              <div className="col-11">
                                                 <p className="lead mt-2">
-                                                   Personal Balance - <b>tyrone</b>
+                                                   Personal Balance - <b>{auth && auth.user.firstName}</b>
                                                    <span className="text-success font-weight-bold">&#036;{params.id ? cart_details && cart_details.price : total}</span>
                                                 </p>
                                              </div>

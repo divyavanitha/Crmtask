@@ -109,7 +109,7 @@ const GigList = (props) => {
                   <h1 className="pull-left">Gigs</h1>
                </div>
                <div className="col-md-6">
-                  <Link className="btn btn-success pull-right" to="/gig/post"><i className="fa fa-plus-circle"></i> Add New Gig </Link>
+                  <Link className="btn btn-success pull-right" to="/gig/add"><i className="fa fa-plus-circle"></i> Add New Gig </Link>
                </div>
             </div>
             <div className="row">
@@ -198,8 +198,8 @@ const GigList = (props) => {
                            <table className="table table-striped">
                               <thead>
                                  <tr>
-                                    <th>Proposal's Title</th>
-                                    <th>Proposal's Price</th>
+                                    <th>Gig</th>
+                                    <th>Price</th>
                                     <th>Views</th>
                                     <th>Orders</th>
                                     <th>Actions</th>
@@ -236,8 +236,8 @@ const GigList = (props) => {
                            <table className="table table-striped">
                               <thead>
                                  <tr>
-                                    <th>Proposal's Title</th>
-                                    <th>Proposal's Price</th>
+                                    <th>Gig</th>
+                                    <th>Price</th>
                                     <th>Views</th>
                                     <th>Orders</th>
                                     <th>Actions</th>
@@ -273,7 +273,7 @@ const GigList = (props) => {
                            <table className="table table-striped">
                               <thead>
                                  <tr>
-                                    <th>Modification Proposal Title</th>
+                                    <th>Modification Gig Title</th>
                                     <th>Modification Message</th>
                                     <th>Actions</th>
                                  </tr>
@@ -308,8 +308,8 @@ const GigList = (props) => {
                            <table className="table table-striped">
                               <thead>
                                  <tr>
-                                    <th>Proposal's Title</th>
-                                    <th>Proposal's Price</th>
+                                    <th>Gig</th>
+                                    <th>Price</th>
                                     <th>Views</th>
                                     <th>Orders</th>
                                     <th>Actions</th>
@@ -317,7 +317,6 @@ const GigList = (props) => {
                               </thead>
                               <tbody>
                                  {gig_list && gig_list.draft.map((list, index) => (<tr key={list._id}>
-                                 {console.log(list.pricing)}
                                     <td className="proposal-title"> {list.title} </td>
                                      <td className="text-success"> &#036;{list.pricing.length ? list.pricing[0].price : 0} </td> 
                                     <td>21</td>
@@ -326,7 +325,7 @@ const GigList = (props) => {
                                        <div className="dropdown">
                                           <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
                                           <div className="dropdown-menu">
-                                             <a href="" className="dropdown-item"> Edit </a>
+                                             <Link className="dropdown-item" to={"/gig/edit/"+list._id}> Edit </Link>
                                              <button data-id={list._id} className="dropdown-item delete"> Delete </button>
                                           </div>
                                        </div>
@@ -344,8 +343,8 @@ const GigList = (props) => {
                            <table className="table table-striped">
                               <thead>
                                  <tr>
-                                    <th>Proposal's Title</th>
-                                    <th>Proposal's Price</th>
+                                    <th>Gig</th>
+                                    <th>Price</th>
                                     <th>Views</th>
                                     <th>Orders</th>
                                     <th>Actions</th>

@@ -40,7 +40,7 @@ const Gallery = (props) => {
 
   const { isDragActive, getRootProps, getInputProps, isDragReject, acceptedFiles, rejectedFiles } = useDropzone({
     onDrop,
-    accept: 'image/png',
+    accept: "image/jpeg, image/png",
     minSize: 0,
     maxSize,
   });
@@ -69,7 +69,7 @@ const Gallery = (props) => {
 
         dispatch(updateImage(data)).then(res => {
           console.log('id', res.responseData._id);
-          history.push('/gig/post/approval/' + res.responseData._id)
+          history.push('/gig/approval/' + res.responseData._id)
 
         })
 

@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import { updateConfirm } from "../../../../_actions/gigs.action";
 
 
-const AddGig = (props) => {
+const GigApproval = (props) => {
   //const { addToast } = useTasts()
   const dispatch = useDispatch();
 
@@ -46,7 +46,7 @@ const AddGig = (props) => {
 
         dispatch(updateConfirm(data)).then(res => {
           console.log('id', res.responseData._id);
-          history.push('/gig/list');
+          history.push('/gigs');
 
         })
 
@@ -115,7 +115,7 @@ const AddGig = (props) => {
                     {/* <!--- tab-content Starts ---> */}
 
                     <div className="tab-pane fade show active" id="publish">
-                      <h1><img style={{ position: 'relative', top: '-5px' }} src="../images/comp/winner.png" />  Yay! You are almost done!</h1>
+                      <h1><img style={{ position: 'relative', top: '-5px' }} src={require('../../../../assets/images/comp/winner.png')} />  Yay! You are almost done!</h1>
                       <h6 className="font-weight-normal line-height-normal">
                         Congrats! you're almost done submitting this proposal. <br />
                 You can go back and check if you entered all the details for this proposal correctly. If all looks good and you agree with
@@ -162,4 +162,4 @@ const AddGig = (props) => {
   );
 };
 
-export default AddGig;
+export default GigApproval;

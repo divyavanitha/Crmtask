@@ -561,131 +561,12 @@ function Home() {
                   </div>
                   <div className="row"> {gig && gig.map((list) => (<Gig key={list._id} list={list} />))} </div>
 
-                  {/* <!-- If You have no gigs, show random gigs on homepage --> */}
-                  <div className="row mb-3 mt-3">
-                     <div className="col-md-12">
-                        <div className="secTitle">
-                           <h2 className="float-left">Top Proposals/Services</h2>
-                           <button className="float-right btn btn-success">VIEW ALL</button>
-                        </div>
-                     </div>
-                  </div>
-                  <div className="row">
-                     <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-3 pr-lg-1">
-                        <div className="proposal-card-base mp-proposal-card">
-                           {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
-                           <a href="proposals/volarex/i-will-design-and-code-android-apps">
-                              <img src={require('../../../assets/images/proposals/andorid-1_1571118714.png')} className="img-fluid" />
-                           </a>
-                           <div className="proposal-card-caption">
-                              {/* <!--- proposal-card-caption Starts ---> */}
-                              <div className="proposal-seller-info">
-                                 {/* <!--- onePress-seller-info Starts ---> */}
-                                 <span className="fit-avatar s24">
-                                    <img src={require('../../../assets/images/userlisting/img-05.jpg')} className="rounded-circle" width="32" height="32" />
-                                 </span>
-                                 <div className="seller-info-wrapper">
-                                    <a href="volarex" className="seller-name">volarex</a>
-                                    <div className="onePress-seller-tooltip">
-                                       New Seller
-                                    </div>
-                                 </div>
-                                 <div className="favoriteIcon">
-                                    <i data-id="6" href="#" className="fa fa-heart proposal-favorite" data-toggle="tooltip"
-                                       data-placement="top" title="Favorite"></i>
-                                 </div>
-                              </div>
-                              {/* <!--- onePress-seller-info Ends ---> */}
-                              <a href="proposals/volarex/i-will-design-and-code-android-apps"
-                                 className="proposal-link-main js-proposal-card-imp-data">
-                                 <h3>I Will Design And Code Android Apps</h3>
-                              </a>
-                              <div className="rating-badges-container">
-                                 <span className="proposal-rating">
-                                    <i className="fa fa-star"></i>
-                                    <span>
-                                       <strong>4.5</strong> (2)
-                                    </span>
-                                 </span>
-                              </div>
-                           </div>
-                           {/* <!--- proposal-card-caption Ends ---> */}
-                           <footer className="proposal-card-footer">
-                              {/* <!--- proposal-card-footer Starts ---> */}
-                              <div className="proposal-price">
-                                 <a>
-                                    <small>STARTING AT</small>&#036;20.00 </a>
-                              </div>
-                           </footer>
-                           {/* <!--- proposal-card-footer Ends ---> */}
-                        </div>
-                        {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
-                     </div>
 
-                  </div>
-                  {/* <!-- If You have no gigs, show random gigs on homepage --> */}
-                  <div className="row mb-3 mt-3">
-                     <div className="col-md-12">
-                        <div className="secTitle">
-                           <h2 className="pl-0 pr-0 ml-0 mr-0 float-left">Random Proposals/Services</h2>
-                           <button className="float-right btn btn-success">VIEW ALL</button>
-                        </div>
-                     </div>
-                  </div>
-                  <div className="row">
 
-                     <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-3 pr-lg-1">
-                        <div className="proposal-card-base mp-proposal-card">
-                           {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
-                           <a href="proposals/rewedfv/fghjkl">
-                              <img src={require('../../../assets/images/postImg/img-03.jpg')} className="img-fluid" />
-                           </a>
-                           <div className="proposal-card-caption">
-                              {/* <!--- proposal-card-caption Starts ---> */}
-                              <div className="proposal-seller-info">
-                                 {/* <!--- onePress-seller-info Starts ---> */}
-                                 <span className="fit-avatar s24">
-                                    <img src={require('../../../assets/images/userlisting/img-07.jpg')} className="rounded-circle" width="32" height="32" />
-                                 </span>
-                                 <div className="seller-info-wrapper">
-                                    <a href="rewedfv" className="seller-name">rewedfv</a>
-                                    <div className="onePress-seller-tooltip">
-                                       New Seller
-                        </div>
-                                 </div>
-                                 <div className="favoriteIcon">
-                                    <i data-id="404" href="#" className="fa fa-heart proposal-favorite" data-toggle="tooltip"
-                                       data-placement="top" title="Favorite"></i>
-                                 </div>
-                              </div>
-                              {/* <!--- onePress-seller-info Ends ---> */}
-                              <a href="proposals/rewedfv/fghjkl" className="proposal-link-main js-proposal-card-imp-data">
-                                 <h3>fghjkl</h3>
-                              </a>
-                              <div className="rating-badges-container">
-                                 <span className="proposal-rating">
-                                    <i className="fa fa-star"></i>
-                                    <span>
-                                       <strong>0.0</strong> (0)
-                        </span>
-                                 </span>
-                              </div>
-                           </div>
-                           {/* <!--- proposal-card-caption Ends ---> */}
-                           <footer className="proposal-card-footer">
-                              {/* <!--- proposal-card-footer Starts ---> */}
-                              <div className="proposal-price">
-                                 <a>
-                                    <small>STARTING AT</small>&#036;5.00 </a>
-                              </div>
-                           </footer>
-                           {/* <!--- proposal-card-footer Ends ---> */}
-                        </div>
-                        {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
-                     </div>
-                  </div>
-                  {/* <!-- <br> --> */}
+
                   {/* <!-- If You have no gigs, show random gigs on homepage Ends --> */}
+
+                  {/* 
                   <div className="row mt-2 mb-3 mt-3">
                      <div className="col-md-12">
                         <div className="secTitle">
@@ -723,19 +604,7 @@ function Home() {
                                        <button className="btn btn-success btn-sm mt-4 send_button_367">
                                           Send Offer </button>
                                     </td>
-                                    {/*  <script type="text/javascript">
-                           $(".send_button_367").click(function () {
-                              request_id = "367";
-                              $.ajax({
-                                 method: "POST",
-                                 url: "requests/send_offer_modal",
-                                 data: { request_id: request_id }
-                              }).done(function (data) {
-                                 $(".append-modal").html(data);
-                              });
-                           });
-
-                        </script> */}
+                 
                                  </tr>
 
                               </tbody>
@@ -747,7 +616,7 @@ function Home() {
                         </div>
                      </div>
                   </div>
-
+*/}
 
                </div>
             </div>

@@ -6,17 +6,24 @@ import * as Yup from 'yup';
 //import { useToasts } from 'react-toast-notifications'
 
 import { updateRequirement } from "../../../../_actions/gigs.action";
+import { getGigbyId } from "../../../../_actions/user.action";
 
 
-const AddGig = (props) => {
+const Requirement = (props) => {
   //const { addToast } = useToasts()
   const dispatch = useDispatch();
 
   let history = useHistory();
   const params = useParams();
-  useEffect(() => {
+   useEffect(() => {
 
-  }, [params.id]);
+      dispatch(getGigbyId(params.id)).then( async (res) => {
+      });
+
+   }, [params.id]);
+
+   const gig = useSelector((state) => state.user && state.user.gig_details && state.user.gig_details.responseData && state.user.gig_details.responseData.gig);
+
 
   return (
 
@@ -25,7 +32,7 @@ const AddGig = (props) => {
       enableReinitialize
       initialValues={{
         id: params.id,
-        requirement: ''
+        requirement: gig ? gig.requirement : ''
 
       }
       }
@@ -48,7 +55,7 @@ const AddGig = (props) => {
         } else {*/
         dispatch(updateRequirement(data)).then(res => {
           console.log('id', res.responseData._id);
-          history.push('/gig/post/gallery/' + res.responseData._id)
+          history.push('/gig/gallery/' + res.responseData._id)
           //addToast(res.message, { appearance: res.status, autoDismiss: true, })
         })
         //}
@@ -160,4 +167,4 @@ const AddGig = (props) => {
   );
 };
 
-export default AddGig;
+export default Requirement;

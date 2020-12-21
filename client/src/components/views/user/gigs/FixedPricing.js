@@ -26,9 +26,9 @@ const FixedPricing = (props) => {
 
    const delivery = useSelector(state => state.user.delivery_times && state.user.delivery_times.responseData);
 
-   let delivery_times = [''];
-   let revisions = [''];
-   let prices = [''];
+   let delivery_times = [props.pricing && props.pricing[0].DeliveryTime];
+   let revisions = [props.pricing && props.pricing[0].revisions];
+   let prices = [props.pricing && props.pricing[0].price];
 
    return (
 <Formik
@@ -73,7 +73,7 @@ const FixedPricing = (props) => {
             } else {*/
             dispatch(updatePricing(data)).then(res => {
                //console.log(res.responseData._id);
-               history.push('/gig/post/faq/' + res.responseData._id)
+               history.push('/gig/faq/' + res.responseData._id)
                //addToast(res.message, { appearance: res.status, autoDismiss: true, })
             })
             //}

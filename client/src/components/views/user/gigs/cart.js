@@ -109,7 +109,7 @@ const Cart = (props) => {
                dispatch(addCart(data))
             } else {
                dispatch(addCart(data)).then(res => {
-                  history.push('/gig/post/order/' + res.responseData._id)
+                  history.push('/gig/order/' + res.responseData._id)
                })
             }
             resetForm();
