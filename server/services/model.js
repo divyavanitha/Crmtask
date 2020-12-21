@@ -68,7 +68,6 @@ exports._update = async (model, condition = {}, document, options = {}) => {
     try {
 
         const query = await model.findOneAndUpdate(condition, document, { new: true });
-console.log(query);
         return true;
 
     } catch (err) {
@@ -81,7 +80,6 @@ exports._updateMany = async (model, condition = {}, document, options = {}) => {
     try {
 
         const query = await model.updateMany(condition, document, { new: true });
-console.log(query);
         return true;
 
     } catch (err) {

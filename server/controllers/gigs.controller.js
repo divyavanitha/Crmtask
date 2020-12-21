@@ -159,21 +159,15 @@ exports.creategigs = async (req, res) => {
 
     if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
-    let existingGig = await Gig.findOne({ title: req.body.title });
-    if (existingGig) return res.status(422).json( helper.response(  { status: 422, message: 'Gig name already exists'  }   ));
+    if(!req.body.id) {
+        let existingGig = await Gig.findOne({ title: req.body.title });
+        if (existingGig) return res.status(422).json( helper.response(  { status: 422, message: 'Gig name already exists'  }   ));
+    }
 
     try {
-        console.log('files',req.body.tags);
-        let data = {
-                user: req.user._id,
-                title: req.body.title,
-                category: req.body.category_id,
-                subCategory: req.body.sub_category_id,
-                tags: req.body.tags,
-                status: "DRAFT"
-            }
 
         let tags = [];
+        let gig;
         
         for(i in req.body.tags) {
 
@@ -183,9 +177,21 @@ exports.creategigs = async (req, res) => {
              
         }
 
-        if(tags.length > 0) data.tags = tags;
+        let data = {
+                user: req.user._id,
+                title: req.body.title,
+                category: req.body.category_id,
+                subCategory: req.body.sub_category_id,
+                tags: tags
+            }
 
-        let gig = await db._store(Gig, data);
+        if(req.body.id) {
+            await db._update(Gig, { _id: req.body.id }, data);
+            gig = await db._find( Gig, {_id: req.body.id} );
+        } else {
+            data.status = "DRAFT";
+            gig = await db._store(Gig, data);
+        }
 
         const response = helper.response({ message: res.__('inserted'), data: gig });
         return res.status(response.statusCode).json(response);
@@ -273,7 +279,7 @@ exports.updatePricing = async(req, res) => {
     }
 }
 
-exports.Faq = async(req, res) => {
+exports.faq = async(req, res) => {
 
     if(req.body.action == "faq"){
         var schema = Joi.object().options({ abortEarly: false }).keys({
@@ -431,6 +437,11 @@ exports.updateFaq = async(req, res) => {
     }*/
 }
 
+exports.deleteFaq = async(req, res) => {
+    console.log(req.body);
+    
+}
+
 exports.updateRequirement = async(req, res) => {
     const schema = Joi.object().options({ abortEarly: false }).keys({
         requirement: Joi.string().required().label("Rquirement"),
@@ -528,8 +539,7 @@ exports.updateImage = async(req, res) => {
 
 exports.updateConfirm = async(req, res) => {
     const schema = Joi.object().options({ abortEarly: false }).keys({
-        id: Joi.string().required().label("Gig Id"),
-        proposal: Joi.boolean().required().label("Proposal Feature")
+        id: Joi.string().required().label("Gig Id")
     }).unknown(true);
 
     const { error } = schema.validate(req.body);

@@ -65,13 +65,14 @@ const Base = () => {
                 <Route path="/categories/:category/:subcategory" component={CategoryGigList} />
                 <ProtectedRoute path="/cart-payment-option/:id" component={CartPayment} />
                 <ProtectedRoute path="/cart-payment-option" component={CartPayment} />
-                <ProtectedRoute path="/gig/list" component={GigList} />
-                <ProtectedRoute path="/gig/post/pricing/:id" component={Pricing} />
-                <ProtectedRoute path="/gig/post/faq/:id" component={Faq} />
-                <ProtectedRoute path="/gig/post/requirements/:id" component={Requirement} />
-                <ProtectedRoute path="/gig/post/gallery/:id" component={Gallery} />
-                <ProtectedRoute path="/gig/post/approval/:id" component={GigApproval} />
-                <ProtectedRoute path="/gig/post" component={AddGig} />
+                <ProtectedRoute path="/gigs" component={GigList} />
+                <ProtectedRoute path="/gig/pricing/:id" component={Pricing} />
+                <ProtectedRoute path="/gig/faq/:id" component={Faq} />
+                <ProtectedRoute path="/gig/requirements/:id" component={Requirement} />
+                <ProtectedRoute path="/gig/gallery/:id" component={Gallery} />
+                <ProtectedRoute path="/gig/approval/:id" component={GigApproval} />
+                <ProtectedRoute path="/gig/add" component={AddGig} />
+                <ProtectedRoute path="/gig/edit/:id" component={AddGig} />
                 <Route path="/gig/:user/:gig" component={GigDetail} />
                 <ProtectedRoute path="/cart" component={Cart} />
                 <ProtectedRoute path="/buying-order-lists" component={BuyerOrderList} />

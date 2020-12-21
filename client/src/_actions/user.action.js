@@ -225,22 +225,16 @@ export const getSlide = (data) => async dispatch => {
 
 };
 
-export const getGigbyId = (id) => dispatch => {
-    axios
-        .get(`/api/gig/details/${id}`)
-        .then(res => {
-            dispatch({
-                type: FIND_GIG,
-                payload: res.data
-            })
-        }
-        )
-        .catch(e =>
-            dispatch({
-                type: FIND_GIG,
-                payload: null
-            })
-        );
+export const getGigbyId = (id) => async dispatch => {
+
+    let response = await axios.get(`/api/gig/details/${id}`);
+
+    dispatch({
+        type: FIND_GIG,
+        payload: response.data
+    })
+    response.data.status = 'success';
+    return response.data;
 };
 
 export const getGigbyName = (name) => async dispatch => {

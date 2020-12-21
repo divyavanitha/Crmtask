@@ -31,13 +31,24 @@ const PackagePricing = (props) => {
    let prices = [];
    let package_id = [];
    if (packages) {
-      for (let i in packages) {
-         descriptions.push("");
-         delivery_times.push("");
-         revisions.push("");
-         prices.push("");
-         package_id.push(packages[i]._id);
+      if(props.pricing && props.pricing.length == packages.length) {
+         for (let i in packages) {
+            descriptions.push(props.pricing && props.pricing[i].description);
+            delivery_times.push(props.pricing && props.pricing[i].DeliveryTime);
+            revisions.push(props.pricing && props.pricing[i].revisions);
+            prices.push(props.pricing && props.pricing[i].price);
+            package_id.push(packages[i]._id);
+         }
+      } else {
+         for (let i in packages) {
+            descriptions.push("");
+            delivery_times.push("");
+            revisions.push("");
+            prices.push("");
+            package_id.push("");
+         }
       }
+      
    }
    return (
 <Formik
@@ -88,13 +99,13 @@ const PackagePricing = (props) => {
             /*if (params.id) {
                 dispatch(updatePricing(data)).then(res => {
                   console.log(res.responseData._id);
-                  history.push('/gig/post/faq/' + res.responseData._id)
+                  history.push('/gig/faq/' + res.responseData._id)
                   //addToast(res.message, { appearance: res.status, autoDismiss: true, })
                })
             } else {*/
                dispatch(updatePricing(data)).then(res => {
                   //console.log(res.responseData._id);
-                  history.push('/gig/post/faq/' + res.responseData._id)
+                  history.push('/gig/faq/' + res.responseData._id)
                   //addToast(res.message, { appearance: res.status, autoDismiss: true, })
                })
             //}
@@ -196,9 +207,10 @@ const PackagePricing = (props) => {
                                              <tr>
                                                 <td>Delivery Time</td>
                                                 {delivery_times.map((delivery_time, index) => (
-                                                   <td key={index}  className="p-0"><Field component="select" name={`delivery_time_id.${index}`} className={'form-control' + (errors.delivery_time_id && errors.delivery_time_id[index] && touched.delivery_time_id && touched.delivery_time_id[index] ? ' is-invalid' : '')}>
+                                                   <td key={index}  className="p-0">
+                                                   <Field component="select" name={`delivery_time_id.${index}`} className={'form-control' + (errors.delivery_time_id && errors.delivery_time_id[index] && touched.delivery_time_id && touched.delivery_time_id[index] ? ' is-invalid' : '')}>
                                                       <option value="">Select Delivery Time</option>
-                                                      {delivery && delivery.deliveryTime.map((deliveryTime) => (<option key={deliveryTime._id} value={deliveryTime._id} >{deliveryTime.name}</option>))}
+                                                      {delivery && delivery.deliveryTime.map((deliveryTime) => (<option key={deliveryTime._id} value={deliveryTime.name} >{deliveryTime.name}</option>))}
                                                    </Field>
                                                    <ErrorMessage name={`delivery_time_id.${index}`} component="div" className="invalid-feedback" /></td>
                                                 ))}

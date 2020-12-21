@@ -143,6 +143,9 @@ router.post('/gig/faq', function(req, res){
 router.post('/gig/update/faq', middleware.user, function(req, res){
   gigController.updateFaq(req, res);
 });
+router.delete('/gig/update/faq', function(req, res){
+  gigController.deleteFaq(req, res);
+});
 router.post('/gig/requirement', middleware.user, function(req, res){
   gigController.updateRequirement(req, res);
 });

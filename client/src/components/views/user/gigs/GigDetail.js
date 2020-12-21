@@ -39,17 +39,24 @@ const GigDetail = (props) => {
     const [proposal, setProposal] = useState([]);
     const [deliveryTime, setDeliveryTime] = useState(0);
     const [revision, setRevision] = useState(0);
+    const [totalPrice, setTotalPrice] = useState(0);
 
     const addQuantity = () => {
-        setQuantity(quantity+1)
+        let quantityValue = quantity+1;
+        setQuantity(quantityValue)
+        setTotalPrice(quantityValue*price)
     }
 
     const removeQuantity = () => {
-        setQuantity(quantity-1 != 0 ? quantity-1 : quantity)
+        let quantityValue = quantity-1 != 0 ? quantity-1 : quantity;
+        setQuantity(quantityValue)
+        setTotalPrice(quantityValue*price)
     }
 
     const updateQuantity = ({currentTarget: input}) => {
-        setQuantity(input.value != 0 ? parseInt(input.value) : 1)
+        let quantityValue = input.value != 0 ? parseInt(input.value) : 1;
+        setQuantity(quantityValue)
+        setTotalPrice(quantityValue*price)
     }
 
     const updateProposal = (value, status, setFieldValue) => {
@@ -66,14 +73,31 @@ const GigDetail = (props) => {
 
     useEffect(() => {
 
-        dispatch(getGigbyName(params.gig))
+        dispatch(getGigbyName(params.gig)).then((response) => {
+            setPrice(response.responseData.gig.pricing[0].price)
+            setDeliveryTime(response.responseData.gig.pricing[0].DeliveryTime)
+            setRevision(response.responseData.gig.pricing[0].revisions)
+            setTotalPrice(response.responseData.gig.pricing[0].price)
+
+        })
         dispatch(getPackage());
 
     }, []);
 
 
     const gig = useSelector((state) => state.user && state.user.gig_details && state.user.gig_details.responseData && state.user.gig_details.responseData.gig);
-    console.log('gig', gig);
+
+
+
+    const changePackage = (pack) => {
+        let priceData = gig.pricing.find( (p) => { return p.package == pack._id } );
+        setPrice(priceData.price)
+        setDeliveryTime(priceData.DeliveryTime)
+        setRevision(priceData.revisions)
+        setTotalPrice(quantity*priceData.price)
+    }
+
+
     const orderCount = useSelector((state) => state.user && state.user.gig_details && state.user.gig_details.responseData && state.user.gig_details.responseData.orderCount);
     const reviews = useSelector((state) => state.user && state.user.gig_details && state.user.gig_details.responseData && state.user.gig_details.responseData.reviews);
 
@@ -381,8 +405,10 @@ const GigDetail = (props) => {
                                     <div className="card mb-5 rounded-0 gigPlanType">
                                         { gig && !gig.fixed_price && (<div className="card-header pt-0 pl-3 tabs-header">
                                             <ul className="nav nav-tabs card-header-tabs rounded-0 justify-content-center">
-                                                {packages && packages.map((pack, index) => (<li key={index} className="nav-item">
-                                                    <a className="nav-link  " href="#tab_2506" data-toggle="tab" formid="checkoutForm1" data-node-id={pack.name}>
+                                                {packages && packages.map((pack, index) => (
+                                                    <li key={index} className="nav-item" >
+                                                    { console.log(index) }
+                                                    <a className={index == 0 ? "nav-link active" : "nav-link"} onClick={() => changePackage(pack)}  href="#tab_2506" data-toggle="tab" formid="checkoutForm1" data-node-id={pack.name}>
                                                         {pack.name}   </a>
                                                 </li>))}
 
@@ -395,11 +421,11 @@ const GigDetail = (props) => {
                                                     <Field type="hidden" onChange={handleChange} name="package_id" value={values.package_id} />
                                                     <Field type="hidden" onChange={handleChange} name="price" value={values.price} />
                                                     <h3 className="package-price"> Price
-                                                        <span className="float-right font-weight-normal"> &#036;<span className='total-price-1'>{ gig && gig.pricing[0].price }</span> </span>
+                                                        <span className="float-right font-weight-normal"> &#036;<span className='total-price-1'>{ price }</span> </span>
                                                         <span className="total-price-1-num d-none">40</span>
                                                     </h3>
                                                     <h6 className="mb-3">
-                                                        <i className="fa fa-clock-o delivery"> { gig && gig.pricing[0].DeliveryTime } Delivery </i> &nbsp; &nbsp; <i className="fa fa-refresh revision"> { gig && gig.pricing[0].revisions } Revisions </i>
+                                                        <i className="fa fa-clock-o delivery"> { deliveryTime} Delivery </i> &nbsp; &nbsp; <i className="fa fa-refresh revision"> { revision } Revisions </i>
                                                     </h6>
                                                     <hr />
                                                     <ul className="buyables m-b-25 list-unstyled ">
@@ -434,7 +460,7 @@ const GigDetail = (props) => {
                                                         <i className="fa fa-shopping-cart"></i> &nbsp;<strong>Add to cart</strong>
                                                     </button>
                                                     <button type="submit" onClick={() => setFieldValue("action", "order")} name="add_order" value="1" className="btn btn-order">
-                                                        <strong>Order Now (&#036;<span className='total-price-1'>{ gig && gig.pricing[0].price * quantity }</span>)</strong>
+                                                        <strong>Order Now (&#036;<span className='total-price-1'>{ totalPrice }</span>)</strong>
                                                     </button></Fragment>) : '' }
 
                                                 </form>

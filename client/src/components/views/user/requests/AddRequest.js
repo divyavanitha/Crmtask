@@ -72,7 +72,7 @@ const AddRequest = (props) => {
             } else {*/
             dispatch(creategigs(data)).then(res => {
                console.log('id', res.responseData._id);
-               history.push('/gig/post/pricing/' + res.responseData._id)
+               history.push('/gig/pricing/' + res.responseData._id)
                //addToast(res.message, { appearance: res.status, autoDismiss: true, })
             })
             //}

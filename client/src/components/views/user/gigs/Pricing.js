@@ -9,7 +9,7 @@ import $ from 'jquery';
 import FixedPricing from "./FixedPricing";
 import PackagePricing from "./PackagePricing";
 import { updatePricing } from "../../../../_actions/gigs.action";
-import { getDeliveryTime, getPackage } from "../../../../_actions/user.action";
+import { getDeliveryTime, getGigbyId, getPackage } from "../../../../_actions/user.action";
 
 const Pricing = (props) => {
 
@@ -18,8 +18,24 @@ const Pricing = (props) => {
    let history = useHistory();
    const params = useParams();
 
-   const [price, setPrice] = useState(0);
+   const [price, setPrice] = useState(1);
+   useEffect(() => {
 
+      dispatch(getGigbyId(params.id)).then( async (res) => {
+         setPrice(res.responseData.gig.fixed_price);
+       /*  setTags(res.responseData.gig.tags);
+         setCategorylist(res.responseData.gig.category._id);
+         const sub_category = await dispatch(getSubCategory(res.responseData.gig.category._id));
+         if (sub_category && sub_category.responseData.sub_categories) {
+            setSubCategory(sub_category.responseData.sub_categories)
+         }*/
+
+      });
+
+   }, [params.id]);
+
+   const gig = useSelector((state) => state.user && state.user.gig_details && state.user.gig_details.responseData && state.user.gig_details.responseData.gig);
+   
    const changePrice = e => {
       e.preventDefault();
       if($(e.currentTarget).is(":checked")) {
@@ -30,7 +46,7 @@ const Pricing = (props) => {
    };
 
    return (
-      (price == 1) ? <FixedPricing price={price} changePrice={changePrice} /> : <PackagePricing price={price} changePrice={changePrice} /> 
+      (price == 1) ? <FixedPricing price={price} pricing={gig && gig.pricing} changePrice={changePrice} /> : <PackagePricing price={price} pricing={gig && gig.pricing}  changePrice={changePrice} /> 
    );
 };
 
