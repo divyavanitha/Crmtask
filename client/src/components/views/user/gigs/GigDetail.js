@@ -3,6 +3,7 @@ import { withRouter, useParams, Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { Formik, Field, Form, FieldArray, ErrorMessage } from 'formik';
+import Loader from 'react-loader-spinner'
 import parse from 'html-react-parser';
 import moment from 'moment';
 import * as Yup from 'yup';
@@ -32,6 +33,7 @@ const GigDetail = (props) => {
     const params = useParams();
     let history = useHistory();
     const auth = useSelector((state) => state.user);
+    let isLoading = false;
 
     const [price, setPrice] = useState(0);
     const [package_id, setPackage] = useState("");
@@ -72,7 +74,6 @@ const GigDetail = (props) => {
     }
 
     useEffect(() => {
-
         dispatch(getGigbyName(params.gig)).then((response) => {
             setPrice(response.responseData.gig.pricing[0].price)
             setDeliveryTime(response.responseData.gig.pricing[0].DeliveryTime)
@@ -167,11 +168,15 @@ const GigDetail = (props) => {
                 if(values.package_id == ""); delete data["package_id"]; 
 
                 if (values.action == "cart") {
+                    isLoading = true;
                     dispatch(addCart(data)).then(res => {
+                        isLoading = false;
                     }).catch(e => {})
                 } else {
+                    isLoading = true;
                     dispatch(addCart(data)).then(res => {
                         history.push('/cart-payment-option/' + res.responseData.carts._id)
+                        isLoading = false;
                     }).catch(e => {})
                 }
                 resetForm();
@@ -195,6 +200,10 @@ const GigDetail = (props) => {
                 return (
 
                     <Fragment>
+
+                    {isLoading && <div style={{position: 'fixed', opacity: 0.7, top: 0, width: '100%', height: '100%', background: '#000', zIndex: 99 }} >
+                    <Loader style={{position: 'absolute', zIndex: 99, top: '30%', left: '45%' }} visible={isLoading} type="Rings" color="#00BFFF" height={100} width={100} />
+                    </div>}
 
 
                         <div className="mp-gig-top-nav">
