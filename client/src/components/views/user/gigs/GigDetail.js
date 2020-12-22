@@ -218,9 +218,9 @@ const GigDetail = (props) => {
                                     <li>
                                         <a href="#reviews" className="gig-page-nav-link">Reviews</a>
                                     </li>
-                                    <li>
+                                    {/*<li>
                                         <a href="#related" className="gig-page-nav-link">Related Proposals</a>
-                                    </li>
+                                    </li>*/}
                                     <li className="btns d-none float-right">
                                         <button className="order-now btn btn-secondary">
                                             Order Now (&#036;<span className='total-price'>10.00</span>)
@@ -416,7 +416,6 @@ const GigDetail = (props) => {
                                             <ul className="nav nav-tabs card-header-tabs rounded-0 justify-content-center">
                                                 {packages && packages.map((pack, index) => (
                                                     <li key={index} className="nav-item" >
-                                                    { console.log(index) }
                                                     <a className={index == 0 ? "nav-link active" : "nav-link"} onClick={() => changePackage(pack)}  href="#tab_2506" data-toggle="tab" formid="checkoutForm1" data-node-id={pack.name}>
                                                         {pack.name}   </a>
                                                 </li>))}
@@ -471,6 +470,8 @@ const GigDetail = (props) => {
                                                     <button type="submit" onClick={() => setFieldValue("action", "order")} name="add_order" value="1" className="btn btn-order">
                                                         <strong>Order Now (&#036;<span className='total-price-1'>{ totalPrice }</span>)</strong>
                                                     </button></Fragment>) : '' }
+{ gig && gig.user._id == auth.user._id ? (<Link className="btn btn-order primary added mb-3" to={"/gig/edit/"+gig._id}> <i className="fa fa-pencil"></i> &nbsp;<strong>Edit Gig</strong> </Link>
+) : '' }
 
                                                 </form>
                                         

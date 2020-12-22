@@ -40,7 +40,7 @@ exports.createrequest = async (req, res) => {
     const schema = Joi.object().options({ abortEarly: false }).keys({
         category_id: Joi.string().required().label("Category Id"),
         sub_category_id: Joi.string().required().label("Sub Category Id"),
-        duration: Joi.string().required().label("Duration"),
+       // duration: Joi.string().required().label("Duration"),
         budget: Joi.string().required().label("Budget"),
         title: Joi.string().required().label("Title")
     }).unknown(true);
