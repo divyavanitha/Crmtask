@@ -4,7 +4,8 @@ import {
   GET_ALLGIGS,
   GET_ERRORS,
   GET_GIGSBYID,
-  DELETE_GIGS
+  DELETE_GIGS,
+  FIND_GIG
 
 } from './types';
 
@@ -37,10 +38,48 @@ export const updatePricing = (data) => async dispatch => {
   }
 }
 
-export const updateFaq = (data) => async dispatch => {
+export const createFaq = (data) => async dispatch => {
   try {
     let response = await axios.post('/api/gig/faq', data);
-    console.log('data', response);
+
+    dispatch({
+        type: FIND_GIG,
+        payload: response.data
+      })
+    response.data.status = 'success';
+    return response.data;
+  } catch (e) {
+    e.response.data.status = 'error';
+    if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
+    return e.response.data;
+  }
+}
+
+export const updateFaq = (data) => async dispatch => {
+  try {
+    let response = await axios.patch('/api/gig/faq', data);
+
+    dispatch({
+        type: FIND_GIG,
+        payload: response.data
+      })
+    response.data.status = 'success';
+    return response.data;
+  } catch (e) {
+    e.response.data.status = 'error';
+    if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
+    return e.response.data;
+  }
+}
+
+export const updateDelete = (data) => async dispatch => {
+  try {
+    let response = await axios.delete('/api/gig/faq', data);
+
+   /* dispatch({
+        type: FIND_GIG,
+        payload: response.data
+      })*/
     response.data.status = 'success';
     return response.data;
   } catch (e) {

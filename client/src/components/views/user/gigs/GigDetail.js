@@ -324,13 +324,30 @@ const GigDetail = (props) => {
                                         </div>
                                         <div className="card rounded-0 mb-1 " id="details">
                                             <div className="card-header">
-                                                <h4>About This Gig</h4>
+                                                <h3>About This Gig</h3>
                                             </div>
                                             <div className="card-body proposal-desc">
                                                 { parse( description ) }
 
                                             </div>
                                         </div>
+
+                                        {gig && gig.faq.length > 0 && (<div className="card rounded-0 mb-1 " id="details">
+                                            <div className="card-header">
+                                                <h3>Frequently Asked Questions</h3>
+                                            </div>
+                                            <div className="card-body proposal-desc">
+                                            {gig && gig.faq.map((faq, i) => (
+                                                <Fragment key={i}>
+                                                    <h4>{faq.question}</h4>
+                                                    <p>{faq.answer}</p>
+                                                </Fragment>
+
+                                                        ))}
+
+                                            </div>
+                                        </div>) }
+
                                         <div className="card proposal-reviews rounded-0 mb-5" id="reviews">
                                             <div className="card-header">
                                                 <h4 className="mb-0 ">

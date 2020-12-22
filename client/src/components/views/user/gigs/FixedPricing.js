@@ -26,9 +26,9 @@ const FixedPricing = (props) => {
 
    const delivery = useSelector(state => state.user.delivery_times && state.user.delivery_times.responseData);
 
-   let delivery_times = [props.pricing && props.pricing[0].DeliveryTime];
-   let revisions = [props.pricing && props.pricing[0].revisions];
-   let prices = [props.pricing && props.pricing[0].price];
+   let delivery_times = [props.pricing && props.pricing.length > 0 && props.pricing[0].DeliveryTime];
+   let revisions = [props.pricing && props.pricing.length > 0 && props.pricing[0].revisions];
+   let prices = [props.pricing && props.pricing.length > 0 && props.pricing[0].price];
 
    return (
 <Formik
