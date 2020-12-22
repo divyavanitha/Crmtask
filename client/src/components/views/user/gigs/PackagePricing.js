@@ -241,7 +241,7 @@ const PackagePricing = (props) => {
                                                 <td>Price</td>
                                                 {prices.map((price, index) => (
                                                    <td key={index}  className="p-0">
-                                                   <Field name={`price.${index}`} onChange={handleChange} className={'form-control' + (errors.price && errors.price[0] && touched.price && touched.price[0] ? ' is-invalid' : '')} values={`price.${index}`}  placeholder="Price" />
+                                                   <Field name={`price.${index}`} onChange={handleChange} className={'decimal form-control' + (errors.price && errors.price[0] && touched.price && touched.price[0] ? ' is-invalid' : '')} values={`price.${index}`}  placeholder="Price" />
                                                    <ErrorMessage name={`price.${index}`} component="div" className="invalid-feedback" /></td>
                                                 ))}
                                              </tr>

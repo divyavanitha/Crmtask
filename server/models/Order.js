@@ -45,6 +45,10 @@ const orderSchema = mongoose.Schema({
         revision_message: { type: String },
         revision_file: { type: String }
     }],
+    delivery_status: [{
+        deliveredMessage: { type: String },
+        delivery_file: { type: String },
+    }],
     tips: {
         type: Number,
         required: true,

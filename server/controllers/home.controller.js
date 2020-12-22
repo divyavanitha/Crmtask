@@ -2,7 +2,6 @@
 const { Setting } = require('./../models/setting');
 const { Order } = require('../models/Order');
 const { Rating } = require('../models/Rating');
-const { DeliveryStatus } = require('../models/DeliveryStatus');
 const { SubCategory } = require('../models/SubCategory');
 const { Category } = require('../models/category');
 const { DeliveryTime } = require('../models/DeliveryTime');
@@ -64,13 +63,13 @@ exports.buyerOrderList = async (req, res) => {
 
         let orders = await db._get(Order, {buyer: req.user._id}, {}, {populate: "gig"});
 
-        let delivered_order = await db._get(Order, {buyer: req.user._id, status: "Delivered"}, {}, {populate: "gig"});
+        let delivered_order = await db._get(Order, {buyer: req.user._id, status: "DELIVERED"}, {}, {populate: "gig"});
 
-        let completed_order = await db._get(Order, {buyer: req.user._id, status: "Completed"}, {}, {populate: "gig"});
+        let completed_order = await db._get(Order, {buyer: req.user._id, status: "COMPLETED"}, {}, {populate: "gig"});
 
-        let cancelled_order = await db._get(Order, {buyer: req.user._id, status: "Cancelled"}, {}, {populate: "gig"});
+        let cancelled_order = await db._get(Order, {buyer: req.user._id, status: "CANCELLED"}, {}, {populate: "gig"});
 
-        let active_order = await db._get(Order, {buyer: req.user._id, status:  {$in : ["Progress", "Cancellation Requested", "Revision Requested", "Delivered"]}  }, {}, {populate: "gig"});
+        let active_order = await db._get(Order, {buyer: req.user._id, status:  {$in : ["PROGRESS", "CANCELLATION REQUESTED", "REVISION REQUESTED", "DELIVERED"]}  }, {}, {populate: "gig"});
 
         const response = helper.response({ data: {"orders": orders, "delivered_order": delivered_order, "completed_order": completed_order, "cancelled_order": cancelled_order, "active_order": active_order } });
 
@@ -104,13 +103,13 @@ exports.sellerOrderList = async (req, res) => {
 
         let orders = await db._get(Order, {seller: req.user._id}, {}, {populate: "gig"});
 
-        let delivered_order = await db._get(Order, {seller: req.user._id, status: "Delivered"}, {}, {populate: "gig"});
+        let delivered_order = await db._get(Order, {seller: req.user._id, status: "DELIVERED"}, {}, {populate: "gig"});
 
-        let completed_order = await db._get(Order, {seller: req.user._id, status: "Completed"}, {}, {populate: "gig"});
+        let completed_order = await db._get(Order, {seller: req.user._id, status: "COMPLETED"}, {}, {populate: "gig"});
 
-        let cancelled_order = await db._get(Order, {seller: req.user._id, status: "Cancelled"}, {}, {populate: "gig"});
+        let cancelled_order = await db._get(Order, {seller: req.user._id, status: "CANCELLED"}, {}, {populate: "gig"});
 
-        let active_order = await db._get(Order, {seller: req.user._id, status:  {$in : ["Progress", "Cancellation Requested", "Revision Requested", "Delivered"]} }, {}, {populate: "gig"});
+        let active_order = await db._get(Order, {seller: req.user._id, status:  {$in : ["PROGRESS", "CANCELLATION REQUESTED", "REVISION REQUESTED", "DELIVERED"]} }, {}, {populate: "gig"});
 
         const response = helper.response({ data: {"orders": orders, "delivered_order": delivered_order, "completed_order": completed_order, "cancelled_order": cancelled_order, "active_order": active_order } });
         return res.status(response.statusCode).json(response);
@@ -139,22 +138,6 @@ exports.sellerOrderDetails = async (req, res) => {
 
 }
 
-exports.deliveryStatus = async (req, res) => {
-    try {
-
-        let delivery_status = await db._get(DeliveryStatus, {order: req.params.id});
-
-        const data = { delivery_status };
-
-        const response = helper.response({ data: data });
-
-        return res.status(response.statusCode).json(response);
-
-    } catch (err) {
-        console.log(err);
-    }
-
-}
 
 exports.listbycategoryToSubCategory = async (req, res) => {
 

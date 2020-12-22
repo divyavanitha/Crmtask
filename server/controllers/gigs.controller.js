@@ -52,7 +52,7 @@ exports.getGigDetails = async (req, res) => {
             { path: "subCategory", select: 'name'}
             ] });
 
-        let orderCount = await db._count(Order, {gig: gig._id, status:  {$in : ["Progress", "Cancellation Requested", "Revision Requested"]}  });
+        let orderCount = await db._count(Order, {gig: gig._id, status:  {$in : ["PROGRESS", "CANCELLATION REQUESTED", "REVISION REQUESTED"]}  });
 
         let reviews = await db._get(Rating, {gig: gig._id }, { sellerRating: 1, buyerRating: 1, buyerComment: 1, sellerComment: 1} );
 
@@ -79,7 +79,7 @@ exports.getGigDetailByName = async (req, res) => {
             { path: "subCategory", select: 'name'}
             ] });
 
-        let orderCount = await db._count(Order, {gig: gig._id, status:  {$in : ["Progress", "Cancellation Requested", "Revision Requested"]}  });
+        let orderCount = await db._count(Order, {gig: gig._id, status:  {$in : ["PROGRESS", "CANCELLATION REQUESTED", "REVISION REQUESTED"]}  });
 
         let reviews = await db._get(Rating, {gig: gig._id }, { sellerRating: 1, buyerRating: 1, buyerComment: 1, sellerComment: 1, seller_at: 1, buyer_at: 1}, { populate: [{path: 'seller', select: 'firstName lastName profilePhoto -_id'}, {path: 'buyer', select: 'firstName lastName profilePhoto -_id'}] } );
 

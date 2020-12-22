@@ -17,7 +17,6 @@ import {
     SELLER_ORDER_LIST,
     SELLER_ORDER_DETAILS,
     FIND_CART,
-    GET_DELIVERY_STATUS,
     GET_RATING,
     GET_CANCEL_REASON
 } from '../_actions/types';
@@ -75,8 +74,6 @@ const userReducer = (state = initialState, action) => {
             return { ...state, cart_details: action.payload }
         case ADD_CART_COUNT:
             return { ...state, cart_count: action.payload }
-        case GET_DELIVERY_STATUS:
-            return { ...state, delivery_status: action.payload }
         case GET_RATING:
             return { ...state, rating: action.payload }
         case GET_CANCEL_REASON:

@@ -239,10 +239,6 @@ router.get('/seller/orderdetails/:id', middleware.user, (req, res) => {
   homeController.sellerOrderDetails(req, res);
 });
 
-router.get('/delivery/status/:id', middleware.user, (req, res) => {
-  homeController.deliveryStatus(req, res);
-});
-
 router.get('/rating/:id', middleware.user, (req, res) => {
   homeController.orderRating(req, res);
 });

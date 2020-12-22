@@ -2,7 +2,6 @@ const express = require("express");
 const { Cart } = require('../models/Cart');
 const { Order } = require('../models/Order');
 const { Rating } = require('../models/Rating');
-const { DeliveryStatus } = require('../models/DeliveryStatus');
 const { CancellationRequest } = require('../models/CancellationRequest');
 const helper = require('../services/helper.js');
 const db = require('../services/model.js');
@@ -58,7 +57,7 @@ exports.checkout = async (req, res) => {
                         quantity: carts[i].quantity,
                         price: carts[i].price,
                         total: total,
-                        status: "Progress",
+                        status: "PROGRESS",
                         deliveryTime: carts[i].deliveryTime,
                         revisions: carts[i].revisions
                     }
@@ -96,19 +95,19 @@ exports.checkout = async (req, res) => {
 
 exports.updateOrder = async(req, res) => {
 
-    if(req.body.status == "Delivered"){
+    if((req.body.status).toUpperCase() == "DELIVERED"){
         var schema = Joi.object().options({ abortEarly: false }).keys({
             id: Joi.string().required().label("Order Id"),
             status: Joi.string().required().label("Status"),
             delivered_message: Joi.string().required().label("Delivery Message"),
         }).unknown(true);
-    }else if(req.body.status == "Revision Requested"){
+    }else if((req.body.status).toUpperCase() == "REVISION REQUESTED"){
         var schema = Joi.object().options({ abortEarly: false }).keys({
             id: Joi.string().required().label("Order Id"),
             status: Joi.string().required().label("Status"),
             revison_message: Joi.string().required().label("revison_message")
         }).unknown(true); 
-    }else if(req.body.status == "Cancellation Requested"){
+    }else if((req.body.status).toUpperCase() == "CANCELLATION REQUESTED"){
         var schema = Joi.object().options({ abortEarly: false }).keys({
             id: Joi.string().required().label("Order Id"),
             status: Joi.string().required().label("Status"),
@@ -140,25 +139,40 @@ exports.updateOrder = async(req, res) => {
 
     try {
         let order = await Order.findById(req.body.id);
-        if(req.body.status == "Delivered"){
-            
-            order.status= req.body.status;
-            
+        if((req.body.status).toUpperCase() == "DELIVERED"){
+            const arr = order.delivery_status;
+            let index = (arr.length - 1);
 
-            let data = { 
-                order: req.body.id,
-                waterMark: req.body.enable_watermark,
-                deliveredMessage: req.body.delivered_message,
+            let delivery = [];
+
+            if (index === -1) {
+                let data = { 
+                    deliveredMessage: req.body.delivered_message,
+                }
+                if(req.files['delivery_file']) data.delivery_file = req.protocol+ '://' +req.get('host')+"/images/order/" + req.files['delivery_file'][0].filename;
+
+                delivery.push(data);
+                
+                order.delivery_status = delivery; 
+
+            }else{
+                let data = { 
+                    deliveredMessage: req.body.delivered_message,
+                }
+                if(req.files['delivery_file']) data.delivery_file = req.protocol+ '://' +req.get('host')+"/images/order/" + req.files['delivery_file'][0].filename;
+                
+                arr[index+1] = data;
+                delivery = arr[index];
             }
-            if(req.files['delivery_file']) data.delivery_file = req.protocol+ '://' +req.get('host')+"/images/order/" + req.files['delivery_file'][0].filename;
+            console.log('delivery', delivery);
+            order.status= (req.body.status).toUpperCase();
+            
+        }else if((req.body.status).toUpperCase() == "COMPLETED"){
 
-            let delivery_status = await db._store(DeliveryStatus, data);
-        }else if(req.body.status == "Completed"){
-
-            order.status= req.body.status;
+            order.status= (req.body.status).toUpperCase();
             
 
-        }else if(req.body.status == "Revision Requested"){
+        }else if((req.body.status).toUpperCase() == "REVISION REQUESTED"){
 
             const arr = order.used_revisions;
             let index = (arr.length - 1);
@@ -184,14 +198,14 @@ exports.updateOrder = async(req, res) => {
                 arr[index+1] = data;
                 revision = arr[index];
         }
-        console.log('revision', revision);
+                console.log('revision', revision);
         
 
-        order.status= req.body.status;
+                order.status= (req.body.status).toUpperCase();
 
-        }else if(req.body.status == "Cancellation Requested"){
+        }else if((req.body.status).toUpperCase() == "CANCELLATION REQUESTED"){
 
-            order.status= req.body.status;
+            order.status= (req.body.status).toUpperCase();
             order.cancellation_reason= req.body.cancellation_reason;
             order.cancellation_message= req.body.cancellation_message;
             order.cancelled_by= req.body.cancelled_by;
@@ -238,12 +252,12 @@ exports.cancel = async (req, res) => {
 
             let order = await Order.findById(req.body.id);
 
-            if(req.body.cancel_status == "Accepted"){
-                order.CancelRequestStatus = req.body.cancel_status;
-                order.status = "Cancelled";
+            if((req.body.cancel_status).toUpperCase() == "Accepted"){
+                order.CancelRequestStatus = (req.body.cancel_status).toUpperCase();
+                order.status = "CANCELLED";
             }else{
-                order.CancelRequestStatus = req.body.cancel_status;
-                order.status = "Progress";
+                order.CancelRequestStatus = (req.body.cancel_status).toUpperCase();
+                order.status = "PROGRESS";
             }
             
 

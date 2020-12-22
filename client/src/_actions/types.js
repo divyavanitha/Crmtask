@@ -56,8 +56,6 @@ export const FIND_GIG = 'FIND_GIG';
 
 export const GET_DELIVERY_TIME = 'GET_DELIVERY_TIME';
 
-export const GET_DELIVERY_STATUS = 'GET_DELIVERY_STATUS';
-
 export const GET_PACKAGE = 'GET_PACKAGE';
 
 export const GET_RATING = 'GET_RATING';
