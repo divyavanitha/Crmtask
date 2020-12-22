@@ -156,6 +156,12 @@ $("body").on("keypress", ".phone", function(e) {
         }
     });
 
+  $("body").on("keypress", ".decimal", function(e) {
+        if (e.which != 8 && e.which != 0 && e.which != 43 && e.which != 45 && e.which != 46 && (e.which < 48 || e.which > 57)) {
+            return false;
+        }
+    });
+
 ReactDOM.render(
   <Provider store={store}>
     <Router><App /></Router>

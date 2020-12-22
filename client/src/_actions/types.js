@@ -71,3 +71,5 @@ export const GET_MYALLGIGS = 'GET_MYALLGIGS';
 export const GET_GIGSBYID = 'GET_GIGSBYID';
 export const DELETE_GIGS = 'DELETE_GIGS';
 export const GET_ALLGIGS = 'GET_ALLGIGS';
+
+export const CREATE_REQUEST = 'CREATE_REQUEST';

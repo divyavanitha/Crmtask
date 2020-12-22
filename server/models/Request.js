@@ -18,11 +18,11 @@ const requestSchema = mongoose.Schema({
     category: { type: Schema.Types.ObjectId, ref: 'category' },
     subCategory: { type: Schema.Types.ObjectId, ref: 'subCategory' },
     duration: {
-        type: Schema.Types.ObjectId, ref: 'DeliveryTime',
+        type: String,
         required: true
     },
     budget: {
-        type: String,
+        type: Number,
         required: true
     },
     files: {

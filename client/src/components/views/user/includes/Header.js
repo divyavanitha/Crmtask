@@ -339,7 +339,7 @@ function Header() {
                                         <div id="selling" className="dropdown-submenu collapse">
                                             <Link className="dropdown-item" to="/selling-order-lists"> Orders </Link>
                                             <Link className="dropdown-item" to="/gigs"> My Gigs </Link>
-                                            <Link className="dropdown-item" to="/coupon/create"> Create A Coupon </Link>
+                                            {/*<Link className="dropdown-item" to="/coupon/create"> Create A Coupon </Link>*/}
                                             <Link className="dropdown-item" to="/buyer/requests"> Buyer Requests </Link>
                                             <Link className="dropdown-item" to="/revenues"> Revenues </Link>
                                             <Link className="dropdown-item" to="/withdrawal/requests"> Withdrawal Requests </Link>
