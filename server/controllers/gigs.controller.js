@@ -52,7 +52,7 @@ exports.getGigDetails = async (req, res) => {
             { path: "subCategory", select: 'name'}
             ] });
 
-        let orderCount = await db._count(Order, {gig: gig._id, status:  {$in : ["Progress", "Cancellation Requested", "Revision Requested"]}  });
+        let orderCount = await db._count(Order, {gig: gig._id, status:  {$in : ["PROGRESS", "CANCELLATION REQUESTED", "REVISION REQUESTED"]}  });
 
         let reviews = await db._get(Rating, {gig: gig._id }, { sellerRating: 1, buyerRating: 1, buyerComment: 1, sellerComment: 1} );
 
@@ -79,7 +79,7 @@ exports.getGigDetailByName = async (req, res) => {
             { path: "subCategory", select: 'name'}
             ] });
 
-        let orderCount = await db._count(Order, {gig: gig._id, status:  {$in : ["Progress", "Cancellation Requested", "Revision Requested"]}  });
+        let orderCount = await db._count(Order, {gig: gig._id, status:  {$in : ["PROGRESS", "CANCELLATION REQUESTED", "REVISION REQUESTED"]}  });
 
         let reviews = await db._get(Rating, {gig: gig._id }, { sellerRating: 1, buyerRating: 1, buyerComment: 1, sellerComment: 1, seller_at: 1, buyer_at: 1}, { populate: [{path: 'seller', select: 'firstName lastName profilePhoto -_id'}, {path: 'buyer', select: 'firstName lastName profilePhoto -_id'}] } );
 
@@ -116,13 +116,13 @@ exports.getPackage = async (req, res) => {
 exports.usergigs = async (req, res) => {
     try {
 
-        let active_gigs = await db._get(Gig, { user: req.user._id, status: "ACTIVE" });
-        let inactive_gigs = await db._get(Gig, { user: req.user._id, status: "INACTIVE" });
-        let draft_gigs = await db._get(Gig, { user: req.user._id, status: "DRAFT" });
-        let pending_gigs = await db._get(Gig, { user: req.user._id, status: "PENDING" });
-        let modification_gigs = await db._get(Gig, { user: req.user._id, status: "MODIFICATION" });
-        let paused_gigs = await db._get(Gig, { user: req.user._id, status: "PAUSED" });
-        let featured_gigs = await db._get(Gig, { user: req.user._id, featured: true });
+        let active_gigs = await db._get(Gig, { user: req.user._id, status: "ACTIVE" }, {}, {populate: "user"});
+        let inactive_gigs = await db._get(Gig, { user: req.user._id, status: "INACTIVE" }, {}, {populate: "user"});
+        let draft_gigs = await db._get(Gig, { user: req.user._id, status: "DRAFT" }, {}, {populate: "user"});
+        let pending_gigs = await db._get(Gig, { user: req.user._id, status: "PENDING" }, {}, {populate: "user"});
+        let modification_gigs = await db._get(Gig, { user: req.user._id, status: "MODIFICATION" }, {}, {populate: "user"});
+        let paused_gigs = await db._get(Gig, { user: req.user._id, status: "PAUSE" }, {}, {populate: "user"});
+        let featured_gigs = await db._get(Gig, { user: req.user._id, featured: true }, {}, {populate: "user"});
 
         //const data = { gigs };
 
@@ -600,7 +600,7 @@ exports.updateConfirm = async(req, res) => {
     try {
 
         let gig = await Gig.findById(req.body.id);
-         gig.proposal = req.body.proposal;
+         gig.submit_proposal = req.body.proposal;
          gig.status = "PENDING";
         let gigs = await db._update(Gig, { _id: req.body.id }, gig);
         const response = helper.response({ message: res.__('updated'), data: gigs });
@@ -623,6 +623,69 @@ exports.deleteGig = async (req, res) => {
 
         const response = helper.response({ message: res.__('deleted') });
         return res.status(response.statusCode).json(response);
+    }
+    catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                res.status(422).send(err.errors[i].message);
+            }
+        } else {
+            res.status(422).send(err);
+        }
+    }
+
+};
+
+exports.submitApproval = async (req, res) => {
+    try {
+        const gig = {
+            status: "PENDING",
+            submit_proposal:true
+        }
+
+        await db._update(Gig, { _id: req.params.id }, gig);
+
+        const response = helper.response({ message: res.__('updated') });
+        return res.status(response.statusCode).json(response);
+    }
+    catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                res.status(422).send(err.errors[i].message);
+            }
+        } else {
+            res.status(422).send(err);
+        }
+    }
+
+};
+
+exports.gigStatus = async (req, res) => {
+    try {
+console.log(req.body);
+        let gig = await db._find(Gig, {_id:req.body.id});
+        
+        if((req.body.status).toUpperCase() == "ADD_FEATURE"){
+            gig.featured = true;
+            let features = [];
+            data ={
+                payment_option: (req.body.payment_option).toUpperCase(),
+                price: req.body.feature_price,
+                duration: req.body.feature_duration
+            }
+            features.push(data);
+            gig.feature_payment = features;
+        }else if((req.body.status).toUpperCase() == "PAUSE"){
+            gig.status = "PAUSE";
+        }else if((req.body.status).toUpperCase() == "UNPAUSE"){
+            gig.status = "ACTIVE";
+        }
+
+        let gigs = await db._update(Gig, { _id: req.body.id }, gig);
+
+        const response = helper.response({ message: res.__('updated') });
+        return res.status(response.statusCode).json(response);
+        
     }
     catch (err) {
         if (err[0] != undefined) {

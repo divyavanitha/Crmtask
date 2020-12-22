@@ -417,15 +417,6 @@ export const getSellerOrderDetails = (id) => async dispatch => {
 
 };
 
-export const getDeliveryStatus = (id) => async dispatch => {
-    console.log('id', id);
-    const delivery_status = await axios.get(`/api/delivery/status/${id}`)
-    dispatch({
-        type: GET_DELIVERY_STATUS,
-        payload: delivery_status.data
-    });
-}
-
 export const getRating = (id) => async dispatch => {
     console.log('id', id);
     const ratings = await axios.get(`/api/rating/${id}`)

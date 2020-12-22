@@ -29,8 +29,8 @@ const FixedPricing = (props) => {
    let delivery_times = [props.pricing && props.pricing.length > 0 && props.pricing[0].DeliveryTime];
    let revisions = [props.pricing && props.pricing.length > 0 && props.pricing[0].revisions];
    let prices = [props.pricing && props.pricing.length > 0 && props.pricing[0].price];
-
    return (
+
 <Formik
 
          enableReinitialize
@@ -40,7 +40,7 @@ const FixedPricing = (props) => {
             fixed_price: props.price,
             delivery_time_id: delivery_times,
             revisions: revisions,
-            price: prices,
+            price: prices[0] ? prices : [""],
          }
          }
 
@@ -156,7 +156,7 @@ const FixedPricing = (props) => {
                                                 <span className="input-group-addon font-weight-bold"> &#036; </span>
                                                 <div>
                                                    <div>
-                                                      <Field name={`price.${0}`} onChange={handleChange} values={`price.${0}`} placeholder="Price"  style={{ width: '419px' }} className={'form-control' + (errors.price && errors.price[0] && touched.price && touched.price[0] ? ' is-invalid' : '')} />
+                                                      <Field name={`price.${0}`} onChange={handleChange} values={`price.${0}`} placeholder="Price"  style={{ width: '419px' }} className={'decimal form-control' + (errors.price && errors.price[0] && touched.price && touched.price[0] ? ' is-invalid' : '')} />
                                                    </div>
                                                 </div>
                                              </div>

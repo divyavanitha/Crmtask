@@ -4,8 +4,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import Loader from 'react-loader-spinner'
 import $ from 'jquery';
-import { getSellerOrderDetails, getDeliveryStatus, getRating, getCancelReason } from "../../../../_actions/user.action";
+import { getSellerOrderDetails, getRating, getCancelReason } from "../../../../_actions/user.action";
 import { updateOrder, rating, cancel } from "../../../../_actions/order.action";
 
 import OwlCarousel from 'react-owl-carousel';
@@ -16,13 +17,13 @@ const Cart = (props) => {
    const dispatch = useDispatch();
    const params = useParams();
    let history = useHistory();
+   let isLoading = false;
 
    const [total, setTotal] = useState(0);
    const [status, setStatus] = useState("");
 
    useEffect(() => {
       dispatch(getSellerOrderDetails(params.id))
-      dispatch(getDeliveryStatus(params.id))
       dispatch(getRating(params.id))
       dispatch(getCancelReason("seller"))
       //$(document).ready(function () {
@@ -112,8 +113,6 @@ const Cart = (props) => {
 
    const order_details = useSelector((state) => state.user && state.user.seller_order_details && state.user.seller_order_details.responseData && state.user.seller_order_details.responseData.order);
 
-   const delivery_status = useSelector((state) => state.user && state.user.delivery_status && state.user.delivery_status.responseData && state.user.delivery_status.responseData.delivery_status);
-
    const ratings = useSelector((state) => state.user && state.user.rating  && state.user.rating.responseData && state.user.rating.responseData.ratings);
 
    const cancel_reason = useSelector((state) => state.user && state.user.cancel_reason && state.user.cancel_reason.responseData && state.user.cancel_reason.responseData.CancelReasons);
@@ -130,7 +129,6 @@ const Cart = (props) => {
          initialValues={{
             id: params.id,
             delivered_message: '',
-            enable_watermark: false,
             delivery_file: ''
          }
          }
@@ -148,12 +146,12 @@ const Cart = (props) => {
                 const data = new FormData();
                 data.append("id", params.id);
                 data.append("delivered_message", values.delivered_message);
-                data.append("enable_watermark", values.enable_watermark);
                 data.append("delivery_file", values.delivery_file);
                 data.append("status", "Delivered");
 
-
+                
                 dispatch(updateOrder(data)).then(res => {
+                  
                   console.log('id',res.responseData);
                   setStatus(res.responseData.status);
                   $('#deliver-order-modal').modal("hide");
@@ -181,6 +179,7 @@ const Cart = (props) => {
             return (
 
                <Fragment>
+                  
 
                   <div id="order-status-bar">
                      <div className="container">
@@ -206,7 +205,7 @@ const Cart = (props) => {
                                     <li className="nav-item">
                                        <a href="#order-activity" data-toggle="tab" className="nav-link active make-black ">Order Activity</a>
                                     </li>
-                                    {(order_details && order_details.status == "Progress") ? <li className="nav-item">
+                                    {(order_details && order_details.status == "PROGRESS") ? <li className="nav-item">
                                        <a href="#resolution-center" data-toggle="tab" className="nav-link make-black">Resolution Center</a> 
                                     </li> : ""}
                                  </ul>
@@ -332,7 +331,7 @@ const Cart = (props) => {
                               </div>*/}
                                                 {/* message-div Ends */}
 
-                                       {delivery_status && delivery_status.map((list, index) => (<div className="message-div">
+                                       {order_details && order_details.delivery_status.map((list, index) => (<div key={list._id} className="message-div">
                                            <img src="https://www.gigtodo.com//user_images/ty_1574032240.png" width="50" height="50" className="message-image" />
 
                                              <h5>
@@ -377,7 +376,7 @@ const Cart = (props) => {
 
                                       </div>)) : ""}
 
-                                    {(order_details && order_details.status == "Cancellation Requested" && order_details && order_details.cancelled_by == "buyer") ? <div>
+                                    {(order_details && order_details.status == "CANCELLATION REQUESTED" && order_details && order_details.cancelled_by == "buyer") ? <div>
                                       <div className="card mt-4">
                                         <div className="card-body">
                                           <h5 className="text-center">
@@ -409,7 +408,7 @@ const Cart = (props) => {
                                     </div>
                                  </div> : ""}
 
-                                                {(order_details && order_details.status == "Progress" || order_details && order_details.status == "Revision Requested" || order_details && order_details.status == "Delivered") ? <center>
+                                                {(order_details && order_details.status == "PROGRESS" || order_details && order_details.status == "REVISION REQUESTED" || order_details && order_details.status == "DELIVERED") ? <center>
                                                    <button className="btn btn-success btn-lg mt-5 mb-3" data-toggle="modal" data-target="#deliver-order-modal">
                                                    <i className="fa fa-upload"></i> Deliver Order
                                                    </button>
@@ -443,7 +442,7 @@ const Cart = (props) => {
 
 
 
-                              {(order_details && order_details.status == "Completed" && order_details.seller_rated  != 1)  ? <div className="order-review-box mb-3 p-3">
+                              {(order_details && order_details.status == "COMPLETED" && order_details.seller_rated  != 1)  ? <div className="order-review-box mb-3 p-3">
 
                                        <h3 className="text-center text-white"> Please Submit a Review For Your Seller</h3>
 
@@ -539,7 +538,7 @@ const Cart = (props) => {
                                 </div>
                               </div>: ""}
 
-                              {(order_details && order_details.status == "Cancellation Requested" || order_details && order_details.status == "Cancelled") ? <div>
+                              {(order_details && order_details.status == "CANCELLATION REQUESTED" || order_details && order_details.status == "CANCELLED") ? <div>
 
                                 <div className="card mt-4">
                                     <div className="card-body">
@@ -559,7 +558,7 @@ const Cart = (props) => {
                               <p className="message-desc">{order_details && order_details.cancellation_message}</p>
                               </div> </div> : ""}
 
-                              {(order_details && order_details.status == "Cancelled") ? <div className="order-status-message">
+                              {(order_details && order_details.status == "CANCELLED") ? <div className="order-status-message">
 
                                     <i className="fa fa-times fa-3x text-danger"></i>
 
@@ -577,7 +576,7 @@ const Cart = (props) => {
 
                                                 <div className="proposal_reviews mt-5">
                                                 </div>
-                                                {(order_details && order_details.status == "Progress" || order_details && order_details.status == "Revision Requested" || order_details && order_details.status == "Delivered") ? <div className="insert-message-box">
+                                                {(order_details && order_details.status == "PROGRESS" || order_details && order_details.status == "REVISION REQUESTED" || order_details && order_details.status == "DELIVERED") ? <div className="insert-message-box">
                                                    <div className="float-right">
                                                       <p className="text-muted mt-1">
                                                          {order_details && order_details.seller.firstName}      <span className="text-success font-weight-bold"
