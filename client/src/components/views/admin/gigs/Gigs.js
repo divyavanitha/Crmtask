@@ -134,7 +134,7 @@ const Gigs = () => {
           "data": function (data, type, row) {
             console.log('data', data);
             var button = `<a title="View Proposal" id="view-proposal" data-name=`+data.user.firstName+` data-title=`+data.title+` target="_blank"> <i class="fa fa-eye"></i> </a> &nbsp;`
-            if(data.status == "PAUSE" || data.status == "PENDING"){
+            if(data.status == "PAUSE" || data.status == "PENDING" || data.status == "DECLINE"){
                if(data.featured == false){
                   button += `<a class="change-status d-none" data-id=`+data._id+` data-status="ADD_FEATURE" title="Make Your Proposal Featured"><i class="fa fa-star"></i></a> &nbsp;`
                }else{
@@ -160,10 +160,14 @@ const Gigs = () => {
              }
 
              if(data.status == "PAUSE" || data.status == "ACTIVE"){
-              button += `<a title="Approve" class="change-status d-none" data-id=`+data._id+` data-status="APPROVE"><i class="fa fa-check-square-o"></i> </a> &nbsp`;
+              button += `<a title="Approve" class="change-status d-none" data-id=`+data._id+` data-status="APPROVE"><i class="fa fa-check-square-o"></i> </a>`;
              }else{
               button += `<a title="Approve" class="change-status" data-id=`+data._id+` data-status="APPROVE"><i class="fa fa-check-square-o"></i> </a> &nbsp`;
-              button +=  `<a title="Decline" class="change-status" data-id=`+data._id+` data-status="DECLINE"><i class="fa fa-ban"></i></a> &nbsp`;
+              if(data.status == "DECLINE"){
+                button +=  `<a title="Decline" class="change-status d-none" data-id=`+data._id+` data-status="DECLINE"><i class="fa fa-ban"></i></a>`;
+              }else{
+                button +=  `<a title="Decline" class="change-status" data-id=`+data._id+` data-status="DECLINE"><i class="fa fa-ban"></i></a> &nbsp`;
+              }
              }
              if(data.status != "PENDING"){
                button += `<a title="Delete Proposal" data-id=`+data._id+` class="delete"><i class="fa fa-trash"></i></a>`;

@@ -27,11 +27,6 @@ const AddRequest = (props) => {
    const deliveryTime = useSelector((state) => state.user && state.user.delivery_times && state.user.delivery_times.responseData && state.user.delivery_times.responseData.deliveryTime);
 
    const [subCategory, setSubCategory] = useState([])
-   const [file, setFile] = useState();
-
-   const onChangeHandler = e => {
-      setFile(e.target.files[0]);
-   }
 
    const handleCategoryChange = async (value, setFieldValue) => {
       setCategorylist(value);
@@ -53,7 +48,6 @@ const AddRequest = (props) => {
 
          enableReinitialize
          initialValues={{
-            id: '',
             title: '',
             description: '',
             category_id: '',
@@ -80,19 +74,20 @@ const AddRequest = (props) => {
                .required('Budget is required'),
          })}
          onSubmit={(values, { setSubmitting, resetForm }) => {
+            var input = document.getElementById("files");
             const data = new FormData();
             data.append('title', values.title)
             data.append('description', values.description)
             data.append('category_id', values.category_id)
             data.append('sub_category_id', values.sub_category_id)
-            data.append('files[]', file)
+            data.append('files', values.files)
             data.append('duration', values.duration)
             data.append('budget', values.budget)
 console.log(values)
-            /*dispatch(createRequest(data)).then(res => {
-               history.push('/request/manage' + res.responseData._id)
+            dispatch(createRequest(data)).then(res => {
+               history.push('/request/manage')
                //addToast(res.message, { appearance: res.status, autoDismiss: true, })
-            })*/
+            })
 
          }}>
 
@@ -145,7 +140,7 @@ console.log(values)
                                              <div className="col-xl-12 col-lg-12">
 
                                                 <div className="form-group">
-                                                   <input type="file" name="files" onChange={onChangeHandler} values={values.files} className="form-control" id="file" />
+                                                   <input type="file" id="files" name="files" onChange={(e) => { setFieldValue("files", e.currentTarget.files[0]) }} className="form-control" id="file" />
                                                 </div>
                                              </div>
                                           </div>
@@ -187,7 +182,7 @@ console.log(values)
                                              <h5 className="mb-4">Once you place your order, when would you like your service delivered?</h5>
                                           </div>
                                        </div>
-                                       { console.log(errors) }
+                                    
                                        <div className="row mb-4">
                                           <div className="col-md-11 col-sm-12">
                                              <div className="serviceDelivaryLsit">

@@ -139,7 +139,7 @@ const GigList = (props) => {
                      </li>
                      <li className="nav-item">
                         <a href="#declined-proposals" data-toggle="tab" className="nav-link make-black">
-                           Declined <span className="badge badge-success">{gig_list && gig_list.inactive.length}</span>
+                           Declined <span className="badge badge-success">{gig_list && gig_list.decline.length}</span>
                         </a>
                      </li>
                      <li className="nav-item">
@@ -180,7 +180,7 @@ const GigList = (props) => {
 
                                              {/* <a href="" className="dropdown-item"> View Coupons</a> 
                                              <a href="" className="dropdown-item"> View Referrals</a> */}
-                                             <a href="" className="dropdown-item"> Edit </a>
+                                             <Link className="dropdown-item" to={"/gig/edit/"+list._id}> Edit </Link>
                                              <Link data-id={list._id} className="dropdown-item delete"> Delete </Link>
                                           </div>
                                        </div>
@@ -219,7 +219,7 @@ const GigList = (props) => {
                                              <Link data-id={list._id} to={list.user ? "/gig/" + list.user.firstName + "/" + list.title : ""} className="dropdown-item" target="_blank" > Preview </Link>
                                              <Link data-id={list._id} data-status="Unpause" className="dropdown-item Change-gigstatus"> Activate</Link>
                                             {/* <a href="" className="dropdown-item"> View Referrals</a> */}
-                                             <a href="" className="dropdown-item"> Edit </a>
+                                             <Link className="dropdown-item" to={"/gig/edit/"+list._id}> Edit </Link>
                                              <Link data-id={list._id} className="dropdown-item delete"> Delete </Link>
                                           </div>
                                        </div>
@@ -255,7 +255,7 @@ const GigList = (props) => {
                                           <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
                                           <div className="dropdown-menu">
                                              <Link data-id={list._id} to={list.user ? "/gig/" + list.user.firstName + "/" + list.title : ""} className="dropdown-item" target="_blank" > Preview </Link>
-                                             <a href="" className="dropdown-item"> Edit </a>
+                                             <Link className="dropdown-item" to={"/gig/edit/"+list._id}> Edit </Link>
                                              <Link data-id={list._id} className="dropdown-item delete"> Delete </Link>
                                           </div>
                                        </div>
@@ -290,7 +290,7 @@ const GigList = (props) => {
                                           <div className="dropdown-menu">
                                              <Link onClick={() =>  sendApproval(list._id)} className="dropdown-item"> Submit For Approval </Link>
                                              <Link data-id={list._id} to={list.user ? "/gig/" + list.user.firstName + "/" + list.title : ""} className="dropdown-item" target="_blank" > Preview </Link>
-                                             <a className="dropdown-item"> Edit </a>
+                                             <Link className="dropdown-item" to={"/gig/edit/"+list._id}> Edit </Link>
                                              <Link data-id={list._id} className="dropdown-item delete"> Delete </Link>
                                           </div>
                                        </div>
@@ -351,7 +351,7 @@ const GigList = (props) => {
                                  </tr>
                               </thead>
                               <tbody>
-                              {gig_list && gig_list.inactive.map((list, index) => (<tr key={list._id}>
+                              {gig_list && gig_list.decline.map((list, index) => (<tr key={list._id}>
                                  {console.log(list.pricing)}
                                     <td className="proposal-title"> {list.title} </td>
                                     <td className="text-success"> &#036;{list.pricing.length ? list.pricing[0].price : 0} </td> 

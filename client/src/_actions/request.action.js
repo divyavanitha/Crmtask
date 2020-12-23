@@ -1,9 +1,7 @@
 import axios from 'axios';
 import {
-  GET_MYALLGIGS,
+  GET_REQUEST,
   CREATE_REQUEST,
-  GET_ERRORS,
-  GET_GIGSBYID,
   DELETE_GIGS
 
 } from './types';
@@ -22,5 +20,13 @@ export const createRequest = (data) => async dispatch => {
     if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
     return e.response.data;*/
   }
+}
+
+export const getRequestList = (data) => async dispatch => {
+  const request = await axios.get(`/api/requests`, data)
+  dispatch({
+    type: GET_REQUEST,
+    payload: request.data
+  });
 }
 

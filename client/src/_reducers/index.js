@@ -4,6 +4,7 @@ import postjob from './postjob_reducer';
 import profile from './profile_reducer';
 import menu from './menu_reducer';
 import gig from './gigs_reducer';
+import request from './request.reducer';
 import settings from './site.reducer';
 import adminsettings from './admin/settings.reducer';
 import admin from './admin/auth.reducer';
@@ -45,6 +46,7 @@ const rootReducer = combineReducers({
     cancel_reasons,
     gig,
     requests,
+    request,
     gigs
 
 });
