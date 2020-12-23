@@ -18,6 +18,51 @@ const Faq = (props) => {
 
   let history = useHistory();
   const params = useParams();
+
+  $("body").on('click', '.delete-faq', function (e) {
+    var that = $(this);
+      let faq_id = that.closest('.faq_container').find('input[name=faq_id]').val();
+      $.ajax({
+        url: "/api/gig/faq",
+        type: 'delete',
+        headers: {
+          Authorization: localStorage.token
+        },
+        data: {
+          faq_id: faq_id,
+          id: params.id
+        },
+        success: function (data) {
+          that.closest('.faq_container').remove();
+        }
+      });
+    });
+
+    $("body").on('click', '.update', function (e) {
+    var that = $(this);
+      let faq_id = that.closest('.faq_container').find('input[name=faq_id]').val();
+      let title = that.closest('.faq_container').find('input[name=title]').val();
+      let content = that.closest('.faq_container').find('input[name=content]').val();
+      
+      $.ajax({
+        url: "/api/gig/faq",
+        type: 'patch',
+        headers: {
+          Authorization: localStorage.token
+        },
+        data: {
+          question: title,
+          answer: content,
+          faq_id: faq_id,
+          action: "faq",
+          id: params.id
+        },
+        success: function (data) {
+          that.closest('.faq_container').find('.tab-header a:first').html('<i class="fa fa-bars mr-2"></i>'+title);
+        }
+      });
+    });
+
    useEffect(() => {
 
       dispatch(getGigbyId(params.id)).then( async (res) => {
@@ -27,9 +72,12 @@ const Faq = (props) => {
 
    const gig = useSelector((state) => state.user && state.user.gig_details && state.user.gig_details.responseData && state.user.gig_details.responseData.gig);
 
+   
+
    let htmlData = '';
    if(gig) {
     for(let i in gig.faq) {
+
       htmlData += `<div class="tab rounded border-1 faq_container">
 
               <div class="tab-header" data-toggle="collapse" href="#faq-58">
@@ -50,7 +98,7 @@ const Faq = (props) => {
 
                       <div class="form-group mb-0">
                             <a class="btn btn-danger btn-sm delete-faq delete">Delete</a>
-                            <button type="submit" class="btn btn-success btn-sm float-right update">Update</button>
+                            <a class="btn btn-success btn-sm float-right update">Update</a>
                       </div>   
                 </div>
               </div>`;
@@ -117,43 +165,7 @@ const Faq = (props) => {
 
           $('#faTabs').html(html);
 
-          $(".update").on('click', function (e) {
-            $.ajax({
-              url: "/api/gig/update/faq",
-              type: 'post',
-              headers: {
-                Authorization: localStorage.token
-              },
-              data: {
-                question: $("input[name=title]").val(),
-                answer: $("input[name=content]").val(),
-                faq_id: $("input[name=faq_id]").val(),
-                action: "faq",
-                id: params.id
-              },
-              success: function (data) {
-
-              }
-            });
-          });
-
-          $("body").on('click', '.delete', function (e) {
-            let faq_id = $(this).closest('.faq_container').find('input[name=faq_id]');
-            alert();
-            $.ajax({
-              url: "/api/gig/update/faq",
-              type: 'delete',
-              headers: {
-                Authorization: localStorage.token
-              },
-              data: {
-                id: faq_id
-              },
-              success: function (data) {
-                $(this).closest('.faq_container').remove();
-              }
-            });
-          });
+          
 
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -324,7 +336,7 @@ const Faq = (props) => {
 
                           </div>
                           <div className="form-group mb-0">
-                            <button className="btn btn-success btn-sm float-right insert">Insert</button>
+                            <a className="btn btn-success btn-sm float-right insert">Insert</a>
                             <div className="clearfix"></div>
                           </div>
                           {/* </form> */}

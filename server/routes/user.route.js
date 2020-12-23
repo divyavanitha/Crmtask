@@ -140,10 +140,10 @@ router.post('/gig/pricing',middleware.user, function(req, res){
 router.post('/gig/faq', function(req, res){
   gigController.faq(req, res);
 });
-router.post('/gig/update/faq', middleware.user, function(req, res){
+router.patch('/gig/faq', middleware.user, function(req, res){
   gigController.updateFaq(req, res);
 });
-router.delete('/gig/update/faq', function(req, res){
+router.delete('/gig/faq', function(req, res){
   gigController.deleteFaq(req, res);
 });
 router.post('/gig/requirement', middleware.user, function(req, res){

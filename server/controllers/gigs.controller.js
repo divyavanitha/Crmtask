@@ -295,6 +295,7 @@ exports.faq = async(req, res) => {
 
         }).unknown(true);
     }
+    console.log(req.body)
     const { error } = schema.validate(req.body);
 
     let errorMessage = {};
@@ -338,10 +339,10 @@ exports.faq = async(req, res) => {
 
         if(faqs.length > 0) gig.faq = faqs;
         gig.description = req.body.description;
+        await db._update(Gig, { _id: req.body.id }, gig);
         let updated_gig = await Gig.findById(gig._id);
-        let gigs = await db._update(Gig, { _id: req.body.id }, gig);
 
-        const response = helper.response({ message: res.__('updated'), data: gig });
+        const response = helper.response({ message: res.__('updated'), data: updated_gig });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -395,7 +396,7 @@ exports.updateFaq = async(req, res) => {
         let index = arr.find(x => x.id === req.body.faq_id); //e.id === obj.id
         console.log(index);
             //let faqs = [];
-//console.log('index',index);
+            //console.log('index',index);
         /*if (index === -1) {
             for(let i in req.body.question) {*/
                 let faq = {
@@ -438,7 +439,47 @@ exports.updateFaq = async(req, res) => {
 }
 
 exports.deleteFaq = async(req, res) => {
-    console.log(req.body);
+
+    const schema = Joi.object().options({ abortEarly: false }).keys({
+        id: Joi.string().required().label("Gig is required"),
+        faq_id: Joi.string().required().label("Faq Id is required")
+
+    }).unknown(true);
+
+    const { error } = schema.validate(req.body);
+
+    let errorMessage = {};
+    if (error) {
+        error.details.forEach(err => {
+            errorMessage[err.context.key] = (err.message).replace(/"/g, "")
+        })
+    }
+
+    const errorResponse = helper.response({ status: 422, error:errorMessage });
+
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
+
+    try {
+
+        let gig = await Gig.findById(req.body.id);
+
+        console.log(gig.faq.id(req.body.faq_id))
+
+        gig.faq.id(req.body.faq_id).remove();
+
+        let gigs = await db._update(Gig, { _id: req.body.id }, gig);
+        const response = helper.response({ message: res.__('updated'), data: gig });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                return res.status(422).json(err.errors[i].message);
+            }
+        } else {
+            return res.status(422).json(err);
+        }
+    }
     
 }
 

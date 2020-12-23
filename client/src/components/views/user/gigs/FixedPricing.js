@@ -29,7 +29,6 @@ const FixedPricing = (props) => {
    let delivery_times = [props.pricing && props.pricing.length > 0 && props.pricing[0].DeliveryTime];
    let revisions = [props.pricing && props.pricing.length > 0 && props.pricing[0].revisions];
    let prices = [props.pricing && props.pricing.length > 0 && props.pricing[0].price];
-console.log(prices[0]);
    return (
 
 <Formik
