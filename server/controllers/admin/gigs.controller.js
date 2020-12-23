@@ -71,7 +71,7 @@ exports.gigStatus = async (req, res) => {
         }else if((req.params.status).toUpperCase() == "APPROVE"){
             gig.status = "ACTIVE";
         }else if((req.params.status).toUpperCase() == "DECLINE"){
-            gig.status = "INACTIVE";
+            gig.status = "DECLINE";
         }
 
         let gigs = await db._update(Gig, { _id: req.params.id }, gig);

@@ -26,11 +26,10 @@ const requestSchema = mongoose.Schema({
         required: true
     },
     files: {
-        type: Array
+        type: String
     },
     status:{
-        type: Boolean,
-        default: false
+        type: String
     },
     created_at: {
         type: Date,

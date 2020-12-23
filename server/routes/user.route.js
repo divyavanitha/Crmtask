@@ -138,7 +138,7 @@ router.post('/gig/pricing',middleware.user, function(req, res){
   gigController.updatePricing(req, res);
 });
 router.post('/gig/faq', function(req, res){
-  gigController.Faq(req, res);
+  gigController.faq(req, res);
 });
 router.post('/gig/update/faq', middleware.user, function(req, res){
   gigController.updateFaq(req, res);
@@ -206,10 +206,12 @@ router.post('/cancel', middleware.user, function(req, res){
 });
 
 /*Proposal Request*/
-router.post('/request', [middleware.user, middleware.upload( path.join(__dirname, '../storage/images/request/') ).fields([{ name: 'files[]', maxCount: 4 }]) ], (req, res) => {
+router.post('/request', [middleware.user, middleware.upload( path.join(__dirname, '../storage/images/request/') ).fields([{ name: 'files', maxCount: 1 }]) ], (req, res) => {
   requestController.createrequest(req, res);
 });
-
+router.get('/requests',middleware.user, (req, res) => {
+  requestController.listRequests(req, res);
+});
 router.post('/offer', middleware.user, function(req, res){
   requestController.request_offer(req, res);
 });

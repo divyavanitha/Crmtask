@@ -87,6 +87,10 @@ const userSchema = mongoose.Schema({
         type: Number,
         default: 0
     },
+    gig : {
+        type: Schema.Types.ObjectId,
+        ref: 'gigs'
+    },
     rating: {
         type: Number
     },

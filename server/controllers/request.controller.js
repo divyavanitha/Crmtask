@@ -10,23 +10,12 @@ const _ = require('lodash');
 exports.listRequests = async (req, res) => {
     try {
 
-        if(!req.query.length) req.query.length = 10;
-        else req.query.length = parseInt(req.query.length);
-        if(!req.query.page) req.query.page = 1;
-        else req.query.page = parseInt(req.query.page);
+        let active_requests = await db._get(Request, { user: req.user._id, status: "ACTIVE" }, {}, {populate: "user"});
+        let inactive_requests = await db._get(Request, { user: req.user._id, status: "DECLINE" }, {}, {populate: "user"});
+        let pending_requests = await db._get(Request, { user: req.user._id, status: "PENDING" }, {}, {populate: "user"});
+        let paused_requests = await db._get(Request, { user: req.user._id, status: "PAUSE" }, {}, {populate: "user"});
 
-        let skip = (req.query.page * req.query.length) - req.query.length;
-
-        let requests = await db._get(Request, null, null, {limit: req.query.length, skip: skip, populate:"duration" });
-
-        let count = await db._count(Request);
-
-        const data = { requests };
-
-        //const response = helper.response({ data });
-
-        const response = helper.response({ data: helper.paginate(req, data, count) });
-
+        const response = helper.response({ data: {"active": active_gigs, "decline": inactive_gigs, "pending": pending_gigs, "paused": paused_gigs } });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -67,22 +56,12 @@ exports.createrequest = async (req, res) => {
                 subCategory: req.body.sub_category_id,
                 duration: req.body.duration,
                 budget: req.body.budget,
+                status: "PENDING",
                 title: req.body.title,
                 user: req.user._id
             }
 
-         let documents = [];
-
-        for(i in req.files['files[]']) {
-
-            let file = {
-                file: req.protocol+ '://' +req.get('host')+"/images/request/"+(req.files['files[]'][i].filename),
-            }
-            documents.push(file);
-             
-        }
-
-        if(documents.length > 0) data.files = documents;
+        if(req.files['files']) data.files = req.protocol+ '://' +req.get('host')+"/images/request/" + req.files['files'][0].filename;
 
         let request = await db._store(Request, data);
 

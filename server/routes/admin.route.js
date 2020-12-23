@@ -19,7 +19,7 @@ const slideController = require('../controllers/admin/slide.controller');
 const homeController = require('../controllers/home.controller');
 const userController = require('../controllers/admin/user.controller');
 const cancelReasonController = require('../controllers/admin/cancelReason.controller');
-const requestController = require('../controllers/request.controller');
+const requestController = require('../controllers/admin/request.controller');
 const gigController = require('../controllers/admin/gigs.controller');
 
 router.post('/login', (req, res) => {

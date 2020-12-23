@@ -117,7 +117,7 @@ exports.usergigs = async (req, res) => {
     try {
 
         let active_gigs = await db._get(Gig, { user: req.user._id, status: "ACTIVE" }, {}, {populate: "user"});
-        let inactive_gigs = await db._get(Gig, { user: req.user._id, status: "INACTIVE" }, {}, {populate: "user"});
+        let decline_gigs = await db._get(Gig, { user: req.user._id, status: "DECLINE" }, {}, {populate: "user"});
         let draft_gigs = await db._get(Gig, { user: req.user._id, status: "DRAFT" }, {}, {populate: "user"});
         let pending_gigs = await db._get(Gig, { user: req.user._id, status: "PENDING" }, {}, {populate: "user"});
         let modification_gigs = await db._get(Gig, { user: req.user._id, status: "MODIFICATION" }, {}, {populate: "user"});
@@ -126,7 +126,7 @@ exports.usergigs = async (req, res) => {
 
         //const data = { gigs };
 
-        const response = helper.response({ data: {"active": active_gigs, "inactive": inactive_gigs, "draft": draft_gigs, "pending": pending_gigs, "modification": modification_gigs, "paused": paused_gigs, "featured": featured_gigs } });
+        const response = helper.response({ data: {"active": active_gigs, "decline": decline_gigs, "draft": draft_gigs, "pending": pending_gigs, "modification": modification_gigs, "paused": paused_gigs, "featured": featured_gigs } });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -578,7 +578,10 @@ exports.updateConfirm = async(req, res) => {
 
 exports.deleteGig = async (req, res) => {
     try {
-        await db._delete(Gig, {"_id":req.params.id});
+        let gig ={
+        deleted_at: new Date()
+        }
+        await db._update(Gig, { _id: req.params.id }, gig);
 
         const response = helper.response({ message: res.__('deleted') });
         return res.status(response.statusCode).json(response);

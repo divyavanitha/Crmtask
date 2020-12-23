@@ -1,6 +1,7 @@
 const express = require("express");
 const { Cart } = require('../models/Cart');
 const { Order } = require('../models/Order');
+const { User } = require('../models/user');
 const { Rating } = require('../models/Rating');
 const { CancellationRequest } = require('../models/CancellationRequest');
 const helper = require('../services/helper.js');
@@ -371,19 +372,33 @@ exports.rating = async (req, res) => {
 
         let order = await Order.findById(req.body.order_id);
 
+        let user = await User.findById(order.seller);
+
         if(rate != null){
 
             if(req.body.type == "buyer"){
                 var rating ={
                    buyerRating: req.body.buyer_rating,
-                   buyerComment: req.body.buyer_comment
+                   buyerComment: req.body.buyer_comment,
+                   gig: order.gig,
+                   seller: order.seller,
+                   buyer: order.buyer,
+                   buyer_at: new Date()
                 }
 
                 order.buyer_rated=1;
+
+                user.gig = order.gig;
+                //user.ratingPercent = 
+                
             }else{
                 var rating ={
                     sellerRating: req.body.seller_rating,
-                    sellerComment: req.body.seller_comment 
+                    sellerComment: req.body.seller_comment,
+                    gig: order.gig,
+                    seller: order.seller,
+                    buyer: order.buyer,
+                    seller_at: new Date()
                 }
 
                 order.seller_rated=1;
@@ -395,7 +410,11 @@ exports.rating = async (req, res) => {
                 var rating = {
                     orderId: req.body.order_id,
                     buyerRating: req.body.buyer_rating,
-                    buyerComment: req.body.buyer_comment
+                    buyerComment: req.body.buyer_comment,
+                    gig: order.gig,
+                    seller: order.seller,
+                    buyer: order.buyer,
+                    buyer_at: new Date()
                 } 
 
                 order.buyer_rated=1;
@@ -403,7 +422,11 @@ exports.rating = async (req, res) => {
                var rating = {
                     orderId: req.body.order_id,
                     sellerRating: req.body.seller_rating,
-                    sellerComment: req.body.seller_comment
+                    sellerComment: req.body.seller_comment,
+                    gig: order.gig,
+                    seller: order.seller,
+                    buyer: order.buyer,
+                    seller_at: new Date()
                 }
 
                 order.seller_rated=1;  
