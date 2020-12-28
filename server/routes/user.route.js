@@ -12,6 +12,21 @@ const orderController = require('../controllers/order.controller');
 const requestController = require('../controllers/request.controller');
 const cartController = require('../controllers/cart.controller');
 
+router.get('/pages/list/:type', (req, res) => {
+  homeController.pagesList(req, res);
+});
+
+router.get('/pages/list', (req, res) => {
+  homeController.pagesList(req, res);
+});
+
+router.get('/pages', (req, res) => {
+  homeController.pages(req, res);
+});
+
+router.get('/page/:page', (req, res) => {
+  homeController.page(req, res);
+});
 
 router.post('/login', (req, res) => {
   authController.login(req, res);
@@ -116,6 +131,23 @@ router.post('/refresh', (req, res) => {
 });
 
 /*Gig*/
+
+router.get('/favourites', middleware.user, (req, res) => {
+  homeController.getFavourites(req, res);
+});
+
+router.post('/favourite/:id', middleware.user, (req, res) => {
+  homeController.addFavourite(req, res);
+});
+
+router.get('/recent', middleware.user, (req, res) => {
+  homeController.getRecent(req, res);
+});
+
+router.get('/profile', middleware.user, (req, res) => {
+  profilecontroller.getProfile(req, res);
+});
+
 router.get('/list/gigs', (req, res) => {
   gigController.listgigs(req, res);
 });

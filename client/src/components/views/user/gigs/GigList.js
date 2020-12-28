@@ -407,7 +407,7 @@ const GigList = (props) => {
                   <input type="radio" name="payment_option" value="wallet" id="shopping-balance" className="radio-custom"  />
                   <input type="hidden" name="feature_price" value={gig && gig.featuredGigPrice}   />
                   <input type="hidden" name="feature_duration" value={gig && gig.featuredGigDuration}   />
-                  <label for="shopping-balance" className="radio-custom-label"></label>
+                  <label htmlFor="shopping-balance" className="radio-custom-label"></label>
                   <span className="lead font-weight-bold"> Shopping Balance </span>
                   <p className="lead ml-5">
                   Personal Balance - {auth.user.firstName} <span className="text-success font-weight-bold"> ${auth.user.wallet} </span>

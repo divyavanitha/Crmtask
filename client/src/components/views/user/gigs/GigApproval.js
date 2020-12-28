@@ -131,7 +131,7 @@ const GigApproval = (props) => {
                    Proposal will always be at the top section of search results <br />
                    WIth GigToDo feature, your proposal already has a 50% chance of getting ordered by potential buyers
                    <p className="ml-4 mt-3">
-                            <label for="checkid" style={{ wordWrap: 'break-word' }}>
+                            <label htmlFor="checkid" style={{ wordWrap: 'break-word' }}>
                               <input type='checkbox' onClick={(e) => { setFieldValue(`proposal`, e.currentTarget.checked); }} value={values.proposal} name='proposal' style={{ verticalAlign: 'middle', marginLeft: '-1.25rem' }} /> Make Proposal Featured
                       </label>
                           </p>

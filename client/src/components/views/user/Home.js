@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { getMenu, getSlide, getGigWithoutAuth } from "../../../_actions/user.action";
+import { getMenu, getSlide, getGigWithoutAuth, getRecent, getFavourites, addFavourite  } from "../../../_actions/user.action";
 import Gig from "./gigs/Gig"
 
 
@@ -19,10 +19,12 @@ function Home() {
       dispatch(getMenu())
       dispatch(getSlide())
       dispatch(getGigWithoutAuth())
+      dispatch(getRecent())
    }, []);
 
    const slide = useSelector((state) => state.user && state.user.slide && state.user.slide.responseData && state.user.slide.responseData.slides);
    const gig = useSelector((state) => state.user && state.user.gigs && state.user.gigs.responseData && state.user.gigs.responseData.gigs);
+   const recent = useSelector((state) => state.user && state.user.recent);
 
    return (
 
@@ -306,210 +308,54 @@ function Home() {
                   <div className="rounded-0 mb-3 carosel_sec mt-3">
                      <h3 className="buy_head ">Recently Viewed</h3>
                      <div id="demo2" className="carousel slide" data-ride="carousel">
-                        {/* <!-- The slideshow --> */}
+
                         <div className="carousel-inner " role="listbox">
-                           <div className="carousel-item active">
-                              {/* <!--- carousel-item Starts ---> */}
+                           {recent && recent.map((r) => (
+                              <div key={r._id} className="carousel-item ">
                               <div className="proposal-card-base mp-proposal-card">
-                                 {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
-                                 <a href="proposals/mir_digimarket/i-will-create-a-professional-custom-explainer-video">
-                                    <img src={require('../../../assets/images/postImg/img-03.jpg')} className="img-fluid" />
-                                 </a>
-                                 <div className="proposal-card-caption">
-                                    {/* <!--- proposal-card-caption Starts ---> */}
-                                    <div className="proposal-seller-info">
-                                       {/* <!--- onePress-seller-info Starts ---> */}
-                                       <span className="fit-avatar s24">
-                                          <img src={require('../../../assets/images/userlisting/img-02.jpg')} className="rounded-circle" width="32"
-                                             height="32" />
-                                       </span>
-                                       <div className="seller-info-wrapper">
-                                          <a href="mir_digimarket" className="seller-name">mir_digimarket</a>
-                                          <div className="onePress-seller-tooltip">
-                                             Level Two
-                                          </div>
-                                       </div>
-                                    </div>
-                                    {/* <!--- onePress-seller-info Ends ---> */}
-                                    <a href="proposals/mir_digimarket/i-will-create-a-professional-custom-explainer-video"
-                                       className="proposal-link-main">
-                                       <h3>I Will Create A Professional Custom Explainer Video</h3>
-                                    </a>
-                                    <div className="rating-badges-container">
-                                       <span className="proposal-rating">
-                                          <i className="fa fa-star"></i>
-                                          <span>
-                                             <strong>4.8</strong>
-                                       (22)
-                                        </span>
-                                       </span>
-                                    </div>
-                                 </div>
-                                 {/* <!--- proposal-card-caption Ends ---> */}
-                                 <footer className="proposal-card-footer">
-                                    {/* <!--- proposal-card-footer Starts ---> */}
-                                    <div className="proposal-price">
-                                       <a className="js-proposal-card-imp-data">
-                                          <small>Starting At</small>&#036;10.00 </a>
-                                    </div>
-                                 </footer>
-                                 {/* <!--- proposal-card-footer Ends ---> */}
-                              </div>
-                              {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
-                           </div>
-                           {/* <!--- carousel-item Ends ---> */}
-                           <div className="carousel-item ">
-                              {/* <!--- carousel-item Starts ---> */}
-                              <div className="proposal-card-base mp-proposal-card">
-                                 {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
-                                 <a href="proposals/thili00traffi/i-will-develop-and-reskin-3d-and-2d-games-in-unit">
-                                    <img src={require('../../../assets/images/proposals/game-1.jpg')} className="img-fluid" />
-                                 </a>
-                                 <div className="proposal-card-caption">
-                                    {/* <!--- proposal-card-caption Starts ---> */}
-                                    <div className="proposal-seller-info">
-                                       {/* <!--- onePress-seller-info Starts ---> */}
-                                       <span className="fit-avatar s24">
-                                          <img src={require('../../../assets/images/userlisting/img-01.jpg')} className="rounded-circle" width="32"
-                                             height="32" />
-                                       </span>
-                                       <div className="seller-info-wrapper">
-                                          <a href="thili00traffi" className="seller-name">thili00traffi</a>
-                                          <div className="onePress-seller-tooltip">
-                                             New Seller
-                                    </div>
-                                       </div>
-                                    </div>
-                                    {/* <!--- onePress-seller-info Ends ---> */}
-                                    <a href="proposals/thili00traffi/i-will-develop-and-reskin-3d-and-2d-games-in-unit"
-                                       className="proposal-link-main">
-                                       <h3>I Will Develop And Reskin 3d And 2d Games In Unity</h3>
-                                    </a>
-                                    <div className="rating-badges-container">
-                                       <span className="proposal-rating">
-                                          <i className="fa fa-star"></i>
-                                          <span>
-                                             <strong>4.0</strong>
-                                       (4)
-                                    </span>
-                                       </span>
-                                    </div>
-                                 </div>
-                                 {/* <!--- proposal-card-caption Ends ---> */}
-                                 <footer className="proposal-card-footer">
-                                    {/* <!--- proposal-card-footer Starts ---> */}
-                                    <div className="proposal-price">
-                                       <a className="js-proposal-card-imp-data">
-                                          <small>Starting At</small>&#036;20.00 </a>
-                                    </div>
-                                 </footer>
-                                 {/* <!--- proposal-card-footer Ends ---> */}
-                              </div>
-                              {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
-                           </div>
-                           {/* <!--- carousel-item Ends ---> */}
-                           <div className="carousel-item ">
-                              {/* <!--- carousel-item Starts ---> */}
-                              <div className="proposal-card-base mp-proposal-card">
-                                 {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
-                                 <a href="proposals/Patricia/i-will-do-a-video-session-and-teach-you-english">
-                                    <img src={require('../../../assets/images/proposals/board-64269_1920_1588265658.png')} className="img-fluid" />
-                                 </a>
-                                 <div className="proposal-card-caption">
-                                    {/* <!--- proposal-card-caption Starts ---> */}
-                                    <div className="proposal-seller-info">
-                                       {/* <!--- onePress-seller-info Starts ---> */}
-                                       <span className="fit-avatar s24">
-                                          <img src={require('../../../assets/images/userlisting/img-06.jpg')} className="rounded-circle" width="32"
-                                             height="32" />
-                                       </span>
-                                       <div className="seller-info-wrapper">
-                                          <a href="Patricia" className="seller-name">Patricia</a>
-                                          <div className="onePress-seller-tooltip">
-                                             Level One
-                                    </div>
-                                       </div>
-                                    </div>
-                                    {/* <!--- onePress-seller-info Ends ---> */}
-                                    <a href="proposals/Patricia/i-will-do-a-video-session-and-teach-you-english"
-                                       className="proposal-link-main">
-                                       <h3>I will do a video session and teach you english</h3>
-                                    </a>
-                                    <div className="rating-badges-container">
-                                       <span className="proposal-rating">
-                                          <i className="fa fa-star"></i>
-                                          <span>
-                                             <strong>0.0</strong>
-                                       (0)
-                                    </span>
-                                       </span>
-                                    </div>
-                                 </div>
-                                 {/* <!--- proposal-card-caption Ends ---> */}
-                                 <footer className="proposal-card-footer">
-                                    {/* <!--- proposal-card-footer Starts ---> */}
-                                    <div className="proposal-price">
-                                       <a className="js-proposal-card-imp-data">
-                                          <small>Starting At</small>&#036;0.50 </a>
-                                    </div>
-                                 </footer>
-                                 {/* <!--- proposal-card-footer Ends ---> */}
-                              </div>
-                              {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
-                           </div>
-                           {/* <!--- carousel-item Ends ---> */}
-                           <div className="carousel-item ">
-                              {/* <!--- carousel-item Starts ---> */}
-                              <div className="proposal-card-base mp-proposal-card">
-                                 {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
-                                 <a href="proposals/RayTay90/i-will-sell-2000-inspirational-quotes">
-                                    <img src={require('../../../assets/images/proposals/quote-1342706_1280_1588263608.png')} className="img-fluid" />
-                                 </a>
-                                 <div className="proposal-card-caption">
-                                    {/* <!--- proposal-card-caption Starts ---> */}
-                                    <div className="proposal-seller-info">
-                                       {/* <!--- onePress-seller-info Starts ---> */}
-                                       <span className="fit-avatar s24">
-                                          <img src={require('../../../assets/images/userlisting/img-04.jpg')} className="rounded-circle" width="32"
-                                             height="32" />
-                                       </span>
-                                       <div className="seller-info-wrapper">
-                                          <a href="RayTay90" className="seller-name">RayTay90</a>
-                                          <div className="onePress-seller-tooltip">
-                                             Level One
-                                    </div>
-                                       </div>
-                                    </div>
-                                    {/* <!--- onePress-seller-info Ends ---> */}
-                                    <a href="proposals/RayTay90/i-will-sell-2000-inspirational-quotes"
-                                       className="proposal-link-main">
-                                       <h3>I will sell 2000 Inspirational quotes</h3>
-                                    </a>
-                                    <div className="rating-badges-container">
-                                       <span className="proposal-rating">
-                                          <i className="fa fa-star"></i>
-                                          <span>
-                                             <strong>4.6</strong>
-                                       (5)
-                                    </span>
-                                       </span>
-                                    </div>
-                                 </div>
-                                 {/* <!--- proposal-card-caption Ends ---> */}
-                                 <footer className="proposal-card-footer">
-                                    {/* <!--- proposal-card-footer Starts ---> */}
-                                    <div className="proposal-price">
-                                       <a className="js-proposal-card-imp-data">
-                                          <small>Starting At</small>&#036;20.00 </a>
-                                    </div>
-                                 </footer>
-                                 {/* <!--- proposal-card-footer Ends ---> */}
-                              </div>
-                              {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
-                           </div>
-                           {/* <!--- carousel-item Ends ---> */}
+                    <Link to={r.gig.user ? "/gig/" + r.gig.user.firstName + "/" + r.gig.title : ""}>
+                        <img src={r.gig.photo[0] ? r.gig.photo[0].photo : ""} className="img-fluid" />
+                    </Link>
+                    <div className="proposal-card-caption">
+                        <div className="proposal-seller-info">
+                            <span className="fit-avatar s24">
+                                <img src={r.gig.user ? r.gig.user.profilePhoto : ""} className="rounded-circle" width="32" height="32" />
+                            </span>
+                            <div className="seller-info-wrapper">
+                                <a href={r.gig.user ? r.gig.user.firstName : ""} className="seller-name">{r.gig.user ? r.gig.user.firstName : ""} {r.gig.user ? r.gig.user.lastName : ""}</a>
+                                <div className="onePress-seller-tooltip">
+                                    Level Two
+                                </div>
+                            </div>
+                            <div className="favoriteIcon">
+                                <i data-id="4" href="#" className="fa fa-heart proposal-favorite" data-toggle="tooltip"
+                                    data-placement="top" title="Favorite"></i>
+                            </div>
                         </div>
-                        {/* <!-- Left and right controls --> */}
+                        <Link to={r.gig.user ? "/gig/" + r.gig.user.firstName + "/" + r.gig.title : ""} className="proposal-link-main js-proposal-card-imp-data">
+                            <h3>{r.gig.title}</h3>
+                        </Link>
+                        <div className="rating-badges-container">
+                            <span className="proposal-rating">
+                                <i className="fa fa-star"></i>
+                                <span>
+                                    <strong>{r.gig.user ? r.gig.user.rating : "3"}</strong> (22)
+                        </span>
+                            </span>
+                        </div>
+                    </div>
+                    <footer className="proposal-card-footer">
+                        <div className="proposal-price">
+                            <a>
+                                <small>STARTING AT</small>&#036;{r.gig.pricing[0] ? r.gig.pricing[0].price : "0.00"} </a>
+                        </div>
+                    </footer>
+                </div>
+                           </div>
+                           ))}
+
+                        </div>
+
                         <a className="carousel-control-prev" href="#demo2" data-slide="prev">
                            <i className="fa fa-angle-left"></i>
                         </a>

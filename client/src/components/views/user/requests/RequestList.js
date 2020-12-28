@@ -46,44 +46,7 @@ const RequestList = (props) => {
             })
       });*/
 
-      $('body').on('click', '.request', function(){
-
-         var status = $(this).data('status');
-
-      $.ajax({
-        url: "/api/requests?type="+status,
-        type:"GET",
-        processData: false,
-        contentType: false,
-        secure: false,
-        success: (data, textStatus, jqXHR) => {
-            var html = "";
-
-            html += `<tr>
-                                    <td className="proposal-title"> hfhs </td>
-                                    <td>  </td>
-                                    <td></td>
-                                    <td></td>
-                                    <td className="text-success"> &#036;0 </td>
-                                    <td className="text-center">
-                                       <div className="dropdown">
-                                          <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
-                                          <div className="dropdown-menu">
-                                             <a href="" className="dropdown-item"> View Offers </a>
-                                             <a href="#" className="dropdown-item">Pause</a>
-                                             <a href="" className="dropdown-item"> Delete </a>
-                                          </div>
-                                       </div>
-
-                                    </td>
-                                 </tr>`;
-
-                  $(".request-table tbody").html(html);
-        }
-      });
-         
-
-      });
+   
 
       
 
@@ -151,7 +114,24 @@ const RequestList = (props) => {
                                  </tr>
                               </thead>
                               <tbody>
-                                 
+                                 {request_list && request_list.active.map((list, index) => (<tr key={list._id}>
+                                    <td className="proposal-title"> {list.title} </td>
+                                    <td> {list.description} </td>
+                                    <td>{list.created_at}</td>
+                                    <td>22</td>
+                                    <td className="text-success"> &#036;{list.budget} </td>
+                                    <td className="text-center">
+                                       <div className="dropdown">
+                                          <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
+                                          <div className="dropdown-menu">
+                                             <a href="" className="dropdown-item"> View Offers </a>
+                                             <a href="#" className="dropdown-item">Pause</a>
+                                             <a href="" className="dropdown-item"> Delete </a>
+                                          </div>
+                                       </div>
+
+                                    </td>
+                                 </tr>))}
                                  
                               </tbody>
                            </table>

@@ -45,7 +45,7 @@ const PackagePricing = (props) => {
             delivery_times.push("");
             revisions.push("");
             prices.push("");
-            package_id.push("");
+            package_id.push(packages[i]._id);
          }
       }
       
@@ -173,9 +173,9 @@ const PackagePricing = (props) => {
                                  <form onSubmit={handleSubmit} encType="multipart/form-data">
                                     <div className="float-right switch-box">
                                        <span className="text">Fixed Price :</span>
-                                       <label class='switch'>
+                                       <label className='switch'>
                                           <input type='checkbox' onChange={ changePrice } />
-                                          <span class='slider round'></span>
+                                          <span className='slider round'></span>
                                        </label>
                                     </div>
                                     <div className="clearfix"></div>
@@ -257,7 +257,6 @@ const PackagePricing = (props) => {
                                                    </button>
                                                 </div>
                                                 <div className="modal-body">
-                                                   <form action="" method="post" className="update-attribute">
                                                       <input type="hidden" name="name" value="" />
                                                       <div className="form-group">
                                                          <input type="text" className="form-control" name="new_name" placeholder="Attribute Name" />
@@ -265,7 +264,6 @@ const PackagePricing = (props) => {
                                                       <div className="form-group text-center mb-0">
                                                          <input type="submit" className="btn btn-success" value="Update Attribute Name" />
                                                       </div>
-                                                   </form>
                                                 </div>
                                              </div>
                                           </div>

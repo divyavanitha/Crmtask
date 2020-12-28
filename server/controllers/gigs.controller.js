@@ -6,7 +6,9 @@ const { Rating } = require('../models/Rating');
 const { Category } = require('../models/category');
 const { SubCategory } = require('../models/SubCategory');
 const { Setting } = require('./../models/setting');
+const { View } = require('../models/View');
 const helper = require('../services/helper.js');
+const jwt = require('jsonwebtoken');
 const db = require('../services/model.js');
 const Joi = require('@hapi/joi');
 const _ = require('lodash');
@@ -61,6 +63,36 @@ exports.getGigDetails = async (req, res) => {
         reviews = await db._get(Rating, {gig: gig._id }, { sellerRating: 1, buyerRating: 1, buyerComment: 1, sellerComment: 1} );
         }
         const data = { gig, orderCount, reviews };
+        
+
+        let token = req.header("Authorization");
+
+        if (token && token.startsWith('Bearer ')) {
+            // Remove Bearer from string
+            token = token.slice(7, token.length);
+
+            const user = jwt.verify(token, process.env.SECRET_KEY, { algorithm: '[HS512]' });
+
+            let recent = await db._find(View, { gig: req.params.id, user: user._id });
+
+            if(!recent) {
+
+                let data = {
+                    gig: req.params.id, 
+                    user: user._id , 
+                    count: 1
+                }
+
+                await db._store(View, data);
+            } else {
+
+                recent.count += 1;
+
+                await db._update(View, { _id: recent._id }, recent);
+            }
+
+        }
+
         if(gig != undefined){
         var response = helper.response({ data: data });
         }else{
@@ -91,6 +123,34 @@ exports.getGigDetailByName = async (req, res) => {
         let reviews = await db._get(Rating, {gig: gig._id }, { sellerRating: 1, buyerRating: 1, buyerComment: 1, sellerComment: 1, seller_at: 1, buyer_at: 1}, { populate: [{path: 'seller', select: 'firstName lastName profilePhoto -_id'}, {path: 'buyer', select: 'firstName lastName profilePhoto -_id'}] } );
 
         const data = { gig, orderCount, reviews };
+
+        let token = req.header("Authorization");
+
+        if (token && token.startsWith('Bearer ')) {
+            // Remove Bearer from string
+            token = token.slice(7, token.length);
+
+            const user = jwt.verify(token, process.env.SECRET_KEY, { algorithm: '[HS512]' });
+
+            let recent = await db._find(View, { gig: gig._id, user: user._id });
+
+            if(!recent) {
+
+                let data = {
+                    gig: gig._id, 
+                    user: user._id , 
+                    count: 1
+                }
+
+                await db._store(View, data);
+            } else {
+
+                recent.count += 1;
+
+                await db._update(View, { _id: recent._id }, recent);
+            }
+
+        }
 
         const response = helper.response({ data: data });
 

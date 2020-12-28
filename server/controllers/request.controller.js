@@ -9,9 +9,7 @@ const _ = require('lodash');
 
 exports.listRequests = async (req, res) => {
     try {
-        if((req.query.type).toUpperCase() == "APPROVE"){
             let active_requests = await db._get(Request, { user: req.user._id, status: "APPROVE" }, {}, {populate: "user"});
-        }
             let inactive_requests = await db._get(Request, { user: req.user._id, status: "DECLINE" }, {}, {populate: "user"});
             let pending_requests = await db._get(Request, { user: req.user._id, status: "PENDING" }, {}, {populate: "user"});
             let paused_requests = await db._get(Request, { user: req.user._id, status: "PAUSE" }, {}, {populate: "user"});

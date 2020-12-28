@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import $ from 'jquery';
 import { useDropzone } from 'react-dropzone'
 import { updateImage } from "../../../../_actions/gigs.action";
+import { getGigbyId } from "../../../../_actions/user.action";
 
 
 const Gallery = (props) => {
@@ -25,7 +26,7 @@ const Gallery = (props) => {
   let history = useHistory();
   const params = useParams();
   useEffect(() => {
-
+    dispatch(getGigbyId(params.id))
 
   }, [params.id]);
   let files = [];
@@ -45,7 +46,10 @@ const Gallery = (props) => {
     maxSize,
   });
 
-  //const isFileTooLarge = rejectedFiles.length > 0 && rejectedFiles[0].size > maxSize;
+
+
+   const gig = useSelector((state) => state.user && state.user.gig_details && state.user.gig_details.responseData && state.user.gig_details.responseData.gig);
+
 
   return (
 
@@ -53,10 +57,6 @@ const Gallery = (props) => {
       initialValues={{
         id: params.id
       }}
-      validationSchema={Yup.object().shape({
-        /* photo: Yup.string()
-             .required('Photo is required'),*/
-      })}
 
       onSubmit={(values, { setSubmitting, resetForm }) => {
 
@@ -66,12 +66,18 @@ const Gallery = (props) => {
         for (var i = 0; i < file.length; i++) {
           data.append("photo[]", file[i][0]);
         }
-
+/*console.log( ( gig && gig.photo.length  )  );
+console.log(  data.get("photo[]")  );
+console.log( ( gig && gig.photo.length > 0 ) || data.get("photo[]") !== null );*/
+      if( data.get("photo[]") == null ) {
+        if( gig && gig.photo.length > 0 ) {
+          history.push('/gig/approval/' + params.id)
+        }
+      } else {
         dispatch(updateImage(data)).then(res => {
-          console.log('id', res.responseData._id);
           history.push('/gig/approval/' + res.responseData._id)
-
         })
+      }
 
         resetForm();
         setSubmitting(false);
@@ -150,7 +156,7 @@ const Gallery = (props) => {
                       <form onSubmit={handleSubmit} encType="multipart/form-data" >
 
                         <div style={dropzoneStyle} {...getRootProps()}>
-                          <input {...getInputProps()} />
+                          <input name="photo" value={values.photo} {...getInputProps()} />
                           {!isDragActive && <p style={{ textAlign: 'center', color: '#eaeaea' }}>Click here or drop a file to upload!</p>}
                           {isDragActive && !isDragReject && <p style={{ textAlign: 'center', color: '#eaeaea' }}>Drop it like it's hot!</p>}
                           {isDragReject && <p style={{ textAlign: 'center', color: '#eaeaea' }}>File type not accepted, sorry!</p>}
@@ -177,6 +183,7 @@ const Gallery = (props) => {
                           }
                           )}
                         </div>
+                        <ErrorMessage name="photo" component="div" className="invalid-feedback" />
 
                         <div className="mb-5"></div>
                         <div className="form-group mb-0">
