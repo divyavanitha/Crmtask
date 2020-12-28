@@ -10,6 +10,9 @@ const { Slide } = require('../models/Slide');
 const { Menu } = require('../models/Menu');
 const { Package } = require('../models/Package');
 const { CancelReason } = require('../models/CancelReason');
+const { Favourite } = require('../models/Favourite');
+const { View } = require('../models/View');
+const { Page } = require('../models/page');
 const Joi = require('@hapi/joi');
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
@@ -345,6 +348,74 @@ exports.listcategory = async (req, res) => {
 
 }
 
+exports.getFavourites = async (req, res) => {
+
+    try {
+
+        let favourites = await db._get(Favourite, { user: req.user._id }, {}, {populate: ['user', 'gig']});
+
+        const data = { favourites };
+
+        const response = helper.response({ data });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.addFavourite = async (req, res) => {
+
+    try {
+
+        let favourite = await db._find(Favourite, { gig: req.params.id });
+        let status;
+
+        if(!favourite) {
+
+            let data = {
+                gig: req.params.id, 
+                user: req.user._id 
+            }
+            status = true;
+            await db._store(Favourite, data);
+        } else {
+            status = false;
+            await db._delete(Favourite, { gig :req.params.id});
+        }
+
+        const data = { favourite, status };
+
+        const response = helper.response({ data });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.getRecent = async (req, res) => {
+
+    try {
+
+        let recent = await db._get(View, { user: req.user._id }, {}, {populate: ['gig']});
+
+        const data = { recent };
+
+        const response = helper.response({ data });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
 exports.listCancelReason = async (req, res) => {
     try {
 
@@ -352,6 +423,83 @@ exports.listCancelReason = async (req, res) => {
         let CancelReasons = await db._get(CancelReason, { status: 1, type: req.params.type });
 
         const data = { CancelReasons };
+
+        const response = helper.response({ data });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.listCancelReason = async (req, res) => {
+    try {
+
+
+        let CancelReasons = await db._get(CancelReason, { status: 1, type: req.params.type });
+
+        const data = { CancelReasons };
+
+        const response = helper.response({ data });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.pagesList = async (req, res) => {
+    try {
+
+        let type = req.params.type ? (req.params.type).toUpperCase() : '';
+
+        let pages;
+
+        if(req.params.type) {
+            pages = await db._get(Page, { status: 1, type: type }, {url: 1, title: 1, type: 1});
+        } else {
+            pages = await db._get(Page, { status: 1 }, {url: 1, title: 1, type: 1});
+        }
+
+        const data = { pages };
+
+        const response = helper.response({ data });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.pages = async (req, res) => {
+    try {
+
+        let pages = await db._get(Page, { status: 1 });
+
+        const data = { pages };
+
+        const response = helper.response({ data });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.page = async (req, res) => {
+    try {
+
+        let page = await db._get(Page, { status: 1, url: req.params.page });
+
+        const data = { page };
 
         const response = helper.response({ data });
 

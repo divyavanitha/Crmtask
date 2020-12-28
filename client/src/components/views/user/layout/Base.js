@@ -39,10 +39,21 @@ import Purchase from "../Purchase";
 import Favourite from "../Favourite";
 import Contact from "../Contact";
 import Referral from "../Referral";
+import Page from "../Page";
 
 import "../../../../assets/css/custom.css";
 
+import { getPagelist, getPages, getFavourites } from "../../../../_actions/user.action";
+
 const Base = () => {
+
+   const dispatch = useDispatch();
+
+   useEffect(() => {
+      dispatch(getPagelist())
+      dispatch(getPages())
+      dispatch(getFavourites())
+   }, []);
 
     let settings = useSelector((state) => state.settings);
     const auth = useSelector((state) => state.user);
@@ -91,6 +102,7 @@ const Base = () => {
                 <ProtectedRoute path="/favourites" component={Favourite} />
                 <ProtectedRoute path="/contacts" component={Contact} />
                 <ProtectedRoute path="/referrals" component={Referral} />
+                <Route path="/pages/:page" component={Page} />
 
             </Switch>
 

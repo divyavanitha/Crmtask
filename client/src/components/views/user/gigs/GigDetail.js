@@ -3,7 +3,7 @@ import { withRouter, useParams, Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { Formik, Field, Form, FieldArray, ErrorMessage } from 'formik';
-import Loader from 'react-loader-spinner'
+import Loader from 'react-loader-spinner';
 import parse from 'html-react-parser';
 import moment from 'moment';
 import * as Yup from 'yup';
@@ -522,7 +522,7 @@ const GigDetail = (props) => {
                                                     </p>
                                                 </div>
                                                 <div className="col-md-6">
-                                                    <p className="text-muted"><i className="fa fa-check pr-1"></i>  Positive Reviews</p>
+                                                    <p className="text-muted"><i className="fa fa-check pr-1"></i>  Positive&nbsp;Review</p>
                                                     <p className="text-muted"><i className="fa fa-check pr-1"></i> Recent Delivery</p>
                                                 </div>
                                                 <div className="col-md-6">

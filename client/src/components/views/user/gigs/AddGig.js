@@ -173,7 +173,7 @@ const AddGig = (props) => {
                                        {/* <!--- form-group row Starts ---> */}
                                        <div className="col-md-3">Gig Title</div>
                                        <div className="col-md-9">
-                                          <textarea name="title" value={values.title} onChange={handleChange} rows="2" placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} >logo making </textarea>
+                                          <textarea name="title" value={values.title} onChange={handleChange} rows="2" autoComplete="off" placeholder="Title" className={'form-control' + (errors.title && touched.title ? ' is-invalid' : '')} >logo making </textarea>
                                           <ErrorMessage name="title" component="div" className="invalid-feedback" />
                                        </div>
                                        <small className="form-text text-danger"></small>

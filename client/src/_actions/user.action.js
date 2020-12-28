@@ -24,7 +24,12 @@ import {
     FIND_CART,
     GET_DELIVERY_STATUS,
     GET_RATING,
-    GET_CANCEL_REASON
+    GET_CANCEL_REASON,
+    RECENT_GIGS,
+    FAVOURITE_GIGS,
+    ADD_FAVOURITE_GIG,
+    PAGES,
+    PAGE_LIST
 } from './types';
 
 
@@ -414,6 +419,109 @@ export const getSellerOrderDetails = (id) => async dispatch => {
                 payload: null
             })
         );
+
+};
+
+export const getPagelist = (type) => async dispatch => {
+
+    let url = type ? '/api/pages/list/' + type : '/api/pages/list';
+
+    axios
+        .get(url)
+        .then(res => {
+            dispatch({
+                type: PAGE_LIST,
+                payload: res.data.responseData.pages
+            })
+        }
+        )
+        .catch(e =>
+            dispatch({
+                type: PAGE_LIST,
+                payload: null
+            })
+        );
+
+};
+
+export const getPages = () => async dispatch => {
+
+    axios
+        .get(`/api/pages`)
+        .then(res => {
+            dispatch({
+                type: PAGES,
+                payload: res.data.responseData.pages
+            })
+        }
+        )
+        .catch(e =>
+            dispatch({
+                type: PAGES,
+                payload: null
+            })
+        );
+
+};
+
+export const getRecent = () => async dispatch => {
+
+    axios
+        .get(`/api/recent`)
+        .then(res => {
+            dispatch({
+                type: RECENT_GIGS,
+                payload: res.data.responseData.recent
+            })
+        }
+        )
+        .catch(e =>
+            dispatch({
+                type: RECENT_GIGS,
+                payload: null
+            })
+        );
+
+};
+
+export const getFavourites = () => async dispatch => {
+
+    axios
+        .get(`/api/favourites`)
+        .then(res => {
+            dispatch({
+                type: FAVOURITE_GIGS,
+                payload: res.data.responseData.favourites
+            })
+        }
+        )
+        .catch(e =>
+            dispatch({
+                type: FAVOURITE_GIGS,
+                payload: null
+            })
+        );
+
+};
+
+export const addFavourite = (id) => async dispatch => {
+
+    try {
+        const response = await axios.post(`/api/favourite/${id}`);
+
+         dispatch({
+            type: ADD_FAVOURITE_GIG,
+            payload: response.data.responseData
+        })
+
+        return response.data.responseData;
+
+    } catch (e) {
+        dispatch({
+            type: ADD_FAVOURITE_GIG,
+            payload: null
+        })
+    }
 
 };
 

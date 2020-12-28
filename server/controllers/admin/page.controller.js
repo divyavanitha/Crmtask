@@ -37,6 +37,7 @@ exports.createpage = async (req, res) => {
 
     try {
         const page = {
+            type: 'PAGE',
             title: req.body.title,
             content: req.body.content,
             url: req.body.url,
@@ -82,11 +83,12 @@ exports.updatePage = async (req, res) => {
     if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
-        const page = {
-                title: req.body.title,
-                content: req.body.content,
-                url: req.body.url,
-        }
+
+        let page = await db._find(Page, {_id:req.body.id});
+
+        page.title = req.body.title;
+        page.content = req.body.content;
+        page.url = req.body.url;
 
         let pages = await db._update(Page, { _id: req.body.id }, page);
 

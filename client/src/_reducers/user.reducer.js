@@ -18,7 +18,13 @@ import {
     SELLER_ORDER_DETAILS,
     FIND_CART,
     GET_RATING,
-    GET_CANCEL_REASON
+    GET_CANCEL_REASON,
+    RECENT_GIGS,
+    FAVOURITE_GIGS,
+    ADD_FAVOURITE_GIG,
+    PAGES,
+    PAGE_LIST
+
 } from '../_actions/types';
 
 let initialState = {
@@ -78,6 +84,16 @@ const userReducer = (state = initialState, action) => {
             return { ...state, rating: action.payload }
         case GET_CANCEL_REASON:
             return { ...state, cancel_reason: action.payload }
+        case RECENT_GIGS:
+            return { ...state, recent: action.payload }
+        case FAVOURITE_GIGS:
+            return { ...state, favourites: action.payload }
+        case ADD_FAVOURITE_GIG:
+            return { ...state, favourites: action.payload }
+        case PAGES:
+            return { ...state, pages: action.payload }
+        case PAGE_LIST:
+            return { ...state, page_list: action.payload }
         default:
             return state;
     }

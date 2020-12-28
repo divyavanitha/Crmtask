@@ -71,3 +71,9 @@ export const DELETE_GIGS = 'DELETE_GIGS';
 export const GET_ALLGIGS = 'GET_ALLGIGS';
 
 export const CREATE_REQUEST = 'CREATE_REQUEST';
+
+export const RECENT_GIGS = 'RECENT_GIGS';
+export const FAVOURITE_GIGS = 'FAVOURITE_GIGS';
+export const ADD_FAVOURITE_GIG = 'ADD_FAVOURITE_GIG';
+export const PAGES = 'PAGES';
+export const PAGE_LIST = 'PAGE_LIST';

@@ -15,6 +15,12 @@ function Footer() {
 
     let socialLink = settings.settings && settings.settings.socialLink;
 
+    let pageList = useSelector((state) => state.user && state.user.page_list);
+
+    let pages = pageList && pageList.filter(i => i.type == 'PAGE');
+
+    let about = pageList && pageList.filter(i => i.type == 'ABOUT');
+
     return (
 
         <Fragment>
@@ -37,23 +43,21 @@ function Footer() {
                             </div>
                         </div>
                         <div className="col-md-3 col-12">
-                            <h3 className="h3Border" data-toggle="collapse" data-target="#collapsecategories2">Company</h3>
+                            <h3 className="h3Border" data-toggle="collapse" data-target="#collapsecategories2">Pages</h3>
                             <ul className="collapse show list-unstyled" id="collapsecategories2">
-                                <li className="list-unstyled-item"><a href="">About Us</a></li>
-                                <li className="list-unstyled-item"><a href="">Common Problems</a></li>
-                                <li className="list-unstyled-item"><a href="">Tips For Sellers</a></li>
-                                <li className="list-unstyled-item"><a href="">Tips For Buyers</a></li>
+                                { pages && pages.map(page => (
+                                    <li key={page._id} className="list-unstyled-item"><Link to={"/pages/"+page.url}>{page.title}</Link></li>
+                                )
+                            )}
                             </ul>
                         </div>
                         <div className="col-md-3 col-12">
-                            <h3 className="h3Border" data-toggle="collapse" data-target="#collapseabout">Explore More</h3>
+                            <h3 className="h3Border" data-toggle="collapse" data-target="#collapseabout">About</h3>
                             <ul className="collapse show list-unstyled" id="collapseabout">
-                                <li className="list-unstyled-item"><a href=""><i className="fa fa-file-text-o"></i> Terms & Conditions</a></li>
-                                <li className="list-unstyled-item"><a href=""><i className="fa fa fa-life-ring"></i> Customer Support</a></li>
-                                <li className="list-unstyled-item"><a href=""><i className="fa fa-question-circle"></i> How It Works</a></li>
-                                <li className="list-unstyled-item"><a href=""><i className="fa fa-book"></i> Knowledge Bank</a></li>
-                                <li className="list-unstyled-item"><a href=""><i className="fa fa-rss"></i> Blog - Stay Informed</a></li>
-                                <li className="list-unstyled-item"><a href=""><i className="fa fa-comments"></i> Feedback/Forum </a></li>
+                            { about && about.map(page => (
+                                    <li key={page._id}  className="list-unstyled-item"><Link to={"/pages/"+page.url}>{page.title}</Link></li>
+                                )
+                            )}
                             </ul>
                         </div>
 

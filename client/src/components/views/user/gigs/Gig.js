@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { getGigWithoutAuth } from "../../../../_actions/user.action";
+import { getGigWithoutAuth, addFavourite } from "../../../../_actions/user.action";
 
 function Gig(props) {
 
@@ -11,9 +11,27 @@ function Gig(props) {
     useEffect(() => {
 
         dispatch(getGigWithoutAuth())
+
     }, []);
-    const gig = useSelector((state) => state.user && state.user.gigs && state.user.gigs.responseData && state.user.gigs.responseData.gigs);
-    //console.log('gig',gig);
+
+    const [favourite, setFavourite] = useState(false);
+
+    const auth = useSelector((state) => state.user);
+    const gigRating = props.list && props.list.rating ? props.list.rating : 0;
+
+    const favourites = useSelector((state) => state.user && state.user);
+
+    console.log( favourites  )
+
+  //  if( favourites && favourites.find( (fav) => fav._id == props.list._id) ) setFavourite(true);
+
+    const addFav = (id) => {
+       
+      dispatch( addFavourite(id) ).then((res) => {
+        setFavourite(res.status);
+      })
+    }
+
     return (
 
         <Fragment>
@@ -34,12 +52,11 @@ function Gig(props) {
                             <div className="seller-info-wrapper">
                                 <a href={props.list.user ? props.list.user.firstName : ""} className="seller-name">{props.list.user ? props.list.user.firstName : ""} {props.list.user ? props.list.user.lastName : ""}</a>
                                 <div className="onePress-seller-tooltip">
-                                    Level Two
+                                    {props.list.user.type}
                                 </div>
                             </div>
                             <div className="favoriteIcon">
-                                <i data-id="4" href="#" className="fa fa-heart proposal-favorite" data-toggle="tooltip"
-                                    data-placement="top" title="Favorite"></i>
+                              {auth.isAuthenticated == true && (<i data-id="4" onClick={() => addFav(props.list._id) } className="fa fa-heart proposal-favorite" data-toggle="tooltip" data-placement="top" title="Favorite" style={ favourite ? { color:'#3a6cff'} : {}} ></i>) }
                             </div>
                         </div>
                         {/* <!--- onePress-seller-info Ends ---> */}
@@ -48,11 +65,11 @@ function Gig(props) {
                         </Link>
                         <div className="rating-badges-container">
                             <span className="proposal-rating">
-                                <i className="fa fa-star"></i>
-                                <span>
-                                    <strong>{props.list.user ? props.list.user.rating : "3"}</strong> (22)
+
+                            { gigRating != 0 && new Array(Math.ceil(gigRating)).fill(Math.ceil(gigRating)).map(() => <img className='mb-1' src={require('../../../../assets/images/user_rate_full.png')} />  ) }
+
+                            { new Array(5 - Math.ceil(gigRating)).fill(0).map((i, j) => <img key={j} className='mb-1' src={require('../../../../assets/images/user_rate_blank.png')} />  ) } 
                         </span>
-                            </span>
                         </div>
                     </div>
                     {/* <!--- proposal-card-caption Ends ---> */}

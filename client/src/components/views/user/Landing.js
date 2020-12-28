@@ -192,7 +192,7 @@ function Landing() {
                               <p>Consectetur adipisicing elit sed dotem eiusmod tempor incune utnaem labore etdolore maigna aliqua enim poskina ilukita ylokem lokateise ination voluptate velit esse cillum.</p>
                            </div>
                            <div className="wt-btnarea">
-                              <a href="javascript:void(0);" className="btn btn-primary">Join Now</a>
+                           <a href="javascript:void(0);" className="btn btn-primary" data-toggle="modal" data-target="#register-modal">Join Now</a>
                            </div>
                         </div>
                         <div className="wt-companycontent">
@@ -203,7 +203,7 @@ function Landing() {
                               <p>Consectetur adipisicing elit sed dotem eiusmod tempor incune utnaem labore etdolore maigna aliqua enim poskina ilukita ylokem lokateise ination voluptate velit esse cillum.</p>
                            </div>
                            <div className="wt-btnarea">
-                              <a href="javascript:void(0);" className="btn btn-primary">Join Now</a>
+                              <a href="javascript:void(0);" className="btn btn-primary" data-toggle="modal" data-target="#register-modal">Join Now</a>
                            </div>
                         </div>
                      </div>
