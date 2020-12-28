@@ -142,7 +142,7 @@ const Requirement = (props) => {
                         </div>
                         <div className="form-group mb-0">
                           {/* <!--- form-group Starts ---> */}
-                          <a href="#" className="btn btn-secondary float-left back-to-desc">Back</a>
+                          <Link to={"/gig/faq/"+params.id} className="btn btn-secondary float-left back-to-desc">Back</Link>
                           <button type="submit" className="btn btn-success btn-sm float-right">Save & Continue</button>
                         </div>
                         {/* <!--- form-group Starts ---> */}

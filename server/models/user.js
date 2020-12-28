@@ -98,12 +98,17 @@ const userSchema = mongoose.Schema({
         type: Number
     },
     completedOrder: {
-        type: Number
+        type: Number,
+        default: 0
     },
     referralId: {
         type: String,
         minlength: 6,
         trim: true,
+    },
+    type: {
+        type: String,
+        default: "NEWSELLER"
     },
     is_active: {
         type: Boolean,

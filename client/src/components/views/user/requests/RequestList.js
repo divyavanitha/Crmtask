@@ -2,6 +2,7 @@ import React, { Fragment, useState, FormEvent, Dispatch, useEffect } from "react
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useHistory } from "react-router-dom";
 //import { useToasts } from 'react-toast-notifications'
+import $ from 'jquery';
 
 import { getRequestList } from "../../../../_actions/request.action";
 
@@ -45,10 +46,49 @@ const RequestList = (props) => {
             })
       });*/
 
+      $('body').on('click', '.request', function(){
+
+         var status = $(this).data('status');
+
+      $.ajax({
+        url: "/api/requests?type="+status,
+        type:"GET",
+        processData: false,
+        contentType: false,
+        secure: false,
+        success: (data, textStatus, jqXHR) => {
+            var html = "";
+
+            html += `<tr>
+                                    <td className="proposal-title"> hfhs </td>
+                                    <td>  </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td className="text-success"> &#036;0 </td>
+                                    <td className="text-center">
+                                       <div className="dropdown">
+                                          <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
+                                          <div className="dropdown-menu">
+                                             <a href="" className="dropdown-item"> View Offers </a>
+                                             <a href="#" className="dropdown-item">Pause</a>
+                                             <a href="" className="dropdown-item"> Delete </a>
+                                          </div>
+                                       </div>
+
+                                    </td>
+                                 </tr>`;
+
+                  $(".request-table tbody").html(html);
+        }
+      });
+         
+
+      });
+
       
 
    }, []);
-   const request_list = useSelector((state) => state);
+   const request_list = useSelector((state) => state.request && state.request.requests && state.request.requests.responseData);
 
    console.log('list', request_list);
 
@@ -75,23 +115,23 @@ const RequestList = (props) => {
                   <div className="clearfix"></div>
                   <ul className="nav nav-tabs flex-column flex-sm-row mt-4">
                      <li className="nav-item">
-                        <a href="#active-requests" data-toggle="tab" className="nav-link active make-black">
-                           Active Requests <span className="badge badge-success">9</span>
+                        <a href="#active-requests" data-status="APPROVE" data-toggle="tab" className="nav-link active request make-black">
+                           Active Requests <span className="badge badge-success">{request_list && request_list.active.length}</span>
                         </a>
                      </li>
                      <li className="nav-item">
                         <a href="#pause-requests" data-toggle="tab" className="nav-link make-black">
-                           Paused Requests <span className="badge badge-success">0</span>
+                           Paused Requests <span className="badge badge-success">{request_list && request_list.paused.length}</span>
                         </a>
                      </li>
                      <li className="nav-item">
                         <a href="#pending-requests" data-toggle="tab" className="nav-link make-black">
-                           Pending Requests <span className="badge badge-success">4</span>
+                           Pending Requests <span className="badge badge-success">{request_list && request_list.pending.length}</span>
                         </a>
                      </li>
                      <li className="nav-item">
                         <a href="#unapproved" data-toggle="tab" className="nav-link make-black">
-                           Unapproved <span className="badge badge-success">2</span>
+                           Unapproved <span className="badge badge-success">{request_list && request_list.decline.length}</span>
                         </a>
                      </li>
                      
@@ -99,7 +139,7 @@ const RequestList = (props) => {
                   <div className="tab-content">
                      <div id="active-requests" className="tab-pane fade show active">
                         <div className="table-responsive box-table mt-4">
-                           <table className="table table-striped">
+                           <table className="table request-table table-striped">
                               <thead>
                                  <tr>
                                     <th>Title</th>
@@ -111,24 +151,7 @@ const RequestList = (props) => {
                                  </tr>
                               </thead>
                               <tbody>
-                                 <tr>
-                                    <td className="proposal-title"> I will do a video session and prepare you for any job interview </td>
-                                    <td className="text-success"> &#036;10.00 </td>
-                                    <td>21</td>
-                                    <td>22</td>
-                                    <td>22</td>
-                                    <td className="text-center">
-                                       <div className="dropdown">
-                                          <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
-                                          <div className="dropdown-menu">
-                                             <a href="" className="dropdown-item"> View Offers </a>
-                                             <a href="#" className="dropdown-item">Pause</a>
-                                             <a href="" className="dropdown-item"> Delete </a>
-                                          </div>
-                                       </div>
-
-                                    </td>
-                                 </tr>
+                                 
                                  
                               </tbody>
                            </table>
@@ -148,22 +171,24 @@ const RequestList = (props) => {
                                  </tr>
                               </thead>
                               <tbody>
-                               <td className="proposal-title"> I will do a video session and prepare you for any job interview </td>
-                                    <td className="text-success"> &#036;10.00 </td>
-                                    <td>21</td>
+                               {request_list && request_list.paused.map((list, index) => (<tr key={list._id}>
+                                    <td className="proposal-title"> {list.title} </td>
+                                    <td> {list.description} </td>
+                                    <td>{list.created_at}</td>
                                     <td>22</td>
-                                    <td>22</td>
+                                    <td className="text-success"> &#036;{list.budget} </td>
                                     <td className="text-center">
                                        <div className="dropdown">
                                           <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
                                           <div className="dropdown-menu">
-                                             
-                                             <a href="#" className="dropdown-item">Activate</a>
+                                             <a href="" className="dropdown-item"> View Offers </a>
+                                             <a href="#" className="dropdown-item">Pause</a>
                                              <a href="" className="dropdown-item"> Delete </a>
                                           </div>
                                        </div>
 
                                     </td>
+                                 </tr>))}
                               </tbody>
                            </table>
                            
@@ -183,22 +208,24 @@ const RequestList = (props) => {
                                  </tr>
                               </thead>
                               <tbody>
-                                 <tr>
-                                    <td className="proposal-title"> عنوان آزمايشي </td>
-                                    <td className="text-success"> &#036;8.00 </td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
+                                 {request_list && request_list.pending.map((list, index) => (<tr key={list._id}>
+                                    <td className="proposal-title"> {list.title} </td>
+                                    <td> {list.description} </td>
+                                    <td>{list.created_at}</td>
+                                    <td>22</td>
+                                    <td className="text-success"> &#036;{list.budget} </td>
                                     <td className="text-center">
                                        <div className="dropdown">
                                           <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
                                           <div className="dropdown-menu">
-                                             
+                                             <a href="" className="dropdown-item"> View Offers </a>
+                                             <a href="#" className="dropdown-item">Pause</a>
                                              <a href="" className="dropdown-item"> Delete </a>
                                           </div>
                                        </div>
+
                                     </td>
-                                 </tr>
+                                 </tr>))}
                                  
                               </tbody>
                            </table>
@@ -218,20 +245,24 @@ const RequestList = (props) => {
                                  </tr>
                               </thead>
                               <tbody>
-                                 <td className="proposal-title"> I will do a video session and prepare you for any job interview </td>
-                                    <td className="text-success"> &#036;10.00 </td>
-                                    <td>21</td>
+                                 {request_list && request_list.decline.map((list, index) => (<tr key={list._id}>
+                                    <td className="proposal-title"> {list.title} </td>
+                                    <td> {list.description} </td>
+                                    <td>{list.created_at}</td>
                                     <td>22</td>
-                                    <td>22</td>
+                                    <td className="text-success"> &#036;{list.budget} </td>
                                     <td className="text-center">
                                        <div className="dropdown">
                                           <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
                                           <div className="dropdown-menu">
+                                             <a href="" className="dropdown-item"> View Offers </a>
+                                             <a href="#" className="dropdown-item">Pause</a>
                                              <a href="" className="dropdown-item"> Delete </a>
                                           </div>
                                        </div>
 
                                     </td>
+                                 </tr>))}
                                  
                               </tbody>
                            </table>

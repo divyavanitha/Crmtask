@@ -284,7 +284,7 @@ const PackagePricing = (props) => {
 
                                     <div className="form-group mt-4 mb-0">
 
-                                       <a href="#" className="btn btn-secondary float-left back-to-instant">Back</a>
+                                       <Link to="/gig/add" className="btn btn-secondary float-left back-to-instant">Back</Link>
                                        <button type="submit" className="btn btn-success mr-3 float-right">Save & Continue</button>
                                     </div>
                                  </form>

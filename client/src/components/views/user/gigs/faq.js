@@ -351,7 +351,7 @@ const Faq = (props) => {
 
                     <div className="form-group mb-0">
                           {/* <!--- form-group Starts ---> */}
-                          <a href="#" className="btn btn-secondary float-left backButton">Back</a>
+                          <Link to={"/gig/pricing/"+params.id} className="btn btn-secondary float-left backButton">Back</Link>
                           <button type="submit" onClick={() => setFieldValue("action", "desc")} className="btn btn-success float-right">Save & Continue</button>
                     </div>
 

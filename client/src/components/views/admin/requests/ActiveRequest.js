@@ -68,7 +68,7 @@ const Request = () => {
       "processing": true,
       "serverSide": true,
       "ajax": {
-        "url": '/api/admin/requests?type=all',
+        "url": '/api/admin/requests?type=active',
         "type": "GET",
         data: function (data) {
 
@@ -118,14 +118,15 @@ const Request = () => {
           "data": "duration"
         },
         { "data": "budget" },
+
         {
           "data": function (data, type, row) {
-
             var button = `<a title="Delete Proposal" data-id=`+data._id+` class="delete"><i class="fa fa-trash"></i></a> &nbsp`;
             if(data.status == 'PENDING'){
-            button += `<a title="Approve" class="change-status" data-id=`+data._id+` data-status="APPROVE"><i class="fa fa-check-square-o"></i> </a> &nbsp`;
+           button += `<a title="Approve" class="change-status" data-id=`+data._id+` data-status="APPROVE"><i class="fa fa-check-square-o"></i> </a> &nbsp`;
             button +=  `<a title="Decline" class="change-status" data-id=`+data._id+` data-status="DECLINE"><i class="fa fa-ban"></i></a>`;
             }
+
             return button;
 
 
@@ -137,15 +138,13 @@ const Request = () => {
 
     $('body').on('click', '.change-status', function () {
 
-      alert();
-
       var id = $(this).data('id');
       var status = $(this).data('status');
 
       dispatch(changeRequestStatus(id, status)).then(res => {
 
         addToast(res.message, { appearance: res.status, autoDismiss: true, })
-        //window.location.reload();
+        window.location.reload();
       })
     });
 
@@ -174,11 +173,11 @@ const Request = () => {
                 <div className="card-body">
                   <ul className="nav nav-tabs flex-column flex-sm-row mt-4">
                   <li className="nav-item">
-                    <Link to="/admin/request"  className="nav-link active make-black">All ({allRequest})</Link>
+                    <Link to="/admin/request"  className="nav-link make-black">All ({allRequest})</Link>
                   </li>
 
                     <li className="nav-item">
-                    <Link to="/admin/active/request"  className="nav-link make-black">Active ({activeRequest})</Link>
+                    <Link to="/admin/active/request"  className="nav-link active make-black">Active ({activeRequest})</Link>
                     </li>
 
                     <li className="nav-item">

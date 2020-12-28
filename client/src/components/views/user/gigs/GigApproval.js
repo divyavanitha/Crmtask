@@ -138,7 +138,7 @@ const GigApproval = (props) => {
                         </h6>
                         <div className="form-group mb-0 mt-3">
                           {/* <!--- form-group Starts ---> */}
-                          <a href="#" className="btn btn-secondary back-to-gallery">Back</a>
+                          <Link to={"/gig/gallery/"+params.id} className="btn btn-secondary back-to-gallery">Back</Link>
                           <input className="btn btn-success" type="submit" name="submit_proposal" value="Save &amp; Submit For Approval" />
                           <a href="#" className="btn btn-success d-none" id="featured-button">Make Proposal Featured</a>
                         </div>

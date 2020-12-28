@@ -241,10 +241,6 @@ const Gigs = () => {
                     <li className="nav-item">
                     <Link to="/admin/paused/gigs"  className="nav-link make-black">Paused ({pausedGig})</Link>
                     </li>
-
-                    {/* <li className="nav-item">
-                    <a href="#trash" data-toggle="tab" className="nav-link make-black">Trash (0)</a>
-                    </li> */}
                   </ul>
                 </div>
 

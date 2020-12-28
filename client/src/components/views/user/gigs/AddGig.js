@@ -21,16 +21,17 @@ const AddGig = (props) => {
    const [subCategory, setSubCategory] = useState([]);
    useEffect(() => {
       dispatch(getCategory())
+      if(params.id){
+         dispatch(getGigbyId(params.id)).then( async (res) => {
+            setTags(res.responseData.gig.tags);
+            setCategorylist(res.responseData.gig.category._id);
+            const sub_category = await dispatch(getSubCategory(res.responseData.gig.category._id));
+            if (sub_category && sub_category.responseData.sub_categories) {
+               setSubCategory(sub_category.responseData.sub_categories)
+            }
 
-      dispatch(getGigbyId(params.id)).then( async (res) => {
-         setTags(res.responseData.gig.tags);
-         setCategorylist(res.responseData.gig.category._id);
-         const sub_category = await dispatch(getSubCategory(res.responseData.gig.category._id));
-         if (sub_category && sub_category.responseData.sub_categories) {
-            setSubCategory(sub_category.responseData.sub_categories)
-         }
-
-      });
+         });
+      }
 
    }, [params.id]);
 
@@ -212,7 +213,7 @@ const AddGig = (props) => {
                                        <small className="form-text text-danger"></small>
                                     </div>
                                     <div className="form-group mb-0">
-                                       <a href="view_proposals" className="float-left btn btn-secondary">Cancel</a>
+                                       <Link to="/gigs" className="float-left btn btn-secondary">Cancel</Link>
                                        <button type="submit" className="btn btn-success mr-3 float-right">Save & Continue</button>
                                     </div>
                                  </form>

@@ -42,6 +42,10 @@ import Admin from "../admin/Admin";
 import AddUser from "../users/AddUser";
 import User from "../users/User";
 import Request from "../requests/Request";
+import ActiveRequest from "../requests/ActiveRequest";
+import PendingRequest from "../requests/PendingRequest";
+import PausedRequest from "../requests/PausedRequest";
+import DeclinedRequest from "../requests/DeclinedRequest";
 import Dashboard from "../Dashboard";
 import Gigs from "../gigs/Gigs";
 import ActiveGigs from "../gigs/ActiveGigs";
@@ -134,6 +138,10 @@ const Base = () => {
             <Route path="/admin/user/:id/edit" component={AddUser}></Route>
             <Route path="/admin/user" component={User}></Route>
             <Route path="/admin/request" component={Request}></Route>
+            <Route path="/admin/active/request" component={ActiveRequest}></Route>
+            <Route path="/admin/pending/request" component={PendingRequest}></Route>
+            <Route path="/admin/paused/request" component={PausedRequest}></Route>
+            <Route path="/admin/decline/request" component={DeclinedRequest}></Route>
             <Route path="/admin/settings/general" component={General}></Route>
             <Route path="/admin/settings/social/links" component={SocialLink}></Route>
             <Route path="/admin/settings/social" component={Social}></Route>

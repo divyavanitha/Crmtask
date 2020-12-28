@@ -8,6 +8,8 @@ const _ = require('lodash');
 
 
 exports.listRequests = async (req, res) => {
+
+
     try {
 
         if(!req.query.length) req.query.length = 10;
@@ -17,16 +19,32 @@ exports.listRequests = async (req, res) => {
 
         let skip = (req.query.page * req.query.length) - req.query.length;
 
-        let requests = await db._get(Request, null, null, {limit: req.query.length, skip: skip, populate:"duration" });
+        let count, requests;
+        let active_count = await db._count(Request, {status: "APPROVE"});
+        let pending_count = await db._count(Request, {status: "PENDING"});
+        let paused_count = await db._count(Request, {status: "PAUSE"});
+        let declined_count = await db._count(Request, {status: "DECLINE"});
+        let all_count = await db._count(Request);
 
-        let count = await db._count(Request);
+        if((req.query.type).toUpperCase() == "APPROVE"){
+            requests = await db._get(Request, {status: "APPROVE"}, {}, {populate: ["category", "user"]});
+            count = active_count;
+        }else if((req.query.type).toUpperCase() == "PENDING"){
+            requests = await db._get(Request, {status: "PENDING"}, {}, {populate: ["category", "user"]});
+            count = pending_count;
+        }else if((req.query.type).toUpperCase() == "PAUSE"){
+            requests = await db._get(Request, {status: "PAUSE"}, {}, {populate: ["category", "user"]});
+            count = paused_count;
+        }else if((req.query.type).toUpperCase() == "DECLINE"){
+            requests = await db._get(Request, {status: "DECLINE"}, {}, {populate: ["category", "user"]});
+            count = declined_count;
+        }else{
+            requests = await db._get(Request, {}, {} , {populate: ["category", "user"]});
+            count = all_count;
+        }
 
         const data = { requests };
-
-        //const response = helper.response({ data });
-
-        const response = helper.response({ data: helper.paginate(req, data, count) });
-
+        const response = helper.response({ data:  { requests : helper.paginate(req, data, count), active_count: active_count, pending_count: pending_count, paused_count: paused_count, declined_count: declined_count, all_count: all_count }  });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {

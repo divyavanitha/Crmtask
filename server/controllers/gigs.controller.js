@@ -5,6 +5,7 @@ const { Order } = require('../models/Order');
 const { Rating } = require('../models/Rating');
 const { Category } = require('../models/category');
 const { SubCategory } = require('../models/SubCategory');
+const { Setting } = require('./../models/setting');
 const helper = require('../services/helper.js');
 const db = require('../services/model.js');
 const Joi = require('@hapi/joi');
@@ -51,16 +52,22 @@ exports.getGigDetails = async (req, res) => {
             { path: "category", select: 'name'}, 
             { path: "subCategory", select: 'name'}
             ] });
+        console.log('gig',gig);
+        let orderCount;
+        let reviews;
+        if(gig != undefined){
+        orderCount = await db._count(Order, {gig: gig._id, status:  {$in : ["PROGRESS", "CANCELLATION REQUESTED", "REVISION REQUESTED"]}  });
 
-        let orderCount = await db._count(Order, {gig: gig._id, status:  {$in : ["PROGRESS", "CANCELLATION REQUESTED", "REVISION REQUESTED"]}  });
-
-        let reviews = await db._get(Rating, {gig: gig._id }, { sellerRating: 1, buyerRating: 1, buyerComment: 1, sellerComment: 1} );
-
+        reviews = await db._get(Rating, {gig: gig._id }, { sellerRating: 1, buyerRating: 1, buyerComment: 1, sellerComment: 1} );
+        }
         const data = { gig, orderCount, reviews };
-
-        const response = helper.response({ data: data });
-
+        if(gig != undefined){
+        var response = helper.response({ data: data });
+        }else{
+        var response = helper.response({message: "There is no gig in this id"});
+        }
         return res.status(response.statusCode).json(response);
+
 
     } catch (err) {
         console.log(err);
@@ -186,8 +193,19 @@ exports.creategigs = async (req, res) => {
             }
 
         if(req.body.id) {
+            let exisiGig = await Gig.find({ _id: req.body.id });
+            let setting = await db._find(Setting, {}, {createdAt: 0, updatedAt: 0 });
+            if(exisiGig.status == "ACTIVE" || exisiGig.status == "PAUSE"){
+                if(setting.application.editApproval == false){
+                   data.status = "ACTIVE"; 
+                }else{
+                   data.status = "PENDING";
+                }
+            }
             await db._update(Gig, { _id: req.body.id }, data);
             gig = await db._find( Gig, {_id: req.body.id} );
+
+            
         } else {
             data.status = "DRAFT";
             gig = await db._store(Gig, data);
@@ -600,8 +618,14 @@ exports.updateConfirm = async(req, res) => {
     try {
 
         let gig = await Gig.findById(req.body.id);
-         gig.submit_proposal = req.body.proposal;
-         gig.status = "PENDING";
+        let setting = await db._find(Setting, {}, {createdAt: 0, updatedAt: 0 });
+            gig.submit_proposal = req.body.proposal;
+        if(setting.application.manualApproval == false){
+            gig.status = "ACTIVE";
+        }else{
+            gig.status = "PENDING";
+        }
+         
         let gigs = await db._update(Gig, { _id: req.body.id }, gig);
         const response = helper.response({ message: res.__('updated'), data: gigs });
         return res.status(response.statusCode).json(response);
@@ -617,14 +641,17 @@ exports.updateConfirm = async(req, res) => {
     }
 }
 
-exports.deleteGig = async (req, res) => {
+exports.submitApproval = async (req, res) => {
     try {
-        let gig ={
-        deleted_at: new Date()
+
+        const gig = {
+            status: "PENDING",
+            submit_proposal:true
         }
+
         await db._update(Gig, { _id: req.params.id }, gig);
 
-        const response = helper.response({ message: res.__('deleted') });
+        const response = helper.response({ message: res.__('updated') });
         return res.status(response.statusCode).json(response);
     }
     catch (err) {
@@ -639,16 +666,14 @@ exports.deleteGig = async (req, res) => {
 
 };
 
-exports.submitApproval = async (req, res) => {
+exports.deleteGig = async (req, res) => {
     try {
-        const gig = {
-            status: "PENDING",
-            submit_proposal:true
+        let gig ={
+        deleted_at: new Date()
         }
-
         await db._update(Gig, { _id: req.params.id }, gig);
 
-        const response = helper.response({ message: res.__('updated') });
+        const response = helper.response({ message: res.__('deleted') });
         return res.status(response.statusCode).json(response);
     }
     catch (err) {

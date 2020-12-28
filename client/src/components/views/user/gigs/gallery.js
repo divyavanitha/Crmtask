@@ -181,7 +181,7 @@ const Gallery = (props) => {
                         <div className="mb-5"></div>
                         <div className="form-group mb-0">
 
-                          <a href="#" className="btn btn-secondary float-left back-to">Back</a>
+                          <Link to={"/gig/requirements/"+params.id} className="btn btn-secondary float-left back-to">Back</Link>
                           <button type="submit" onClick={() => setFieldValue("action", "desc")} className="btn btn-success mr-3 float-right">Save & Continue</button>
                           <a href="tyrone/logo-making" id="previewProposal" className="btn btn-success float-right mr-3 d-none">Preview Proposal</a>
 

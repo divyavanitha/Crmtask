@@ -9,13 +9,14 @@ const _ = require('lodash');
 
 exports.listRequests = async (req, res) => {
     try {
+        if((req.query.type).toUpperCase() == "APPROVE"){
+            let active_requests = await db._get(Request, { user: req.user._id, status: "APPROVE" }, {}, {populate: "user"});
+        }
+            let inactive_requests = await db._get(Request, { user: req.user._id, status: "DECLINE" }, {}, {populate: "user"});
+            let pending_requests = await db._get(Request, { user: req.user._id, status: "PENDING" }, {}, {populate: "user"});
+            let paused_requests = await db._get(Request, { user: req.user._id, status: "PAUSE" }, {}, {populate: "user"});
 
-        let active_requests = await db._get(Request, { user: req.user._id, status: "ACTIVE" }, {}, {populate: "user"});
-        let inactive_requests = await db._get(Request, { user: req.user._id, status: "DECLINE" }, {}, {populate: "user"});
-        let pending_requests = await db._get(Request, { user: req.user._id, status: "PENDING" }, {}, {populate: "user"});
-        let paused_requests = await db._get(Request, { user: req.user._id, status: "PAUSE" }, {}, {populate: "user"});
-
-        const response = helper.response({ data: {"active": active_gigs, "decline": inactive_gigs, "pending": pending_gigs, "paused": paused_gigs } });
+        const response = helper.response({ data: {"active": active_requests, "decline": inactive_requests, "pending": pending_requests, "paused": paused_requests } });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {

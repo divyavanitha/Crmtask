@@ -19,6 +19,10 @@ const adminSchema = mongoose.Schema({
         trim: true,
         unique: true
     },
+    wallet: {
+        type: Number,
+        default: 0
+    },
     roles: [{
         role: { type: Schema.Types.ObjectId, ref: 'roles' }
     }],

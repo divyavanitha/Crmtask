@@ -1,7 +1,9 @@
 const express = require("express");
 const { Cart } = require('../models/Cart');
 const { Order } = require('../models/Order');
+const { Setting } = require('./../models/setting');
 const { User } = require('../models/user');
+const { Admin } = require('../models/admin');
 const { Rating } = require('../models/Rating');
 const { CancellationRequest } = require('../models/CancellationRequest');
 const helper = require('../services/helper.js');
@@ -43,7 +45,7 @@ exports.checkout = async (req, res) => {
            if(carts.length > 0){
                for(let i in carts) {
 
-                    total = total + carts[i].price;
+                    total = total + (carts[i].price * carts[i].quantity);
 
                     let orderId = 'FIV'+Math.floor(100000 + Math.random() * 900000);
 
@@ -374,6 +376,12 @@ exports.rating = async (req, res) => {
 
         let user = await User.findById(order.seller);
 
+        let admin  = await db._find(Admin);
+
+        let order_count = await db._count(Order, {seller: order.seller});
+
+        let setting = await db._find(Setting, {}, {createdAt: 0, updatedAt: 0 });
+
         if(rate != null){
 
             if(req.body.type == "buyer"){
@@ -387,9 +395,6 @@ exports.rating = async (req, res) => {
                 }
 
                 order.buyer_rated=1;
-
-                user.gig = order.gig;
-                //user.ratingPercent = 
                 
             }else{
                 var rating ={
@@ -435,6 +440,56 @@ exports.rating = async (req, res) => {
            await db._store(Rating, rating); 
         }
 
+        let total_rate = await Rating.aggregate([
+                { $match:{seller: order.seller} },
+                 {
+                   $group:
+                     {
+                       _id: "$seller",
+                       average: { $avg:  '$buyerRating'},
+                       count: { $sum: 1 },
+                       total: { $sum:  '$buyerRating'}
+                     }
+                 }
+            ]);
+        
+
+            user.gig = order.gig;
+            user.ratingPercent = (total_rate[0].total / (order_count * 5) * 100);
+            user.rating = total_rate[0].average;
+            user.completedOrder += 1; 
+
+        if((setting.seller.levelTwoRating == user.ratingPercent) && (setting.seller.levelTwoCompletedOrder == user.completedOrder)) {
+            user.type = "LEVELTWO";
+            let comission = ((order.total * setting.pricing.commissionLevelTwo) / 100);
+            let balance =  order.total - comission;
+            user.wallet += balance;
+            admin.wallet += comission;
+        } 
+        if((setting.seller.levelOneRating == user.ratingPercent) && (setting.seller.levelOneCompletedOrder == user.completedOrder)){
+            user.type = "LEVELONE";
+            let comission = ((order.total * setting.pricing.commissionLevelOne) / 100);
+            let balance =  order.total - comission;
+            user.wallet += balance;
+            admin.wallet += comission;
+           
+        }
+        if((setting.seller.topRatedRating == user.ratingPercent) && (setting.seller.topRatedCompletedOrder == user.completedOrder)){
+            user.type = "TOPRATED";
+            let comission = ((order.total * setting.pricing.commissionTopRated) / 100);
+            let balance =  order.total - comission;
+            user.wallet += balance;
+            admin.wallet += comission;   
+        }
+        if(user.type == "NEWSELLER"){
+            let comission = ((order.total * setting.pricing.commission) / 100);
+            let balance =  order.total - comission;
+            user.wallet += balance;
+            admin.wallet += comission;
+        }
+
+        await db._update(User, {_id: order.seller}, user);
+        await db._update(Admin, {}, admin);
         let orders = await db._update(Order, { _id: req.body.order_id }, order);
 
         const response = helper.response({ message: res.__('inserted') });
