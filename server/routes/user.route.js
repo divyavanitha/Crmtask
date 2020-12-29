@@ -256,6 +256,12 @@ router.get('/request/changestatus/:id/:status', middleware.user, (req, res) => {
 router.get('/buyer/requests',middleware.user, (req, res) => {
   requestController.buyerRequest(req, res);
 });
+router.get('/sent/offers',middleware.user, (req, res) => {
+  requestController.sentOffer(req, res);
+});
+router.get('/view/offer/:id',middleware.user, (req, res) => {
+  requestController.viewOffer(req, res);
+});
 
 router.post('/send_sms', (req, res) => {
   homeController.sendSms(req, res);
@@ -289,7 +295,7 @@ router.get('/gig/subcategory',middleware.user, (req, res) => {
   homeController.gigSubCatoegory(req, res);
 });
 
-router.get('/request/gigs/:sub', middleware.user, (req, res) => {
+router.get('/request/gigs/:id/:sub', middleware.user, (req, res) => {
   homeController.requestGigs(req, res);
 });
 

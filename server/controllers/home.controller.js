@@ -14,6 +14,7 @@ const { CancelReason } = require('../models/CancelReason');
 const { Favourite } = require('../models/Favourite');
 const { View } = require('../models/View');
 const { Page } = require('../models/page');
+const { Request } = require("../models/Request");
 const Joi = require('@hapi/joi');
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
@@ -550,8 +551,9 @@ exports.requestGigs = async (req, res) => {
     try {
 
         let gig = await db._get(Gig, { subCategory: req.params.sub });
+        let request = await db._get(Request, { _id: req.params.id });
         
-        const data = { gig };
+        const data = { gig, request };
 
         const response = helper.response({ data });
 

@@ -81,3 +81,5 @@ export const PAGE_LIST = 'PAGE_LIST';
 export const BUYER_REQUEST = 'BUYER_REQUEST';
 export const GIG_SUBCATEGORY = 'GIG_SUBCATEGORY';
 export const REQUEST_GIGS = 'REQUEST_GIGS';
+export const SENT_OFFER = 'SENT_OFFER';
+export const VIEW_OFFER = 'VIEW_OFFER';

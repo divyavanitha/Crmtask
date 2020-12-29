@@ -20,6 +20,7 @@ import Faq from "../gigs/faq";
 import CategoryGigList from "../CategoryGigList";
 import AddRequest from "../requests/AddRequest";
 import RequestList from "../requests/RequestList";
+import ViewOffer from "../requests/ViewOffer";
 import Requirement from "../gigs/Requirement";
 import Gallery from "../gigs/gallery";
 import GigApproval from "../gigs/GigApproval";
@@ -92,6 +93,7 @@ const Base = () => {
                 <ProtectedRoute path="/seller-order/details/:id" component={SellerOrderDetails} />
                 <ProtectedRoute path="/request/add" component={AddRequest} />
                 <ProtectedRoute path="/request/manage" component={RequestList} />
+                <ProtectedRoute path="/view/offer/:id" component={ViewOffer} />
                 <ProtectedRoute path="/profile" component={Profile} />
                 <ProtectedRoute path="/dashboard" component={Dashboard} />
                 <ProtectedRoute path="/revenues" component={Revenue} />

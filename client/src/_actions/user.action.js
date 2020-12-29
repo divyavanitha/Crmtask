@@ -551,10 +551,10 @@ export const gigSubCatoegory = (data) => async dispatch => {
 
 };
 
-export const requestGigs = (sub) => async dispatch => {
+export const requestGigs = (id,sub) => async dispatch => {
 
     try {
-        const response = await axios.get(`/api/request/gigs/${sub}`);
+        const response = await axios.get(`/api/request/gigs/${id}/${sub}`);
 
          dispatch({
             type: REQUEST_GIGS,

@@ -25,7 +25,6 @@ const RequestList = (props) => {
             .off()
             .on("click", function () {
                dispatch(deleteRequest(sid)).then(res => {
-                 
                   that.closest('tr').remove();
                   $('.delete-modal').modal("hide");
                   window.location.reload();
@@ -117,13 +116,13 @@ const RequestList = (props) => {
                                     <td className="proposal-title"> {list.title} </td>
                                     <td> {list.description} </td>
                                     <td>{list.created_at}</td>
-                                    <td>22</td>
+                                    <td>{list.offerCount}</td>
                                     <td className="text-success"> &#036;{list.budget} </td>
                                     <td className="text-center">
                                        <div className="dropdown">
                                           <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
                                           <div className="dropdown-menu">
-                                             <a href="" className="dropdown-item"> View Offers </a>
+                                             <Link to={"/view/offer/"+list._id} className="dropdown-item"> View Offers </Link>
                                              <Link data-status="PAUSE" data-id={list._id} className="dropdown-item change-status">Pause</Link>
                                              <Link data-id={list._id} className="dropdown-item delete"> Delete </Link>
                                           </div>
@@ -154,7 +153,7 @@ const RequestList = (props) => {
                                     <td className="proposal-title"> {list.title} </td>
                                     <td> {list.description} </td>
                                     <td>{list.created_at}</td>
-                                    <td>22</td>
+                                    <td>{list.offerCount}</td>
                                     <td className="text-success"> &#036;{list.budget} </td>
                                     <td className="text-center">
                                        <div className="dropdown">
@@ -190,7 +189,7 @@ const RequestList = (props) => {
                                     <td className="proposal-title"> {list.title} </td>
                                     <td> {list.description} </td>
                                     <td>{list.created_at}</td>
-                                    <td>22</td>
+                                    <td>{list.offerCount}</td>
                                     <td className="text-success"> &#036;{list.budget} </td>
                                     <td className="text-center">
                                        <div className="dropdown">
@@ -226,7 +225,7 @@ const RequestList = (props) => {
                                     <td className="proposal-title"> {list.title} </td>
                                     <td> {list.description} </td>
                                     <td>{list.created_at}</td>
-                                    <td>22</td>
+                                    <td>{list.offerCount}</td>
                                     <td className="text-success"> &#036;{list.budget} </td>
                                     <td className="text-center">
                                        <div className="dropdown">

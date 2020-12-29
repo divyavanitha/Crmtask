@@ -5,18 +5,22 @@ import { getMenu } from "../../../_actions/user.action";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import Gig from "./gigs/Gig";
 import OwlCarousel from 'react-owl-carousel';
-import { getBuyerRequest } from "../../../_actions/request.action";
-import { gigSubCatoegory, requestGigs } from "../../../_actions/user.action";
+import { getBuyerRequest, requestOffer, sentOffer } from "../../../_actions/request.action";
+import { gigSubCatoegory, requestGigs, getDeliveryTime } from "../../../_actions/user.action";
 import * as Yup from 'yup';
 import $ from 'jquery';
 
 const BuyerRequest = (props) => {
-    const dispatch = useDispatch();
+   const dispatch = useDispatch();
    let history = useHistory();
+   let [gig, setGig] = useState([]);
+   let [gigId, setGigId] = useState(0);
+   let [gigTitle, setGigTitle] = useState("");
    useEffect(() => {
       dispatch(getBuyerRequest())
       dispatch(gigSubCatoegory())
-
+      dispatch(getDeliveryTime())
+      dispatch(sentOffer())
       $('body').on('click', '.send_offer', function (e) {
         
          var that = $(this);
@@ -25,8 +29,9 @@ const BuyerRequest = (props) => {
          const sub = that.data('sub');
          console.log('id', id);
          console.log('sub', sub);
-         dispatch(requestGigs(sub)).then(res => {
-                console.log('reqest', res);
+         dispatch(requestGigs(id,sub)).then(res => {
+            console.log('request', res);
+               setGig(res); 
 
          })
 
@@ -34,10 +39,18 @@ const BuyerRequest = (props) => {
          $(".send-offer-modal-btn")
             .off()
             .on("click", function () {
-               dispatch(requestGigs(id)).then(res => {
-                  $('.send-offer-modal').modal("hide");
+               var gig_id = $("input[name='gig_id']:checked").val();
+               var title = $("input[name='gig_id']:checked").data('title');
+               console.log(gig_id, title);
+               setGigId(gig_id);
+               setGigTitle(title);
+               $('.submit-proposal-details').modal("show");
 
-               })
+               $('.back')
+               .off()
+               .on("click", function () { 
+                  $('.send-offer-modal').modal("show");
+               });
 
             });
       });
@@ -45,9 +58,9 @@ const BuyerRequest = (props) => {
    }, []);
    const buyer_request = useSelector((state) => state.request && state.request.request && state.request.request.responseData);
    const gig_subcategory = useSelector((state) => state.user && state.user.gig_subcategory);
-   
-   const request_gigs = useSelector((state) => state.user);
-   console.log('list', request_gigs);
+   const deliveryTime = useSelector((state) => state.user && state.user.delivery_times && state.user.delivery_times.responseData && state.user.delivery_times.responseData.deliveryTime);
+   const offer = useSelector((state) => state.request && state.request.offer && state.request.offer.responseData);
+   console.log(offer);
 
     return (
 
@@ -56,35 +69,38 @@ const BuyerRequest = (props) => {
             enableReinitialize
             initialValues={{
                 id:  '',
-                name:  '',
-                category: ''
+                description:  '',
+                delivery_time: '',
+                amount: '',
+                gig_id: gigId,
+                request_id: gig.request && gig.request[0]._id
             }
             }
 
             validationSchema={Yup.object().shape({
-                name: Yup.string()
-                    .required('Name is required'),
-                category: Yup.string()
-                    .required('Category is required')
+                description: Yup.string()
+                    .required('Description is required'),
+                delivery_time: Yup.string()
+                    .required('Delivery Time is required'),
+                amount: Yup.number()
+                    .required('Amount is required')
             })}
             onSubmit={(values, { setSubmitting, resetForm }) => {
-
+               console.log('values', values);
                 let data = {
-                    id: values.id,
-                    name: values.name,
-                    category: values.category
+                    description: values.description,
+                    delivery_time: values.delivery_time,
+                    amount: values.amount,
+                    gig_id: gigId,
+                    request_id: gig.request && gig.request[0]._id
                 };
 
-                /*if (params.id) {
-                    dispatch(updateSubCategory(data)).then(res => {
-                        addToast(res.message, { appearance: res.status, autoDismiss: true, })
-                        history.push('/admin/subcategory/')
-                    })
-                } else {
-                    dispatch(addSubCategory(data)).then(res => {
-                        addToast(res.message, { appearance: res.status, autoDismiss: true, })
-                    })
-                }*/
+                
+                 dispatch(requestOffer(data)).then(res => {
+                     $('.submit-proposal-details').modal("hide");
+                     window.location.reload();
+                 })
+                
                 resetForm();
                 setSubmitting(false);
             }}>
@@ -99,6 +115,7 @@ const BuyerRequest = (props) => {
                     handleChange,
                     handleBlur,
                     handleSubmit,
+                    setFieldValue,
                     handleReset,
                 } = props;
 
@@ -137,7 +154,7 @@ const BuyerRequest = (props) => {
                   </li>
                   <li className="nav-item">
                      <a href="#sent-offers" data-toggle="tab" className="nav-link make-black">
-                     Offers Sent <span className="badge badge-success"> 12  </span>
+                     Offers Sent <span className="badge badge-success"> {offer && offer.length}  </span>
                      </a>
                   </li>
                </ul>
@@ -155,7 +172,6 @@ const BuyerRequest = (props) => {
                            <thead>
                               <tr>
                                  <th>Request</th>
-                                 <th>Offers</th>
                                  <th>Date</th>
                                  <th>Duration</th>
                                  <th>Budget</th>
@@ -165,7 +181,7 @@ const BuyerRequest = (props) => {
                                {buyer_request && buyer_request.map((list, index) => (<tr key={list._id} id="request_tr_367">
                                  <td>
                                     <a href="">
-                                    <img src="assets/images/comp/profileIcon.png" className="request-img rounded-circle" />
+                                    <img src={list.files} className="request-img rounded-circle" />
                                     </a>
                                     <div className="request-description">
                                        <h6> 
@@ -178,12 +194,11 @@ const BuyerRequest = (props) => {
                                           <li> {list.subCategory.name} </li>
                                        </ul>
                                     </div>
-                                 </td>
-                                 <td>0</td>
+                                 </td>                                 
                                  <td> {list.created_at} </td>
                                  <td> 
                                     {list.duration}
-                                    <Link data-id={list._id} className="remove-link text-danger delete"> Remove Request </Link>
+                                    
                                  </td>
                                  <td className="text-success font-weight-bold">
                                     &#036;{list.budget}                                            <br />
@@ -200,53 +215,42 @@ const BuyerRequest = (props) => {
                         <h3 className="float-left mb-3 pt-2"> Sent Offers </h3>
                         <select id="sub-category" className="form-control float-right sort-by mb-3">
                            <option value="all"> All Subcategories </option>
-                           <option value='1'> Logo Design </option>
-                           <option value='2'> Business Cards &amp; Stationery </option>
-                           <option value='31'> Proofreading & Editing </option>
-                           <option value='70'> Virtual Assistant </option>
-                           <option value='84'> Health, Nutrition & Fitness </option>
-                           <option value='86'> Spiritual & Healing </option>
-                           <option value='88'> Collectibles </option>
+                           {gig_subcategory && gig_subcategory.map((c_list) => (<option key={c_list._id} value={c_list._id} onChange={handleChange}>{c_list.subCategory.name}</option>))}
                         </select>
                         <table className="table table-striped">
                            <thead>
                               <tr>
                                  <th>Request</th>
-                                 <th>Offers</th>
-                                 <th>Date</th>
-                                 <th>Duration</th>
-                                 <th>Budget</th>
+                                 <th>Offer Duration</th>
+                                 <th>Offer Price</th>
+                                 <th>Your Request</th>
                               </tr>
                            </thead>
                            <tbody id="load-data">
-                              <tr id="request_tr_367">
+                              {offer && offer.map((list, index) => (<tr id="request_tr_367">
                                  <td>
                                     <a href="">
-                                    <img src="assets/images/comp/profileIcon.png" className="request-img rounded-circle" />
+                                    <img src={list.request.files} className="request-img rounded-circle" />
                                     </a>
                                     <div className="request-description">
                                        <h6> 
-                                          <a href="">pat</a> 
+                                          <a href="">{list.request.user.firstName}</a> 
                                        </h6>
-                                       <h5 className="text-success"> sdfsdf </h5>
-                                       <p className="lead mb-2"> sdfsdfsdfsdfsf </p>
+                                       <h5 className="text-success"> {list.request.title} </h5>
+                                       <p className="lead mb-2"> {list.request.description} </p>
                                        <ul className="request-category">
-                                          <li> Graphics &amp; Design </li>
-                                          <li> Logo Design </li>
+                                       <li> {list.request.category.name} </li>
+                                          <li> {list.request.subCategory.name} </li>
                                        </ul>
                                     </div>
                                  </td>
-                                 <td>0</td>
-                                 <td> October 05, 2020 </td>
-                                 <td> 
-                                    1 Day 
-                                    <a href="#" className="remove-link text-danger remove_request_367"> Remove Request </a>
-                                 </td>
+                                 <td>{list.duration}</td>
+                                 <td> {list.amount} </td>
                                  <td className="text-success font-weight-bold">
-                                    &#036;33.00                                            <br />
-                                    <button className="btn btn-success btn-sm mt-4 send_button">Send Offer</button>
+                                    <h6>{list.gig.title}</h6> <br />
+                                    <p>{list.description}</p>
                                  </td>
-                              </tr>
+                              </tr>))}
                               
                            </tbody>
                         </table>
@@ -293,71 +297,34 @@ const BuyerRequest = (props) => {
             
                <div id="request-description">
 
-                  <h6 className="text-success mb-1"> sdfsdf </h6>
+                  <h6 className="text-success mb-1"> {gig.request && gig.request[0].title} </h6>
 
-                  <p>sdfsdfsdfsdfsf</p>
+                  <p>{gig.request && gig.request[0].description}</p>
 
                </div>    
 
             </div>
             <div className="request-proposals-list">
+               {gig.gig && gig.gig.map((list, index) => (<div key={list._id}>
                <div className="proposal-picture">
 
-                  <input type="radio" id="radio-623" className="radio-custom" name="proposal_id" value="623" required="" />
+                  <input type="radio" id="radio" className="radio-custom" data-title={list.title} name="gig_id" value={list._id} />
 
-                  <label for="radio-623" className="radio-custom-label"></label>
+                  <label for="radio" className="radio-custom-label"></label>
 
-                  <img src="https://www.gigtodo.com/proposals/proposal_files/man-iand-woman-doing-a-handshake-3874034_1588269353.png" width="50" height="50" style={{ borderRadius: '2% !important' }} />
+                  <img src={list.photo ? list.photo[0].photo : ""} width="50" height="50" style={{ borderRadius: '2% !important' }} />
 
                </div> 
 
                <div className="proposal-title">
 
-                  <p>I will do a video session and prepare you for any job interview</p>
+                  <p>{list.title}</p>
 
                </div>
+               </div>))}
 
                <hr />
-                    
-                    
-               <div className="proposal-picture">
 
-                  <input type="radio" id="radio-890" className="radio-custom" name="proposal_id" value="890" required="" />
-
-                  <label for="radio-890" className="radio-custom-label"></label>
-
-                  <img src="https://www.gigtodo.com/proposals/proposal_files/poster%206_1595619408.png" width="50" height="50" style={{ borderRadius: "2% !important;" }} />
-
-               </div> 
-
-               <div className="proposal-title">
-
-                  <p>i will design a perfect logo for your company</p>
-
-               </div>
-
-               <hr />
-                    
-                    
-               <div className="proposal-picture">
-
-                  <input type="radio" id="radio-904" className="radio-custom" name="proposal_id" value="904" required="" />
-
-                  <label for="radio-904" className="radio-custom-label"></label>
-
-                  <img src="https://www.gigtodo.com/proposals/proposal_files/screenshot-premium11.web-hosting.com_2083-2020.07.29-06_54_39_1596023798.png" width="50" height="50" style={{ borderRadius: "2% !important;" }} />
-
-               </div> 
-
-               <div className="proposal-title">
-
-                  <p>dsfgfdghfrghrfhcxvbsdfhgdfhg</p>
-
-               </div>
-
-               <hr />
-                    
-                    
             </div>
 
          </div>
@@ -372,6 +339,85 @@ const BuyerRequest = (props) => {
          </div>
       </div>
    </div>
+
+   <div className="modal submit-proposal-details" tabIndex="-1" role="basic" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+
+      <div className="modal-dialog">
+
+         <div className="modal-content">
+
+            <div className="modal-header">
+
+               <h5 className="modal-title h5"> Specify Your Proposal Details </h5>
+
+               <button className="close" data-dismiss="modal"> × </button>
+
+            </div>
+
+            <div className="modal-body p-0">
+               <div className="request-summary">
+                  <img src="https://www.gigtodo.com/user_images/images_1608630531.png" width="50" height="50" className="rounded-circle" />
+                  <div id="request-description">
+                     <h6 className="text-success mb-1"> {gig.request && gig.request[0].title} </h6>
+                     <p> {gig.request && gig.request[0].description} </p>
+                  </div>
+               </div>
+               <form onSubmit={handleSubmit} encType="multipart/form-data">
+                  <div className="selected-proposal p-3">
+                     <h5> {gigTitle} </h5>
+                     <hr />
+
+                     <div className="form-group">
+
+                        <label className="font-weight-bold"> Description :  </label>
+
+                        <Field component="textarea" name="description" value={values.description} onChange={handleChange}  className="form-control" className={'form-control' + (errors.description && errors.description && errors.description && errors.description ? ' is-invalid' : '')} />
+                        <ErrorMessage name="description" component="div" className="error-message" />
+                     </div>
+
+                     <hr />
+
+                     <div className="form-group">
+
+                        <label className="font-weight-bold"> Delivery Time :  </label>
+
+                        <Field component="select" className="form-control float-right" onChange={handleChange} name="delivery_time" className={'form-control' + (errors.delivery_time && errors.delivery_time && errors.delivery_time && errors.delivery_time ? ' is-invalid' : '')}>
+                           <option value=""> Select Delivery Time </option>
+                           { deliveryTime && deliveryTime.map((time) => (<option value={time.name}> {time.name} </option> ) ) }
+                        </Field>
+                        <ErrorMessage name='delivery_time' component="div" className="error-message" />
+                     </div>
+
+                     <hr />
+                     <div className="form-group">
+                        <label className="font-weight-bold"> Total Offer Amount :  </label>
+
+                        <div className="input-group float-right">
+
+                           <span className="input-group-addon font-weight-bold"> $ </span>
+
+                           <Field name="amount" className="form-control" value={values.amount} min="5" onChange={handleChange} placeholder="5 Minimum" className={'decimal form-control' + (errors.amount && errors.amount && errors.amount && errors.amount ? ' is-invalid' : '')} />
+                           <ErrorMessage name='amount' component="div" className="error-message" />
+                        </div>
+                  </div>
+            </div>
+            <div className="modal-footer">
+               <button type="button" className="btn btn-secondary back" data-dismiss="modal" data-toggle="modal" data-target="#send-offer-modal">Back</button>
+
+               <button type="submit" className="btn btn-success submit-proposal-details-btn">Submit Offer</button>
+            </div>
+         </form>
+
+      </div>
+
+      </div>
+
+<div id="insert_offer"></div>
+
+
+</div>
+
+</div>
 
 
 
