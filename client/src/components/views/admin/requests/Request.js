@@ -136,16 +136,13 @@ const Request = () => {
     });
 
     $('body').on('click', '.change-status', function () {
-
-      alert();
-
       var id = $(this).data('id');
       var status = $(this).data('status');
 
       dispatch(changeRequestStatus(id, status)).then(res => {
 
         addToast(res.message, { appearance: res.status, autoDismiss: true, })
-        //window.location.reload();
+        window.location.reload();
       })
     });
 

@@ -167,3 +167,20 @@ exports.changeStatus = async (req, res) => {
     }
 
 };
+
+exports.buyerRequest = async (req, res) => {
+    try {
+
+        let requests = await db._get(Request, { user: { $ne: req.user._id }, status: "APPROVE" }, {}, { populate: [ 
+            { path: "user" },
+            { path: "category", select: 'name'}, 
+            { path: "subCategory", select: 'name'}
+            ] });
+        const response = helper.response({ data: requests});
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}

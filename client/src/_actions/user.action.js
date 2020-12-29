@@ -29,7 +29,9 @@ import {
     FAVOURITE_GIGS,
     ADD_FAVOURITE_GIG,
     PAGES,
-    PAGE_LIST
+    PAGE_LIST,
+    GIG_SUBCATEGORY,
+    REQUEST_GIGS
 } from './types';
 
 
@@ -534,3 +536,38 @@ export const getRating = (id) => async dispatch => {
     });
 }
 
+export const gigSubCatoegory = (data) => async dispatch => {
+
+    try {
+        let gig = await axios.get("/api/gig/subcategory", data);
+
+        dispatch({
+            type: GIG_SUBCATEGORY,
+            payload: gig.data.responseData
+        });
+    } catch (e) {
+        console.log(e)
+    }
+
+};
+
+export const requestGigs = (sub) => async dispatch => {
+
+    try {
+        const response = await axios.get(`/api/request/gigs/${sub}`);
+
+         dispatch({
+            type: REQUEST_GIGS,
+            payload: response.data.responseData
+        })
+
+        return response.data.responseData;
+
+    } catch (e) {
+        dispatch({
+            type: REQUEST_GIGS,
+            payload: null
+        })
+    }
+
+};

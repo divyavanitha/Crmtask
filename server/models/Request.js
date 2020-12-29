@@ -16,7 +16,7 @@ const requestSchema = mongoose.Schema({
         type: String
     },
     category: { type: Schema.Types.ObjectId, ref: 'category' },
-    subCategory: { type: Schema.Types.ObjectId, ref: 'subCategory' },
+    subCategory: { type: Schema.Types.ObjectId, ref: 'SubCategory' },
     duration: {
         type: String,
         required: true

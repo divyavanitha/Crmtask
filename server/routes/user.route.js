@@ -247,7 +247,15 @@ router.get('/requests',middleware.user, (req, res) => {
 router.post('/offer', middleware.user, function(req, res){
   requestController.request_offer(req, res);
 });
-
+router.delete('/request/:id', middleware.user, (req, res) => {
+  requestController.deleteRequest(req, res);
+});
+router.get('/request/changestatus/:id/:status', middleware.user, (req, res) => {
+  requestController.changeStatus(req, res);
+});
+router.get('/buyer/requests',middleware.user, (req, res) => {
+  requestController.buyerRequest(req, res);
+});
 
 router.post('/send_sms', (req, res) => {
   homeController.sendSms(req, res);
@@ -275,6 +283,14 @@ router.get('/seller/orderdetails/:id', middleware.user, (req, res) => {
 
 router.get('/rating/:id', middleware.user, (req, res) => {
   homeController.orderRating(req, res);
+});
+
+router.get('/gig/subcategory',middleware.user, (req, res) => {
+  homeController.gigSubCatoegory(req, res);
+});
+
+router.get('/request/gigs/:sub', middleware.user, (req, res) => {
+  homeController.requestGigs(req, res);
 });
 
 /*router.post('/reset-password', authController.forgetpassword)

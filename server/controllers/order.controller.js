@@ -184,7 +184,7 @@ exports.updateOrder = async(req, res) => {
 
             if (index === -1) {
                let data = { 
-                revison_message: req.body.revison_message,  
+                revision_message: req.body.revison_message,  
                 }
                 if(req.files['revision_file']) data.revision_file = req.protocol+ '://' +req.get('host')+"/images/order/" + req.files['revision_file'][0].filename;
 
@@ -194,7 +194,7 @@ exports.updateOrder = async(req, res) => {
 
             }else{
                 let data = { 
-                revison_message: req.body.revison_message,  
+                revision_message: req.body.revison_message,  
                 }
                 if(req.files['revision_file']) data.revision_file = req.protocol+ '://' +req.get('host')+"/images/order/" + req.files['revision_file'][0].filename;
                 

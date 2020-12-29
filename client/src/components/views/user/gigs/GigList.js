@@ -36,6 +36,7 @@ const GigList = (props) => {
                   //addToast(res.message, { appearance: res.status, autoDismiss: true, })
                   that.closest('tr').remove();
                   $('.delete-modal').modal("hide");
+                  window.location.reload();
 
                })
 
@@ -43,8 +44,6 @@ const GigList = (props) => {
       });
 
       $('body').on('click', '.Change-gigstatus', function(){
-            /*let id = $(this).data('id');
-            let status = $(this).data('status');*/
             let data = {
                id: $(this).data('id'),
                status: $(this).data('status')

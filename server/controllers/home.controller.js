@@ -7,6 +7,7 @@ const { Category } = require('../models/category');
 const { DeliveryTime } = require('../models/DeliveryTime');
 const { Coupon } = require('../models/Coupon');
 const { Slide } = require('../models/Slide');
+const { Gig } = require('../models/gigs');
 const { Menu } = require('../models/Menu');
 const { Package } = require('../models/Package');
 const { CancelReason } = require('../models/CancelReason');
@@ -519,6 +520,40 @@ exports.orderRating = async (req, res) => {
         const data = { ratings };
 
         const response = helper.response({ data: data });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.gigSubCatoegory = async (req, res) => {
+    try {
+
+        let gigs = await db._get(Gig, { user: req.user._id }, {select: ['_id', 'category', 'subCategory']}, { populate: [ 
+            { path: "category", select: 'name'}, 
+            { path: "subCategory", select: 'name'}
+            ] });
+        const response = helper.response({ data: gigs});
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.requestGigs = async (req, res) => {
+
+    try {
+
+        let gig = await db._get(Gig, { subCategory: req.params.sub });
+        
+        const data = { gig };
+
+        const response = helper.response({ data });
 
         return res.status(response.statusCode).json(response);
 

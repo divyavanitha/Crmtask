@@ -1,25 +1,112 @@
-import React, { Fragment, useState } from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import React, { Fragment, useState, useEffect } from 'react';
+import { withRouter, Link, useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
 import { getMenu } from "../../../_actions/user.action";
-import Gig from "./gigs/Gig"
-
-
-
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import Gig from "./gigs/Gig";
 import OwlCarousel from 'react-owl-carousel';
+import { getBuyerRequest } from "../../../_actions/request.action";
+import { gigSubCatoegory, requestGigs } from "../../../_actions/user.action";
+import * as Yup from 'yup';
+import $ from 'jquery';
+
+const BuyerRequest = (props) => {
+    const dispatch = useDispatch();
+   let history = useHistory();
+   useEffect(() => {
+      dispatch(getBuyerRequest())
+      dispatch(gigSubCatoegory())
+
+      $('body').on('click', '.send_offer', function (e) {
+        
+         var that = $(this);
+         e.preventDefault();
+         const id = that.data('id');
+         const sub = that.data('sub');
+         console.log('id', id);
+         console.log('sub', sub);
+         dispatch(requestGigs(sub)).then(res => {
+                console.log('reqest', res);
+
+         })
+
+         $('.send-offer-modal').modal("show");
+         $(".send-offer-modal-btn")
+            .off()
+            .on("click", function () {
+               dispatch(requestGigs(id)).then(res => {
+                  $('.send-offer-modal').modal("hide");
+
+               })
+
+            });
+      });
+
+   }, []);
+   const buyer_request = useSelector((state) => state.request && state.request.request && state.request.request.responseData);
+   const gig_subcategory = useSelector((state) => state.user && state.user.gig_subcategory);
+   
+   const request_gigs = useSelector((state) => state.user);
+   console.log('list', request_gigs);
+
+    return (
+
+        <Formik
+
+            enableReinitialize
+            initialValues={{
+                id:  '',
+                name:  '',
+                category: ''
+            }
+            }
+
+            validationSchema={Yup.object().shape({
+                name: Yup.string()
+                    .required('Name is required'),
+                category: Yup.string()
+                    .required('Category is required')
+            })}
+            onSubmit={(values, { setSubmitting, resetForm }) => {
+
+                let data = {
+                    id: values.id,
+                    name: values.name,
+                    category: values.category
+                };
+
+                /*if (params.id) {
+                    dispatch(updateSubCategory(data)).then(res => {
+                        addToast(res.message, { appearance: res.status, autoDismiss: true, })
+                        history.push('/admin/subcategory/')
+                    })
+                } else {
+                    dispatch(addSubCategory(data)).then(res => {
+                        addToast(res.message, { appearance: res.status, autoDismiss: true, })
+                    })
+                }*/
+                resetForm();
+                setSubmitting(false);
+            }}>
+
+            {props => {
+                const {
+                    values,
+                    touched,
+                    errors,
+                    dirty,
+                    isSubmitting,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    handleReset,
+                } = props;
+
+                return (
+                    <Fragment>
 
 
-
-function BuyerRequest() {
-
-
-
-   return (
-
-      <Fragment>
-
-        <div className="container">
+<div className="container">
    <div className="row buyer-requests proposals-container mb-5">
       <div className="col-md-12 mt-5">
          <div className="row">
@@ -45,7 +132,7 @@ function BuyerRequest() {
                   <li className="nav-item">
                      <a href="#active-requests" data-toggle="tab" className="nav-link active make-black">
                      Active <span className="badge badge-success"> 
-                     49            </span>
+                     {buyer_request && buyer_request.length}            </span>
                      </a>
                   </li>
                   <li className="nav-item">
@@ -62,13 +149,7 @@ function BuyerRequest() {
                         <h3 className="float-left mb-3 pt-2"> Buyer Requests </h3>
                         <select id="sub-category" className="form-control float-right sort-by mb-3">
                            <option value="all"> All Subcategories </option>
-                           <option value='1'> Logo Design </option>
-                           <option value='2'> Business Cards &amp; Stationery </option>
-                           <option value='31'> Proofreading & Editing </option>
-                           <option value='70'> Virtual Assistant </option>
-                           <option value='84'> Health, Nutrition & Fitness </option>
-                           <option value='86'> Spiritual & Healing </option>
-                           <option value='88'> Collectibles </option>
+                           {gig_subcategory && gig_subcategory.map((c_list) => (<option key={c_list._id} value={c_list._id} onChange={handleChange}>{c_list.subCategory.name}</option>))}
                         </select>
                         <table className="table table-striped">
                            <thead>
@@ -81,262 +162,35 @@ function BuyerRequest() {
                               </tr>
                            </thead>
                            <tbody id="load-data">
-                              <tr id="request_tr_367">
+                               {buyer_request && buyer_request.map((list, index) => (<tr key={list._id} id="request_tr_367">
                                  <td>
                                     <a href="">
                                     <img src="assets/images/comp/profileIcon.png" className="request-img rounded-circle" />
                                     </a>
                                     <div className="request-description">
                                        <h6> 
-                                          <a href="">pat</a> 
+                                          <a href="">{list.user.firstName}</a> 
                                        </h6>
-                                       <h5 className="text-success"> sdfsdf </h5>
-                                       <p className="lead mb-2"> sdfsdfsdfsdfsf </p>
+                                       <h5 className="text-success"> {list.title} </h5>
+                                       <p className="lead mb-2">  {list.description} </p>
                                        <ul className="request-category">
-                                          <li> Graphics &amp; Design </li>
-                                          <li> Logo Design </li>
+                                          <li> {list.category.name} </li>
+                                          <li> {list.subCategory.name} </li>
                                        </ul>
                                     </div>
                                  </td>
                                  <td>0</td>
-                                 <td> October 05, 2020 </td>
+                                 <td> {list.created_at} </td>
                                  <td> 
-                                    1 Day 
-                                    <a href="#" className="remove-link text-danger remove_request_367"> Remove Request </a>
+                                    {list.duration}
+                                    <Link data-id={list._id} className="remove-link text-danger delete"> Remove Request </Link>
                                  </td>
                                  <td className="text-success font-weight-bold">
-                                    &#036;33.00                                            <br />
-                                    <button className="btn btn-success btn-sm mt-4 send_button">Send Offer</button>
+                                    &#036;{list.budget}                                            <br />
+                                    <a data-id={list._id} data-sub={list.subCategory._id} className="btn btn-success btn-sm mt-4 send_offer">Send Offer</a>
                                  </td>
-                              </tr>
-                              <tr id="request_tr_348">
-                                 <td>
-                                    <a href="">
-                                    <img src="assets/images/comp/profileIcon.png" className="request-img rounded-circle" />
-                                    </a>
-                                    <div className="request-description">
-                                       <h6> 
-                                          <a href="">pat</a> 
-                                       </h6>
-                                       <h5 className="text-success"> design  a logo for us </h5>
-                                       <p className="lead mb-2"> hi we need a logo  </p>
-                                       <ul className="request-category">
-                                          <li> Graphics &amp; Design </li>
-                                          <li> Logo Design </li>
-                                       </ul>
-                                    </div>
-                                 </td>
-                                 <td>0</td>
-                                 <td> September 21, 2020 </td>
-                                 <td> 
-                                    5 Days 
-                                    <a href="#" className="remove-link text-danger remove_request_348"> Remove Request </a>
-                                 </td>
-                                 <td className="text-success font-weight-bold">
-                                    &#036;5.00                                            <br />
-                                    <button className="btn btn-success btn-sm mt-4 send_button">Send Offer</button>
-                                 </td>
-                              </tr>
-                              <tr id="request_tr_307">
-                                 <td>
-                                    <a href="">
-                                    <img src="assets/images/comp/profileIcon.png" className="request-img rounded-circle" />
-                                    </a>
-                                    <div className="request-description">
-                                       <h6> 
-                                          <a href="">pat</a> 
-                                       </h6>
-                                       <h5 className="text-success"> еуые </h5>
-                                       <p className="lead mb-2"> ываываыва </p>
-                                       <ul className="request-category">
-                                          <li> Graphics &amp; Design </li>
-                                          <li> Logo Design </li>
-                                       </ul>
-                                    </div>
-                                 </td>
-                                 <td>0</td>
-                                 <td> July 22, 2020 </td>
-                                 <td> 
-                                    1 Day 
-                                    <a href="#" className="remove-link text-danger remove_request_307"> Remove Request </a>
-                                 </td>
-                                 <td className="text-success font-weight-bold">
-                                    &#036;111,111.00                                            <br />
-                                    <button className="btn btn-success btn-sm mt-4 send_button">Send Offer</button>
-                                 </td>
-                              </tr>
-                              <tr id="request_tr_297">
-                                 <td>
-                                    <a href="">
-                                    <img src="assets/images/comp/profileIcon.png" className="request-img rounded-circle" />
-                                    </a>
-                                    <div className="request-description">
-                                       <h6> 
-                                          <a href="">pat</a> 
-                                       </h6>
-                                       <h5 className="text-success"> fghfhgfjg </h5>
-                                       <p className="lead mb-2"> jfhjgfjgcm </p>
-                                       <ul className="request-category">
-                                          <li> Graphics &amp; Design </li>
-                                          <li> Business Cards &amp; Stationery </li>
-                                       </ul>
-                                    </div>
-                                 </td>
-                                 <td>0</td>
-                                 <td> July 13, 2020 </td>
-                                 <td> 
-                                    1 Day 
-                                    <a href="#" className="remove-link text-danger remove_request_297"> Remove Request </a>
-                                 </td>
-                                 <td className="text-success font-weight-bold">
-                                    &#036;34.00                                            <br />
-                                    <button className="btn btn-success btn-sm mt-4 send_button">Send Offer</button>
-                                 </td>
-                              </tr>
-                              <tr id="request_tr_296">
-                                 <td>
-                                    <a href="">
-                                    <img src="assets/images/comp/profileIcon.png" className="request-img rounded-circle" />
-                                    </a>
-                                    <div className="request-description">
-                                       <h6> 
-                                          <a href="">pat</a> 
-                                       </h6>
-                                       <h5 className="text-success"> Required Logo Designer </h5>
-                                       <p className="lead mb-2"> Test </p>
-                                       <ul className="request-category">
-                                          <li> Graphics &amp; Design </li>
-                                          <li> Logo Design </li>
-                                       </ul>
-                                    </div>
-                                 </td>
-                                 <td>0</td>
-                                 <td> July 13, 2020 </td>
-                                 <td> 
-                                    8 
-                                    <a href="#" className="remove-link text-danger remove_request_296"> Remove Request </a>
-                                 </td>
-                                 <td className="text-success font-weight-bold">
-                                    &#036;10.00                                            <br />
-                                    <button className="btn btn-success btn-sm mt-4 send_button">Send Offer</button>
-                                 </td>
-                              </tr>
-                              <tr id="request_tr_292">
-                                 <td>
-                                    <a href="">
-                                    <img src="assets/images/comp/profileIcon.png" className="request-img rounded-circle" />
-                                    </a>
-                                    <div className="request-description">
-                                       <h6> 
-                                          <a href="">pat</a> 
-                                       </h6>
-                                       <h5 className="text-success"> Logo ABC </h5>
-                                       <p className="lead mb-2"> nama : ABC
-                                          warna : biru 
-                                       </p>
-                                       <a href="https://www.gigtodo.com/requests/request_files/Screenshot%202020-07-11%20at%201.14.10%20PM_1594613213.png" download>
-                                       <i className="fa fa-arrow-circle-down"></i> Screenshot 2020-07-11 at 1.14.10 PM_1594613213.png                        </a>
-                                       <ul className="request-category">
-                                          <li> Graphics &amp; Design </li>
-                                          <li> Logo Design </li>
-                                       </ul>
-                                    </div>
-                                 </td>
-                                 <td>0</td>
-                                 <td> July 12, 2020 </td>
-                                 <td> 
-                                    2 Days 
-                                    <a href="#" className="remove-link text-danger remove_request_292"> Remove Request </a>
-                                 </td>
-                                 <td className="text-success font-weight-bold">
-                                    &#036;50.00                                            <br />
-                                    <button className="btn btn-success btn-sm mt-4 send_button">Send Offer</button>
-                                 </td>
-                              </tr>
-                              <tr id="request_tr_287">
-                                 <td>
-                                    <a href="">
-                                    <img src="assets/images/comp/profileIcon.png" className="request-img rounded-circle" />
-                                    </a>
-                                    <div className="request-description">
-                                       <h6> 
-                                          <a href="">pat</a> 
-                                       </h6>
-                                       <h5 className="text-success"> Hi I need help with abcd </h5>
-                                       <p className="lead mb-2"> Hi I need help with abcd </p>
-                                       <ul className="request-category">
-                                          <li> Graphics &amp; Design </li>
-                                          <li> Logo Design </li>
-                                       </ul>
-                                    </div>
-                                 </td>
-                                 <td>0</td>
-                                 <td> July 04, 2020 </td>
-                                 <td> 
-                                    1 Day 
-                                    <a href="#" className="remove-link text-danger remove_request_287"> Remove Request </a>
-                                 </td>
-                                 <td className="text-success font-weight-bold">
-                                    &#036;10.00                                            <br />
-                                    <button className="btn btn-success btn-sm mt-4 send_button">Send Offer</button>
-                                 </td>
-                              </tr>
-                              <tr id="request_tr_284">
-                                 <td>
-                                    <a href="">
-                                    <img src="assets/images/comp/profileIcon.png" className="request-img rounded-circle" />
-                                    </a>
-                                    <div className="request-description">
-                                       <h6> 
-                                          <a href="">Patricia</a> 
-                                       </h6>
-                                       <h5 className="text-success"> Looking for a talented logo designer [Urgent] </h5>
-                                       <p className="lead mb-2"> I am in search for a very talented logo designer to help come up with a concept for my new clothing line. I need someone with at least a couple years of experience. Send me offers! </p>
-                                       <ul className="request-category">
-                                          <li> Graphics &amp; Design </li>
-                                          <li> Logo Design </li>
-                                       </ul>
-                                    </div>
-                                 </td>
-                                 <td>1</td>
-                                 <td> June 25, 2020 </td>
-                                 <td> 
-                                    4 Days 
-                                    <a href="#" className="remove-link text-danger remove_request_284"> Remove Request </a>
-                                 </td>
-                                 <td className="text-success font-weight-bold">
-                                    &#036;250.00                                            <br />
-                                    <button className="btn btn-success btn-sm mt-4 send_button">Send Offer</button>
-                                 </td>
-                              </tr>
-                              <tr id="request_tr_279">
-                                 <td>
-                                    <a href="">
-                                    <img src="assets/images/comp/profileIcon.png" className="request-img rounded-circle" />
-                                    </a>
-                                    <div className="request-description">
-                                       <h6> 
-                                          <a href="">pat</a> 
-                                       </h6>
-                                       <h5 className="text-success"> efef </h5>
-                                       <p className="lead mb-2"> sgfg </p>
-                                       <ul className="request-category">
-                                          <li> Graphics &amp; Design </li>
-                                          <li> Logo Design </li>
-                                       </ul>
-                                    </div>
-                                 </td>
-                                 <td>0</td>
-                                 <td> June 12, 2020 </td>
-                                 <td> 
-                                    2 Days 
-                                    <a href="#" className="remove-link text-danger remove_request_279"> Remove Request </a>
-                                 </td>
-                                 <td className="text-success font-weight-bold">
-                                    &#036;5.00                                            <br />
-                                    <button className="btn btn-success btn-sm mt-4 send_button">Send Offer</button>
-                                 </td>
-                              </tr>
+                              </tr>))}
+                              
                            </tbody>
                         </table>
                      </div>
@@ -393,234 +247,7 @@ function BuyerRequest() {
                                     <button className="btn btn-success btn-sm mt-4 send_button">Send Offer</button>
                                  </td>
                               </tr>
-                              <tr id="request_tr_348">
-                                 <td>
-                                    <a href="">
-                                    <img src="assets/images/comp/profileIcon.png" className="request-img rounded-circle" />
-                                    </a>
-                                    <div className="request-description">
-                                       <h6> 
-                                          <a href="">pat</a> 
-                                       </h6>
-                                       <h5 className="text-success"> design  a logo for us </h5>
-                                       <p className="lead mb-2"> hi we need a logo  </p>
-                                       <ul className="request-category">
-                                          <li> Graphics &amp; Design </li>
-                                          <li> Logo Design </li>
-                                       </ul>
-                                    </div>
-                                 </td>
-                                 <td>0</td>
-                                 <td> September 21, 2020 </td>
-                                 <td> 
-                                    5 Days 
-                                    <a href="#" className="remove-link text-danger remove_request_348"> Remove Request </a>
-                                 </td>
-                                 <td className="text-success font-weight-bold">
-                                    &#036;5.00                                            <br />
-                                    <button className="btn btn-success btn-sm mt-4 send_button">Send Offer</button>
-                                 </td>
-                              </tr>
-                              <tr id="request_tr_307">
-                                 <td>
-                                    <a href="">
-                                    <img src="assets/images/comp/profileIcon.png" className="request-img rounded-circle" />
-                                    </a>
-                                    <div className="request-description">
-                                       <h6> 
-                                          <a href="">pat</a> 
-                                       </h6>
-                                       <h5 className="text-success"> еуые </h5>
-                                       <p className="lead mb-2"> ываываыва </p>
-                                       <ul className="request-category">
-                                          <li> Graphics &amp; Design </li>
-                                          <li> Logo Design </li>
-                                       </ul>
-                                    </div>
-                                 </td>
-                                 <td>0</td>
-                                 <td> July 22, 2020 </td>
-                                 <td> 
-                                    1 Day 
-                                    <a href="#" className="remove-link text-danger remove_request_307"> Remove Request </a>
-                                 </td>
-                                 <td className="text-success font-weight-bold">
-                                    &#036;111,111.00                                            <br />
-                                    <button className="btn btn-success btn-sm mt-4 send_button">Send Offer</button>
-                                 </td>
-                              </tr>
-                              <tr id="request_tr_297">
-                                 <td>
-                                    <a href="">
-                                    <img src="assets/images/comp/profileIcon.png" className="request-img rounded-circle" />
-                                    </a>
-                                    <div className="request-description">
-                                       <h6> 
-                                          <a href="">pat</a> 
-                                       </h6>
-                                       <h5 className="text-success"> fghfhgfjg </h5>
-                                       <p className="lead mb-2"> jfhjgfjgcm </p>
-                                       <ul className="request-category">
-                                          <li> Graphics &amp; Design </li>
-                                          <li> Business Cards &amp; Stationery </li>
-                                       </ul>
-                                    </div>
-                                 </td>
-                                 <td>0</td>
-                                 <td> July 13, 2020 </td>
-                                 <td> 
-                                    1 Day 
-                                    <a href="#" className="remove-link text-danger remove_request_297"> Remove Request </a>
-                                 </td>
-                                 <td className="text-success font-weight-bold">
-                                    &#036;34.00                                            <br />
-                                    <button className="btn btn-success btn-sm mt-4 send_button">Send Offer</button>
-                                 </td>
-                              </tr>
-                              <tr id="request_tr_296">
-                                 <td>
-                                    <a href="">
-                                    <img src="assets/images/comp/profileIcon.png" className="request-img rounded-circle" />
-                                    </a>
-                                    <div className="request-description">
-                                       <h6> 
-                                          <a href="">pat</a> 
-                                       </h6>
-                                       <h5 className="text-success"> Required Logo Designer </h5>
-                                       <p className="lead mb-2"> Test </p>
-                                       <ul className="request-category">
-                                          <li> Graphics &amp; Design </li>
-                                          <li> Logo Design </li>
-                                       </ul>
-                                    </div>
-                                 </td>
-                                 <td>0</td>
-                                 <td> July 13, 2020 </td>
-                                 <td> 
-                                    8 
-                                    <a href="#" className="remove-link text-danger remove_request_296"> Remove Request </a>
-                                 </td>
-                                 <td className="text-success font-weight-bold">
-                                    &#036;10.00                                            <br />
-                                    <button className="btn btn-success btn-sm mt-4 send_button">Send Offer</button>
-                                 </td>
-                              </tr>
-                              <tr id="request_tr_292">
-                                 <td>
-                                    <a href="">
-                                    <img src="assets/images/comp/profileIcon.png" className="request-img rounded-circle" />
-                                    </a>
-                                    <div className="request-description">
-                                       <h6> 
-                                          <a href="">pat</a> 
-                                       </h6>
-                                       <h5 className="text-success"> Logo ABC </h5>
-                                       <p className="lead mb-2"> nama : ABC
-                                          warna : biru 
-                                       </p>
-                                       <a href="https://www.gigtodo.com/requests/request_files/Screenshot%202020-07-11%20at%201.14.10%20PM_1594613213.png" download>
-                                       <i className="fa fa-arrow-circle-down"></i> Screenshot 2020-07-11 at 1.14.10 PM_1594613213.png                        </a>
-                                       <ul className="request-category">
-                                          <li> Graphics &amp; Design </li>
-                                          <li> Logo Design </li>
-                                       </ul>
-                                    </div>
-                                 </td>
-                                 <td>0</td>
-                                 <td> July 12, 2020 </td>
-                                 <td> 
-                                    2 Days 
-                                    <a href="#" className="remove-link text-danger remove_request_292"> Remove Request </a>
-                                 </td>
-                                 <td className="text-success font-weight-bold">
-                                    &#036;50.00                                            <br />
-                                    <button className="btn btn-success btn-sm mt-4 send_button">Send Offer</button>
-                                 </td>
-                              </tr>
-                              <tr id="request_tr_287">
-                                 <td>
-                                    <a href="">
-                                    <img src="assets/images/comp/profileIcon.png" className="request-img rounded-circle" />
-                                    </a>
-                                    <div className="request-description">
-                                       <h6> 
-                                          <a href="">pat</a> 
-                                       </h6>
-                                       <h5 className="text-success"> Hi I need help with abcd </h5>
-                                       <p className="lead mb-2"> Hi I need help with abcd </p>
-                                       <ul className="request-category">
-                                          <li> Graphics &amp; Design </li>
-                                          <li> Logo Design </li>
-                                       </ul>
-                                    </div>
-                                 </td>
-                                 <td>0</td>
-                                 <td> July 04, 2020 </td>
-                                 <td> 
-                                    1 Day 
-                                    <a href="#" className="remove-link text-danger remove_request_287"> Remove Request </a>
-                                 </td>
-                                 <td className="text-success font-weight-bold">
-                                    &#036;10.00                                            <br />
-                                    <button className="btn btn-success btn-sm mt-4 send_button">Send Offer</button>
-                                 </td>
-                              </tr>
-                              <tr id="request_tr_284">
-                                 <td>
-                                    <a href="">
-                                    <img src="assets/images/comp/profileIcon.png" className="request-img rounded-circle" />
-                                    </a>
-                                    <div className="request-description">
-                                       <h6> 
-                                          <a href="">Patricia</a> 
-                                       </h6>
-                                       <h5 className="text-success"> Looking for a talented logo designer [Urgent] </h5>
-                                       <p className="lead mb-2"> I am in search for a very talented logo designer to help come up with a concept for my new clothing line. I need someone with at least a couple years of experience. Send me offers! </p>
-                                       <ul className="request-category">
-                                          <li> Graphics &amp; Design </li>
-                                          <li> Logo Design </li>
-                                       </ul>
-                                    </div>
-                                 </td>
-                                 <td>1</td>
-                                 <td> June 25, 2020 </td>
-                                 <td> 
-                                    4 Days 
-                                    <a href="#" className="remove-link text-danger remove_request_284"> Remove Request </a>
-                                 </td>
-                                 <td className="text-success font-weight-bold">
-                                    &#036;250.00                                            <br />
-                                    <button className="btn btn-success btn-sm mt-4 send_button">Send Offer</button>
-                                 </td>
-                              </tr>
-                              <tr id="request_tr_279">
-                                 <td>
-                                    <a href="">
-                                    <img src="assets/images/comp/profileIcon.png" className="request-img rounded-circle" />
-                                    </a>
-                                    <div className="request-description">
-                                       <h6> 
-                                          <a href="">pat</a> 
-                                       </h6>
-                                       <h5 className="text-success"> efef </h5>
-                                       <p className="lead mb-2"> sgfg </p>
-                                       <ul className="request-category">
-                                          <li> Graphics &amp; Design </li>
-                                          <li> Logo Design </li>
-                                       </ul>
-                                    </div>
-                                 </td>
-                                 <td>0</td>
-                                 <td> June 12, 2020 </td>
-                                 <td> 
-                                    2 Days 
-                                    <a href="#" className="remove-link text-danger remove_request_279"> Remove Request </a>
-                                 </td>
-                                 <td className="text-success font-weight-bold">
-                                    &#036;5.00                                            <br />
-                                    <button className="btn btn-success btn-sm mt-4 send_button">Send Offer</button>
-                                 </td>
-                              </tr>
+                              
                            </tbody>
                         </table>
                      </div>
@@ -650,59 +277,43 @@ function BuyerRequest() {
       </div>
    </div>
 </div>
-<div className="append-modal">
-   <div id="send-offer-modal" className="modal fade" style={{ display: 'none' }} aria-hidden="true">
-
-
-   <div className="modal-dialog">
-
-      <div className="modal-content">
-
-         <div className="modal-header">
-
-            <h5 className="modal-title">Select A Proposal/Service To Offer</h5>
-
-            <button className="close" data-dismiss="modal"> <span> ×</span></button>
-            
-
-         </div>
-
-         <div className="modal-body p-0">
+   
+    <div className="modal send-offer-modal" tabIndex="-1" role="basic" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div className="modal-dialog">
+               <div className="modal-content">
+                  <div className="modal-header">
+                     <h5 className="modal-title">Select A Proposal/Service To Offer</h5>
+                     <button className="close" data-dismiss="modal"> <span> ×</span></button>
+                  </div>
+                  <div className="modal-body p-0">
 
             <div className="request-summary">
-                    
-                                    
-                     <img src="https://www.gigtodo.com/user_images/cool-profile-picastures-coo_1602176634.png" width="50" height="50" className="rounded-circle" />
-
+                                      
+               <img src="https://www.gigtodo.com/user_images/cool-profile-picastures-coo_1602176634.png" width="50" height="50" className="rounded-circle" />
             
-            <div id="request-description">
+               <div id="request-description">
 
-               <h6 className="text-success mb-1"> sdfsdf </h6>
+                  <h6 className="text-success mb-1"> sdfsdf </h6>
 
-               <p>sdfsdfsdfsdfsf</p>
+                  <p>sdfsdfsdfsdfsf</p>
+
+               </div>    
 
             </div>
-               
-
-            </div>
-
-
             <div className="request-proposals-list">
-                    
-               
                <div className="proposal-picture">
 
-               <input type="radio" id="radio-623" className="radio-custom" name="proposal_id" value="623" required="" />
+                  <input type="radio" id="radio-623" className="radio-custom" name="proposal_id" value="623" required="" />
 
-               <label for="radio-623" className="radio-custom-label"></label>
+                  <label for="radio-623" className="radio-custom-label"></label>
 
-               <img src="https://www.gigtodo.com/proposals/proposal_files/man-iand-woman-doing-a-handshake-3874034_1588269353.png" width="50" height="50" style={{ borderRadius: '2% !important' }} />
+                  <img src="https://www.gigtodo.com/proposals/proposal_files/man-iand-woman-doing-a-handshake-3874034_1588269353.png" width="50" height="50" style={{ borderRadius: '2% !important' }} />
 
                </div> 
 
                <div className="proposal-title">
 
-               <p>I will do a video session and prepare you for any job interview</p>
+                  <p>I will do a video session and prepare you for any job interview</p>
 
                </div>
 
@@ -711,17 +322,17 @@ function BuyerRequest() {
                     
                <div className="proposal-picture">
 
-               <input type="radio" id="radio-890" className="radio-custom" name="proposal_id" value="890" required="" />
+                  <input type="radio" id="radio-890" className="radio-custom" name="proposal_id" value="890" required="" />
 
-               <label for="radio-890" className="radio-custom-label"></label>
+                  <label for="radio-890" className="radio-custom-label"></label>
 
-               <img src="https://www.gigtodo.com/proposals/proposal_files/poster%206_1595619408.png" width="50" height="50" style={{ borderRadius: "2% !important;" }} />
+                  <img src="https://www.gigtodo.com/proposals/proposal_files/poster%206_1595619408.png" width="50" height="50" style={{ borderRadius: "2% !important;" }} />
 
                </div> 
 
                <div className="proposal-title">
 
-               <p>i will design a perfect logo for your company</p>
+                  <p>i will design a perfect logo for your company</p>
 
                </div>
 
@@ -730,17 +341,17 @@ function BuyerRequest() {
                     
                <div className="proposal-picture">
 
-               <input type="radio" id="radio-904" className="radio-custom" name="proposal_id" value="904" required="" />
+                  <input type="radio" id="radio-904" className="radio-custom" name="proposal_id" value="904" required="" />
 
-               <label for="radio-904" className="radio-custom-label"></label>
+                  <label for="radio-904" className="radio-custom-label"></label>
 
-               <img src="https://www.gigtodo.com/proposals/proposal_files/screenshot-premium11.web-hosting.com_2083-2020.07.29-06_54_39_1596023798.png" width="50" height="50" style={{ borderRadius: "2% !important;" }} />
+                  <img src="https://www.gigtodo.com/proposals/proposal_files/screenshot-premium11.web-hosting.com_2083-2020.07.29-06_54_39_1596023798.png" width="50" height="50" style={{ borderRadius: "2% !important;" }} />
 
                </div> 
 
                <div className="proposal-title">
 
-               <p>dsfgfdghfrghrfhcxvbsdfhgdfhg</p>
+                  <p>dsfgfdghfrghrfhcxvbsdfhgdfhg</p>
 
                </div>
 
@@ -750,26 +361,26 @@ function BuyerRequest() {
             </div>
 
          </div>
-
+            
          <div className="modal-footer">
 
             <button className="btn btn-secondary" data-dismiss="modal"> Close</button>
 
-            <button className="btn btn-success" id="submit-proposal" data-toggle="modal" data-dismiss="modal" data-target="#submit-proposal-details" title="Choose an offer before clicking continue">Continue</button>
+            <button className="btn btn-success send-offer-modal-btn" id="submit-proposal" data-toggle="modal" data-dismiss="modal" data-target="#submit-proposal-details" title="Choose an offer before clicking continue">Continue</button>
 
          </div>
-
+         </div>
       </div>
-
    </div>
 
-</div>
-</div>
 
 
-
-      </Fragment>
-   );
-}
+   
+                    </Fragment>
+                );
+            }}
+        </Formik>
+    );
+};
 
 export default BuyerRequest;

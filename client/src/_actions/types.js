@@ -78,3 +78,6 @@ export const FAVOURITE_GIGS = 'FAVOURITE_GIGS';
 export const ADD_FAVOURITE_GIG = 'ADD_FAVOURITE_GIG';
 export const PAGES = 'PAGES';
 export const PAGE_LIST = 'PAGE_LIST';
+export const BUYER_REQUEST = 'BUYER_REQUEST';
+export const GIG_SUBCATEGORY = 'GIG_SUBCATEGORY';
+export const REQUEST_GIGS = 'REQUEST_GIGS';

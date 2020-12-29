@@ -4,7 +4,7 @@ import { Link, useParams, useHistory } from "react-router-dom";
 //import { useToasts } from 'react-toast-notifications'
 import $ from 'jquery';
 
-import { getRequestList } from "../../../../_actions/request.action";
+import { getRequestList, deleteRequest, changeRequestStatus } from "../../../../_actions/request.action";
 
 const RequestList = (props) => {
 
@@ -13,7 +13,7 @@ const RequestList = (props) => {
    useEffect(() => {
       dispatch(getRequestList())
 
-      /*$('body').on('click', '.delete', function (e) {
+      $('body').on('click', '.delete', function (e) {
         
          var that = $(this);
          e.preventDefault();
@@ -24,27 +24,26 @@ const RequestList = (props) => {
          $(".delete-modal-btn")
             .off()
             .on("click", function () {
-               dispatch(deleteGig(sid)).then(res => {
+               dispatch(deleteRequest(sid)).then(res => {
                  
                   that.closest('tr').remove();
                   $('.delete-modal').modal("hide");
+                  window.location.reload();
 
                })
 
             });
-      });*/
+      });
 
-      /*$('body').on('click', '.Change-gigstatus', function(){
+      $('body').on('click', '.change-status', function(){
+              let id = $(this).data('id');
+              let status = $(this).data('status');
             
-            let data = {
-               id: $(this).data('id'),
-               status: $(this).data('status')
-            }
-            dispatch(changeGigStatus(data)).then(res => {
+            dispatch(changeRequestStatus(id, status)).then(res => {
                 console.log('id',res.responseData);
                 window.location.reload();           
             })
-      });*/
+      });
 
    
 
@@ -125,8 +124,8 @@ const RequestList = (props) => {
                                           <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
                                           <div className="dropdown-menu">
                                              <a href="" className="dropdown-item"> View Offers </a>
-                                             <a href="#" className="dropdown-item">Pause</a>
-                                             <a href="" className="dropdown-item"> Delete </a>
+                                             <Link data-status="PAUSE" data-id={list._id} className="dropdown-item change-status">Pause</Link>
+                                             <Link data-id={list._id} className="dropdown-item delete"> Delete </Link>
                                           </div>
                                        </div>
 
@@ -161,9 +160,8 @@ const RequestList = (props) => {
                                        <div className="dropdown">
                                           <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
                                           <div className="dropdown-menu">
-                                             <a href="" className="dropdown-item"> View Offers </a>
-                                             <a href="#" className="dropdown-item">Pause</a>
-                                             <a href="" className="dropdown-item"> Delete </a>
+                                             <Link data-status="APPROVE" data-id={list._id} className="dropdown-item change-status">Active</Link>
+                                             <Link data-id={list._id} className="dropdown-item delete"> Delete </Link>
                                           </div>
                                        </div>
 
@@ -198,9 +196,8 @@ const RequestList = (props) => {
                                        <div className="dropdown">
                                           <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
                                           <div className="dropdown-menu">
-                                             <a href="" className="dropdown-item"> View Offers </a>
-                                             <a href="#" className="dropdown-item">Pause</a>
-                                             <a href="" className="dropdown-item"> Delete </a>
+                                             
+                                             <Link data-id={list._id} className="dropdown-item delete"> Delete </Link>
                                           </div>
                                        </div>
 
@@ -235,9 +232,8 @@ const RequestList = (props) => {
                                        <div className="dropdown">
                                           <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
                                           <div className="dropdown-menu">
-                                             <a href="" className="dropdown-item"> View Offers </a>
-                                             <a href="#" className="dropdown-item">Pause</a>
-                                             <a href="" className="dropdown-item"> Delete </a>
+                                             
+                                             <Link data-id={list._id} className="dropdown-item delete"> Delete </Link>
                                           </div>
                                        </div>
 
@@ -254,6 +250,24 @@ const RequestList = (props) => {
             </div>
          </div>
          <div id="featured-proposal-modal"></div>
+
+         <div className="modal delete-modal" tabIndex="-1" role="basic" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div className="modal-dialog">
+               <div className="modal-content">
+                  <div className="modal-header">
+                     <h4 className="modal-title">Confirm Delete</h4>
+                  </div>
+                  <div className="modal-body p-2"> Are you sure want to delete? </div>
+                  <div className="modal-footer">
+                     <button type="button" className="btn default" data-dismiss="modal">Close</button>
+                     <button type="button" data-value="1" className="btn btn-danger delete-modal-btn">Delete</button>
+                  </div>
+               </div>
+
+            </div>
+
+         </div>
+
 
 
       </Fragment>

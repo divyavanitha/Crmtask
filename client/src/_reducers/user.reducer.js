@@ -23,7 +23,9 @@ import {
     FAVOURITE_GIGS,
     ADD_FAVOURITE_GIG,
     PAGES,
-    PAGE_LIST
+    PAGE_LIST,
+    GIG_SUBCATEGORY,
+    REQUEST_GIGS
 
 } from '../_actions/types';
 
@@ -94,6 +96,10 @@ const userReducer = (state = initialState, action) => {
             return { ...state, pages: action.payload }
         case PAGE_LIST:
             return { ...state, page_list: action.payload }
+        case GIG_SUBCATEGORY:
+            return { ...state, gig_subcategory: action.payload }
+        case REQUEST_GIGS:
+            return { ...state, request_gigs: action.payload }
         default:
             return state;
     }
