@@ -310,8 +310,8 @@ function Home() {
                      <div id="demo2" className="carousel slide" data-ride="carousel">
 
                         <div className="carousel-inner " role="listbox">
-                           {recent && recent.map((r) => (
-                              <div key={r._id} className="carousel-item ">
+                           {recent && recent.map((r, index) => (
+                              <div key={r._id} className={ index == 0 ? "carousel-item active" : "carousel-item"}>
                               <div className="proposal-card-base mp-proposal-card">
                     <Link to={r.gig.user ? "/gig/" + r.gig.user.firstName + "/" + r.gig.title : ""}>
                         <img src={r.gig.photo[0] ? r.gig.photo[0].photo : ""} className="img-fluid" />
@@ -326,10 +326,6 @@ function Home() {
                                 <div className="onePress-seller-tooltip">
                                     Level Two
                                 </div>
-                            </div>
-                            <div className="favoriteIcon">
-                                <i data-id="4" href="#" className="fa fa-heart proposal-favorite" data-toggle="tooltip"
-                                    data-placement="top" title="Favorite"></i>
                             </div>
                         </div>
                         <Link to={r.gig.user ? "/gig/" + r.gig.user.firstName + "/" + r.gig.title : ""} className="proposal-link-main js-proposal-card-imp-data">

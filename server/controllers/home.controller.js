@@ -11,6 +11,7 @@ const { Gig } = require('../models/gigs');
 const { Menu } = require('../models/Menu');
 const { Package } = require('../models/Package');
 const { CancelReason } = require('../models/CancelReason');
+const { requestOffer } = require('../models/requestOffer');
 const { Favourite } = require('../models/Favourite');
 const { View } = require('../models/View');
 const { Page } = require('../models/page');
@@ -368,10 +369,10 @@ exports.getFavourites = async (req, res) => {
 }
 
 exports.addFavourite = async (req, res) => {
+console.log(requestOffer)
+   /* try {
 
-    try {
-
-        let favourite = await db._find(Favourite, { gig: req.params.id });
+        let favourite = await db._find(Favourite, { gig: req.params.id }, {}, {populate: ['user', 'gig']});
         let status;
 
         if(!favourite) {
@@ -382,6 +383,8 @@ exports.addFavourite = async (req, res) => {
             }
             status = true;
             await db._store(Favourite, data);
+
+            favourite = await db._find(Favourite, { gig: req.params.id }, {}, {populate: ['user', 'gig']});
         } else {
             status = false;
             await db._delete(Favourite, { gig :req.params.id});
@@ -395,7 +398,7 @@ exports.addFavourite = async (req, res) => {
 
     } catch (err) {
         console.log(err);
-    }
+    }*/
 
 }
 

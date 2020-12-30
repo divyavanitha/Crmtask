@@ -32,7 +32,8 @@ import {
 let initialState = {
     isAuthenticated: false,
     user: {},
-    cart_count: 0
+    cart_count: 0,
+    favourite: []
 }
 
 const userReducer = (state = initialState, action) => {
@@ -91,7 +92,26 @@ const userReducer = (state = initialState, action) => {
         case FAVOURITE_GIGS:
             return { ...state, favourites: action.payload }
         case ADD_FAVOURITE_GIG:
-            return { ...state, favourites: action.payload }
+            let data = {...state}
+            let response = action.payload;
+            let fav = data.favourites;
+
+            if(response.status) {
+                fav.push(action.payload.favourite)
+            } else {
+                
+                let t = fav.filter((fav) => { 
+                    return fav.gig._id !== response.favourite.gig._id 
+                })
+                fav = [];
+                if(t.length > 0) {
+                    for(let i in t) {
+                        fav.push(t[i])
+                    }
+                }
+            }
+
+            return { ...state , favourites: fav }
         case PAGES:
             return { ...state, pages: action.payload }
         case PAGE_LIST:

@@ -511,7 +511,7 @@ export const addFavourite = (id) => async dispatch => {
     try {
         const response = await axios.post(`/api/favourite/${id}`);
 
-         dispatch({
+        dispatch({
             type: ADD_FAVOURITE_GIG,
             payload: response.data.responseData
         })
@@ -519,10 +519,7 @@ export const addFavourite = (id) => async dispatch => {
         return response.data.responseData;
 
     } catch (e) {
-        dispatch({
-            type: ADD_FAVOURITE_GIG,
-            payload: null
-        })
+        return { status: false, favourite: null };
     }
 
 };

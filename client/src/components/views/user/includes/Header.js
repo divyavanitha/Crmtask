@@ -286,13 +286,13 @@ function Header() {
                      </a></li></ul>)
                         }
                         {auth.isAuthenticated && (<ul className="account-nav apply-nav-height">
-                            <li className="logged-in-link d-none d-sm-block d-md-block d-lg-block">
+                            {/*<li className="logged-in-link d-none d-sm-block d-md-block d-lg-block">
                                 <a className="menuItem" href="" title="Freelancers">
                                     <span className="onePress-icon nav-icon onePress-icon-relative">
                                         <i className="fa  fa-user-o fa-lg" style={{ fontSize: "1.4em" }}></i>
                                     </span>
                                 </a>
-                            </li>
+                            </li>*/}
                                 <li className="logged-in-link d-none d-sm-block d-md-block d-lg-block">
                                 <a className="menuItem" href="" title="Notifications">
                                     <span className="onePress-icon nav-icon onePress-icon-relative">
