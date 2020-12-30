@@ -2,11 +2,12 @@ import axios from 'axios';
 import {
   GET_REQUEST,
   CREATE_REQUEST,
-  BUYER_REQUEST
+  BUYER_REQUEST,
+  SENT_OFFER,
+  VIEW_OFFER
 
 } from './types';
 
-//const dispatch = useDispatch();
 
 export const createRequest = (data) => async dispatch => {
   try {
@@ -58,6 +59,35 @@ export const getBuyerRequest = () => async dispatch => {
   dispatch({
     type: BUYER_REQUEST,
     payload: request.data
+  });
+}
+
+export const requestOffer = (data) => async dispatch => {
+  try {
+    let response = await axios.post('/api/offer', data);
+    console.log('data', response);
+    response.data.status = 'success';
+    return response.data;
+  } catch (e) {
+    e.response.data.status = 'error';
+    if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
+    return e.response.data;
+  }
+}
+
+export const sentOffer = () => async dispatch => {
+  const offer = await axios.get(`/api/sent/offers`)
+  dispatch({
+    type: SENT_OFFER,
+    payload: offer.data
+  });
+}
+
+export const viewOffer = (id) => async dispatch => {
+  const offer = await axios.get(`/api/view/offer/${id}`)
+  dispatch({
+    type: VIEW_OFFER,
+    payload: offer.data
   });
 }
 

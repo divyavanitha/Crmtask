@@ -25,6 +25,10 @@ const requestSchema = mongoose.Schema({
         type: Number,
         required: true
     },
+    offerCount: {
+        type: Number,
+        default: 0
+    },
     files: {
         type: String
     },

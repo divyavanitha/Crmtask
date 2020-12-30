@@ -1,6 +1,6 @@
 const express = require("express");
 const { Request } = require("../../models/Request");
-const { requestOffer } = require('../../models/requestOffer');
+const { RequestOffer } = require('../../models/RequestOffer');
 const helper = require('../../services/helper.js');
 const db = require('../../services/model.js');
 const Joi = require('@hapi/joi');

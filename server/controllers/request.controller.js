@@ -1,6 +1,6 @@
 const express = require("express");
 const { Request } = require("../models/Request");
-const { requestOffer } = require('../models/requestOffer');
+const { RequestOffer } = require('../models/RequestOffer');
 const helper = require('../services/helper.js');
 const db = require('../services/model.js');
 const Joi = require('@hapi/joi');
@@ -103,7 +103,10 @@ exports.request_offer = async (req, res) => {
 
     const schema = Joi.object().options({ abortEarly: false }).keys({
         gig_id: Joi.string().required().label("Gig Id"),
-        request_id: Joi.string().required().label("Request Id")
+        request_id: Joi.string().required().label("Request Id"),
+        description: Joi.string().required().label("Description"),
+        amount: Joi.number().required().label("Amount"),
+        delivery_time: Joi.string().required().label("Delivery Time")
     }).unknown(true);
 
     const { error } = schema.validate(req.body);
@@ -121,13 +124,21 @@ exports.request_offer = async (req, res) => {
     if (error) return res.status(response.statusCode).json(response);
 
     try {
+        let requests = await db._find(Request, {"_id":req.body.request_id});
 
         let data = {
                 gig: req.body.gig_id,
-                request: req.body.request_id
+                request: req.body.request_id,
+                seller: req.user._id,
+                description: req.body.description,
+                duration: req.body.delivery_time,
+                amount: req.body.amount
             }
 
-        let offer = await db._store(requestOffer, data);
+        requests.offerCount += 1;  
+
+        let offer = await db._store(RequestOffer, data);
+        await db._update(Request, requests);
 
         const response = helper.response({ message: res.__('created'), data: offer });
         return res.status(response.statusCode).json(response);
@@ -177,6 +188,46 @@ exports.buyerRequest = async (req, res) => {
             { path: "subCategory", select: 'name'}
             ] });
         const response = helper.response({ data: requests});
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.sentOffer = async (req, res) => {
+    try {
+
+        let offers = await db._get(RequestOffer, { seller: req.user._id }, {}, { populate: [ 
+            { path: "request", populate: { path: 'user', model: 'users', select: ['_id','firstName'] } }, 
+            { path: "request", populate: { path: 'category', model: 'category', select: ['_id','name'] } },
+            { path: "request", populate: { path: 'subCategory', model: 'SubCategory', select: ['_id','name'] } },
+            { path: "gig", select: "title"} 
+            ] });
+        const response = helper.response({ data: offers});
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.viewOffer = async (req, res) => {
+    try {
+
+        let offers = await db._get(RequestOffer, { request: req.params.id }, {}, {populate: [{path: "seller", select: ["firstName", "profilePhoto"]}, 
+            {path: "gig", select: ["title", "photo"]}]});
+        let request = await db._find(Request, { _id: req.params.id }, {}, { populate: [ 
+            { path: "user" },
+            { path: "category", select: 'name'}, 
+            { path: "subCategory", select: 'name'}
+            ] });
+
+        const data = { offers, request };
+
+        const response = helper.response({ data });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
