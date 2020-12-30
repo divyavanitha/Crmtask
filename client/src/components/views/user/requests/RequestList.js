@@ -122,7 +122,7 @@ const RequestList = (props) => {
                                        <div className="dropdown">
                                           <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
                                           <div className="dropdown-menu">
-                                             <Link to={"/view/offer/"+list._id} className="dropdown-item"> View Offers </Link>
+                                             <Link to={"/view/offer/"+list._id} target="_blank" className="dropdown-item"> View Offers </Link>
                                              <Link data-status="PAUSE" data-id={list._id} className="dropdown-item change-status">Pause</Link>
                                              <Link data-id={list._id} className="dropdown-item delete"> Delete </Link>
                                           </div>

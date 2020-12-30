@@ -49,6 +49,25 @@ exports.checkout = async (req, res) => {
 
                 let orderId = 'FIV' + Math.floor(100000 + Math.random() * 900000);
 
+                let setting = await db._find(Setting, {}, { createdAt: 0, updatedAt: 0 });
+
+                let user = await User.findById(carts[i].gig.user);
+
+                if ((setting.seller.levelTwoRating == user.ratingPercent) && (setting.seller.levelTwoCompletedOrder == user.completedOrder)) {
+                    var commission = ((total * setting.pricing.commissionLevelTwo) / 100);
+                }
+                if ((setting.seller.levelOneRating == user.ratingPercent) && (setting.seller.levelOneCompletedOrder == user.completedOrder)) {
+                    
+                    var commission = ((total * setting.pricing.commissionLevelOne) / 100);
+
+                }
+                if ((setting.seller.topRatedRating == user.ratingPercent) && (setting.seller.topRatedCompletedOrder == user.completedOrder)) {
+                    var commission = ((total * setting.pricing.commissionTopRated) / 100);
+                }
+                if (user.type == "NEWSELLER") {
+                    var commission = ((total * setting.pricing.commission) / 100);
+                }
+
                 var order = {
                     orderId: orderId,
                     coupon: req.body.coupon_id,
@@ -60,6 +79,7 @@ exports.checkout = async (req, res) => {
                     quantity: carts[i].quantity,
                     price: carts[i].price,
                     total: total,
+                    commission: commission,
                     status: "PROGRESS",
                     deliveryTime: carts[i].deliveryTime,
                     revisions: carts[i].revisions
@@ -136,11 +156,11 @@ exports.updateOrder = async (req, res) => {
         })
     }
 
-    const errorResponse = helper.response({ status: 422, error: errorMessage });
+    /*const errorResponse = helper.response({ status: 422, error: errorMessage });
 
     if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
-    try {
+    try {*/
         let order = await Order.findById(req.body.id);
         if ((req.body.status).toUpperCase() == "DELIVERED") {
             const arr = order.delivery_status;
@@ -173,6 +193,36 @@ exports.updateOrder = async (req, res) => {
         } else if ((req.body.status).toUpperCase() == "COMPLETED") {
 
             order.status = (req.body.status).toUpperCase();
+
+            var user = await User.findById(order.seller);
+            var admin = await db._find(Admin);
+            let setting = await db._find(Setting, {}, { createdAt: 0, updatedAt: 0 });
+
+        if ((setting.seller.levelTwoRating == user.ratingPercent) && (setting.seller.levelTwoCompletedOrder == user.completedOrder)) {
+            let comission = ((order.total * setting.pricing.commissionLevelTwo) / 100);
+            let balance = order.total - comission;
+            user.wallet += balance;
+            admin.wallet += comission;
+        }
+        if ((setting.seller.levelOneRating == user.ratingPercent) && (setting.seller.levelOneCompletedOrder == user.completedOrder)) {
+            let comission = ((order.total * setting.pricing.commissionLevelOne) / 100);
+            let balance = order.total - comission;
+            user.wallet += balance;
+            admin.wallet += comission;
+
+        }
+        if ((setting.seller.topRatedRating == user.ratingPercent) && (setting.seller.topRatedCompletedOrder == user.completedOrder)) {
+            let comission = ((order.total * setting.pricing.commissionTopRated) / 100);
+            let balance = order.total - comission;
+            user.wallet += balance;
+            admin.wallet += comission;
+        }
+        if (user.type == "NEWSELLER") {
+            let comission = ((order.total * setting.pricing.commission) / 100);
+            let balance = order.total - comission;
+            user.wallet += balance;
+            admin.wallet += comission;
+        }
 
 
         } else if ((req.body.status).toUpperCase() == "REVISION REQUESTED") {
@@ -215,10 +265,12 @@ exports.updateOrder = async (req, res) => {
         }
 
         let orders = await db._update(Order, { _id: req.body.id }, order);
+        await db._update(User, { _id: order.seller }, user);
+        await db._update(Admin, {}, admin);
         const response = helper.response({ message: res.__('updated'), data: order });
         return res.status(response.statusCode).json(response);
 
-    } catch (err) {
+    /*} catch (err) {
         if (err[0] != undefined) {
             for (i in err.errors) {
                 return res.status(422).json(err.errors[i].message);
@@ -226,7 +278,7 @@ exports.updateOrder = async (req, res) => {
         } else {
             return res.status(422).json(err);
         }
-    }
+    }*/
 }
 
 exports.cancel = async (req, res) => {
@@ -376,8 +428,6 @@ exports.rating = async (req, res) => {
 
         let user = await User.findById(order.seller);
 
-        let admin = await db._find(Admin);
-
         let order_count = await db._count(Order, { seller: order.seller });
 
         let setting = await db._find(Setting, {}, { createdAt: 0, updatedAt: 0 });
@@ -407,6 +457,7 @@ exports.rating = async (req, res) => {
                 }
 
                 order.seller_rated = 1;
+                user.completedOrder += 1;
             }
             await db._update(Rating, { _id: rate._id }, rating);
 
@@ -435,6 +486,7 @@ exports.rating = async (req, res) => {
                 }
 
                 order.seller_rated = 1;
+                user.completedOrder += 1;
             }
 
             await db._store(Rating, rating);
@@ -457,39 +509,19 @@ exports.rating = async (req, res) => {
         user.gig = order.gig;
         user.ratingPercent = (total_rate[0].total / (order_count * 5) * 100);
         user.rating = total_rate[0].average;
-        user.completedOrder += 1;
 
         if ((setting.seller.levelTwoRating == user.ratingPercent) && (setting.seller.levelTwoCompletedOrder == user.completedOrder)) {
             user.type = "LEVELTWO";
-            let comission = ((order.total * setting.pricing.commissionLevelTwo) / 100);
-            let balance = order.total - comission;
-            user.wallet += balance;
-            admin.wallet += comission;
         }
         if ((setting.seller.levelOneRating == user.ratingPercent) && (setting.seller.levelOneCompletedOrder == user.completedOrder)) {
             user.type = "LEVELONE";
-            let comission = ((order.total * setting.pricing.commissionLevelOne) / 100);
-            let balance = order.total - comission;
-            user.wallet += balance;
-            admin.wallet += comission;
 
         }
         if ((setting.seller.topRatedRating == user.ratingPercent) && (setting.seller.topRatedCompletedOrder == user.completedOrder)) {
             user.type = "TOPRATED";
-            let comission = ((order.total * setting.pricing.commissionTopRated) / 100);
-            let balance = order.total - comission;
-            user.wallet += balance;
-            admin.wallet += comission;
-        }
-        if (user.type == "NEWSELLER") {
-            let comission = ((order.total * setting.pricing.commission) / 100);
-            let balance = order.total - comission;
-            user.wallet += balance;
-            admin.wallet += comission;
         }
 
         await db._update(User, { _id: order.seller }, user);
-        await db._update(Admin, {}, admin);
         let orders = await db._update(Order, { _id: req.body.order_id }, order);
 
         const response = helper.response({ message: res.__('inserted') });

@@ -195,13 +195,11 @@ console.log('cart_details', cart_details);
             if(params.id){
               var data = {
                   id: params.id,
-                  total: values.total,
                   payment_mode: values.payment_mode,
                   wallet: wallet
                }; 
             }else{
                var data = {
-                  total: values.total,
                   payment_mode: values.payment_mode,
                   wallet: wallet
                };
