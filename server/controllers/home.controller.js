@@ -536,7 +536,7 @@ exports.orderRating = async (req, res) => {
 exports.gigSubCatoegory = async (req, res) => {
     try {
 
-        let gigs = await db._get(Gig, { user: req.user._id }, {select: ['_id', 'category', 'subCategory']}, { populate: [ 
+        let gigs = await db._get(Gig, { user: req.user._id }, { category : 1, subCategory : 1 }, { populate: [ 
             { path: "category", select: 'name'}, 
             { path: "subCategory", select: 'name'}
             ] });

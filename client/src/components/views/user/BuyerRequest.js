@@ -16,8 +16,14 @@ const BuyerRequest = (props) => {
    let [gig, setGig] = useState([]);
    let [gigId, setGigId] = useState(0);
    let [gigTitle, setGigTitle] = useState("");
+   let [buyerRequest, setbuyerRequest] = useState([]);
+   let [response, setResponse] = useState([]);
    useEffect(() => {
-      dispatch(getBuyerRequest())
+      dispatch(getBuyerRequest()).then((response) => {
+        setResponse(response);
+        setbuyerRequest(response);
+
+      });
       dispatch(gigSubCatoegory())
       dispatch(getDeliveryTime())
       dispatch(sentOffer())
@@ -56,11 +62,19 @@ const BuyerRequest = (props) => {
       });
 
    }, []);
-   const buyer_request = useSelector((state) => state.request && state.request.request && state.request.request.responseData);
+  
    const gig_subcategory = useSelector((state) => state.user && state.user.gig_subcategory);
    const deliveryTime = useSelector((state) => state.user && state.user.delivery_times && state.user.delivery_times.responseData && state.user.delivery_times.responseData.deliveryTime);
    const offer = useSelector((state) => state.request && state.request.offer && state.request.offer.responseData);
-   console.log(offer);
+
+   const handleChangeCategory = ({currentTarget : input}) => {
+      if(input.value){
+        setbuyerRequest(response && response.filter((request) => { return request.subCategory._id == input.value }));
+      } else {
+        setbuyerRequest(response);
+      }
+      
+   }
 
     return (
 
@@ -149,7 +163,7 @@ const BuyerRequest = (props) => {
                   <li className="nav-item">
                      <a href="#active-requests" data-toggle="tab" className="nav-link active make-black">
                      Active <span className="badge badge-success"> 
-                     {buyer_request && buyer_request.length}            </span>
+                     {buyerRequest && buyerRequest.length}            </span>
                      </a>
                   </li>
                   <li className="nav-item">
@@ -164,9 +178,9 @@ const BuyerRequest = (props) => {
                   <div id="active-requests" className="tab-pane fade show active">
                      <div className="table-responsive">
                         <h3 className="float-left mb-3 pt-2"> Buyer Requests </h3>
-                        <select id="sub-category" className="form-control float-right sort-by mb-3">
-                           <option value="all"> All Subcategories </option>
-                           {gig_subcategory && gig_subcategory.map((c_list) => (<option key={c_list._id} value={c_list._id} onChange={handleChange}>{c_list.subCategory.name}</option>))}
+                        <select id="sub-category"  onChange={handleChangeCategory} className="form-control float-right sort-by mb-3">
+                           <option value=""> All Subcategories </option>
+                           {gig_subcategory && gig_subcategory.map((c_list, index) => (<option key={index} value={c_list.subCategory._id} >{c_list.subCategory.name}</option>))}
                         </select>
                         <table className="table table-striped">
                            <thead>
@@ -178,7 +192,7 @@ const BuyerRequest = (props) => {
                               </tr>
                            </thead>
                            <tbody id="load-data">
-                               {buyer_request && buyer_request.map((list, index) => (<tr key={list._id} id="request_tr_367">
+                               {buyerRequest && buyerRequest.map((list, index) => (<tr key={index} id="request_tr_367">
                                  <td>
                                     <a href="">
                                     <img src={list.files} className="request-img rounded-circle" />
@@ -215,7 +229,7 @@ const BuyerRequest = (props) => {
                         <h3 className="float-left mb-3 pt-2"> Sent Offers </h3>
                         <select id="sub-category" className="form-control float-right sort-by mb-3">
                            <option value="all"> All Subcategories </option>
-                           {gig_subcategory && gig_subcategory.map((c_list) => (<option key={c_list._id} value={c_list._id} onChange={handleChange}>{c_list.subCategory.name}</option>))}
+                           {gig_subcategory && gig_subcategory.map((c_list, index) => (<option key={index} value={c_list._id} onChange={handleChange}>{c_list.subCategory.name}</option>))}
                         </select>
                         <table className="table table-striped">
                            <thead>
@@ -227,7 +241,7 @@ const BuyerRequest = (props) => {
                               </tr>
                            </thead>
                            <tbody id="load-data">
-                              {offer && offer.map((list, index) => (<tr id="request_tr_367">
+                              {offer && offer.map((list, index) => (<tr key={index} id="request_tr_367">
                                  <td>
                                     <a href="">
                                     <img src={list.request.files} className="request-img rounded-circle" />

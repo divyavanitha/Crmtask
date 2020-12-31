@@ -60,6 +60,7 @@ export const getBuyerRequest = () => async dispatch => {
     type: BUYER_REQUEST,
     payload: request.data
   });
+  return request.data.responseData;
 }
 
 export const requestOffer = (data) => async dispatch => {

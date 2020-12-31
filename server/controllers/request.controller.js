@@ -4,10 +4,12 @@ const { RequestOffer } = require('../models/RequestOffer');
 const { Setting } = require('./../models/setting');
 const helper = require('../services/helper.js');
 const { User } = require('../models/user');
+const { Gig } = require('../models/gigs');
 const db = require('../services/model.js');
 const Joi = require('@hapi/joi');
 const _ = require('lodash');
 const { Order } = require('../models/Order');
+const ObjectId = require('mongoose').Types.ObjectId;
 
 exports.listRequests = async (req, res) => {
     try {
@@ -45,11 +47,11 @@ exports.createrequest = async (req, res) => {
         })
     }
 
-    const response = helper.response({ status: 422, error:errorMessage });
+    /*const response = helper.response({ status: 422, error:errorMessage });
 
     if (error) return res.status(response.statusCode).json(response);
 
-    try {
+    try {*/
 
 
         let setting = await db._find(Setting, {}, {createdAt: 0, updatedAt: 0 });
@@ -72,8 +74,6 @@ exports.createrequest = async (req, res) => {
             }
 
 
-            await db._update(Gig, { _id: req.body.id }, data);
-
         if(req.files['files']) data.files = req.protocol+ '://' +req.get('host')+"/images/request/" + req.files['files'][0].filename;
 
         let request = await db._store(Request, data);
@@ -81,7 +81,7 @@ exports.createrequest = async (req, res) => {
         const response = helper.response({ message: res.__('created'), data: request });
         return res.status(response.statusCode).json(response);
 
-    } catch (err) {
+   /* } catch (err) {
         if (err[0] != undefined) {
             for (i in err.errors) {
                 return res.status(422).json(err.errors[i].message);
@@ -89,7 +89,7 @@ exports.createrequest = async (req, res) => {
         } else {
             return res.status(422).json(err);
         }
-    }
+    }*/
 
 }
 
@@ -196,12 +196,127 @@ exports.changeStatus = async (req, res) => {
 exports.buyerRequest = async (req, res) => {
     try {
 
-        let requests = await db._get(Request, { user: { $ne: req.user._id }, status: "APPROVE" }, {}, { populate: [ 
-            { path: "user" },
-            { path: "category", select: 'name'}, 
+        let gigs = await db._get(Gig, { user: req.user._id }, { subCategory : 1 }, { populate: [ 
             { path: "subCategory", select: 'name'}
             ] });
-        const response = helper.response({ data: requests});
+
+        let subCategory = [];
+
+        for (let gig of gigs) {
+            if(gig.subCategory)
+            subCategory.push(gig.subCategory._id);
+        }
+console.log(subCategory);
+        const requests = await Request.aggregate([
+
+            { "$match": { status: "APPROVE", user: { $ne: new ObjectId(req.user._id) }, subCategory: { $in: subCategory }} },
+            {
+                "$lookup": {
+                    "from": "users",
+                    "let": { "id": "$user" },
+                    "pipeline": [
+                        {
+                            "$match": {
+                                "$expr": {
+                                   
+                                    "$eq": [
+                                        "$$id",
+                                        "$_id"
+                                    ]
+                                        
+                                }
+
+                            },
+
+                        },
+                        {"$project": {"firstName" : 1}}
+                    ],
+                    "as": "user"
+                }
+            },  
+            {
+                "$lookup": {
+                    "from": "categories",
+                    "let": { "id": "$category" },
+                    "pipeline": [
+                        {
+
+                            "$match": {
+                                "$expr": {
+                                   
+                                    "$eq": [
+                                        "$$id",
+                                        "$_id"
+                                    ]
+                                        
+                                }
+
+                            },
+
+                        },
+                        {"$project": {"name" : 1}}
+                    ],
+                    "as": "category"
+                }
+            },
+            {
+                "$lookup": {
+                    "from": "subcategories",
+                    "let": { "id": "$subCategory" },
+                    "pipeline": [
+                        {
+
+                            "$match": {
+                                "$expr": {
+                                   
+                                    "$eq": [
+                                        "$$id",
+                                        "$_id"
+                                    ]
+                                        
+                                }
+
+                            },
+
+                        },
+                        {"$project": {"name" : 1}}
+                    ],
+                    "as": "subCategory"
+                }
+            },
+            {
+                "$lookup": {
+                    "from": "requestoffers",
+                    "let": { "id": "$_id" },
+                    "pipeline": [
+                        {
+
+                            "$match": {
+                                "$expr": {
+                                    "$and": [
+                                        { "$eq": ["$seller", new ObjectId(req.user._id)] },
+                                        {
+                                            "$eq": [
+                                                "$$id",
+                                                "$request"
+                                            ]
+                                        }]
+                                }
+
+                            },
+
+                        },
+                    ],
+                    "as": "requestoffers"
+                }
+            },
+            { $unwind : "$user" },
+            { $unwind : "$category" },
+            { $unwind : "$subCategory" },
+            { $match: { "requestoffers": { $eq: [] } } }
+        ])
+
+        const response = helper.response({ data : requests });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
