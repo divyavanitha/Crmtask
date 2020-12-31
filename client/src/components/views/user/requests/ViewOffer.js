@@ -4,17 +4,63 @@ import { Link, useParams, useHistory } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 //import { useToasts } from 'react-toast-notifications'
+import $ from 'jquery';
 
-import { viewOffer } from "../../../../_actions/request.action";
+import { viewOffer, orderOffer } from "../../../../_actions/request.action";
 
 const ViewOffer = (props) => {
 
    const dispatch = useDispatch();
    let history = useHistory();
    const params = useParams();
+   const auth = useSelector((state) => state.user);
 
    useEffect(() => {
       dispatch(viewOffer(params.id))
+
+      $('body').on('click', '.order', function(e){
+
+         var that = $(this);
+         e.preventDefault();
+         const id = params.id;
+         const gig = that.data('gig');
+         const amount = that.data('amount');
+         const duration = that.data('duration');
+         const description = that.data('description');
+         const gigId = that.data('id');
+         const seller = that.data('seller');
+
+         $("#Gig").text(gig);
+         $("#description").text(description);
+         $("#price").text("$"+amount);
+         $(".duration").text("Delivery Time: "+duration);
+
+         $('.payment-listing-modal').modal("show");
+         $(".payment-modal-btn")
+            .off()
+            .on("click", function () {
+               let wallet = false;
+               if ($("input[name='payment_option']:checked").val() == "wallet") {
+                  wallet = true;
+               }
+
+               let data = {
+                  payment_mode: $("input[name='payment_option']:checked").val(),
+                  gig_id: gigId,
+                  amount: amount,
+                  duration: duration,
+                  seller: seller,
+                  wallet: wallet
+               }
+console.log('data',data);
+               dispatch(orderOffer(data)).then(res => {
+                  /*$('.payment-listing-modal').modal("hide");
+                  history.push('/buying-order-lists');*/
+               })
+
+            });
+      });
+
    }, [params.id]);
 
 const offer = useSelector((state) => state.request && state.request.view_offer && state.request.view_offer.responseData);
@@ -27,46 +73,15 @@ console.log('offer', offer && offer.offers);
 
          enableReinitialize
          initialValues={{
-            title: '',
-            description: '',
-            category_id: '',
-            files: '',
-            sub_category_id: '',
-            duration: '',
-            budget: ''
-
+   
          }
          }
 
          validationSchema={Yup.object().shape({
-            title: Yup.string()
-               .required('Title is required'),
-            description: Yup.string()
-               .required('Description is required'),
-            category_id: Yup.string()
-               .required('Category is required'),
-            sub_category_id: Yup.string()
-               .required('Sub Category is required'),
-            duration: Yup.string()
-               .required('Duration is required'),
-            budget: Yup.number()
-               .required('Budget is required'),
+           
          })}
          onSubmit={(values, { setSubmitting, resetForm }) => {
-            var input = document.getElementById("files");
-            const data = new FormData();
-            data.append('title', values.title)
-            data.append('description', values.description)
-            data.append('category_id', values.category_id)
-            data.append('sub_category_id', values.sub_category_id)
-            data.append('files', values.files)
-            data.append('duration', values.duration)
-            data.append('budget', values.budget)
-console.log(values)
-            /*dispatch(createRequest(data)).then(res => {
-               history.push('/request/manage')
-               //addToast(res.message, { appearance: res.status, autoDismiss: true, })
-            })*/
+           
 
          }}>
 
@@ -105,6 +120,7 @@ console.log(values)
                               </div>
                            </div>
                         { offer && offer.offers.map((list, index) => (<div className="card rounded-0 mb-3">
+                           {console.log('gig', list.gig._id)}
                            <div className="card-body">
                               <div className="row">
                                  <div className="col-md-2">
@@ -137,7 +153,7 @@ console.log(values)
                               <a href="../conversations/message?seller_id=19&offer_id=97" className="btn btn-sm btn-success rounded-0">
                                  Contact Now
                               </a> &nbsp;
-                              <button id="order-button-97" className="btn btn-sm btn-success rounded-0">
+                              <button id="order-button" data-id={list.gig._id} data-gig={list.gig.title} data-description={list.description} data-amount={list.amount} data-seller={list.seller._id} data-duration= {list.duration} className="btn btn-sm btn-success rounded-0 order">
                                  Order Now
                               </button>
                           </div>
@@ -147,8 +163,60 @@ console.log(values)
                </div>
             </div>
          </div>
+
+<div className="modal payment-listing-modal" tabIndex="-1" role="basic" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+   <div className="modal-dialog">
+      <div className="modal-content">
+         <div className="modal-header">
+            <h5 className="modal-title"> Select A Payment Method </h5>
+            <button className="close" data-dismiss="modal">
+               <span> × </span>
+            </button>
+         </div>
+         <div className="modal-body p-0">
+            <div className="order-details">
+               <div className="request-div">
+                  <h4>THIS ORDER IS RELATED TO THE FOLLOWING REQUEST:</h4>
+                  <p>
+                     {offer && offer.request.title}
+                  </p>
+                  
+               </div>
+               <div className="offer-div">
+                  <h4 id="Gig">
+                     I will design your dream logo                  
+                     
+                  </h4>
+                  <span className="price" id="price">$22.00</span>
+                  <p id="description">w</p>
+                  <p><strong> <i className="fa fa-calendar duration"></i>  </strong></p>
+               </div>
+            </div>
+            <div className="payment-options-list">
+               <div className="payment-options mb-2">
+                  <input type="radio" value="wallet" name="payment_option" id="shopping-balance" className="radio-custom" />
+                  <label for="shopping-balance" className="radio-custom-label"></label>
+                  <span className="lead font-weight-bold"> Shopping Balance </span>
+                  <p className="lead ml-5">
+                  Personal Balance - {auth.user.firstName} <span className="text-success font-weight-bold"> ${auth.user.wallet} </span>
+                  </p>
+               </div>
+               <hr />
+                                                            
+            </div>
+         </div>
+         <div className="modal-footer">
+             <button className="btn btn-secondary" data-dismiss="modal"> Close </button>
+                 <button className="btn btn-success payment-modal-btn" type="submit" name="view_offers_submit_order" >
+                  Pay With Shopping Balance</button>
+               
+               <br />
+         </div>
+      </div>
+   </div>
+</div>
          
-               </Fragment>
+         </Fragment>
             );
          }}
       </Formik>

@@ -58,6 +58,11 @@ const orderSchema = mongoose.Schema({
         required: true,
         default: 0
     },
+    commission: {
+        type: Number,
+        required: true,
+        default: 0
+    },
     tip_message: { 
         type: String 
     },

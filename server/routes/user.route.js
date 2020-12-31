@@ -278,6 +278,9 @@ router.get('/sent/offers',middleware.user, (req, res) => {
 router.get('/view/offer/:id',middleware.user, (req, res) => {
   requestController.viewOffer(req, res);
 });
+router.post('/order/offer', middleware.user, function(req, res){
+  requestController.orderOffer(req, res);
+});
 
 router.post('/send_sms', (req, res) => {
   homeController.sendSms(req, res);

@@ -91,3 +91,16 @@ export const viewOffer = (id) => async dispatch => {
   });
 }
 
+export const orderOffer = (data) => async dispatch => {
+  try {
+    let response = await axios.post('/api/order/offer', data);
+    console.log('data', response);
+    response.data.status = 'success';
+    return response.data;
+  } catch (e) {
+    e.response.data.status = 'error';
+    if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
+    return e.response.data;
+  }
+}
+
