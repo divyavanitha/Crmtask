@@ -140,6 +140,22 @@ router.post('/favourite/:id', middleware.user, (req, res) => {
   homeController.addFavourite(req, res);
 });
 
+router.get('/favourite/cart', middleware.user, (req, res) => {
+  homeController.addFavouritetoCart(req, res);
+});
+
+router.get('/revenues', middleware.user, (req, res) => {
+  homeController.revenues(req, res);
+});
+
+router.get('/withdrawal', middleware.user, (req, res) => {
+  homeController.withdrawalList(req, res);
+});
+
+router.post('/withdrawal', middleware.user, (req, res) => {
+  homeController.withdrawal(req, res);
+});
+
 router.get('/recent', middleware.user, (req, res) => {
   homeController.getRecent(req, res);
 });

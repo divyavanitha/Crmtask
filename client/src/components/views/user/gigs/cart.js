@@ -76,45 +76,7 @@ const Cart = (props) => {
 
    return (
 
-      <Formik
-
-         enableReinitialize
-         initialValues={{
-            /*gig_id: params.gig,
-            price: price,
-            quantity: '1',
-            package_id: package_id*/
-
-         }
-         }
-
-         validationSchema={Yup.object().shape({
-            /* title: Yup.string()
-                 .required('Title is required'),
-             sub_category_id: Yup.string()
-                 .required('Sub Category is required'),
-             tags: Yup.string()
-                 .required('Tags is required'),*/
-         })}
-         onSubmit={(values, { setSubmitting, resetForm }) => {
-            console.log('values', values);
-            let data = {
-               /* gig_id: params.gig,
-                price: values.price,
-                quantity: values.quantity,
-                package_id: values.package_id*/
-            };
-
-            if (values.action == "cart") {
-               dispatch(addCart(data))
-            } else {
-               dispatch(addCart(data)).then(res => {
-                  history.push('/gig/order/' + res.responseData._id)
-               })
-            }
-            resetForm();
-            setSubmitting(false);
-         }}>
+      <Formik>
 
          {props => {
             const {

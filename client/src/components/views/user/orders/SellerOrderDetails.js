@@ -17,7 +17,7 @@ const Cart = (props) => {
    const dispatch = useDispatch();
    const params = useParams();
    let history = useHistory();
-   let isLoading = false;
+   const [isLoading, setIsLoading] = useState(false);
 
    const [total, setTotal] = useState(0);
    const [status, setStatus] = useState("");
@@ -344,7 +344,7 @@ const Cart = (props) => {
 
                                              {list.deliveredMessage}
 
-                                                 <a href='orderIncludes/download?order_id=1611&c_id=1376' className='d-block mt-2 ml-1' target='_blank'>
+                                                 <a href={list.delivery_file} className='d-block mt-2 ml-1' target='_blank'>
                                                    <i className='fa fa-download'></i> {list.delivery_file}
                                                  </a>
                                                

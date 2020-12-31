@@ -19,6 +19,10 @@ function Header() {
 
     let cartCount = useSelector((state) => state.user.cart_count);
 
+    const selectMenu = () => {
+        $('.dropdown-menu').removeClass('show');
+    }
+
     useEffect(() => {
         dispatch(getCartList())
         $(document).ready(function () {
@@ -334,38 +338,38 @@ function Header() {
                                     </a>
 
                                     <div className="dropdown-menu" style={{ minWidth: '200px', width: 'auto!important', zIndex: '2000' }} >
-                                        <Link className="dropdown-item" to="/dashboard"> Dashboard </Link>
+                                        <Link onClick={selectMenu} className="dropdown-item" to="/dashboard"> Dashboard </Link>
                                         <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#selling"> Selling </a>
                                         <div id="selling" className="dropdown-submenu collapse">
-                                            <Link className="dropdown-item" to="/selling-order-lists"> Orders </Link>
-                                            <Link className="dropdown-item" to="/gigs"> My Gigs </Link>
+                                            <Link onClick={selectMenu}  className="dropdown-item" to="/selling-order-lists"> Orders </Link>
+                                            <Link onClick={selectMenu}  className="dropdown-item" to="/gigs"> My Gigs </Link>
                                             {/*<Link className="dropdown-item" to="/coupon/create"> Create A Coupon </Link>*/}
-                                            <Link className="dropdown-item" to="/buyer/requests"> Buyer Requests </Link>
-                                            <Link className="dropdown-item" to="/revenues"> Revenues </Link>
-                                            <Link className="dropdown-item" to="/withdrawal/requests"> Withdrawal Requests </Link>
+                                            <Link onClick={selectMenu}  className="dropdown-item" to="/buyer/requests"> Buyer Requests </Link>
+                                            <Link onClick={selectMenu}  className="dropdown-item" to="/revenues"> Revenues </Link>
+                                            <Link onClick={selectMenu}  className="dropdown-item" to="/withdrawal/requests"> Withdrawal Requests </Link>
                                         </div>
                                         <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#buying"> Buying </a>
                                         <div id="buying" className="dropdown-submenu collapse">
-                                            <Link className="dropdown-item" to="/buying-order-lists"> Orders </Link>
-                                            <Link className="dropdown-item" to="/purchases"> Purchases </Link>
-                                            <Link className="dropdown-item" to="/favourites"> Favorites </Link>
+                                            <Link onClick={selectMenu}  className="dropdown-item" to="/buying-order-lists"> Orders </Link>
+                                            <Link onClick={selectMenu}  className="dropdown-item" to="/purchases"> Purchases </Link>
+                                            <Link onClick={selectMenu}  className="dropdown-item" to="/favourites"> Favorites </Link>
                                         </div>
                                         <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#requests"> Requests </a>
                                         <div id="requests" className="dropdown-submenu collapse">
-                                            <Link className="dropdown-item" to="/request/add"> Post A Request </Link>
-                                            <Link className="dropdown-item" to="/request/manage"> Manage Requests </Link>
+                                            <Link onClick={selectMenu}  className="dropdown-item" to="/request/add"> Post A Request </Link>
+                                            <Link onClick={selectMenu}  className="dropdown-item" to="/request/manage"> Manage Requests </Link>
                                         </div>
-                                        <Link className="dropdown-item" to="/contacts"> Contacts </Link>
+                                        <Link onClick={selectMenu}  className="dropdown-item" to="/contacts"> Contacts </Link>
                                         <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#referrals"> My Referrals </a>
                                         <div id="referrals" className="dropdown-submenu collapse">
-                                            <Link className="dropdown-item" to="/referrals"> User Referrals </Link>
+                                            <Link onClick={selectMenu}  className="dropdown-item" to="/referrals"> User Referrals </Link>
                                             <a className="dropdown-item" href="proposal_referrals" data-target="#referrals"> Proposal Referrals  </a>
                                         </div>
                                         <Link className="dropdown-item" to="/profile"> My Profile </Link>
                                         <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#settings"> Settings </a>
                                         <div id="settings" className="dropdown-submenu collapse">
-                                            <a className="dropdown-item" href="settings?profile_settings"> Profile Settings </a>
-                                            <a className="dropdown-item" href="settings?account_settings"> Account Settings </a>
+                                            <a onClick={selectMenu}  className="dropdown-item" href="settings?profile_settings"> Profile Settings </a>
+                                            <a onClick={selectMenu}  className="dropdown-item" href="settings?account_settings"> Account Settings </a>
                                         </div>
                                         <div className="dropdown-divider"></div>
                                         <a onClick={() => dispatch(logout())} className="dropdown-item">
