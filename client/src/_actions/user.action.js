@@ -524,6 +524,68 @@ export const addFavourite = (id) => async dispatch => {
 
 };
 
+export const addFavouritetoCart = () => async dispatch => {
+
+    try {
+        const response = await axios.get(`/api/favourite/cart`);
+
+        dispatch({
+            type: ADD_CART_COUNT,
+            payload: response.data.responseData.count
+        });
+
+        dispatch({
+            type: FAVOURITE_GIGS,
+            payload: []
+        })
+
+        return response.data.responseData;
+
+    } catch (e) {
+        return { status: false, favourite: null };
+    }
+
+};
+
+export const getRevenues = () => async dispatch => {
+
+    try {
+
+        const response = await axios.get(`/api/revenues`);
+        return response.data.responseData;
+
+    } catch (e) {
+        return { withdrawalAmount: 500, pendingAmount: 38, gigAmount: 0, revenues: [] };
+    }
+
+};
+
+export const getWithdrawals = () => async dispatch => {
+
+    try {
+
+        const response = await axios.get(`/api/withdrawal`);
+        return response.data.responseData;
+
+    } catch (e) {
+        return { withdrawals: [] };
+    }
+
+};
+
+export const withdraw = (data) => async dispatch => {
+
+    try {
+
+        const response = await axios.post(`/api/withdrawal`, data);
+        return response.data.responseData;
+
+    } catch (e) {
+        return { withdrawalAmount: 500, pendingAmount: 38, gigAmount: 0, revenues: [] };
+    }
+
+};
+
 export const getRating = (id) => async dispatch => {
     console.log('id', id);
     const ratings = await axios.get(`/api/rating/${id}`)

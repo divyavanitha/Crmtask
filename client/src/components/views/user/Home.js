@@ -30,13 +30,10 @@ function Home() {
 
       <Fragment>
          <div className="container mt-3">
-            {/* <!-- Container starts --> */}
             <div className="row">
                <div className="col-md-3 ">
                   <div className="card rounded-0 mb-3 welcome-box">
-                     {/* <!-- card rounded-0 mb-3 welcome-box Starts --> */}
                      <div className="card-body pb-2 card_user">
-                        {/* <!-- card-body Starts --> */}
                         <center>
                            <img src={require('../../../assets/images/img-03.jpg')} className="img-fluid rounded-circle mb-3" />
                         </center>
@@ -45,25 +42,19 @@ function Home() {
                         <p>Sell your services to millions of people all over the world.</p>
                         <Link to="/request/add" className="btn get_btn mt-0">Post A Request</Link>
                      </div>
-                     {/* <!-- card-body Ends --> */}
                   </div>
-                  {/* <!-- card rounded-0 mb-3 welcome-box Ends --> */}
                   <div className="rounded-0 carosel_sec pt-2">
                      <h3 className="buy_head mt-2">Buy It Again</h3>
                      <div id="demo" className="carousel slide" data-ride="carousel">
-                        {/* <!-- The slideshow --> */}
                         <div className="carousel-inner " role="listbox">
                            <div className="carousel-item active">
                               <div className="proposal-card-base mp-proposal-card">
-                                 {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
                                  <a href="proposals/Timiex/i-will-design-a-professional-wordpress-website-for-your-business">
                                     <img src={require('../../../assets/images/proposals/website-design-logo-png_1590561828.png')}
                                        className="img-fluid" />
                                  </a>
                                  <div className="proposal-card-caption">
-                                    {/* <!--- proposal-card-caption Starts ---> */}
                                     <div className="proposal-seller-info">
-                                       {/* <!--- onePress-seller-info Starts ---> */}
                                        <span className="fit-avatar s24">
                                           <img src={require('../../../assets/images/userlisting/img-02.jpg')} className="rounded-circle" width="32"
                                              height="32" />
@@ -75,7 +66,6 @@ function Home() {
                                     </div>
                                        </div>
                                     </div>
-                                    {/* <!--- onePress-seller-info Ends ---> */}
                                     <a href="proposals/Timiex/i-will-design-a-professional-wordpress-website-for-your-business"
                                        className="proposal-link-main">
                                        <h3>I will design a professional WordPress website for your business </h3>
@@ -90,29 +80,22 @@ function Home() {
                                        </span>
                                     </div>
                                  </div>
-                                 {/* <!--- proposal-card-caption Ends ---> */}
                                  <footer className="proposal-card-footer">
-                                    {/* <!--- proposal-card-footer Starts ---> */}
                                     <div className="proposal-price">
                                        <a className="js-proposal-card-imp-data">
                                           <small>Starting At</small>&#036;35.00 </a>
                                     </div>
                                  </footer>
-                                 {/* <!--- proposal-card-footer Ends ---> */}
                               </div>
-                              {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
                            </div>
                            <div className="carousel-item ">
                               <div className="proposal-card-base mp-proposal-card">
-                                 {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
                                  <a href="proposals/Timiex/i-will-design-a-professional-wordpress-website-for-your-business">
                                     <img src={require('../../../assets/images/proposals/website-design-logo-png_1590561828.png')}
                                        className="img-fluid" />
                                  </a>
                                  <div className="proposal-card-caption">
-                                    {/* <!--- proposal-card-caption Starts ---> */}
                                     <div className="proposal-seller-info">
-                                       {/* <!--- onePress-seller-info Starts ---> */}
                                        <span className="fit-avatar s24">
                                           <img src={require('../../../assets/images/userlisting/img-02.jpg')} className="rounded-circle" width="32"
                                              height="32" />
@@ -124,7 +107,6 @@ function Home() {
                                     </div>
                                        </div>
                                     </div>
-                                    {/* <!--- onePress-seller-info Ends ---> */}
                                     <a href="proposals/Timiex/i-will-design-a-professional-wordpress-website-for-your-business"
                                        className="proposal-link-main">
                                        <h3>I will design a professional WordPress website for your business </h3>
@@ -139,28 +121,21 @@ function Home() {
                                        </span>
                                     </div>
                                  </div>
-                                 {/* <!--- proposal-card-caption Ends ---> */}
                                  <footer className="proposal-card-footer">
-                                    {/* <!--- proposal-card-footer Starts ---> */}
                                     <div className="proposal-price">
                                        <a className="js-proposal-card-imp-data">
                                           <small>Starting At</small>&#036;35.00 </a>
                                     </div>
                                  </footer>
-                                 {/* <!--- proposal-card-footer Ends ---> */}
                               </div>
-                              {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
                            </div>
                            <div className="carousel-item ">
                               <div className="proposal-card-base mp-proposal-card">
-                                 {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
                                  <a href="proposals/RayTay90/i-will-sell-2000-inspirational-quotes">
                                     <img src={require('../../../assets/images/proposals/quote-1342706_1280_1588263608.png')} className="img-fluid" />
                                  </a>
                                  <div className="proposal-card-caption">
-                                    {/* <!--- proposal-card-caption Starts ---> */}
                                     <div className="proposal-seller-info">
-                                       {/* <!--- onePress-seller-info Starts ---> */}
                                        <span className="fit-avatar s24">
                                           <img src={require('../../../assets/images/userlisting/img-04.jpg')} className="rounded-circle" width="32"
                                              height="32" />
@@ -172,7 +147,6 @@ function Home() {
                                     </div>
                                        </div>
                                     </div>
-                                    {/* <!--- onePress-seller-info Ends ---> */}
                                     <a href="proposals/RayTay90/i-will-sell-2000-inspirational-quotes"
                                        className="proposal-link-main">
                                        <h3>I will sell 2000 Inspirational quotes</h3>
@@ -187,28 +161,21 @@ function Home() {
                                        </span>
                                     </div>
                                  </div>
-                                 {/* <!--- proposal-card-caption Ends ---> */}
                                  <footer className="proposal-card-footer">
-                                    {/* <!--- proposal-card-footer Starts ---> */}
                                     <div className="proposal-price">
                                        <a className="js-proposal-card-imp-data">
                                           <small>Starting At</small>&#036;20.00 </a>
                                     </div>
                                  </footer>
-                                 {/* <!--- proposal-card-footer Ends ---> */}
                               </div>
-                              {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
                            </div>
                            <div className="carousel-item ">
                               <div className="proposal-card-base mp-proposal-card">
-                                 {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
                                  <a href="proposals/Patricia/e-book-on-how-to-be-a-successful-entreprenuer">
                                     <img src={require('../../../assets/images/proposals/fall-3723738_1920_1588260783.png')} className="img-fluid" />
                                  </a>
                                  <div className="proposal-card-caption">
-                                    {/* <!--- proposal-card-caption Starts ---> */}
                                     <div className="proposal-seller-info">
-                                       {/* <!--- onePress-seller-info Starts ---> */}
                                        <span className="fit-avatar s24">
                                           <img src={require('../../../assets/images/userlisting/img-06.jpg')} className="rounded-circle" width="32"
                                              height="32" />
@@ -220,7 +187,6 @@ function Home() {
                                     </div>
                                        </div>
                                     </div>
-                                    {/* <!--- onePress-seller-info Ends ---> */}
                                     <a href="proposals/Patricia/e-book-on-how-to-be-a-successful-entreprenuer"
                                        className="proposal-link-main">
                                        <h3>E-book on how to be a successful entreprenuer </h3>
@@ -235,28 +201,21 @@ function Home() {
                                        </span>
                                     </div>
                                  </div>
-                                 {/* <!--- proposal-card-caption Ends ---> */}
                                  <footer className="proposal-card-footer">
-                                    {/* <!--- proposal-card-footer Starts ---> */}
                                     <div className="proposal-price">
                                        <a className="js-proposal-card-imp-data">
                                           <small>Starting At</small>&#036;10.00 </a>
                                     </div>
                                  </footer>
-                                 {/* <!--- proposal-card-footer Ends ---> */}
                               </div>
-                              {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
                            </div>
                            <div className="carousel-item ">
                               <div className="proposal-card-base mp-proposal-card">
-                                 {/* <!--- proposal-card-base mp-proposal-card Starts ---> */}
                                  <a href="proposals/mir_digimarket/i-will-create-a-professional-custom-explainer-video">
                                     <img src={require('../../../assets/images/postImg/img-03.jpg')} className="img-fluid" />
                                  </a>
                                  <div className="proposal-card-caption">
-                                    {/* <!--- proposal-card-caption Starts ---> */}
                                     <div className="proposal-seller-info">
-                                       {/* <!--- onePress-seller-info Starts ---> */}
                                        <span className="fit-avatar s24">
                                           <img src={require('../../../assets/images/userlisting/img-02.jpg')} className="rounded-circle" width="32"
                                              height="32" />
@@ -268,7 +227,6 @@ function Home() {
                                     </div>
                                        </div>
                                     </div>
-                                    {/* <!--- onePress-seller-info Ends ---> */}
                                     <a href="proposals/mir_digimarket/i-will-create-a-professional-custom-explainer-video"
                                        className="proposal-link-main">
                                        <h3>I Will Create A Professional Custom Explainer Video</h3>
@@ -283,17 +241,13 @@ function Home() {
                                        </span>
                                     </div>
                                  </div>
-                                 {/* <!--- proposal-card-caption Ends ---> */}
                                  <footer className="proposal-card-footer">
-                                    {/* <!--- proposal-card-footer Starts ---> */}
                                     <div className="proposal-price">
                                        <a className="js-proposal-card-imp-data">
                                           <small>Starting At</small>&#036;10.00 </a>
                                     </div>
                                  </footer>
-                                 {/* <!--- proposal-card-footer Ends ---> */}
                               </div>
-                              {/* <!--- proposal-card-base mp-proposal-card Ends ---> */}
                            </div>
                         </div>
                         {/* <!-- Left and right controls --> */}

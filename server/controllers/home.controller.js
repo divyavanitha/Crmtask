@@ -11,17 +11,20 @@ const { Gig } = require('../models/gigs');
 const { Menu } = require('../models/Menu');
 const { Package } = require('../models/Package');
 const { CancelReason } = require('../models/CancelReason');
-const { requestOffer } = require('../models/requestOffer');
 const { Favourite } = require('../models/Favourite');
 const { View } = require('../models/View');
 const { Page } = require('../models/page');
+const { Cart } = require('../models/Cart');
 const { Request } = require("../models/Request");
+const { Withdrawal } = require("../models/Withdrawal");
 const Joi = require('@hapi/joi');
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
 const helper = require('../services/helper.js');
 const db = require('../services/model.js');
+const ObjectId = require('mongoose').Types.ObjectId; 
+
 dotenv.config({ path: __dirname + '/../../.env' });
 
 exports.settings = async (req, res) => {
@@ -370,22 +373,29 @@ exports.getFavourites = async (req, res) => {
 }
 
 exports.addFavourite = async (req, res) => {
-console.log(requestOffer)
-   /* try {
+    try {
 
         let favourite = await db._find(Favourite, { gig: req.params.id }, {}, {populate: ['user', 'gig']});
         let status;
 
         if(!favourite) {
 
-            let data = {
-                gig: req.params.id, 
-                user: req.user._id 
-            }
-            status = true;
-            await db._store(Favourite, data);
+            let gig = await db._find(Gig, { _id: req.params.id, user: { $ne: req.user._id } });
 
-            favourite = await db._find(Favourite, { gig: req.params.id }, {}, {populate: ['user', 'gig']});
+            if(gig) {
+                let data = {
+                    gig: req.params.id, 
+                    user: req.user._id 
+                }
+                status = true;
+                await db._store(Favourite, data);
+
+                favourite = await db._find(Favourite, { gig: req.params.id }, {}, {populate: ['user', 'gig']});
+            } else {
+                status = false;
+                await db._delete(Favourite, { gig :req.params.id});
+            }
+
         } else {
             status = false;
             await db._delete(Favourite, { gig :req.params.id});
@@ -399,7 +409,153 @@ console.log(requestOffer)
 
     } catch (err) {
         console.log(err);
-    }*/
+    }
+
+}
+
+exports.addFavouritetoCart = async (req, res) => {
+    try {
+
+        let favourite = await db._get(Favourite, { user: req.user._id }, {}, {populate: [{ path: 'gig' }] });
+
+        if(favourite.length > 0) {
+
+            for (let i in favourite) {
+                var cart = {
+                    user: req.user._id,
+                    gig: favourite[i].gig._id,
+                    quantity: 1,
+                    price: favourite[i].gig.pricing[0].price,
+                    package: favourite[i].gig.pricing[0].package,
+                    deliveryTime: favourite[i].gig.pricing[0].DeliveryTime,
+                    revisions: favourite[i].gig.pricing[0].revisions
+                }
+
+                await db._store(Cart, cart);
+            }
+
+            let count = await db._count(Cart, {user: req.user._id} );
+
+            await db._deleteAll(Favourite, { user: req.user._id });
+
+            const response = helper.response({ message: res.__('inserted'), data: { "count": count } });
+            return res.status(response.statusCode).json(response);
+
+        }
+
+        return res.status(422).json({ message: res.__('No favourotes.') });
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.revenues = async (req, res) => {
+    try {
+
+        let revenues = await db._get(Order, { seller: req.user._id, status: 'COMPLETED' }, { total: 1, adminCommission: 1, completed_at: 1 });
+
+        let withdrawalAmount = await Withdrawal.aggregate([
+            { $match : { user: new ObjectId(req.user._id), status: 'COMPLETED' } },
+            { $group : { "_id": "$user", total : { $sum : "$price" } } }
+        ])
+
+        let pendingAmount = await Order.aggregate([
+            { $match : { seller: new ObjectId(req.user._id), status: 'COMPLETED' } },
+            { $project: { "pending": { "$subtract": [ "$total", "$adminCommission" ] }} },
+            { $group : { "_id": "$seller", total : { $sum : "$pending" } } }
+        ])
+
+        let gigAmount = await Order.aggregate([
+            { $match : { buyer: new ObjectId(req.user._id), status: 'COMPLETED' } },
+            { $group : { "_id": "$buyer", total : { $sum : "$total" } } }
+        ])
+
+        const data = { 
+            withdrawalAmount: withdrawalAmount.length > 0 ? withdrawalAmount[0].total : 0,
+            pendingAmount: pendingAmount.length > 0 ? pendingAmount[0].total : 0,
+            gigAmount: gigAmount.length > 0 ? gigAmount[0].total : 0, 
+            revenues: revenues
+        };
+
+        const response = helper.response({ data });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.withdrawalList = async (req, res) => {
+    try {
+
+        let withdrawals = await db._get(Withdrawal, { user: req.user._id });
+
+        const data = { 
+            withdrawals: withdrawals
+        };
+
+        const response = helper.response({ data });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.withdrawal = async (req, res) => {
+
+    const schema = Joi.object().options({ abortEarly: false }).keys({
+        price: Joi.number().required().label("Amount"),
+        payment_mode: Joi.string().required().label("Payment Mode")
+
+    }).unknown(true);
+
+    const { error } = schema.validate(req.body);
+
+    let errorMessage = {};
+
+    if (error) {
+        error.details.forEach(err => {
+            errorMessage[err.context.key] = (err.message).replace(/"/g, "")
+        })
+    }
+
+    const errorResponse = helper.response({ status: 422, error: errorMessage });
+
+    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
+
+    try {
+
+        if(req.user.wallet >= req.body.price) {
+
+            let data = {
+                refId: 'P-' + Math.floor(100000 + Math.random() * 900000), 
+                user: req.user._id, 
+                payment_mode: req.body.payment_mode, 
+                price: req.body.price, 
+                status: 'PENDING' 
+            }
+
+            let withdrawal = await db._store(Withdrawal, data);
+
+            const response = helper.response({ message: res.__('inserted'), data: withdrawal });
+
+            return res.status(response.statusCode).json(response);
+
+        } else {
+            const errorResponse = helper.response({ status: 422, error: { price: "Withdrawal Amount is greater than available limit." } });
+            return res.status(errorResponse.statusCode).json(errorResponse)
+        }
+
+    } catch (err) {
+        console.log(err);
+    }
 
 }
 

@@ -2,6 +2,7 @@ const express = require("express");
 const { Cart } = require('../models/Cart');
 const helper = require('../services/helper.js');
 const db = require('../services/model.js');
+const { Gig } = require('../models/gigs');
 const Joi = require('@hapi/joi');
 const _ = require('lodash');
 
@@ -60,21 +61,47 @@ exports.addcart = async (req, res) => {
     if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
-        let cart_length = await db._get(Cart, {user: req.user._id} );
-            var cart = {
-                user: req.user._id,
-                gig: req.body.gig_id,
-                quantity: req.body.quantity,
-                proposals: req.body.proposals,
-                price: req.body.price,
-                package: req.body.package_id,
-                deliveryTime: req.body.deliveryTime,
-                revisions: req.body.revision
-            }
 
-        let carts= await db._store(Cart, cart);
-        /*carts.count = cart_length.length;
-        console.log(carts.count);*/
+        let existingCart = await db._find(Cart, { gig: req.body.gig_id } );
+       
+        if(req.body.package) {
+
+            let gig = await db._find(Gig, {_id: req.body.gig_id, pricing: { $elemMatch : { package: { $eq: req.body.package } }} }, { pricing: 1, createdAt: -1, updatedAt: -1 });
+
+            let pricing = gig.pricing.find(price => { return price.package == req.body.package })
+
+            var cart = {
+                    user: req.user._id,
+                    gig: req.body.gig_id,
+                    quantity: req.body.quantity,
+                    price: pricing.price,
+                    package: pricing.package,
+                    deliveryTime: pricing.DeliveryTime,
+                    revisions: pricing.revisions
+                }
+
+        } else {
+
+            let gig = await db._find(Gig, {_id: req.body.gig_id}, { pricing: 1, createdAt: -1, updatedAt: -1 });
+     
+            var cart = {
+                    user: req.user._id,
+                    gig: req.body.gig_id,
+                    quantity: req.body.quantity,
+                    price: gig.pricing[0].price,
+                    package: gig.pricing[0].package,
+                    deliveryTime: gig.pricing[0].DeliveryTime,
+                    revisions: gig.pricing[0].revisions
+                }
+        }
+
+        if(existingCart) {
+            cart.quantity = existingCart.quantity + req.body.quantity;
+            await db._update(Cart, { _id: existingCart.id }, cart);
+            var carts = await db._find(Cart, { gig: req.body.gig_id } );
+        } else {
+            var carts = await db._store(Cart, cart);
+        }
 
         let count = await db._count(Cart, {user: req.user._id} );
 

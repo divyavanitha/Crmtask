@@ -104,7 +104,7 @@ exports._delete = async (model, condition = {}, options = {}) => {
 
 exports._deleteAll = async (model, condition = {}, options = {}) => {
     try {
-        const query = model.deleteMany(condition);
+        const query = await model.deleteMany(condition);
 
         return true;
     } catch (err) {
@@ -115,7 +115,7 @@ exports._deleteAll = async (model, condition = {}, options = {}) => {
 
 exports._count = async (model, condition = {}, options = {}) => {
     try {
-        const query = model.countDocuments(condition);
+        const query = await model.countDocuments(condition);
 
         return query;
     } catch (err) {

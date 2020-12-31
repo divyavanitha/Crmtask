@@ -33,7 +33,7 @@ const GigDetail = (props) => {
     const params = useParams();
     let history = useHistory();
     const auth = useSelector((state) => state.user);
-    let isLoading = false;
+    const [isLoading, setIsLoading] = useState(false);
 
     const [price, setPrice] = useState(0);
     const [package_id, setPackage] = useState("");
@@ -142,11 +142,7 @@ const GigDetail = (props) => {
             enableReinitialize
             initialValues={{
                 gig_id: gig && gig._id,
-                price: gig && gig.pricing[0].price ,
-                package_id: package_id,
-                deliveryTime: deliveryTime,
-                revision: revision,
-                proposal: proposal
+                package_id: package_id
 
             }
             }
@@ -158,25 +154,21 @@ const GigDetail = (props) => {
 
                 let data = {
                     gig_id: gig && gig._id,
-                    price: values.price,
                     quantity: quantity,
-                    package_id: values.package_id,
-                    deliveryTime: values.deliveryTime,
-                    revision: values.revision,
-                    proposal: proposal
+                    package_id: package_id
                 };
                 if(values.package_id == ""); delete data["package_id"]; 
 
                 if (values.action == "cart") {
-                    isLoading = true;
+                    setIsLoading(true)
                     dispatch(addCart(data)).then(res => {
-                        isLoading = false;
+                        setIsLoading(false)
                     }).catch(e => {})
                 } else {
-                    isLoading = true;
+                    setIsLoading(true)
                     dispatch(addCart(data)).then(res => {
                         history.push('/cart-payment-option/' + res.responseData.carts._id)
-                        isLoading = false;
+                        setIsLoading(false)
                     }).catch(e => {})
                 }
                 resetForm();

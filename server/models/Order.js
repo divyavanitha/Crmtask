@@ -29,6 +29,10 @@ const orderSchema = mongoose.Schema({
         type: Number,
         required: true
     },
+    adminCommission: {
+        type: Number,
+        required: true
+    },
     quantity: {
         type: Number,
         required: true
@@ -81,6 +85,14 @@ const orderSchema = mongoose.Schema({
     cancellation_reason: { type: String },
     cancellation_message: { type: String },
     cancelled_by: { type: String },
+    started_at: {
+        type: Date,
+        default: Date.now
+    },
+    completed_at: {
+        type: Date,
+        default: Date.now
+    },
     created_at: {
         type: Date,
         default: Date.now
