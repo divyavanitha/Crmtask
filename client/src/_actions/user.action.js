@@ -31,7 +31,11 @@ import {
     PAGES,
     PAGE_LIST,
     GIG_SUBCATEGORY,
-    REQUEST_GIGS
+    REQUEST_GIGS,
+    GET_COUNTRY,
+    GET_CITY,
+    GET_STATE,
+    GET_LANGUAGE
 } from './types';
 
 
@@ -242,6 +246,43 @@ export const getGigbyId = (id) => async dispatch => {
     response.data.status = 'success';
     return response.data;
 };
+
+export const getCountry = (data) => async dispatch => {
+    const countries = await axios.get(`/api/countries`)
+    dispatch({
+        type: GET_COUNTRY,
+        payload: countries.data
+    });
+}
+
+export const getState = (id) => async dispatch => {
+    const states = await axios.get(`/api/states/${id}`)
+    console.log('state', states);
+    /*dispatch({
+        type: GET_STATE,
+        payload: states.data
+    });*/
+    return states.data;
+}
+
+export const getCity = (id) => async dispatch => {
+    const cities = await axios.get(`/api/cities/${id}`)
+   /* dispatch({
+        type: GET_CITY,
+        payload: cities.data
+    });*/
+    return cities.data;
+}
+
+
+export const getLanguage = (data) => async dispatch => {
+    const languages = await axios.get(`/api/language`)
+    dispatch({
+        type: GET_LANGUAGE,
+        payload: languages.data
+    });
+}
+
 
 export const getGigbyName = (name) => async dispatch => {
     //try {

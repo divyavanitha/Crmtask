@@ -28,8 +28,6 @@ export const GET_SUBCATEGORY = 'GET_SUBCATEGORY';
 export const GET_CHATS = 'get_chat';
 export const AFTER_POST_MESSAGE = 'after_post_message';
 
-//export const GET_USERS = 'GET_USERS';
-
 export const GET_MENUS = 'GET_MENUS';
 
 export const GET_CART_LIST = 'GET_CART_LIST';
@@ -63,6 +61,14 @@ export const GET_RATING = 'GET_RATING';
 export const GET_CANCEL_REASON = 'GET_CANCEL_REASON';
 
 export const SITE = 'SITE';
+
+export const GET_COUNTRY = 'GET_COUNTRY';
+
+export const GET_CITY = 'GET_CITY';
+
+export const GET_STATE = 'GET_STATE';
+
+export const GET_LANGUAGE = 'GET_LANGUAGE';
 
 export const CREATE_GIGS = 'CREATE_GIGS';
 export const GET_MYALLGIGS = 'GET_MYALLGIGS';

@@ -45,8 +45,9 @@ const userSchema = mongoose.Schema({
     deviceToken: {
         type: String
     },
-    country: { type: String, ref: 'Country' },
-    city: { type: String, ref: 'City' },
+    country: { type: String, ref: 'country' },
+    city: { type: String, ref: 'city' },
+    state: { type: String, ref: 'state' },
     language: [{
         language: { type: Schema.Types.ObjectId, ref: 'Language' },
         level: { type: String },
@@ -72,7 +73,7 @@ const userSchema = mongoose.Schema({
         level: { type: String },
     }],
     education: [{
-        country: { type: Schema.Types.ObjectId, ref: 'Country' },
+        country: { type: String, ref: 'country' },
         institute: { type: String },
         title: { type: String },
         major: { type: String },

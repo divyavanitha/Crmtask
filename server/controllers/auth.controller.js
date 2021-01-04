@@ -44,7 +44,7 @@ exports.login = async (req, res) => {
         user.deviceToken = req.body.device_token;
         const result = await user.save();
 
-        let payload = _.pick(user, ['_id', 'firstName', 'lastName', 'email', 'mobile', 'wallet']);
+        let payload = _.pick(user, ['_id', 'firstName', 'lastName', 'email', 'mobile', 'wallet', 'country', 'city', 'state', 'description', 'headline', 'profilePhoto', 'coverPhoto']);
 
         const token = user.generateAuthToken(payload);
         const refreshToken = user.generateRefreshToken(payload);
@@ -472,7 +472,7 @@ exports.country = async (req, res) => {
 exports.state = async (req, res) => {
     try {
 
-        let states = await db._get(State, { status: 1}, {createdAt: 0, updatedAt: 0 });
+        let states = await db._get(State, { status: 1, countryId: req.params.id}, {createdAt: 0, updatedAt: 0 });
 
         const data = { states };
 
@@ -487,7 +487,7 @@ exports.state = async (req, res) => {
 exports.city = async (req, res) => {
     try {
 
-        let cities = await db._get(City, { status: 1}, {createdAt: 0, updatedAt: 0 });
+        let cities = await db._get(City, { status: 1, stateId: req.params.id}, {createdAt: 0, updatedAt: 0 });
 
         const data = { cities };
 

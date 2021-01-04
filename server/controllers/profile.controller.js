@@ -18,7 +18,7 @@ exports.getProfile = async (req, res) => {
     const errors = {};
     try {
 
-        let user = await db._get(User, { _id: req.user._id });
+        let user = await db._find(User, { _id: req.user._id });
         const data = { user };
         const response = helper.response({ data });
         return res.status(response.statusCode).json(response);
@@ -43,7 +43,8 @@ exports.updateProfile = async (req, res) => {
         mobile: Joi.string().required().min(6).label("Mobile"),
         city: Joi.string().required().label("City"),
         headline: Joi.string().required().label("Headline"),
-        description: Joi.string().required().label("Description")
+        description: Joi.string().required().label("Description"),
+        state: Joi.string().required().label("State")
     }).unknown(true);
 
     const { error } = schema.validate(req.body);
@@ -58,9 +59,10 @@ exports.updateProfile = async (req, res) => {
 
     const response = helper.response({ status: 422, error: errorMessage });
 
-    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
+    if (error) return res.status(response.statusCode).json(response);
 
     try {
+        console.log(req.body.id);
         const user = {
             firstName: req.body.first_name,
             lastName: req.body.last_name,
@@ -72,12 +74,13 @@ exports.updateProfile = async (req, res) => {
             coverPhoto: req.body.cover_photo,
             headline: req.body.headline,
             description: req.body.description,
+            state: req.body.state
         }
         //console.log(JSON.stringify(req.files));
 
         if(req.files['profile_photo']) user.profilePhoto = req.protocol + '://' + req.get('host') + "/images/user/" + (req.files['profile_photo'][0].filename);
         if(req.files['cover_photo']) user.coverPhoto = req.protocol + '://' + req.get('host') + "/images/user/" + (req.files['cover_photo'][0].filename);
-
+console.log(user);
 
         let users = await db._update(User, { _id: req.body.id }, user);
 

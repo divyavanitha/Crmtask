@@ -11,8 +11,7 @@ const citySchema = mongoose.Schema({
         trim: true,
         minlength: 1
     },
-    countryId: { type: Schema.Types.ObjectId, ref: 'Country' },
-    cityId: { type: Schema.Types.ObjectId, ref: 'City' },
+    stateId: { type: Number, ref: 'state' },
     status: {
         type: Boolean,
         default: true

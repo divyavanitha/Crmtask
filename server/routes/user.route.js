@@ -50,11 +50,11 @@ router.get('/settings', (req, res) => {
 });
 
 
-router.get('/states', (req, res) => {
+router.get('/states/:id', (req, res) => {
   authController.state(req, res);
 });
 
-router.get('/cities', (req, res) => {
+router.get('/cities/:id', (req, res) => {
   authController.city(req, res);
 });
 

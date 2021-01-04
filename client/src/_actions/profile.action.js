@@ -6,27 +6,29 @@ import {
   CLEAR_ERRORS,
   GET_PROFILE,
   GET_PROFILES,
-  DELETEPROFILE
+  DELETEPROFILE,
+
 } from './types';
 
 // Add Post
-export function createprofile(dataToSubmit) {
+export const updateProfile = (data) => async dispatch => {
 
-  const request = axios.post(`api/profile/create`, dataToSubmit)
-    .then(response => {
-      return {
-        type: CREATE_PROFILE,
-        payload: response.data
-      }
-    });
-
-  return request;
+  try {
+    let response = await axios.post('/api/profile', data);
+    console.log('data', response);
+    response.data.status = 'success';
+    return response.data;
+  } catch (e) {
+    e.response.data.status = 'error';
+    if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
+    return e.response.data;
+  }
 
 }
 
-export const getprofilebyid = () => dispatch => {
+export const getProfile = () => dispatch => {
 
-  axios.get(`/api/profile/getprofilebyid`)
+  axios.get(`/api/profile`)
     .then(res => {
       dispatch({
         type: GET_PROFILE,

@@ -11,7 +11,7 @@ const stateSchema = mongoose.Schema({
         trim: true,
         minlength: 1
     },
-    countryId: { type: Schema.Types.ObjectId, ref: 'Country' },
+    countryId: { type: Number, ref: 'country' },
     timezone: {
         type: String,
         trim: true,

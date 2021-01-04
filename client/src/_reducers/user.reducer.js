@@ -25,7 +25,11 @@ import {
     PAGES,
     PAGE_LIST,
     GIG_SUBCATEGORY,
-    REQUEST_GIGS
+    REQUEST_GIGS,
+    GET_COUNTRY,
+    GET_CITY,
+    GET_STATE,
+    GET_LANGUAGE
 
 } from '../_actions/types';
 
@@ -33,7 +37,7 @@ let initialState = {
     isAuthenticated: false,
     user: {},
     cart_count: 0,
-    favourite: []
+    favourite: [],
 }
 
 const userReducer = (state = initialState, action) => {
@@ -71,6 +75,14 @@ const userReducer = (state = initialState, action) => {
             return { ...state, packages: action.payload }
         case GET_CART_LIST:
             return { ...state, cart_lists: action.payload }
+        case GET_COUNTRY:
+            return { ...state, countries: action.payload }
+        case GET_CITY:
+            return { ...state, cities: action.payload }
+        case GET_STATE:
+            return { ...state, states: action.payload }
+        case GET_LANGUAGE:
+            return { ...state, languages: action.payload }
         case BUYER_ORDER_LIST:
             return { ...state, buyer_order_list: action.payload }
         case BUYER_ORDER_DETAILS:
