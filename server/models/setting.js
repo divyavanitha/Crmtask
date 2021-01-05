@@ -161,6 +161,18 @@ const settingSchema = mongoose.Schema({
         }
     },
     seller: {
+        newSellerRating: {
+            type: Number,
+            required: true
+        },
+        newSellerCompletedOrder: {
+            type: Number,
+            required: true
+        },
+        newSellerPayout: {
+            type: Date,
+            default: Date.now
+        },
         levelOneRating: {
             type: Number,
             required: true
@@ -168,6 +180,10 @@ const settingSchema = mongoose.Schema({
         levelOneCompletedOrder: {
             type: Number,
             required: true
+        },
+        levelOnePayout: {
+            type: Date,
+            default: Date.now
         },
         levelTwoRating: {
             type: Number,
@@ -177,6 +193,10 @@ const settingSchema = mongoose.Schema({
             type: Number,
             required: true
         },
+        levelTwoPayout: {
+            type: Date,
+            default: Date.now
+        },
         topRatedRating: {
             type: Number,
             required: true
@@ -184,6 +204,10 @@ const settingSchema = mongoose.Schema({
         topRatedCompletedOrder: {
             type: Number,
             required: true
+        },
+        topRatedPayout: {
+            type: Date,
+            default: Date.now
         }
     },
     gig: {

@@ -11,6 +11,7 @@ const gigController = require('../controllers/gigs.controller');
 const orderController = require('../controllers/order.controller');
 const requestController = require('../controllers/request.controller');
 const cartController = require('../controllers/cart.controller');
+const cardController = require('../controllers/card.controller');
 
 router.get('/pages/list/:type', (req, res) => {
   homeController.pagesList(req, res);
@@ -317,6 +318,23 @@ router.get('/gig/subcategory',middleware.user, (req, res) => {
 router.get('/request/gigs/:id/:sub', middleware.user, (req, res) => {
   homeController.requestGigs(req, res);
 });
+
+router.post('/card/add', (req, res) => {
+  cardController.addCard(req, res);
+});
+
+router.post('/card/payout/add', (req, res) => {
+  cardController.addPayoutCard(req, res);
+});
+
+router.delete('/card/remove', (req, res) => {
+  cardController.removeCard(req, res);
+});
+
+router.delete('/card/payout/remove', (req, res) => {
+  cardController.removePayoutCard(req, res);
+});
+
 
 /*router.post('/reset-password', authController.forgetpassword)
 

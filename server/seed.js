@@ -90,7 +90,7 @@ async function seed() {
 	await Country.insertMany(countries).then(function(){  console.log("Country Seeded."); }).catch(function(error){  console.log(error); process.exit();  }); 
 
 	async.each(states_data, function iteratee(state, next) {
-		states.push(  new State({_id: state.id, name: state.name, countryId: Schema.Types.ObjectId(state.country_id), timezone: state.name})  )
+		states.push(  new State({_id: state.id, name: state.name, countryId: parseInt(state.country_id), timezone: state.name})  )
 	})
 
 	await State.deleteMany({}).then(function(){  }).catch(function(error){  console.log(error) }); 
@@ -98,7 +98,7 @@ async function seed() {
 	await State.insertMany(states).then(function(){  console.log("State Seeded."); }).catch(function(error){  console.log(error); process.exit();  }); 
 
 	async.each(cities_data, function iteratee(city, next) {
-		cities.push(  new City({_id: city.id, name: city.name, countryId: Schema.Types.ObjectId(city.state_id), stateId: Schema.Types.ObjectId(city.state_id) })  )
+		cities.push(  new City({_id: city.id, name: city.name, stateId: parseInt(city.state_id) })  )
 	})
 
 	await City.deleteMany({}).then(function(){  }).catch(function(error){  console.log(error) }); 
@@ -177,7 +177,7 @@ async function seed() {
 	})
 
 	await async.each(pages_data, async function iteratee(page, next) {
-		pages.push(  new Page({title: page.title, content: page.content, url: page.url })  )
+		pages.push(  new Page({title: page.title, content: page.content, type: page.type , url: page.url })  )
 	})
 
 	await async.each(skills_data, async function iteratee(skill, next) {

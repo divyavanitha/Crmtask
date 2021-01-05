@@ -3,6 +3,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { getCategory } from "../../../../_actions/user.action";
+import $ from 'jquery';
 
 function Nav() {
 
@@ -18,6 +19,10 @@ function Nav() {
         dispatch(getCategory())
 
     }, []);
+
+    const selectMenu = () => {
+        $('.sub-nav-container').addClass('display-none');
+    }
 
     const category = useSelector(state => state.user.category);
     const category_list = category && category.responseData.categories;
@@ -46,7 +51,7 @@ function Nav() {
                             data-ui="top-nav-category-list" aria-activedescendant="catnav-primary-link-10855">
                             {category_list && category_list.map((c_list) => (<li key={c_list._id} className="top-nav-item pt-xs-1 pb-xs-1 pl-xs-2 pr-xs-2 display-flex-xs align-items-center text-center"
                                 data-linkable="true" data-ui="top-nav-category-link" data-node-id={c_list._id}>
-                                <a href="">
+                                <a href="#">
                                     {c_list.name} </a>
                             </li>))}
 
@@ -66,9 +71,9 @@ function Nav() {
 
                                             {chunk.map((subCategories) => (
                                                 <li key={subCategories._id}>
-                                                    <a className="display-block text-gray text-body-larger pt-xs-1"
-                                                        href={`/categories/${c_list.name}/${subCategories.name}`}>
-                                                        {subCategories.name} </a>
+                                                    <Link onClick={selectMenu} className="display-block text-gray text-body-larger pt-xs-1"
+                                                        to={`/categories/${c_list.name}/${subCategories.name}`}>
+                                                        {subCategories.name} </Link>
                                                 </li>
                                             ))}
 
