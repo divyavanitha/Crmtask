@@ -26,23 +26,21 @@ export const updateProfile = (data) => async dispatch => {
 
 }
 
-export const getProfile = () => dispatch => {
-
-  axios.get(`/api/profile`)
-    .then(res => {
-      dispatch({
+export const getProfile = () => async dispatch => {
+  try {
+  const profile = await axios.get(`/api/profile`)
+    console.log('state', profile);
+    dispatch({
         type: GET_PROFILE,
-        payload: res.data
+        payload: profile.data
       })
-    })
-    .catch(err =>
-      dispatch({
+  return profile.data.responseData;
+  } catch (e) {
+    dispatch({
         type: GET_PROFILE,
         payload: null
       })
-    );
-
-
+  }
 
 }
 

@@ -1,10 +1,11 @@
 import React, { Fragment, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from 'react';
 import { getMenu } from "../../../_actions/user.action";
 import Gig from "./gigs/Gig"
 
+import { getProfile } from "../../../_actions/profile.action";
 
 
 import OwlCarousel from 'react-owl-carousel';
@@ -13,8 +14,16 @@ import OwlCarousel from 'react-owl-carousel';
 
 function Dashboard() {
 
+   const dispatch = useDispatch();
 
 
+   const profile = useSelector((state) => state.profile && state.profile.getprofile && state.profile.getprofile.responseData && state.profile.getprofile.responseData.user);
+
+   useEffect(() => {
+      dispatch(getProfile())
+   }, []);
+
+console.log('useer', profile);
    return (
 
       <Fragment>
