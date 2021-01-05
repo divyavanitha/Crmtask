@@ -366,11 +366,6 @@ function Header() {
                                             <a className="dropdown-item" href="proposal_referrals" data-target="#referrals"> Proposal Referrals  </a>
                                         </div>
                                         <Link className="dropdown-item" to="/profile"> My Profile </Link>
-                                        <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#settings"> Settings </a>
-                                        <div id="settings" className="dropdown-submenu collapse">
-                                            <a onClick={selectMenu}  className="dropdown-item" href="settings?profile_settings"> Profile Settings </a>
-                                            <a onClick={selectMenu}  className="dropdown-item" href="settings?account_settings"> Account Settings </a>
-                                        </div>
                                         <div className="dropdown-divider"></div>
                                         <a onClick={() => dispatch(logout())} className="dropdown-item">
                                             Logout   </a>
