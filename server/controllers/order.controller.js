@@ -42,7 +42,7 @@ exports.checkout = async (req, res) => {
             var carts = await db._get(Cart, { user: req.user._id }, {}, { populate: "gig" });
         }
         let total = 0;
-
+console.log('carts', carts);
         if (carts.length > 0) {
             for (let i in carts) {
 
@@ -50,24 +50,50 @@ exports.checkout = async (req, res) => {
 
                 let orderId = 'FIV' + Math.floor(100000 + Math.random() * 900000);
 
-                let setting = await db._find(Setting, {}, { createdAt: 0, updatedAt: 0 });
-
                 let user = await User.findById(carts[i].gig.user);
+                var buyer = await User.findById(req.user._id);
+                var admin = await db._find(Admin);
+                let setting = await db._find(Setting, {}, { createdAt: 0, updatedAt: 0 });
 
                 if ((setting.seller.levelTwoRating == user.ratingPercent) && (setting.seller.levelTwoCompletedOrder == user.completedOrder)) {
                     var commission = ((total * setting.pricing.commissionLevelTwo) / 100);
+                    let balance = total - commission;
+                    if(req.body.payment_mode == "WALLET"){
+                        buyer.wallet = buyer.wallet - total;
+                        user.wallet += balance;
+                    }
+                    admin.wallet += commission;
                 }
                 if ((setting.seller.levelOneRating == user.ratingPercent) && (setting.seller.levelOneCompletedOrder == user.completedOrder)) {
-                    
                     var commission = ((total * setting.pricing.commissionLevelOne) / 100);
+                    let balance = total - commission;
+                    if(req.body.payment_mode == "WALLET"){
+                        buyer.wallet = buyer.wallet - total;
+                        user.wallet += balance;
+                    }
+                    admin.wallet += commission;
 
                 }
                 if ((setting.seller.topRatedRating == user.ratingPercent) && (setting.seller.topRatedCompletedOrder == user.completedOrder)) {
                     var commission = ((total * setting.pricing.commissionTopRated) / 100);
+                    let balance = total - commission;
+                    if(req.body.payment_mode == "WALLET"){
+                        buyer.wallet = buyer.wallet - total;
+                        user.wallet += balance;
+                    }
+                    admin.wallet += commission;
                 }
                 if (user.type == "NEWSELLER") {
                     var commission = ((total * setting.pricing.commission) / 100);
+                    let balance = total - commission;
+                    if(req.body.payment_mode == "WALLET"){
+                        buyer.wallet -= total;
+                        user.wallet += balance;
+                    }
+                    admin.wallet += commission;
                 }
+
+
 
                 var order = {
                     orderId: orderId,
@@ -97,7 +123,9 @@ exports.checkout = async (req, res) => {
                     message: "Has just sent you an offer on your request click here to view."
                 }
                 await db._store(Notification, notification);
-
+                await db._update(User, { _id: orders.seller }, user);
+                await db._update(User, { _id: orders.buyer }, buyer);
+                await db._update(Admin, {}, admin);
                 await db._delete(Cart, { "_id": carts[i]._id });
 
                 let tot_carts = await db._get(Cart, { user: req.user._id });
@@ -214,54 +242,10 @@ exports.updateOrder = async (req, res) => {
         } else if ((req.body.status).toUpperCase() == "COMPLETED") {
 
             order.status = (req.body.status).toUpperCase();
-            
 
             var user = await User.findById(order.seller);
-            var buyer = await User.findById(order.buyer);
-            var admin = await db._find(Admin);
-            let setting = await db._find(Setting, {}, { createdAt: 0, updatedAt: 0 });
 
-        if ((setting.seller.levelTwoRating == user.ratingPercent) && (setting.seller.levelTwoCompletedOrder == user.completedOrder)) {
-            let comission = ((order.total * setting.pricing.commissionLevelTwo) / 100);
-            let balance = order.total - comission;
-            if(order.payment_mode == "WALLET"){
-                buyer.wallet = buyer.wallet - order.total;
-                user.wallet += balance;
-            }
-            admin.wallet += comission;
             user.recentDelivery = new Date();
-        }
-        if ((setting.seller.levelOneRating == user.ratingPercent) && (setting.seller.levelOneCompletedOrder == user.completedOrder)) {
-            let comission = ((order.total * setting.pricing.commissionLevelOne) / 100);
-            let balance = order.total - comission;
-            if(order.payment_mode == "WALLET"){
-                buyer.wallet = buyer.wallet - order.total;
-                user.wallet += balance;
-            }
-            admin.wallet += comission;
-            user.recentDelivery = new Date();
-
-        }
-        if ((setting.seller.topRatedRating == user.ratingPercent) && (setting.seller.topRatedCompletedOrder == user.completedOrder)) {
-            let comission = ((order.total * setting.pricing.commissionTopRated) / 100);
-            let balance = order.total - comission;
-            if(order.payment_mode == "WALLET"){
-                buyer.wallet = buyer.wallet - order.total;
-                user.wallet += balance;
-            }
-            admin.wallet += comission;
-            user.recentDelivery = new Date();
-        }
-        if (user.type == "NEWSELLER") {
-            let comission = ((order.total * setting.pricing.commission) / 100);
-            let balance = order.total - comission;
-            if(order.payment_mode == "WALLET"){
-                buyer.wallet -= order.total;
-                user.wallet += balance;
-            }
-            admin.wallet += comission;
-            user.recentDelivery = new Date();
-        }
 
             var notification = {
                 sender: order.buyer,
@@ -343,8 +327,6 @@ exports.updateOrder = async (req, res) => {
 
         let orders = await db._update(Order, { _id: req.body.id }, order);
         await db._update(User, { _id: order.seller }, user);
-        await db._update(User, { _id: order.buyer }, buyer);
-        await db._update(Admin, {}, admin);
         await db._store(Notification, notification);
         const response = helper.response({ message: res.__('updated'), data: order });
         return res.status(response.statusCode).json(response);
@@ -452,14 +434,20 @@ exports.cancel = async (req, res) => {
 }
 
 exports.tips = async (req, res) => {
+    if(req.body.tip_status == 1){
+        var schema = Joi.object().options({ abortEarly: false }).keys({
+            id: Joi.string().required().label("Order Id"),
+            tips: Joi.number().required().label("Tip Amount"),
+            tip_message: Joi.string().required().label("Tip Message")
 
-    const schema = Joi.object().options({ abortEarly: false }).keys({
-        id: Joi.string().required().label("Order Id"),
-        tips: Joi.number().required().label("Tip Amount"),
-        tip_message: Joi.string().required().label("Tip Message")
+        }).unknown(true);
+    }else {
+        var schema = Joi.object().options({ abortEarly: false }).keys({
+            id: Joi.string().required().label("Order Id")
 
-    }).unknown(true);
+        }).unknown(true);
 
+    }
     const { error } = schema.validate(req.body);
 
     let errorMessage = {};
@@ -482,7 +470,8 @@ exports.tips = async (req, res) => {
 
             let order = {
                 tips: req.body.tips,
-                tip_message: req.body.tip_message
+                tip_message: req.body.tip_message,
+                tip_status: req.body.tip_status
             }
 
             if(order_detail.payment_mode == "WALLET"){

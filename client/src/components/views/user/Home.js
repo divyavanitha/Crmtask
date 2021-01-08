@@ -78,8 +78,8 @@ function Home() {
                                        <span className="proposal-rating">
                                           <i className="fa fa-star"></i>
                                           <span>
-                                             <strong>0.0</strong>
-                                       (0)
+                                             
+                                       ({list.seller ? list.seller.rating : "3"})
                                        </span>
                                        </span>
                                     </div>
@@ -87,7 +87,7 @@ function Home() {
                                  <footer className="proposal-card-footer">
                                     <div className="proposal-price">
                                        <a className="js-proposal-card-imp-data">
-                                          <small>Starting At</small>&#036;35.00 </a>
+                                          <small>Starting At</small>&#036;{list.gig.pricing[0] ? list.gig.pricing[0].price : "0.00"} </a>
                                     </div>
                                  </footer>
                               </div>
@@ -121,7 +121,7 @@ function Home() {
                             <div className="seller-info-wrapper">
                                 <a href={r.gig.user ? r.gig.user.firstName : ""} className="seller-name">{r.gig.user ? r.gig.user.firstName : ""} {r.gig.user ? r.gig.user.lastName : ""}</a>
                                 <div className="onePress-seller-tooltip">
-                                    Level Two
+                                    {r.gig.user ? r.gig.user.type : ""}
                                 </div>
                             </div>
                         </div>

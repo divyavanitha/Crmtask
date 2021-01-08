@@ -52,7 +52,7 @@ function Dashboard() {
 
    }, []);
 
-console.log('useer', seller_buyer);
+console.log('useer', order_count && order_count);
    return (
 
       <Fragment>
@@ -151,7 +151,7 @@ console.log('useer', seller_buyer);
                   <div className="row mb-3">
                      <div className="col-6 col-lg-4">
                         <h6><i className="fa fa-globe pr-1"></i> Country</h6>
-                        <h4 className="text-muted">{user && user.country.name}</h4>
+                        <h4 className="text-muted">{user && user.country ? user && user.country.name : ""}</h4>
                      </div>
                      <div className="col-6 col-lg-8">
                         <h6><i className="fa fa-star pr-1"></i> Positive Ratings</h6>
@@ -220,7 +220,7 @@ console.log('useer', seller_buyer);
                               <img width="" src={ require('../../../assets/images/comp/accounting.png') } alt="accounting" />
                            </div>
                            <h5 className="text-muted pt-2"> Balance</h5>
-                           <h3 className="text-success">&#036;1,124.00</h3>
+                           <h3 className="text-success">&#036;{(order_count && order_count.earnings.length > 0) ? order_count && order_count.earnings[0].total : "0.00"}</h3>
                         </div>
                      </div>
                      <div className="col-md-4 text-left">
@@ -229,7 +229,7 @@ console.log('useer', seller_buyer);
                               <img width="" src={ require('../../../assets/images/comp/financial.png') } alt="financial" />
                            </div>
                            <h5 className="text-muted pt-2"> Earnings(Month) </h5>
-                           <h3 className="text-success">&#036;85.00</h3>
+                           <h3 className="text-success">&#036;{(order_count && order_count.balance_amount.length > 0) ? order_count && order_count.balance_amount[0].total : "0.00"}</h3>
                         </div>
                      </div>
                   </div>

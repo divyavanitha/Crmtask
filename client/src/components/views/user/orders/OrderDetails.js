@@ -86,13 +86,22 @@ const Cart = (props) => {
         })
     }
 
-    const Tips = async () => {
+    const Tips = async (status) => {
 
-        let data = {
+        if(status == "0"){
+          var data = {
+                id: params.id,
+                tip_status: status
+          };
+        }else {
+          var data = {
                 id: params.id,
                 tip_message: $("textarea[name=tip_message]").val(),
-                tips: $("input[name=tips]").val()
-        };
+                tips: $("input[name=tips]").val(),
+                tip_status: status
+          };
+        }
+        
         
         dispatch(tips(data)).then(res => {
           console.log('id',res.responseData);
@@ -114,7 +123,7 @@ const Cart = (props) => {
 
         $("#tipModal").modal('hide');
 
-     if(order_details && order_details.tips == 0 && order_details && order_details.status == "COMPLETED" && order_details && order_details.buyer_rated == 1){
+     if(order_details && order_details.status == "COMPLETED" && order_details && order_details.buyer_rated == 1 && order_details && order_details.tip_status != 0 && order_details && order_details.tips == 0){
         $("#tipModal").modal('show');
      }else{
         $("#tipModal").modal('hide');
@@ -753,7 +762,7 @@ const Cart = (props) => {
                         </div>
                         <div className="modal-body text-center">
                           <button className="btn btn-success btn-lg mr-2" data-toggle="modal" data-target="#tipModal2" data-dismiss="modal">Yes, Add Tip</button>
-                          <button className="btn btn-success btn-lg" data-dismiss="modal">No, Thanks</button>
+                          <button className="btn btn-success btn-lg" onClick={ () => Tips("0") } data-dismiss="modal">No, Thanks</button>
                         </div>
                       </div>
                     </div>
@@ -782,7 +791,7 @@ const Cart = (props) => {
 
                               <textarea name="tip_message" onChange={handleChange} className="form-control mb-3" rows="4" placeholder="Leave Your Seller A Message."></textarea>
 
-                              <button onClick={Tips} className="btn btn-success"> Submit Tip </button>     
+                              <button onClick={ () => Tips("1") } className="btn btn-success"> Submit Tip </button>     
                         </div>
                       </div>
                     </div>

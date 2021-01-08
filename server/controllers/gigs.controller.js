@@ -138,7 +138,7 @@ exports.getGigDetailByName = async (req, res) => {
             const user = jwt.verify(token, process.env.SECRET_KEY, { algorithm: '[HS512]' });
 
             let recent = await db._find(View, { gig: gig._id, user: user._id });
-
+            gig.viewCount += 1;
             if(!recent) {
 
                 let data = {
@@ -147,14 +147,10 @@ exports.getGigDetailByName = async (req, res) => {
                     count: 1
                 }
 
-                gig.viewCount = 1;
-
                 await db._store(View, data);
             } else {
 
                 recent.count += 1;
-
-                gig.viewCount += 1;
 
                 await db._update(View, { _id: recent._id }, recent);
             }

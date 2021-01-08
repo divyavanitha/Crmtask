@@ -125,13 +125,8 @@ exports.sellerOrderList = async (req, res) => {
         console.log(new Date(date.getFullYear(), date.getMonth(), 1));
         console.log(new Date(date.getFullYear(), date.getMonth() + 1, 0));
 
-        /*let earnings = await db._get(Order, {seller: req.user._id, status: "COMPLETED", created_at: {
-            $gte: new Date(date.getFullYear(), date.getMonth(), 1),
-            $lt: new Date(date.getFullYear(), date.getMonth() + 1, 0)
-        }});*/
-
         let earnings = await Order.aggregate([
-            { $match: { seller: req.user._id, status: "COMPLETED" } },
+            { $match: { seller: new ObjectId(req.user._id), status: "COMPLETED" } },
             {
                 $group:
                 {
@@ -142,7 +137,7 @@ exports.sellerOrderList = async (req, res) => {
         ]);
 
         let balance_amount = await Order.aggregate([
-            { $match: { seller: req.user._id, status: { $nin: ["CANCELLED", "COMPLETED"] } } },
+            { $match: { seller: new ObjectId(req.user._id), status: { $nin: ["CANCELLED", "COMPLETED"] } } },
             {
                 $group:
                 {
@@ -156,7 +151,7 @@ exports.sellerOrderList = async (req, res) => {
 
         console.log(balance_amount);
 
-        const response = helper.response({ data: {"orders": orders, "delivered_order": delivered_order, "completed_order": completed_order, "cancelled_order": cancelled_order, "active_order": active_order } });
+        const response = helper.response({ data: {"orders": orders, "delivered_order": delivered_order, "completed_order": completed_order, "cancelled_order": cancelled_order, "active_order": active_order, "earnings": earnings, "balance_amount": balance_amount } });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
