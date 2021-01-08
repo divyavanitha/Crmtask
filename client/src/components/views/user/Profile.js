@@ -16,29 +16,42 @@ const Profile = (props) => {
    let history = useHistory();
    const params = useParams();
    const auth = useSelector((state) => state.user);
-   const [countrylist, setCountrylist] = useState('');
+   const [countrylist, setCountrylist] = useState([]);
    const [stateList, setStateList] = useState([]);
    const [cityList, setCityList] = useState([]);
-
+   const offer = useSelector((state) => state.request && state.request.view_offer && state.request.view_offer.responseData);
+   const countries = useSelector((state) => state.user && state.user.countries && state.user.countries.responseData && state.user.countries.responseData.countries);
+   const profile = useSelector((state) => state.profile && state.profile.getprofile && state.profile.getprofile.responseData && state.profile.getprofile.responseData.user);
    useEffect(() => {
-      dispatch(getProfile())
+      dispatch(getProfile()).then((profile) => {
+         console.log('profile', profile);
+         dispatch(getState(profile.user.country)).then((response) => {
+            setStateList(response.responseData.states);
+         });
+         dispatch(getCity(profile.user.state)).then((response) => {
+            setCityList(response.responseData.cities);
+         });
+      
+      });
       dispatch(getCountry())
       dispatch(getLanguage())
       
+      
 
-   }, [params.id]);
 
-const offer = useSelector((state) => state.request && state.request.view_offer && state.request.view_offer.responseData);
-const countries = useSelector((state) => state.user && state.user.countries && state.user.countries.responseData && state.user.countries.responseData.countries);
-const profile = useSelector((state) => state.profile && state.profile.getprofile && state.profile.getprofile.responseData && state.profile.getprofile.responseData.user);
+   }, []);
 
-console.log('profile', profile);
 
+
+//console.log('profile', profile);
+
+   
+ 
 const handleCountryChange = async (value, setFieldValue) => {
       setCountrylist(value);
       if (value) {
          setFieldValue('country', value);
-         const state = await dispatch(getState(value));
+         const state =  dispatch(getState(value));
          console.log('state', state);
          if (state && state.responseData.states) {
             setStateList(state.responseData.states)
@@ -48,7 +61,7 @@ const handleCountryChange = async (value, setFieldValue) => {
    }
 
 const handleStateChange = async (value, setFieldValue) => {
-      //setCountrylist(value);
+      //setStateList(value);
       console.log('state_id', value);
       if (value) {
          setFieldValue('state', value);
@@ -230,11 +243,11 @@ const handleStateChange = async (value, setFieldValue) => {
                                        <div className="form-group row">
                                           <label className="col-md-4 col-form-label"> State </label>
                                           <div className="col-md-8">
-                                           {countrylist && (<Fragment><select name="state" className={'form-control' + (errors.state && touched.state ? ' is-invalid' : '')} onChange={(e) => { handleStateChange(e.currentTarget.value, setFieldValue) }} >
+                                           {countrylist && (<Fragment><select name="state" className={'form-control' + (errors.state && touched.state ? ' is-invalid' : '')} value={profile && profile.state} onChange={(e) => { handleStateChange(e.currentTarget.value, setFieldValue) }} >
 
                                                 <option value="">Select state</option>
 
-                                                {stateList.map((s_list) => (<option key={s_list._id} value={s_list._id} >{s_list.name}</option>))}
+                                                {stateList && stateList.map((s_list) => (<option key={s_list._id} value={s_list._id} >{s_list.name}</option>))}
                                              </select>
                                                 <ErrorMessage name="state" component="div" className="invalid-feedback" /> </Fragment>)}
                                           </div>
@@ -244,12 +257,13 @@ const handleStateChange = async (value, setFieldValue) => {
                                        {/* <!-- form-group row Ends --> */}
                                        <div className="form-group row">
                                           <label className="col-md-4 col-form-label"> City </label>
+                                          {console.log(profile && profile.city)}
                                           <div className="col-md-8">
-                                           {stateList && (<Fragment><select name="city" className={'form-control' + (errors.city && touched.city ? ' is-invalid' : '')} onChange={(e) => { setFieldValue('city', e.currentTarget.value); }} >
+                                           {stateList && (<Fragment><select name="city" className={'form-control' + (errors.city && touched.city ? ' is-invalid' : '')} value={profile && profile.city} onChange={(e) => { setFieldValue('city', e.currentTarget.value); }} >
 
                                                 <option value="">Select City</option>
 
-                                                {cityList.map((s_list) => (<option key={s_list._id} value={s_list._id} >{s_list.name}</option>))}
+                                                {cityList && cityList.map((s_list) => (<option key={s_list._id} value={s_list._id} >{s_list.name}</option>))}
                                              </select>
                                                 <ErrorMessage name="city" component="div" className="invalid-feedback" /> </Fragment>)}
                                           </div>

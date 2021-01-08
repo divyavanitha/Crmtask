@@ -29,10 +29,6 @@ const orderSchema = mongoose.Schema({
         type: Number,
         required: true
     },
-    adminCommission: {
-        type: Number,
-        required: true
-    },
     quantity: {
         type: Number,
         required: true

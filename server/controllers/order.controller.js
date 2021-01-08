@@ -195,32 +195,45 @@ exports.updateOrder = async (req, res) => {
             order.status = (req.body.status).toUpperCase();
 
             var user = await User.findById(order.seller);
+            var buyer = await User.findById(order.buyer);
             var admin = await db._find(Admin);
             let setting = await db._find(Setting, {}, { createdAt: 0, updatedAt: 0 });
 
         if ((setting.seller.levelTwoRating == user.ratingPercent) && (setting.seller.levelTwoCompletedOrder == user.completedOrder)) {
             let comission = ((order.total * setting.pricing.commissionLevelTwo) / 100);
             let balance = order.total - comission;
-            user.wallet += balance;
+            if(order.payment_mode == "WALLET"){
+                buyer.wallet = buyer.wallet - order.total;
+                user.wallet += balance;
+            }
             admin.wallet += comission;
         }
         if ((setting.seller.levelOneRating == user.ratingPercent) && (setting.seller.levelOneCompletedOrder == user.completedOrder)) {
             let comission = ((order.total * setting.pricing.commissionLevelOne) / 100);
             let balance = order.total - comission;
-            user.wallet += balance;
+            if(order.payment_mode == "WALLET"){
+                buyer.wallet = buyer.wallet - order.total;
+                user.wallet += balance;
+            }
             admin.wallet += comission;
 
         }
         if ((setting.seller.topRatedRating == user.ratingPercent) && (setting.seller.topRatedCompletedOrder == user.completedOrder)) {
             let comission = ((order.total * setting.pricing.commissionTopRated) / 100);
             let balance = order.total - comission;
-            user.wallet += balance;
+            if(order.payment_mode == "WALLET"){
+                buyer.wallet = buyer.wallet - order.total;
+                user.wallet += balance;
+            }
             admin.wallet += comission;
         }
         if (user.type == "NEWSELLER") {
             let comission = ((order.total * setting.pricing.commission) / 100);
             let balance = order.total - comission;
-            user.wallet += balance;
+            if(order.payment_mode == "WALLET"){
+                buyer.wallet = buyer.wallet - order.total;
+                user.wallet += balance;
+            }
             admin.wallet += comission;
         }
 
@@ -266,6 +279,7 @@ exports.updateOrder = async (req, res) => {
 
         let orders = await db._update(Order, { _id: req.body.id }, order);
         await db._update(User, { _id: order.seller }, user);
+        await db._update(User, { _id: order.buyer }, buyer);
         await db._update(Admin, {}, admin);
         const response = helper.response({ message: res.__('updated'), data: order });
         return res.status(response.statusCode).json(response);

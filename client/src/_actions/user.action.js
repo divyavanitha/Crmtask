@@ -253,6 +253,7 @@ export const getCountry = (data) => async dispatch => {
         type: GET_COUNTRY,
         payload: countries.data
     });
+    return countries.data.responseData;
 }
 
 export const getState = (id) => async dispatch => {
