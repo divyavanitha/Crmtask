@@ -2,6 +2,7 @@ const express = require("express");
 const { Cart } = require('../models/Cart');
 const { Order } = require('../models/Order');
 const { Setting } = require('./../models/setting');
+const { Notification } = require('../models/Notification');
 const { User } = require('../models/user');
 const { Admin } = require('../models/admin');
 const { Rating } = require('../models/Rating');
@@ -86,6 +87,16 @@ exports.checkout = async (req, res) => {
                 }
 
                 let orders = await db._store(Order, order);
+
+                let notification = {
+                    sender: orders.buyer,
+                    senderType: "BUYER",
+                    receiver: orders.seller,
+                    type: "ORDER",
+                    orderId: orders._id,
+                    message: "Has just sent you an offer on your request click here to view."
+                }
+                await db._store(Notification, notification);
 
                 await db._delete(Cart, { "_id": carts[i]._id });
 
@@ -190,9 +201,20 @@ exports.updateOrder = async (req, res) => {
             console.log('delivery', delivery);
             order.status = (req.body.status).toUpperCase();
 
+            var notification = {
+                sender: order.seller,
+                senderType: "SELLER",
+                receiver: order.buyer,
+                type: "ORDER",
+                orderId: order._id,
+                message: "Delivered your order."
+            }
+            
+
         } else if ((req.body.status).toUpperCase() == "COMPLETED") {
 
             order.status = (req.body.status).toUpperCase();
+            
 
             var user = await User.findById(order.seller);
             var buyer = await User.findById(order.buyer);
@@ -207,6 +229,7 @@ exports.updateOrder = async (req, res) => {
                 user.wallet += balance;
             }
             admin.wallet += comission;
+            user.recentDelivery = new Date();
         }
         if ((setting.seller.levelOneRating == user.ratingPercent) && (setting.seller.levelOneCompletedOrder == user.completedOrder)) {
             let comission = ((order.total * setting.pricing.commissionLevelOne) / 100);
@@ -216,6 +239,7 @@ exports.updateOrder = async (req, res) => {
                 user.wallet += balance;
             }
             admin.wallet += comission;
+            user.recentDelivery = new Date();
 
         }
         if ((setting.seller.topRatedRating == user.ratingPercent) && (setting.seller.topRatedCompletedOrder == user.completedOrder)) {
@@ -226,16 +250,28 @@ exports.updateOrder = async (req, res) => {
                 user.wallet += balance;
             }
             admin.wallet += comission;
+            user.recentDelivery = new Date();
         }
         if (user.type == "NEWSELLER") {
             let comission = ((order.total * setting.pricing.commission) / 100);
             let balance = order.total - comission;
             if(order.payment_mode == "WALLET"){
-                buyer.wallet = buyer.wallet - order.total;
+                buyer.wallet -= order.total;
                 user.wallet += balance;
             }
             admin.wallet += comission;
+            user.recentDelivery = new Date();
         }
+
+            var notification = {
+                sender: order.buyer,
+                senderType: "BUYER",
+                receiver: order.seller,
+                type: "ORDER",
+                orderId: order._id,
+                message: "Completed your order."
+            }
+
 
 
         } else if ((req.body.status).toUpperCase() == "REVISION REQUESTED") {
@@ -269,18 +305,47 @@ exports.updateOrder = async (req, res) => {
 
             order.status = (req.body.status).toUpperCase();
 
+            var notification = {
+                sender: order.buyer,
+                senderType: "BUYER",
+                receiver: order.seller,
+                type: "ORDER",
+                orderId: order._id,
+                message: "Requested for a revision."
+            }
+
         } else if ((req.body.status).toUpperCase() == "CANCELLATION REQUESTED") {
 
             order.status = (req.body.status).toUpperCase();
             order.cancellation_reason = req.body.cancellation_reason;
             order.cancellation_message = req.body.cancellation_message;
             order.cancelled_by = req.body.cancelled_by;
+
+            if(req.user._id == order.buyer){
+                var sender = order.buyer;
+                var receiver = order.seller;
+                var sender_type = "BUYER";
+            }else if (req.user._id == order.seller){
+                var sender = order.seller;
+                var receiver = order.buyer;
+                var sender_type = "SELLER";
+            }
+
+            var notification = {
+                sender: sender,
+                senderType: sender_type,
+                receiver: receiver,
+                type: "ORDER",
+                orderId: order._id,
+                message: "Wants to cancel the order."
+            }
         }
 
         let orders = await db._update(Order, { _id: req.body.id }, order);
         await db._update(User, { _id: order.seller }, user);
         await db._update(User, { _id: order.buyer }, buyer);
         await db._update(Admin, {}, admin);
+        await db._store(Notification, notification);
         const response = helper.response({ message: res.__('updated'), data: order });
         return res.status(response.statusCode).json(response);
 
@@ -321,17 +386,56 @@ exports.cancel = async (req, res) => {
 
         let order = await Order.findById(req.body.id);
 
-        if ((req.body.cancel_status).toUpperCase() == "Accepted") {
+        if ((req.body.cancel_status).toUpperCase() == "ACCEPTED") {
             order.CancelRequestStatus = (req.body.cancel_status).toUpperCase();
             order.status = "CANCELLED";
+
+            if(req.user._id == order.buyer){
+                var sender = order.buyer;
+                var receiver = order.seller;
+                var sender_type = "BUYER";
+            }else if (req.user._id == order.seller){
+                var sender = order.seller;
+                var receiver = order.buyer;
+                var sender_type = "SELLER";
+            }
+
+            var notification = {
+                sender: sender,
+                senderType: sender_type,
+                receiver: receiver,
+                type: "ORDER",
+                orderId: order._id,
+                message: "Accepted cancellation request."
+            }
+
         } else {
             order.CancelRequestStatus = (req.body.cancel_status).toUpperCase();
             order.status = "PROGRESS";
+
+            if(req.user._id == order.buyer){
+                var sender = order.buyer;
+                var receiver = order.seller;
+                var sender_type = "BUYER";
+            }else if (req.user._id == order.seller){
+                var sender = order.seller;
+                var receiver = order.buyer;
+                var sender_type = "SELLER";
+            }
+
+            var notification = {
+                sender: sender,
+                senderType: sender_type,
+                receiver: receiver,
+                type: "ORDER",
+                orderId: order._id,
+                message: "Declined your cancellation request."
+            }
         }
 
 
         let orders = await db._update(Order, { _id: req.body.id }, order);
-
+        await db._store(Notification, notification);
         const response = helper.response({ message: res.__('inserted') });
         return res.status(response.statusCode).json(response);
 
@@ -372,15 +476,34 @@ exports.tips = async (req, res) => {
 
     try {
 
+        let order_detail = await Order.findById(req.body.id);
+        var user = await User.findById(order_detail.seller);
+        var buyer = await User.findById(order_detail.buyer);
 
-        let order = {
-            tips: req.body.tips,
-            tip_message: req.body.tip_message
-        }
+            let order = {
+                tips: req.body.tips,
+                tip_message: req.body.tip_message
+            }
+
+            if(order_detail.payment_mode == "WALLET"){
+                buyer.wallet -= req.body.tips;
+                user.wallet += req.body.tips;
+            }
+
+            var notification = {
+                sender: req.user._id,
+                senderType: "BUYER",
+                receiver: order_detail.seller,
+                type: "ORDER",
+                orderId: order_detail._id,
+                message: "Has given you "+req.body.tips+" tip."
+            }
 
 
         let orders = await db._update(Order, { _id: req.body.id }, order);
-
+        await db._update(User, { _id: order_detail.seller }, user);
+        await db._update(User, { _id: order_detail.buyer }, buyer);
+        await db._store(Notification, notification);
         const response = helper.response({ message: res.__('inserted') });
         return res.status(response.statusCode).json(response);
 
@@ -460,6 +583,15 @@ exports.rating = async (req, res) => {
 
                 order.buyer_rated = 1;
 
+                var notification = {
+                    sender: order.buyer,
+                    senderType: "BUYER",
+                    receiver: order.seller,
+                    type: "ORDER",
+                    orderId: order._id,
+                    message: "Please review and rate your buyer."
+                }
+
             } else {
                 var rating = {
                     sellerRating: req.body.seller_rating,
@@ -472,6 +604,15 @@ exports.rating = async (req, res) => {
 
                 order.seller_rated = 1;
                 user.completedOrder += 1;
+
+                var notification = {
+                    sender: order.seller,
+                    senderType: "SELLER",
+                    receiver: order.buyer,
+                    type: "ORDER",
+                    orderId: order._id,
+                    message: "Please review and rate your seller."
+                }
             }
             await db._update(Rating, { _id: rate._id }, rating);
 
@@ -488,6 +629,15 @@ exports.rating = async (req, res) => {
                 }
 
                 order.buyer_rated = 1;
+
+                var notification = {
+                    sender: order.buyer,
+                    senderType: "BUYER",
+                    receiver: order.seller,
+                    type: "ORDER",
+                    orderId: order._id,
+                    message: "Please review and rate your buyer."
+                }
             } else {
                 var rating = {
                     orderId: req.body.order_id,
@@ -501,6 +651,15 @@ exports.rating = async (req, res) => {
 
                 order.seller_rated = 1;
                 user.completedOrder += 1;
+
+                var notification = {
+                    sender: order.seller,
+                    senderType: "SELLER",
+                    receiver: order.buyer,
+                    type: "ORDER",
+                    orderId: order._id,
+                    message: "Please review and rate your seller."
+                }
             }
 
             await db._store(Rating, rating);
@@ -536,6 +695,7 @@ exports.rating = async (req, res) => {
         }
 
         await db._update(User, { _id: order.seller }, user);
+        await db._store(Notification, notification);
         let orders = await db._update(Order, { _id: req.body.order_id }, order);
 
         const response = helper.response({ message: res.__('inserted') });

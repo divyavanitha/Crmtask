@@ -54,8 +54,8 @@ const ViewOffer = (props) => {
                }
 console.log('data',data);
                dispatch(orderOffer(data)).then(res => {
-                  /*$('.payment-listing-modal').modal("hide");
-                  history.push('/buying-order-lists');*/
+                  $('.payment-listing-modal').modal("hide");
+                  history.push('/buying-order-lists');
                })
 
             });

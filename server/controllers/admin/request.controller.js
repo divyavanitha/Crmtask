@@ -1,6 +1,8 @@
 const express = require("express");
 const { Request } = require("../../models/Request");
 const { RequestOffer } = require('../../models/RequestOffer');
+const { Notification } = require('../../models/Notification');
+const { Admin } = require('../../models/admin');
 const helper = require('../../services/helper.js');
 const db = require('../../services/model.js');
 const Joi = require('@hapi/joi');
@@ -75,12 +77,34 @@ exports.deleteRequest = async (req, res) => {
 
 exports.changeStatus = async (req, res) => {
     try {
+
+        let req = await db._find(Request, { _id: req.params.id });
+        var admin = await db._find(Admin);
+
         const request = {
-                status: req.params.status,
+            status: req.params.status,
+        }
+
+        if(req.params.status == "APPROVE"){
+            var notification = {
+                sender: admin._id,
+                senderType: "ADMIN",
+                receiver: req.user,
+                type: "REQUEST",
+                message: "Has approved your Request. Thanks for posting."
+            }
+        }else if(req.params.status == "DECLINE"){
+            var notification = {
+                sender: admin._id,
+                senderType: "ADMIN",
+                receiver: req.user,
+                type: "REQUEST",
+                message: "Has declined your Request. Please submit a valid Request."
+            }
         }
 
         let requests = await db._update(Request, { _id: req.params.id }, request);
-
+        await db._store(Notification, notification);
         const response = helper.response({ message: res.__('updated') });
         return res.status(response.statusCode).json(response);
         

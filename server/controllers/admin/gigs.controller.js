@@ -4,6 +4,8 @@ const { Gig } = require('../../models/gigs');
 const { Category } = require('../../models/category');
 const { Order } = require('../../models/Order');
 const { SubCategory } = require('../../models/SubCategory');
+const { Notification } = require('../../models/Notification');
+const { Admin } = require('../../models/admin');
 const helper = require('../../services/helper.js');
 const db = require('../../services/model.js');
 const Joi = require('@hapi/joi');
@@ -59,7 +61,7 @@ exports.gigStatus = async (req, res) => {
     try {
 
         let gig = await db._find(Gig, {_id:req.params.id});
-        
+        var admin = await db._find(Admin);
         if((req.params.status).toUpperCase() == "ADD_FEATURE"){
             gig.featured = true;
         }else if((req.params.status).toUpperCase() == "REMOVE_FEATURE"){
@@ -70,12 +72,29 @@ exports.gigStatus = async (req, res) => {
             gig.status = "ACTIVE";
         }else if((req.params.status).toUpperCase() == "APPROVE"){
             gig.status = "ACTIVE";
+
+            var notification = {
+                sender: admin._id,
+                senderType: "ADMIN",
+                receiver: gig.user,
+                type: "GIG",
+                message: "Has approved your Gig. Thanks for posting."
+            }
+
         }else if((req.params.status).toUpperCase() == "DECLINE"){
             gig.status = "DECLINE";
+
+            var notification = {
+                sender: admin._id,
+                senderType: "ADMIN",
+                receiver: gig.user,
+                type: "GIG",
+                message: "Has declined your gig. Please submit a valid gig. "
+            }
         }
 
         let gigs = await db._update(Gig, { _id: req.params.id }, gig);
-
+        await db._store(Notification, notification);
         const response = helper.response({ message: res.__('updated') });
         return res.status(response.statusCode).json(response);
         
@@ -155,14 +174,24 @@ exports.requestModification = async (req, res) => {
     if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
     try {
+        var admin = await db._find(Admin);
+        let gigs = await db._find(Gig, {_id:req.body.id});
         const gig = {
             modify_description: req.body.modify_description,
             status: "MODIFICATION",
             submit_proposal:false
         }
 
-         await db._update(Gig, { _id: req.body.id }, gig);
+        var notification = {
+            sender: admin._id,
+            senderType: "ADMIN",
+            receiver: gigs.user,
+            type: "GIG",
+            message: "Has Modification Requested your Gig. Thanks for posting."
+        }
 
+         await db._update(Gig, { _id: req.body.id }, gig);
+         await db._store(Notification, notification);
         const response = helper.response({ message: res.__('updated') });
         return res.status(response.statusCode).json(response);
 

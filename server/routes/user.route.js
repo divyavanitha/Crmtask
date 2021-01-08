@@ -67,6 +67,10 @@ router.get('/skills', (req, res) => {
   authController.skill(req, res);
 });
 
+router.get('/user', middleware.user, (req, res) => {
+  homeController.findUser(req, res);
+});
+
 router.get('/profile', middleware.user, (req, res) => {
   profilecontroller.getProfile(req, res);
 });
@@ -317,6 +321,22 @@ router.get('/gig/subcategory',middleware.user, (req, res) => {
 
 router.get('/request/gigs/:id/:sub', middleware.user, (req, res) => {
   homeController.requestGigs(req, res);
+});
+
+router.get('/seller/buyer', middleware.user, (req, res) => {
+  homeController.sellerBuyer(req, res);
+});
+
+router.get('/notifications',middleware.user, (req, res) => {
+  homeController.notifications(req, res);
+});
+
+router.delete('/notifications/:id', middleware.user, (req, res) => {
+  homeController.deleteNotification(req, res);
+});
+
+router.get('/buyit/again', middleware.user, (req, res) => {
+  homeController.buyItAgain(req, res);
 });
 
 router.post('/card/add', (req, res) => {

@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import moment from 'moment';
 import Loader from 'react-loader-spinner'
 import $ from 'jquery';
 import { getSellerOrderDetails, getRating, getCancelReason } from "../../../../_actions/user.action";
@@ -241,7 +242,7 @@ const Cart = (props) => {
                                                                   {order_details && order_details.buyer.firstName} {order_details && order_details.buyer.lastName}               </a>
                                              | <span className="font-weight-bold ml-1"> Status: </span>
                                                                {status ? status :  order_details && order_details.status}             | <span className="font-weight-bold ml-1"> Date: </span>
-                                                               {order_details && order_details.created_at}             | <span className="font-weight-bold ml-1"> Order Revisions: </span>
+                                                               { moment(order_details && order_details.created_at).format('MMMM DD, YYYY') }             | <span className="font-weight-bold ml-1"> Order Revisions: </span>
                                                                {order_details && order_details.revisions} | <span className="font-weight-bold ml-1"> Revisions Used: </span>
                                                                {order_details && order_details.used_revisions.length}
                                                             </p>

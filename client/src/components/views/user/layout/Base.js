@@ -41,6 +41,8 @@ import Favourite from "../Favourite";
 import Contact from "../Contact";
 import Referral from "../Referral";
 import Page from "../Page";
+import Notification from "../Notification";
+import StartSelling from "../StartSelling";
 
 import "../../../../assets/css/custom.css";
 
@@ -103,6 +105,8 @@ const Base = () => {
                 <ProtectedRoute path="/purchases" component={Purchase} />
                 <ProtectedRoute path="/favourites" component={Favourite} />
                 <ProtectedRoute path="/contacts" component={Contact} />
+                <ProtectedRoute path="/notifications" component={Notification} />
+                <ProtectedRoute path="/start/selling" component={StartSelling} />
                 <ProtectedRoute path="/referrals" component={Referral} />
                 <Route path="/pages/:page" component={Page} />
 

@@ -35,7 +35,11 @@ import {
     GET_COUNTRY,
     GET_CITY,
     GET_STATE,
-    GET_LANGUAGE
+    GET_LANGUAGE,
+    FIND_USER,
+    GET_SELLER_BUYER,
+    GET_NOTIFICATION,
+    BUY_IT_AGAIN
 } from './types';
 
 
@@ -187,6 +191,35 @@ export const getCategory = (data) => async dispatch => {
     dispatch({
         type: GET_CATEGORY,
         payload: category.data
+    });
+}
+
+export const getNotification = () => async dispatch => {
+     console.log('note');
+    const notification = await axios.get(`/api/notifications`)
+    console.log('note', notification);
+    dispatch({
+        type: GET_NOTIFICATION,
+        payload: notification.data
+    });
+}
+
+export const deleteNotification = (id) => async dispatch => {
+    try {
+        let response = await axios.delete(`/api/notifications/${id}`);
+        response.data.status = 'success';
+        return response.data;
+    } catch (e) {
+        e.response.data.status = 'error';
+        return e.response.data;
+    }
+};
+
+export const buyItAgain = () => async dispatch => {
+    const buyit = await axios.get(`/api/buyit/again`)
+    dispatch({
+        type: BUY_IT_AGAIN,
+        payload: buyit.data
     });
 }
 
@@ -394,6 +427,39 @@ export const deleteCart = (id) => async dispatch => {
     }
 };
 
+export const findUser = (id) => async dispatch => {
+    try {
+        let response = await axios.get(`/api/user`);
+
+        dispatch({
+            type: FIND_USER,
+            payload: response.data
+        });
+
+        response.data.status = 'success';
+        return response.data;
+    } catch (e) {
+        e.response.data.status = 'error';
+        return e.response.data;
+    }
+};
+
+export const sellerBuyer = (id) => async dispatch => {
+    try {
+        let response = await axios.get(`/api/seller/buyer`);
+
+        dispatch({
+            type: GET_SELLER_BUYER,
+            payload: response.data
+        });
+
+        response.data.status = 'success';
+        return response.data;
+    } catch (e) {
+        e.response.data.status = 'error';
+        return e.response.data;
+    }
+};
 
 
 export const buyerOrderList = (data) => async dispatch => {

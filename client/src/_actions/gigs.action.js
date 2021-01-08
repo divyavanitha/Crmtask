@@ -136,6 +136,8 @@ export const getGigList = (data) => async dispatch => {
     type: GET_ALLGIGS,
     payload: gig.data
   });
+
+  return gig.data.responseData;
 }
 
 export const submitApproval = (id) => async dispatch => {

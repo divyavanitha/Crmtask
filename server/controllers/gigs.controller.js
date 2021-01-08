@@ -30,6 +30,7 @@ exports.listgigs = async (req, res) => {
         }
 
         projection.status = 'ACTIVE';
+        projection.deleted_at = null;
 
         let gigs = await db._get(Gig, projection, {}, {populate: "user"});
 
@@ -75,6 +76,8 @@ exports.getGigDetails = async (req, res) => {
 
             let recent = await db._find(View, { gig: req.params.id, user: user._id });
 
+            gig.viewCount += 1;
+
             if(!recent) {
 
                 let data = {
@@ -92,6 +95,8 @@ exports.getGigDetails = async (req, res) => {
             }
 
         }
+
+        await db._update(Gig, { _id: gig._id }, gig);
 
         if(gig != undefined){
         var response = helper.response({ data: data });
@@ -142,15 +147,20 @@ exports.getGigDetailByName = async (req, res) => {
                     count: 1
                 }
 
+                gig.viewCount = 1;
+
                 await db._store(View, data);
             } else {
 
                 recent.count += 1;
 
+                gig.viewCount += 1;
+
                 await db._update(View, { _id: recent._id }, recent);
             }
 
         }
+        await db._update(Gig, { _id: gig._id }, gig);
 
         const response = helper.response({ data: data });
 
@@ -183,13 +193,13 @@ exports.getPackage = async (req, res) => {
 exports.usergigs = async (req, res) => {
     try {
 
-        let active_gigs = await db._get(Gig, { user: req.user._id, status: "ACTIVE" }, {}, {populate: "user"});
-        let decline_gigs = await db._get(Gig, { user: req.user._id, status: "DECLINE" }, {}, {populate: "user"});
-        let draft_gigs = await db._get(Gig, { user: req.user._id, status: "DRAFT" }, {}, {populate: "user"});
-        let pending_gigs = await db._get(Gig, { user: req.user._id, status: "PENDING" }, {}, {populate: "user"});
-        let modification_gigs = await db._get(Gig, { user: req.user._id, status: "MODIFICATION" }, {}, {populate: "user"});
-        let paused_gigs = await db._get(Gig, { user: req.user._id, status: "PAUSE" }, {}, {populate: "user"});
-        let featured_gigs = await db._get(Gig, { user: req.user._id, featured: true }, {}, {populate: "user"});
+        let active_gigs = await db._get(Gig, { user: req.user._id, status: "ACTIVE", deleted_at: null }, {}, {populate: "user"});
+        let decline_gigs = await db._get(Gig, { user: req.user._id, status: "DECLINE", deleted_at: null }, {}, {populate: "user"});
+        let draft_gigs = await db._get(Gig, { user: req.user._id, status: "DRAFT", deleted_at: null }, {}, {populate: "user"});
+        let pending_gigs = await db._get(Gig, { user: req.user._id, status: "PENDING", deleted_at: null }, {}, {populate: "user"});
+        let modification_gigs = await db._get(Gig, { user: req.user._id, status: "MODIFICATION", deleted_at: null }, {}, {populate: "user"});
+        let paused_gigs = await db._get(Gig, { user: req.user._id, status: "PAUSE", deleted_at: null }, {}, {populate: "user"});
+        let featured_gigs = await db._get(Gig, { user: req.user._id, featured: true, deleted_at: null }, {}, {populate: "user"});
 
         //const data = { gigs };
 

@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import $ from 'jquery';
+import moment from 'moment';
 import { getBuyerOrderDetails, getRating, getCancelReason} from "../../../../_actions/user.action";
 import { rating, updateOrder, cancel, tips } from "../../../../_actions/order.action";
 
@@ -239,7 +240,7 @@ const Cart = (props) => {
                                                                   {order_details && order_details.seller.firstName} {order_details && order_details.seller.lastName}               </a>
                                              | <span className="font-weight-bold ml-1"> Status: </span>
                                              {order_details && order_details.status}              | <span className="font-weight-bold ml-1"> Date: </span>
-                                                               {order_details && order_details.created_at}             | <span className="font-weight-bold ml-1"> Order Revisions:  </span>
+                                                               { moment(order_details && order_details.created_at).format('MMMM DD, YYYY') }             | <span className="font-weight-bold ml-1"> Order Revisions:  </span>
                                                                {order_details && order_details.revisions}
                                                             </p>
                                                          </div>

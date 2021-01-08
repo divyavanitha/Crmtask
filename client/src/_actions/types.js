@@ -70,6 +70,14 @@ export const GET_STATE = 'GET_STATE';
 
 export const GET_LANGUAGE = 'GET_LANGUAGE';
 
+export const FIND_USER = 'FIND_USER';
+
+export const GET_NOTIFICATION = 'GET_NOTIFICATION';
+
+export const GET_SELLER_BUYER = 'GET_SELLER_BUYER';
+
+export const BUY_IT_AGAIN = 'BUY_IT_AGAIN';
+
 export const CREATE_GIGS = 'CREATE_GIGS';
 export const GET_MYALLGIGS = 'GET_MYALLGIGS';
 export const GET_GIGSBYID = 'GET_GIGSBYID';

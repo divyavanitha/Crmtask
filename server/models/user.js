@@ -102,6 +102,10 @@ const userSchema = mongoose.Schema({
         type: Number,
         default: 0
     },
+    recentDelivery: {
+        type: Date,
+        default: Date.now
+    },
     referralId: {
         type: String,
         minlength: 6,

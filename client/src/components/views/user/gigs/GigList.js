@@ -10,6 +10,8 @@ const GigList = (props) => {
    const dispatch = useDispatch();
    let history = useHistory();
    let [payment, setPayment] = useState(0);
+   let [filterGig, setFileterGig] = useState([]);
+   let [response, setResponse] = useState([]);
    let settings = useSelector((state) => state.settings);
 
    let gig = settings.settings && settings.settings.gig;
@@ -19,7 +21,11 @@ const GigList = (props) => {
    console.log('setting', auth);
 
    useEffect(() => {
-      dispatch(getGigList())
+      dispatch(getGigList()).then((response) => {
+        setResponse(response);
+        setFileterGig(response);
+
+      });
 
       $('body').on('click', '.delete', function (e) {
          //alert();
@@ -93,6 +99,17 @@ const GigList = (props) => {
         })
    }
 
+   /*const handleClickGig = (value) => {
+      console.log(value);
+      if(value){
+       console.log(response);
+        setFileterGig(response && response.filter((request) => {console.log('dsfs',request); return request.subCategory._id == value }));
+      } else {
+        setFileterGig(response);
+      }
+      
+   }*/
+
 
 
    return (
@@ -165,7 +182,7 @@ const GigList = (props) => {
                                  {console.log(list.pricing)}
                                     <td className="proposal-title"> {list.title} </td>
                                      <td className="text-success"> &#036;{list.pricing.length ? list.pricing[0].price : 0} </td> 
-                                    <td>21</td>
+                                    <td>{list.viewCount}</td>
                                     <td>22</td>
                                     <td className="text-center">
                                        <div className="dropdown">
@@ -209,7 +226,7 @@ const GigList = (props) => {
                                  {console.log(list.pricing)}
                                     <td className="proposal-title"> {list.title} </td>
                                      <td className="text-success"> &#036;{list.pricing.length ? list.pricing[0].price : 0} </td> 
-                                    <td>21</td>
+                                    <td>{list.viewCount}</td>
                                     <td>22</td>
                                     <td className="text-center">
                                        <div className="dropdown">
@@ -247,7 +264,7 @@ const GigList = (props) => {
                                  {console.log(list.pricing)}
                                     <td className="proposal-title"> {list.title} </td>
                                      <td className="text-success"> &#036;{list.pricing.length ? list.pricing[0].price : 0} </td> 
-                                    <td>21</td>
+                                    <td>{list.viewCount}</td>
                                     <td>22</td>
                                     <td className="text-center">
                                        <div className="dropdown">

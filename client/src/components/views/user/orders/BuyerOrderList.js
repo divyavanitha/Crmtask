@@ -2,7 +2,7 @@ import React, { Fragment, useState, FormEvent, Dispatch, useEffect } from "react
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useHistory } from "react-router-dom";
 //import { useToasts } from 'react-toast-notifications'
-
+import moment from 'moment';
 import { getGigList, deleteGig } from "../../../../_actions/gigs.action";
 import { buyerOrderList } from "../../../../_actions/user.action";
 
@@ -107,7 +107,7 @@ const GigList = (props) => {
                                              </Link>
                                           </td>
                                           <td>
-                                             {list.created_at}
+                                            { moment(list.created_at).format('MMMM DD, YYYY') }
                                           </td>
                                           <td>{list.deliveryTime}</td>
                                           <td>&#036;{list.price}</td>
@@ -138,7 +138,7 @@ const GigList = (props) => {
                                              </Link>
                                           </td>
                                           <td>
-                                             {list.created_at}
+                                             { moment(list.created_at).format('MMMM DD, YYYY') }
                                           </td>
                                           <td>{list.deliveryTime}</td>
                                           <td>&#036;{list.price}</td>
@@ -171,7 +171,7 @@ const GigList = (props) => {
                                              </Link>
                                           </td>
                                           <td>
-                                             {list.created_at}
+                                             { moment(list.created_at).format('MMMM DD, YYYY') }
                                           </td>
                                           <td>{list.deliveryTime}</td>
                                           <td>&#036;{list.price}</td>
@@ -202,7 +202,7 @@ const GigList = (props) => {
                                              </Link>
                                           </td>
                                           <td>
-                                             {list.created_at}
+                                             { moment(list.created_at).format('MMMM DD, YYYY') }
                                           </td>
                                           <td>{list.deliveryTime}</td>
                                           <td>&#036;{list.price}</td>
@@ -232,7 +232,7 @@ const GigList = (props) => {
                                              </Link>
                                           </td>
                                           <td>
-                                             {list.created_at}
+                                            { moment(list.created_at).format('MMMM DD, YYYY') }
                                           </td>
                                           <td>{list.deliveryTime}</td>
                                           <td>&#036;{list.price}</td>
