@@ -16,7 +16,7 @@ const cardSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    last_four: {
+    lastFour: {
         type: Number,
         required: true
     },
@@ -24,22 +24,13 @@ const cardSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    card_id: {
+    cardId: {
         type: String,
         required: true
     },
-    customer_id: {
+    customerId: {
         type: String,
         required: true
-    },
-    month: {
-        type: Number,
-        required: true
-    },
-    year: { 
-        type: Schema.Types.ObjectId, 
-        ref: 'Package', 
-        required: false 
     },
     isDefault:{
         type: Boolean,
@@ -49,7 +40,6 @@ const cardSchema = mongoose.Schema({
         type: Date,
         default: Date.now
     },
-   
     updated_at: {
         type: Date,
         default: Date.now

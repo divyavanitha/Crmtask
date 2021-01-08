@@ -374,7 +374,7 @@ function Header() {
                                 </div>
                             </li>
                             <li className="logged-in-link mr-lg-0 mr-2 d-none d-sm-block d-md-block d-lg-block">
-                              <a className="menuItem btn btn-success text-white">${auth.user.wallet}</a>
+                              <Link to="/wallet" className="menuItem btn btn-success text-white">${auth.user.wallet}</Link>
                             </li>
                             </ul>)}
 

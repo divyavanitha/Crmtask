@@ -19,7 +19,19 @@ function AccountSettings() {
                <h2>Account Settings</h2>
             </div>
             <div className="card-body">
-               <h5 className="mb-4"> Stripe Payment </h5>
+               <h5 className="mb-4"> Cards </h5>
+               <form method="post" className="clearfix mb-3">
+                  <div className="form-group row">
+                     <label className="col-md-4 col-form-label"> Enter Paypal Email </label>
+                     <div className="col-md-8">
+
+                     </div>
+                  </div>
+
+                  <a href="#" data-toggle="modal" data-target="#stripe-modal" className="btn btn-success float-right">Add Card</a>
+               </form>
+               <hr />
+               <h5 className="mb-4"> Payout Cards (Debit) </h5>
                <form method="post" className="clearfix mb-3">
                   <div className="form-group row">
                      <label className="col-md-4 col-form-label"> Enter Paypal Email </label>

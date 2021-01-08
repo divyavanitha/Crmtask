@@ -47,21 +47,21 @@ module.exports = [{
     },
     "sms": {
         "status": false,
-        "provider": "Twilio",
+        "provider": "TWILIO",
         "sid": "",
         "token": "",
         "sender": ""
     },
     "mail": {
         "status": false,
-        "service": "gmail",
+        "service": "GMAIL",
         "username": "",
         "password": "",
         "from": ""
     },
     "payment": [{
          "status": false,
-         "name": "Stripe",
+         "name": "STRIPE",
          "credentials": [{
             "name": "publishable_key",
             "value": ""
@@ -82,6 +82,8 @@ module.exports = [{
         "referGig": false
     },
     "seller": {
+        "newSellerRating": 0,
+        "newSellerCompletedOrder": 0,
         "levelOneRating": 70,
         "levelOneCompletedOrder": 50,
         "levelTwoRating": 50,

@@ -319,19 +319,23 @@ router.get('/request/gigs/:id/:sub', middleware.user, (req, res) => {
   homeController.requestGigs(req, res);
 });
 
-router.post('/card/add', (req, res) => {
+router.post('/card/add', middleware.user, (req, res) => {
   cardController.addCard(req, res);
 });
 
-router.post('/card/payout/add', (req, res) => {
+router.post('/card/payout/add', middleware.user, (req, res) => {
   cardController.addPayoutCard(req, res);
 });
 
-router.delete('/card/remove', (req, res) => {
+router.post('/wallet', middleware.user, (req, res) => {
+  cardController.addMoney(req, res);
+});
+
+router.delete('/card/remove', middleware.user, (req, res) => {
   cardController.removeCard(req, res);
 });
 
-router.delete('/card/payout/remove', (req, res) => {
+router.delete('/card/payout/remove', middleware.user, (req, res) => {
   cardController.removePayoutCard(req, res);
 });
 

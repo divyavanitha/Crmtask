@@ -14,7 +14,7 @@ import OwlCarousel from 'react-owl-carousel';
 
 
 
-function Revenue() {
+function Wallet() {
 
     const dispatch = useDispatch();
     const auth = useSelector((state) => state.user);
@@ -88,25 +88,23 @@ function Revenue() {
                   <div className="card">
                      <div className="card-body">
                         <div className="row">
-                           <div className="col-md-3">
+                           <div className="col-md-8">
                               <div className="rs-detail">
-                                 <p> Withdrawals </p>
-                                 <h2> &#036;{withdrawalAmount}</h2>
+                                <div className="row">
+                                <div className="col-md-9">
+                                 <p> Add Amount </p>
+                                 <input type="text" name="amount" value={price} onChange={handleChange} className="form-control input-lg decimal" placeholder="Enter Amount"  />
+
+                                 <p> Card </p>
+                                  <select name="enable_sound" className="form-control">
+                                     <option value="yes"> Yes </option>
+                                     <option value="no"> No </option>
+                                  </select>
+                                  </div>
+                                  </div>
                               </div>
                            </div>
-                           <div className="col-md-3">
-                              <div className="rs-detail">
-                                 <p> Used To Order Gigs </p>
-                                 <h2> &#036;-{gigAmount}</h2>
-                              </div>
-                           </div>
-                           <div className="col-md-3">
-                              <div className="rs-detail">
-                                 <p> Pending Clearance </p>
-                                 <h2> &#036;{pendingAmount}</h2>
-                              </div>
-                           </div>
-                           <div className="col-md-3">
+                           <div className="col-md-4">
                               <div className="rs-detail">
                                  <p> Available Income </p>
                                  <h2> &#036;{auth.user && auth.user.wallet}</h2>
@@ -197,4 +195,4 @@ function Revenue() {
    );
 }
 
-export default Revenue;
+export default Wallet;

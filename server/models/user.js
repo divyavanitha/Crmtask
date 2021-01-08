@@ -111,6 +111,9 @@ const userSchema = mongoose.Schema({
         type: String,
         default: "NEWSELLER"
     },
+    stripeId: {
+        type: String
+    },
     is_active: {
         type: Boolean,
         default: false
