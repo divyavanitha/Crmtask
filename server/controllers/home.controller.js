@@ -776,7 +776,6 @@ exports.requestGigs = async (req, res) => {
 exports.notifications = async (req, res) => {
 
     try {
-
         let notification = await db._get(Notification, { receiver: req.user._id }, {}, {sort: { _id: -1 }, populate: "sender" });
         
         const data = { notification };

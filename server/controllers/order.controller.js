@@ -478,16 +478,16 @@ exports.tips = async (req, res) => {
                 buyer.wallet -= req.body.tips;
                 user.wallet += req.body.tips;
             }
-
-            var notification = {
-                sender: req.user._id,
-                senderType: "BUYER",
-                receiver: order_detail.seller,
-                type: "ORDER",
-                orderId: order_detail._id,
-                message: "Has given you "+req.body.tips+" tip."
+            if(req.body.tip_status == 1){
+                var notification = {
+                    sender: req.user._id,
+                    senderType: "BUYER",
+                    receiver: order_detail.seller,
+                    type: "ORDER",
+                    orderId: order_detail._id,
+                    message: "Has given you "+req.body.tips+" tip."
+                }
             }
-
 
         let orders = await db._update(Order, { _id: req.body.id }, order);
         await db._update(User, { _id: order_detail.seller }, user);

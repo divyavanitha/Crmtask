@@ -76,6 +76,7 @@ router.get('/profile', middleware.user, (req, res) => {
 });
 
 router.post('/profile', [middleware.user, middleware.upload( path.join(__dirname, '../storage/images/user/') ).fields([{ name: 'profile_photo', maxCount: 4 }, { name: 'cover_photo', maxCount: 1 }]) ],  (req, res) => {
+  console.log(err);
   profilecontroller.updateProfile(req, res);
 });
 

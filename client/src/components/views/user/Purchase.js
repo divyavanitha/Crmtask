@@ -47,7 +47,7 @@ const dispatch = useDispatch();
                   </tr>
                </thead>
                <tbody>
-                   {buyer_order_list && buyer_order_list.orders.map((list, index) => (<tr>
+                   {buyer_order_list && buyer_order_list.completed_order.map((list, index) => (<tr>
                      <td> { moment(list.created_at).format('MMMM DD, YYYY') } </td>
                      <td> 
                      Order Tip Payment with <b>{list.payment_mode}</b> (<Link target='_blank' to={"/order/details/" + list._id} className='text-success'>View Order</Link>)

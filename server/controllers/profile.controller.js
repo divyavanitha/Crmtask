@@ -62,7 +62,7 @@ exports.updateProfile = async (req, res) => {
     if (error) return res.status(response.statusCode).json(response);
 
     try {
-        console.log(req.body.id);
+        //console.log(req.body.id);
         const user = {
             firstName: req.body.first_name,
             lastName: req.body.last_name,
@@ -80,9 +80,9 @@ exports.updateProfile = async (req, res) => {
 
         if(req.files['profile_photo']) user.profilePhoto = req.protocol + '://' + req.get('host') + "/images/user/" + (req.files['profile_photo'][0].filename);
         if(req.files['cover_photo']) user.coverPhoto = req.protocol + '://' + req.get('host') + "/images/user/" + (req.files['cover_photo'][0].filename);
-console.log(user);
 
-        let users = await db._update(User, { _id: req.body.id }, user);
+
+        //let users = await db._update(User, { _id: req.body.id }, user);
 
         const response = helper.response({ message: res.__('updated') });
         return res.status(response.statusCode).json(response);
