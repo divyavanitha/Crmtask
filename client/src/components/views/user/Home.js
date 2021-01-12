@@ -37,7 +37,7 @@ function Home() {
                   <div className="card rounded-0 mb-3 welcome-box">
                      <div className="card-body pb-2 card_user">
                         <center>
-                           <img src={require('../../../assets/images/img-03.jpg')} className="img-fluid rounded-circle mb-3" />
+                           <img src={auth.user && auth.user.profilePhoto ? auth.user && auth.user.profilePhoto : require('../../../assets/images/img-03.jpg')} className="img-fluid rounded-circle mb-3" />
                         </center>
                         <h5>Welcome <span className="text-success">{auth.user && auth.user.firstName}</span> </h5>
                         <hr />

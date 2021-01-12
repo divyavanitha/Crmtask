@@ -305,8 +305,9 @@ function Header() {
 
                                     <div className="dropdown-menu" style={{ minWidth: '332px', width: 'auto!important', zIndex: '2000' }} >
                                         <h3 className="dropdown-header"> Notifications ({notification && notification.length}) 
-                                        <Link className="float-right make-black" target="_blank" to="/notifications" style={{color:"black"}}>View Notifications</Link>
+                                        <Link className="float-right make-black" to="/notifications" style={{color:"black"}}>View Notifications</Link>
                                         </h3>
+                                        <div style={{ overflow: 'hidden', overflowY: 'scroll', height: '200px' }}>
                                         {notification && notification.map((list, index) => (<div key={index} className="header-message-div">
                                                 
                                                 <Link target="_blank" to={list.type == "ORDER" ? "/order/details/"+list.orderId : (list.type == "GIG" ? "/gigs" : "/buyer/requests")}>
@@ -316,9 +317,10 @@ function Header() {
                                                 
 
                                             </div>))}
+                                        </div>
                                             
                                             <div className="mt-2"><center className="pl-2 pr-2">
-                                            <Link to="/notifications" target="_blank" className="ml-0 btn btn-success btn-block">See All</Link></center>
+                                            <Link to="/notifications" style={{ color: '#fff' }} className="ml-0 btn btn-success btn-block">See All</Link></center>
                                             </div>
                                     </div>
 
@@ -354,7 +356,7 @@ function Header() {
                                 <div className="dropdown user-menu">
                                     <a href="#" id="usermenu" className="user dropdown-toggle menuItem" style={{ marginTop: "17px" }}
                                         data-toggle="dropdown">
-                                        <img src={require('../../../../assets/images/userlisting/img-03.jpg')} width="27" height="27" className="rounded-circle" /> &nbsp;
+                                        <img src={auth.user && auth.user.profilePhoto ? auth.user && auth.user.profilePhoto : require('../../../../assets/images/userlisting/img-03.jpg')} width="27" height="27" className="rounded-circle" /> &nbsp;
                                         <span className="name">{auth.user && auth.user.firstName}</span>
                                     </a>
 
