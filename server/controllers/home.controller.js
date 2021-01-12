@@ -485,7 +485,7 @@ exports.addFavouritetoCart = async (req, res) => {
 exports.revenues = async (req, res) => {
     try {
 
-        let revenues = await db._get(Order, { seller: req.user._id, status: 'COMPLETED' }, { total: 1, adminCommission: 1, completed_at: 1 });
+        let revenues = await db._get(Order, { seller: req.user._id, status: 'COMPLETED' }, { total: 1, commission: 1, completed_at: 1 });
 
         let withdrawalAmount = await Withdrawal.aggregate([
             { $match : { user: new ObjectId(req.user._id), status: 'COMPLETED' } },
@@ -494,7 +494,7 @@ exports.revenues = async (req, res) => {
 
         let pendingAmount = await Order.aggregate([
             { $match : { seller: new ObjectId(req.user._id), status: 'COMPLETED' } },
-            { $project: { "pending": { "$subtract": [ "$total", "$adminCommission" ] }} },
+            { $project: { "pending": { "$subtract": [ "$total", "$commission" ] }} },
             { $group : { "_id": "$seller", total : { $sum : "$pending" } } }
         ])
 
@@ -594,7 +594,7 @@ exports.getRecent = async (req, res) => {
 
     try {
 
-        let recent = await db._get(View, { user: req.user._id }, {}, {populate: ['gig']});
+        let recent = await db._get(View, { user: req.user._id }, {}, {populate: ['gig', 'user']});
 
         const data = { recent };
 
@@ -832,6 +832,34 @@ exports.buyItAgain = async (req, res) => {
     }
 
 };
+
+exports.profileGigs = async (req, res) => {
+    try {
+        let gig = await db._get(Gig, {user:req.params.id, status: "ACTIVE"}, {}, { populate: [ 
+            { path: "user", populate: { path: 'country', model: 'Country', select: 'name' } }, 
+            { path: "user", populate: { path: 'city', model: 'city', select: 'name' } }, 
+            { path: "category", select: 'name'}, 
+            { path: "subCategory", select: 'name'}
+            ] });
+
+        const data = { gig };
+
+        const response = helper.response({ data });
+
+        return res.status(response.statusCode).json(response);        
+    }
+    catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                res.status(422).send(err.errors[i].message);
+            }
+        } else {
+            res.status(422).send(err);
+        }
+    }
+
+};
+
 
 exports.sellerBuyer = async (req, res) => {
 

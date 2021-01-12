@@ -155,7 +155,7 @@ function upload(destinationPath) {
         }
     });
 
-    let uploaded = multer({ storage: storage, limits: { fileSize: (1 * 1024) } });
+    let uploaded = multer({ storage: storage, limits: { fileSize: (5000 * 1024) } });
     return uploaded;
 }
 

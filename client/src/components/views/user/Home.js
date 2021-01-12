@@ -28,8 +28,6 @@ function Home() {
    const recent = useSelector((state) => state.user && state.user.recent);
    const buyit = useSelector((state) => state.user && state.user.buy_it && state.user.buy_it.responseData && state.user.buy_it.responseData.order);
 
-   console.log('buyit', buyit);
-
    return (
 
       <Fragment>
@@ -51,46 +49,42 @@ function Home() {
                      <h3 className="buy_head mt-2">Buy It Again</h3>
                      <div id="demo" className="carousel slide" data-ride="carousel">
                         <div className="carousel-inner " role="listbox">
-                           {buyit && buyit.map((list, index) => (<div className="carousel-item active">
+                           {buyit && buyit.map((r, index) => (<div key={r._id} className={ index == 0 ? "carousel-item active" : "carousel-item"}>
                               <div className="proposal-card-base mp-proposal-card">
-                                 <a href="proposals/Timiex/i-will-design-a-professional-wordpress-website-for-your-business">
-                                    <img src={list.gig.photo[0].photo}
-                                       className="img-fluid" />
-                                 </a>
-                                 <div className="proposal-card-caption">
+                                <Link to={r.seller ? "/gig/" + r.seller.firstName + "/" + r.gig.title : ""}>
+                                    <img src={r.gig.photo[0] ? r.gig.photo[0].photo : ""} className="img-fluid" />
+                                </Link>
+                                <div className="proposal-card-caption">
                                     <div className="proposal-seller-info">
-                                       <span className="fit-avatar s24">
-                                          <img src={list.seller.profilePhoto} className="rounded-circle" width="32"
-                                             height="32" />
-                                       </span>
-                                       <div className="seller-info-wrapper">
-                                          <a href="Timiex" className="seller-name"> {list.seller.firstName}</a>
-                                          <div className="onePress-seller-tooltip">
-                                             {list.seller.type}
+                                        <span className="fit-avatar s24">
+                                            <img src={r.seller ? r.seller.profilePhoto : ""} className="rounded-circle" width="32" height="32" />
+                                        </span>
+                                        <div className="seller-info-wrapper">
+                                            <a href={r.seller ? r.seller.firstName : ""} className="seller-name">{r.seller ? r.seller.firstName : ""} {r.seller ? r.seller.lastName : ""}</a>
+                                            <div className="onePress-seller-tooltip">
+                                                {r.seller ? r.seller.type : ""}
+                                            </div>
+                                        </div>
                                     </div>
-                                       </div>
-                                    </div>
-                                    <a href="proposals/Timiex/i-will-design-a-professional-wordpress-website-for-your-business"
-                                       className="proposal-link-main">
-                                       <h3>{list.gig.title} </h3>
-                                    </a>
+                                    <Link to={r.seller ? "/gig/" + r.seller.firstName + "/" + r.gig.title : ""} className="proposal-link-main js-proposal-card-imp-data">
+                                        <h3>{r.gig.title}</h3>
+                                    </Link>
                                     <div className="rating-badges-container">
-                                       <span className="proposal-rating">
-                                          <i className="fa fa-star"></i>
-                                          <span>
-                                             
-                                       ({list.seller ? list.seller.rating : "3"})
-                                       </span>
-                                       </span>
+                                        <span className="proposal-rating">
+                                            <i className="fa fa-star"></i>
+                                            <span>
+                                                <strong>{r.seller ? Math.ceil(r.seller.rating) : "3"}</strong>
+                                    </span>
+                                        </span>
                                     </div>
-                                 </div>
-                                 <footer className="proposal-card-footer">
+                                </div>
+                                <footer className="proposal-card-footer">
                                     <div className="proposal-price">
-                                       <a className="js-proposal-card-imp-data">
-                                          <small>Starting At</small>&#036;{list.gig.pricing[0] ? list.gig.pricing[0].price : "0.00"} </a>
+                                        <a>
+                                            <small>STARTING AT</small>&#036;{r.gig.pricing[0] ? r.gig.pricing[0].price : "0.00"} </a>
                                     </div>
-                                 </footer>
-                              </div>
+                                </footer>
+                            </div>
                            </div>))}              
                         </div>
                         {/* <!-- Left and right controls --> */}
@@ -110,29 +104,29 @@ function Home() {
                            {recent && recent.map((r, index) => (
                               <div key={r._id} className={ index == 0 ? "carousel-item active" : "carousel-item"}>
                               <div className="proposal-card-base mp-proposal-card">
-                    <Link to={r.gig.user ? "/gig/" + r.gig.user.firstName + "/" + r.gig.title : ""}>
+                    <Link to={r.user ? "/gig/" + r.user.firstName + "/" + r.gig.title : ""}>
                         <img src={r.gig.photo[0] ? r.gig.photo[0].photo : ""} className="img-fluid" />
                     </Link>
                     <div className="proposal-card-caption">
                         <div className="proposal-seller-info">
                             <span className="fit-avatar s24">
-                                <img src={r.gig.user ? r.gig.user.profilePhoto : ""} className="rounded-circle" width="32" height="32" />
+                                <img src={r.user ? r.user.profilePhoto : ""} className="rounded-circle" width="32" height="32" />
                             </span>
                             <div className="seller-info-wrapper">
-                                <a href={r.gig.user ? r.gig.user.firstName : ""} className="seller-name">{r.gig.user ? r.gig.user.firstName : ""} {r.gig.user ? r.gig.user.lastName : ""}</a>
+                                <a href={r.user ? r.user.firstName : ""} className="seller-name">{r.user ? r.user.firstName : ""} {r.user ? r.user.lastName : ""}</a>
                                 <div className="onePress-seller-tooltip">
-                                    {r.gig.user ? r.gig.user.type : ""}
+                                    {r.user ? r.user.type : ""}
                                 </div>
                             </div>
                         </div>
-                        <Link to={r.gig.user ? "/gig/" + r.gig.user.firstName + "/" + r.gig.title : ""} className="proposal-link-main js-proposal-card-imp-data">
+                        <Link to={r.user ? "/gig/" + r.user.firstName + "/" + r.gig.title : ""} className="proposal-link-main js-proposal-card-imp-data">
                             <h3>{r.gig.title}</h3>
                         </Link>
                         <div className="rating-badges-container">
                             <span className="proposal-rating">
                                 <i className="fa fa-star"></i>
                                 <span>
-                                    <strong>{r.gig.user ? r.gig.user.rating : "3"}</strong> (22)
+                                    <strong>{r.user ? Math.ceil(r.user.rating) : "3"}</strong> 
                         </span>
                             </span>
                         </div>

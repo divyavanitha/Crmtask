@@ -233,13 +233,13 @@ const Cart = (props) => {
                                                       {/* card-body Starts */}
                                                       <div className="row">
                                                          <div className="col-md-2">
-                                                            <img src="assets/images/videosales.png" className="img-fluid d-lg-block d-md-block d-none" />
+                                                            <img src={(order_details && order_details.gig.photo.length > 0) ? order_details && order_details.gig.photo[0].photo : ""} className="img-fluid d-lg-block d-md-block d-none" />
                                                          </div>
                                                          <div className="col-md-10">
                                                             <h1 className="text-success float-right d-lg-block d-md-block d-none">&#036;{order_details && order_details.price}</h1>
                                                             <h4>
                                                                Order Number {order_details && order_details.orderId}              <small>
-                                                                  <Link to={order_details && order_details.seller ? "/gig/" + order_details.seller.firstName + "/" + order_details.gig._id : ""} target="_blank" className="text-success">
+                                                                  <Link to={order_details && order_details.seller ? "/gig/" + order_details.seller.firstName + "/" + order_details.gig.title : ""} target="_blank" className="text-success">
                                                                      View Proposal/Service               </Link>
                                                                </small>
                                                             </h4>
@@ -360,7 +360,7 @@ const Cart = (props) => {
                                     </div> : ""}
 
                                     {order_details && order_details.delivery_status.map((list, index) => (<div key={list._id} className="message-div">
-                                           <img src="https://www.gigtodo.com//user_images/ty_1574032240.png" width="50" height="50" className="message-image" />
+                                           <img src={order_details && order_details.seller.profilePhoto} width="50" height="50" className="message-image" />
 
                                              <h5>
 
@@ -372,8 +372,8 @@ const Cart = (props) => {
 
                                              {list.deliveredMessage}
 
-                                                 <a href='orderIncludes/download?order_id=1611&c_id=1376' className='d-block mt-2 ml-1' target='_blank'>
-                                                   <i className='fa fa-download'></i> {list.delivery_file}
+                                                 <a href={list.delivery_file} className='d-block mt-2 ml-1' target='_blank'>
+                                                   <i className='fa fa-download'></i> {(list.delivery_file).substring((list.delivery_file).lastIndexOf('/') + 1)}
                                                  </a>
                                                
                                              </p>
@@ -390,7 +390,7 @@ const Cart = (props) => {
                                         </div>
                                       </div> ) : "" }
                                       {order_details && order_details.used_revisions ? order_details && order_details.used_revisions.map((list, index) => (<div key={list._id} className="message-div-hover">
-                                        <img src="https://www.gigtodo.com//user_images/cool-profile-picastures-coo_1602176634.png" width="50" height="50" className="message-image" />
+                                        <img src={order_details && order_details.buyer.profilePhoto} width="50" height="50" className="message-image" />
                                               
                                       <h5><a href="#" className="seller-buyer-name"> {order_details && order_details.buyer.firstName} </a></h5>
 
@@ -398,8 +398,9 @@ const Cart = (props) => {
 
                                       {list.revision_message}
 
-                                      <a href="orderIncludes/download?order_id=1608&c_id=1382" className="d-block mt-2 ml-1" target='_blank'>
-                                        <i className="fa fa-download"></i> {list.revision_file}</a>
+                                      <a href={list.revision_file} className='d-block mt-2 ml-1' target='_blank'>
+                                       <i className='fa fa-download'></i> {(list.revision_file).substring((list.revision_file).lastIndexOf('/') + 1)}
+                                      </a>
                                       </p>
 
                                       <p className="text-right text-muted mb-0"> {list.updated_at} </p>
@@ -418,7 +419,7 @@ const Cart = (props) => {
 
 
                                       <div className="message-div">
-                                        <img src="https://www.gigtodo.com//user_images/cool-profile-picastures-coo_1602176634.png" width="50" height="50" className="message-image" />            
+                                        <img src={order_details && order_details.seller.profilePhoto} width="50" height="50" className="message-image" />            
                                       <h5><a href="#" className="seller-buyer-name"> {order_details && order_details.seller.firstName} </a></h5>
 
                                       <p className="message-desc">{order_details && order_details.cancellation_message}</p>
@@ -462,7 +463,7 @@ const Cart = (props) => {
                                         
                                         <div className="message-div">
 
-                                        <img src="https://www.gigtodo.com//user_images/ty_1574032240.png" width="50" height="50" className="message-image" />
+                                        <img src={order_details && order_details.seller.profilePhoto} width="50" height="50" className="message-image" />
                                           <h5><a href="#" className="seller-buyer-name"> {order_details && order_details.buyer.firstName} </a></h5>
                                           <p className="message-desc">{order_details && order_details.tip_message}</p>
                                           <p className="text-right text-muted mb-0"> December 08, 2020 </p>
@@ -533,7 +534,7 @@ const Cart = (props) => {
 
                                               <li className="star-rating-row">
                                                   <span className="user-picture">
-                                                      <img src="https://www.gigtodo.com/user_images/ty_1574032240.png" width="60" height="60" />
+                                                      <img src={order_details && order_details.buyer.profilePhoto} width="60" height="60" />
                                                   </span>
                                                   <h4>
                                                       <a href="#" className="mr-1 text-success">{order_details && order_details.buyer.firstName} </a>
@@ -553,7 +554,7 @@ const Cart = (props) => {
                                                             {seller_rating.map((list, index) => (<span key = {index} className="fa fa-star checked" style={{color: "#EEBD01"}}></span>))}
                                                         </h4>
                                                       <span className="user-picture">
-                                                          <img src="https://www.gigtodo.com//user_images/cool-profile-picastures-coo_1602176634.png" width="40" height="40" />
+                                                          <img src={order_details && order_details.seller.profilePhoto} width="40" height="40" />
                                                       </span>
                                                       <div className="msg-body">
                                                           {ratings && ratings.sellerComment}

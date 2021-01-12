@@ -43,6 +43,7 @@ import Referral from "../Referral";
 import Page from "../Page";
 import Notification from "../Notification";
 import StartSelling from "../StartSelling";
+import SellerProfile from "../gigs/SellerProfile";
 
 import "../../../../assets/css/custom.css";
 
@@ -77,6 +78,7 @@ const Base = () => {
             <Switch>
                 <Route exact={true} path="/" component={auth.isAuthenticated ? Home : Landing} />
                 <Route path="/categories/:category/:subcategory" component={CategoryGigList} />
+                <Route path="/profile/:id/:user" component={SellerProfile} />
                 <ProtectedRoute path="/cart-payment-option/:id" component={CartPayment} />
                 <ProtectedRoute path="/cart-payment-option" component={CartPayment} />
                 <ProtectedRoute path="/gigs" component={GigList} />

@@ -49,7 +49,7 @@ function Dashboard() {
          price: price,
          payment_mode: paymentMode
       }
-      console.log()
+
       if(price && price != 0 && price >= (gigSetting && gigSetting.minimumWithdrawalLimit)) {
          setIsLoading(true);
          dispatch(withdraw(data)).then((response) => {
@@ -138,7 +138,7 @@ function Dashboard() {
                            <td> 
                               Order Revenue (<Link to={"/order/details/"+revenue._id} className="text-success"> View Order </Link>)
                            </td>
-                           <td className="text-success"> +&#036;{revenue.total-revenue.adminCommission} </td>
+                           <td className="text-success"> +&#036;{revenue.total-revenue.commission} </td>
                         </tr>
                      ))}
                      </tbody>

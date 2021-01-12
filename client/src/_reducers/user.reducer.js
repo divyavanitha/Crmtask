@@ -33,7 +33,8 @@ import {
     FIND_USER,
     GET_SELLER_BUYER,
     GET_NOTIFICATION,
-    BUY_IT_AGAIN
+    BUY_IT_AGAIN,
+    PROFILE_GIGS
 
 } from '../_actions/types';
 
@@ -115,6 +116,8 @@ const userReducer = (state = initialState, action) => {
             return { ...state, seller_buyer: action.payload }
         case BUY_IT_AGAIN:
             return { ...state, buy_it: action.payload}
+        case PROFILE_GIGS:
+        return { ...state, profile_gigs: action.payload}
         case ADD_FAVOURITE_GIG:
             let data = {...state}
             let response = action.payload;

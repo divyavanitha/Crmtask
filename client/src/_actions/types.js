@@ -78,6 +78,8 @@ export const GET_SELLER_BUYER = 'GET_SELLER_BUYER';
 
 export const BUY_IT_AGAIN = 'BUY_IT_AGAIN';
 
+export const PROFILE_GIGS = 'PROFILE_GIGS';
+
 export const CREATE_GIGS = 'CREATE_GIGS';
 export const GET_MYALLGIGS = 'GET_MYALLGIGS';
 export const GET_GIGSBYID = 'GET_GIGSBYID';

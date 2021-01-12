@@ -33,15 +33,6 @@ function Header() {
         
         $(document).ready(function () {
 
-            /*$(function () {
-                $('[data-toggle="tooltip"]').tooltip();
-            });
-            $(function () {
-                $('[data-toggle="popover"]').popover();
-            });*/
-
-            //// Categories Dropdown Code
-
             $("body").on("mouseover", ".top-nav-item", function () {
                 $(".body-sub-width").addClass("display-none");
                 $(".top-nav-item").removeClass("active");
@@ -240,8 +231,6 @@ function Header() {
     const cart = useSelector((state) => state.user && state.user.cart_lists && state.user.cart_lists.carts);
     const notification = useSelector((state) => state.user && state.user.notification && state.user.notification.responseData && state.user.notification.responseData.notification);
 
-    console.log('notification',notification);
-
     return (
 
         <Fragment>
@@ -318,7 +307,7 @@ function Header() {
                                         <h3 className="dropdown-header"> Notifications ({notification && notification.length}) 
                                         <Link className="float-right make-black" target="_blank" to="/notifications" style={{color:"black"}}>View Notifications</Link>
                                         </h3>
-                                        {notification && notification.map((list, index) => (<div className="header-message-div">
+                                        {notification && notification.map((list, index) => (<div key={index} className="header-message-div">
                                                 
                                                 <Link target="_blank" to={list.type == "ORDER" ? "/order/details/"+list.orderId : (list.type == "GIG" ? "/gigs" : "/buyer/requests")}>
                                                 <img src={list.sender ? list.sender.profilePhoto : window.location.href+"public/images/images_1608630531.png"} className="rounded-circle" width="50" height="50" /><strong className="heading">{list.sender ? list.sender.firstName : "Admin"}</strong>

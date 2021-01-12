@@ -3,6 +3,7 @@ const { Cart } = require('../models/Cart');
 const { Order } = require('../models/Order');
 const { Setting } = require('./../models/setting');
 const { Notification } = require('../models/Notification');
+const { Gig } = require('../models/gigs');
 const { User } = require('../models/user');
 const { Admin } = require('../models/admin');
 const { Rating } = require('../models/Rating');
@@ -244,8 +245,12 @@ exports.updateOrder = async (req, res) => {
             order.status = (req.body.status).toUpperCase();
 
             var user = await User.findById(order.seller);
+            var gig = await Gig.findById(order.gig);
 
             user.recentDelivery = new Date();
+            user.completedOrder += 1;
+
+            gig.completedOrder +=1;
 
             var notification = {
                 sender: order.buyer,
@@ -327,6 +332,7 @@ exports.updateOrder = async (req, res) => {
 
         let orders = await db._update(Order, { _id: req.body.id }, order);
         await db._update(User, { _id: order.seller }, user);
+        await db._update(Gig, { _id: order.gig }, gig);
         await db._store(Notification, notification);
         const response = helper.response({ message: res.__('updated'), data: order });
         return res.status(response.statusCode).json(response);
@@ -554,6 +560,8 @@ exports.rating = async (req, res) => {
 
         let user = await User.findById(order.seller);
 
+        var gig = await Gig.findById(order.gig);
+
         let order_count = await db._count(Order, { seller: order.seller });
 
         let setting = await db._find(Setting, {}, { createdAt: 0, updatedAt: 0 });
@@ -592,7 +600,6 @@ exports.rating = async (req, res) => {
                 }
 
                 order.seller_rated = 1;
-                user.completedOrder += 1;
 
                 var notification = {
                     sender: order.seller,
@@ -639,7 +646,6 @@ exports.rating = async (req, res) => {
                 }
 
                 order.seller_rated = 1;
-                user.completedOrder += 1;
 
                 var notification = {
                     sender: order.seller,
@@ -667,10 +673,23 @@ exports.rating = async (req, res) => {
             }
         ]);
 
+        let gig_rate = await Rating.aggregate([
+            { $match: { seller: order.seller, gig: order.gig } },
+            {
+                $group:
+                {
+                    _id: "$seller",
+                    average: { $avg: '$buyerRating' }
+                }
+            }
+        ]);
+
 
         user.gig = order.gig;
         user.ratingPercent = (total_rate[0].total / (order_count * 5) * 100);
         user.rating = total_rate[0].average;
+
+        gig.rating = gig_rate[0].average;
 
         if ((setting.seller.levelTwoRating == user.ratingPercent) && (setting.seller.levelTwoCompletedOrder == user.completedOrder)) {
             user.type = "LEVELTWO";
@@ -684,6 +703,7 @@ exports.rating = async (req, res) => {
         }
 
         await db._update(User, { _id: order.seller }, user);
+        await db._update(Gig, { _id: order.gig }, gig);
         await db._store(Notification, notification);
         let orders = await db._update(Order, { _id: req.body.order_id }, order);
 

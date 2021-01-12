@@ -183,7 +183,7 @@ const GigList = (props) => {
                                     <td className="proposal-title"> {list.title} </td>
                                      <td className="text-success"> &#036;{list.pricing.length ? list.pricing[0].price : 0} </td> 
                                     <td>{list.viewCount}</td>
-                                    <td>22</td>
+                                    <td>{list.completedOrder}</td>
                                     <td className="text-center">
                                        <div className="dropdown">
                                           <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
@@ -227,7 +227,7 @@ const GigList = (props) => {
                                     <td className="proposal-title"> {list.title} </td>
                                      <td className="text-success"> &#036;{list.pricing.length ? list.pricing[0].price : 0} </td> 
                                     <td>{list.viewCount}</td>
-                                    <td>22</td>
+                                    <td>{list.completedOrder}</td>
                                     <td className="text-center">
                                        <div className="dropdown">
                                           <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
@@ -265,7 +265,7 @@ const GigList = (props) => {
                                     <td className="proposal-title"> {list.title} </td>
                                      <td className="text-success"> &#036;{list.pricing.length ? list.pricing[0].price : 0} </td> 
                                     <td>{list.viewCount}</td>
-                                    <td>22</td>
+                                    <td>{list.completedOrder}</td>
                                     <td className="text-center">
                                        <div className="dropdown">
                                           <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
@@ -335,8 +335,8 @@ const GigList = (props) => {
                                  {gig_list && gig_list.draft.map((list, index) => (<tr key={list._id}>
                                     <td className="proposal-title"> {list.title} </td>
                                      <td className="text-success"> &#036;{list.pricing.length ? list.pricing[0].price : 0} </td> 
-                                    <td>21</td>
-                                    <td>22</td>
+                                    <td>{list.viewCount}</td>
+                                    <td>{list.completedOrder}</td>
                                     <td className="text-center">
                                        <div className="dropdown">
                                           <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>
@@ -371,8 +371,8 @@ const GigList = (props) => {
                                  {console.log(list.pricing)}
                                     <td className="proposal-title"> {list.title} </td>
                                     <td className="text-success"> &#036;{list.pricing.length ? list.pricing[0].price : 0} </td> 
-                                    <td>21</td>
-                                    <td>22</td>
+                                    <td>{list.viewCount}</td>
+                                    <td>{list.completedOrder}</td>
                                     <td className="text-center">
                                        <div className="dropdown">
                                           <button className="btn btn-success dropdown-toggle" data-toggle="dropdown"></button>

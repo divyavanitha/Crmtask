@@ -39,7 +39,8 @@ import {
     FIND_USER,
     GET_SELLER_BUYER,
     GET_NOTIFICATION,
-    BUY_IT_AGAIN
+    BUY_IT_AGAIN,
+    PROFILE_GIGS
 } from './types';
 
 
@@ -195,9 +196,7 @@ export const getCategory = (data) => async dispatch => {
 }
 
 export const getNotification = () => async dispatch => {
-     console.log('note');
     const notification = await axios.get(`/api/notifications`)
-    console.log('note', notification);
     dispatch({
         type: GET_NOTIFICATION,
         payload: notification.data
@@ -280,6 +279,18 @@ export const getGigbyId = (id) => async dispatch => {
     return response.data;
 };
 
+export const profileGigs = (id) => async dispatch => {
+
+    let response = await axios.get(`/api/profile/gigs/${id}`);
+
+    dispatch({
+        type: PROFILE_GIGS,
+        payload: response.data
+    })
+    response.data.status = 'success';
+    return response.data;
+};
+
 export const getCountry = (data) => async dispatch => {
     const countries = await axios.get(`/api/countries`)
     dispatch({
@@ -319,7 +330,7 @@ export const getLanguage = (data) => async dispatch => {
 
 
 export const getGigbyName = (name) => async dispatch => {
-    //try {
+    try {
         let response = await axios.get(`/api/gig/detail/${name}`);
         dispatch({
             type: FIND_GIG,
@@ -327,12 +338,12 @@ export const getGigbyName = (name) => async dispatch => {
         });
         response.data.status = 'success';
         return response.data;
-    /*} catch (e) {
+    } catch (e) {
         console.log(e);
         e.response.data.status = 'error';
         if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
-    }*/
+    }
 };
 
 export const getGigbyCategory = (data) => async dispatch => {
@@ -347,7 +358,7 @@ export const getGigbyCategory = (data) => async dispatch => {
 };
 
 export const getCartbyId = (id) => dispatch => {
-    console.log('id', id);
+
     axios
         .get(`/api/cart/${id}`)
         .then(res => {
@@ -695,7 +706,6 @@ export const withdraw = (data) => async dispatch => {
 };
 
 export const getRating = (id) => async dispatch => {
-    console.log('id', id);
     const ratings = await axios.get(`/api/rating/${id}`)
     dispatch({
         type: GET_RATING,

@@ -13,6 +13,7 @@ const requestController = require('../controllers/request.controller');
 const cartController = require('../controllers/cart.controller');
 const cardController = require('../controllers/card.controller');
 
+
 router.get('/pages/list/:type', (req, res) => {
   homeController.pagesList(req, res);
 });
@@ -338,6 +339,10 @@ router.delete('/notifications/:id', middleware.user, (req, res) => {
 
 router.get('/buyit/again', middleware.user, (req, res) => {
   homeController.buyItAgain(req, res);
+});
+
+router.get('/profile/gigs/:id', (req, res) => {
+  homeController.profileGigs(req, res);
 });
 
 router.post('/card/add', (req, res) => {
