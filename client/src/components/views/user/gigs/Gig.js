@@ -62,7 +62,7 @@ function Gig(props) {
                         <div className="rating-badges-container">
                             <span className="proposal-rating">
 
-                            { gigRating != 0 && new Array(Math.ceil(gigRating)).fill(Math.ceil(gigRating)).map((i) => <img className='mb-1' src={require('../../../../assets/images/user_rate_full.png')} />  ) }
+                            { gigRating != 0 && new Array(Math.ceil(gigRating)).fill(Math.ceil(gigRating)).map((i) => <img key={i} className='mb-1' src={require('../../../../assets/images/user_rate_full.png')} />  ) }
 
                             { new Array(5 - Math.ceil(gigRating)).fill(0).map((i, j) => <img key={j} className='mb-1' src={require('../../../../assets/images/user_rate_blank.png')} />  ) } 
                             </span>

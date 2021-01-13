@@ -360,7 +360,7 @@ const Cart = (props) => {
                                           <h5 className="text-center"><i className="fa fa-pencil-square-o"></i> Revison Requested By {order_details && order_details.buyer.firstName} </h5>
                                         </div>
                                       </div>) : "" }
-                                      {order_details && order_details.used_revisions ? order_details && order_details.used_revisions.map((list, index) => (<div className="message-div-hover">
+                                      {order_details && order_details.used_revisions ? order_details && order_details.used_revisions.map((list, index) => (<div key={index} className="message-div-hover">
                                         <img src={order_details && order_details.buyer.profilePhoto} width="50" height="50" className="message-image" />
                                               
                                       <h5><a href="#" className="seller-buyer-name"> {order_details && order_details.buyer.firstName} </a></h5>
@@ -429,7 +429,7 @@ const Cart = (props) => {
                                               
                                           <div className="message-div mt-3">
 
-                                            <img src="https://www.gigtodo.com//user_images/ty_1574032240.png" width="50" height="50" className="message-image" />
+                                            <img src={order_details && order_details.buyer.profilePhoto} width="50" height="50" className="message-image" />
                                                           
                                             <h5><a href="#" className="seller-buyer-name"> {order_details && order_details.buyer.firstName} </a></h5>
 
@@ -627,7 +627,7 @@ const Cart = (props) => {
                                                                   <label className="font-weight-bold"> Cancellation Request Reason </label>
                                                                   <select name="cancellation_reason" onChange={handleChange} className="form-control">
                                                                      <option className="hidden"> Select Cancellation Reason </option>
-                                                                     {cancel_reason && cancel_reason.map((list, index) => (<option value={list.reason}> {list.reason}. </option>))}
+                                                                     {cancel_reason && cancel_reason.map((list, index) => (<option key={index} value={list.reason}> {list.reason}. </option>))}
                                                                      
                                                                   </select>
                                                                </div>

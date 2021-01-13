@@ -20,8 +20,6 @@ function Header() {
 
     let cartCount = useSelector((state) => state.user.cart_count);
 
-    const user = useSelector((state) => state.user && state.user.find_user && state.user.find_user.responseData && state.user.find_user.responseData.user);
-
     const selectMenu = () => {
         $('.dropdown-menu').removeClass('show');
     }
@@ -230,6 +228,7 @@ function Header() {
 
     const cart = useSelector((state) => state.user && state.user.cart_lists && state.user.cart_lists.carts);
     const notification = useSelector((state) => state.user && state.user.notification && state.user.notification.responseData && state.user.notification.responseData.notification);
+    const user = useSelector((state) => state.user && state.user.find_user && state.user.find_user.responseData && state.user.find_user.responseData.user);
 
     return (
 
