@@ -55,15 +55,15 @@ import { getPagelist, getPages, getFavourites } from "../../../../_actions/user.
 const Base = () => {
 
    const dispatch = useDispatch();
+   const auth = useSelector((state) => state.user);
 
    useEffect(() => {
       dispatch(getPagelist())
       dispatch(getPages())
-      dispatch(getFavourites())
+      if(auth.isAuthenticated) dispatch(getFavourites())
    }, []);
 
     let settings = useSelector((state) => state.settings);
-    const auth = useSelector((state) => state.user);
 
     let site = settings.settings && settings.settings.site;
 

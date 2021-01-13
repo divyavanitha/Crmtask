@@ -25,9 +25,12 @@ function Header() {
     }
 
     useEffect(() => {
-        dispatch(getNotification())
-        dispatch(findUser())
-        dispatch(getCartList())
+        if(auth.isAuthenticated) {
+            dispatch(getNotification())
+            dispatch(findUser())
+            dispatch(getCartList())
+        }
+        
         
         $(document).ready(function () {
 
