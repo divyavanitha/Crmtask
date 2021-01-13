@@ -179,6 +179,21 @@ exports.listDeliveryTime = async (req, res) => {
 
 }
 
+exports.getProfile = async (req, res) => {
+    try {
+
+        let user = await db._get(DeliveryTime, { status: 1 });
+        const data = { deliveryTime };
+
+        const response = helper.response({ data });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
 exports.listCoupon = async (req, res) => {
 
     try {

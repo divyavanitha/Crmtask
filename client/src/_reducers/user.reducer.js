@@ -29,7 +29,12 @@ import {
     GET_COUNTRY,
     GET_CITY,
     GET_STATE,
-    GET_LANGUAGE
+    GET_LANGUAGE,
+    CARDS,
+    ADDCARD,
+    PAYOUTCARDS,
+    ADDPAYOUTCARD,
+    WALLET
 
 } from '../_actions/types';
 
@@ -132,6 +137,26 @@ const userReducer = (state = initialState, action) => {
             return { ...state, gig_subcategory: action.payload }
         case REQUEST_GIGS:
             return { ...state, request_gigs: action.payload }
+        case CARDS:
+            return { ...state, cards: action.payload }
+        case ADDCARD:
+
+            let cardData = { ...state }
+            let cards = cardData.cards;
+            cards.push(action.payload)
+            return { ...state, cards: cards}
+
+        case PAYOUTCARDS:
+            return { ...state, payout_cards: action.payload }
+        case ADDPAYOUTCARD:
+
+            let payoutData = { ...state }
+            let payout_cards = payoutData.payout_cards;
+            payout_cards.push(action.payload)
+            return { ...state, payout_cards: payout_cards }
+
+        case WALLET:
+            return { ...state, wallet: action.payload }
         default:
             return state;
     }

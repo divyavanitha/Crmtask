@@ -75,10 +75,10 @@ exports._update = async (model, condition = {}, document, options = {}) => {
 
 }
 
-exports._updateMany = async (model, condition = {}, document, options = {}) => {
+exports._updateMany = async (model, condition = {}, data, options = {}) => {
     try {
 
-        const query = await model.updateMany(condition, document, { new: true });
+        const query = await model.updateMany(condition, data, { new: true });
         return true;
 
     } catch (err) {

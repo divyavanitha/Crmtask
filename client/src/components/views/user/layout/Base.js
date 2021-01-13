@@ -31,6 +31,8 @@ import OrderDetails from "../orders/OrderDetails";
 import SellerOrderList from "../orders/SellerOrderList";
 import SellerOrderDetails from "../orders/SellerOrderDetails";
 import Profile from "../Profile";
+import Account from "../Account";
+import Proposals from "../Profile";
 import Dashboard from "../Dashboard";
 import Wallet from "../Wallet";
 import Revenue from "../Revenue";
@@ -96,6 +98,8 @@ const Base = () => {
                 <ProtectedRoute path="/request/manage" component={RequestList} />
                 <ProtectedRoute path="/view/offer/:id" component={ViewOffer} />
                 <ProtectedRoute path="/profile" component={Profile} />
+                <ProtectedRoute path="/account" component={Account} />
+                <ProtectedRoute path="/proposals" component={Proposals} />
                 <ProtectedRoute path="/dashboard" component={Dashboard} />
                 <ProtectedRoute path="/revenues" component={Revenue} />
                 <ProtectedRoute path="/coupon/create" component={CouponCreate} />

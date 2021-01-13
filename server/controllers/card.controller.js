@@ -9,25 +9,49 @@ const Joi = require('@hapi/joi');
 const Stripe = require('stripe');
 const _ = require('lodash');
 
+exports.getCard = async (req, res) => {
+    try {
 
+
+        let cards = await db._get(Card, {user: req.user._id, type: 'CHARGE'}, {isDefault : 1, funding : 1, brand : 1, lastFour : 1 });
+
+        const data = {  cards };
+
+        const response = helper.response({ data });
+        return res.status(response.statusCode).json(response);
+
+        
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.getPayoutCard = async (req, res) => {
+    try {
+
+
+        let cards = await db._get(Card, {user: req.user._id, type: 'PAYOUT'}, {isDefault : 1, funding : 1, brand : 1, lastFour : 1 });
+
+        const data = {  cards };
+
+        const response = helper.response({ data });
+        return res.status(response.statusCode).json(response);
+
+        
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
 
 exports.addCard = async (req, res) => {
     try {
 
 
- let setting = await db._find(Setting, {}, {createdAt: 0, updatedAt: 0 });
-        let stripePayment = setting.payment.filter(pay => pay.name === 'STRIPE');
-
-        let secret_key = stripePayment.length > 0 && stripePayment[0].credentials ? stripePayment[0].credentials.filter(credential => credential.name === 'secret_key')[0].value : '';
-        
-const stripe = require('stripe')(secret_key);
-
-const customer = await stripe.customers.retrieve(
-  'cus_IiML7Z7ajc3y8S'
-);
-
-return res.status(200).json(customer);
-    /*    let setting = await db._find(Setting, {}, {createdAt: 0, updatedAt: 0 });
+        let setting = await db._find(Setting, {}, {createdAt: 0, updatedAt: 0 });
         let stripePayment = setting.payment.filter(pay => pay.name === 'STRIPE');
 
         let secret_key = stripePayment.length > 0 && stripePayment[0].credentials ? stripePayment[0].credentials.filter(credential => credential.name === 'secret_key')[0].value : '';
@@ -48,7 +72,23 @@ return res.status(200).json(customer);
             const customer = await stripe.customers.create({
                 source: customerToken.id,
             });
-console.log(customer)
+
+            let cards = await db._count(Card, {user: req.user._id, type: 'CHARGE'});
+
+            let defaultCard = await db._find(Card, {user: req.user._id, type: 'CHARGE', isDefault: true });
+
+            let isDefault;
+
+            if(cards.length > 0) {
+                if(req.body.default) {
+                    isDefault = 1;
+                    await db._updateMany(Card, {user: req.user._id, type: 'CHARGE' }, {"$set":{"isDefault": false}});
+                }
+                
+            } else {
+                isDefault = 1;
+            }
+
             const cardData = {
                         name: req.body.name,
                         user: req.user._id,
@@ -57,8 +97,18 @@ console.log(customer)
                         brand: customer.sources.data[0].brand,
                         cardId: customer.sources.data[0].id,
                         customerId: customer.sources.data[0].customer,
-                        isDefault: req.body.default
+                        type: 'CHARGE',
+                        isDefault: isDefault
                     }
+
+            const existingCard = await db._find(Card, {lastFour: customer.sources.data[0].last4});
+
+            if(existingCard) {
+
+                const errorResponse = helper.response({ status: 422, message: 'Card already available!' });
+
+                return res.status(errorResponse.statusCode).json(errorResponse);
+            }
 
             const card = await db._store(Card, cardData);
 
@@ -66,7 +116,7 @@ console.log(customer)
 
             const response = helper.response({ data });
             return res.status(response.statusCode).json(response);
-        }*/
+        }
 
         
 
@@ -119,6 +169,7 @@ exports.addPayoutCard = async (req, res) => {
                             brand: accountToken.card.brand,
                             cardId: accountToken.card.id,
                             customerId: account.id,
+                            type: 'PAYOUT',
                             isDefault: req.body.default
                         }
 

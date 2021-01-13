@@ -34,7 +34,11 @@ const cardSchema = mongoose.Schema({
     },
     isDefault:{
         type: Boolean,
-        default: true
+        default: false
+    },
+    type:{
+        type: String,
+        required: true
     },
     created_at: {
         type: Date,

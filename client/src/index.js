@@ -26,6 +26,21 @@ if (localStorage.token) {
 
   const decoded = jwt_decode(localStorage.token);
 
+  axios.get("/api/profile").then((response) => {
+    console.log(response)
+  }).catch((err) => {
+
+  });
+
+  /*decoded.wallet = 
+
+  "_id": "5fdb2f99f6a1971be19f9020",
+  "firstName": "User",
+  "lastName": "Demo",
+  "email": "demo@demo.com",
+  "mobile": "9876543210",
+  "wallet": 170,*/
+
   store.dispatch({
     type: AUTH_USER,
     payload: decoded

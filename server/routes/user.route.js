@@ -319,6 +319,15 @@ router.get('/request/gigs/:id/:sub', middleware.user, (req, res) => {
   homeController.requestGigs(req, res);
 });
 
+router.get('/cards', middleware.user, (req, res) => {
+  cardController.getCard(req, res);
+});
+
+router.get('/cards/payout', middleware.user, (req, res) => {
+  cardController.getPayoutCard(req, res);
+});
+
+
 router.post('/card/add', middleware.user, (req, res) => {
   cardController.addCard(req, res);
 });

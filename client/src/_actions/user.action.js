@@ -35,7 +35,12 @@ import {
     GET_COUNTRY,
     GET_CITY,
     GET_STATE,
-    GET_LANGUAGE
+    GET_LANGUAGE,
+    CARDS,
+    ADDCARD,
+    PAYOUTCARDS,
+    ADDPAYOUTCARD,
+    WALLET
 } from './types';
 
 
@@ -672,3 +677,97 @@ export const requestGigs = (id,sub) => async dispatch => {
     }
 
 };
+
+export const getCard = () => async dispatch => {
+
+    try {
+        const response = await axios.get(`/api/cards`);
+
+         dispatch({
+            type: CARDS,
+            payload: response.data.responseData.cards
+        })
+
+        return response.data.responseData;
+
+    } catch (e) {
+        dispatch({
+            type: CARDS,
+            payload: []
+        })
+    }
+
+};
+
+export const getPayoutCard = () => async dispatch => {
+
+    try {
+        const response = await axios.get(`/api/cards/payout`);
+
+         dispatch({
+            type: PAYOUTCARDS,
+            payload: response.data.responseData.cards
+        })
+
+        return response.data.responseData;
+
+    } catch (e) {
+        dispatch({
+            type: PAYOUTCARDS,
+            payload: []
+        })
+    }
+
+};
+
+export const addCard = (data) => async dispatch => {
+
+    try {
+        console.log(data)
+        const response = await axios.post(`/api/card/add`, data);
+
+         dispatch({
+            type: ADDCARD,
+            payload: response.data.responseData.card
+        })
+
+        return response.data.responseData;
+
+    } catch (e) { }
+
+};
+
+export const addPayoutCard = (data) => async dispatch => {
+
+    try {
+        const response = await axios.post(`/api/card/payout/add`, data);
+
+         dispatch({
+            type: ADDPAYOUTCARD,
+            payload: response.data.responseData.card
+        })
+
+        return response.data.responseData;
+
+    } catch (e) { }
+
+};
+
+export const addMoney = (data) => async dispatch => {
+
+    try {
+        const response = await axios.post(`/api/wallet`, data);
+
+         dispatch({
+            type: WALLET,
+            payload: response.data.responseData
+        })
+
+        return response.data.responseData;
+
+    } catch (e) {
+        
+    }
+
+};
+

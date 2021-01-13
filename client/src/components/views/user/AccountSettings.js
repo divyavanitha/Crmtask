@@ -2,14 +2,33 @@ import React, { Fragment, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { getMenu } from "../../../_actions/user.action";
+import { getCard, getPayoutCard } from "../../../_actions/user.action";
 import StripeForm from "./StripeForm";
+
 
 
 
 function AccountSettings() {
 
+   const dispatch = useDispatch();
+   const auth = useSelector((state) => state.user);
+    const [isLoading, setIsLoading] = useState(false);
+   let cards = useSelector((state) => state.user.cards);
 
+
+   useEffect(() => {
+      setIsLoading(true);
+      dispatch(getCard()).then((response) => {
+        setIsLoading(false);
+         /*setGigAmount(response.gigAmount);
+         setPendingAmount(response.pendingAmount);
+         setWithdrawalAmount(response.withdrawalAmount);
+         setRevenues(response.revenues);
+         setIsLoading(false)*/
+      })
+    }, []);
+
+    console.log(cards)
 
    return (
 
@@ -22,7 +41,8 @@ function AccountSettings() {
                <h5 className="mb-4"> Cards </h5>
                <form method="post" className="clearfix mb-3">
                   <div className="form-group row">
-                     <label className="col-md-4 col-form-label"> Enter Paypal Email </label>
+                  {console.log(cards)}
+                     {/* cards && cards.map(card => <div>{card.last_four}{card.brand}{card.isDefault}</div>) */}
                      <div className="col-md-8">
 
                      </div>

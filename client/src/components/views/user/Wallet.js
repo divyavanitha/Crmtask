@@ -4,8 +4,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import moment from 'moment';
 import Loader from 'react-loader-spinner';
-import { getMenu, getRevenues, withdraw } from "../../../_actions/user.action";
-import Gig from "./gigs/Gig";
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { getCard, addMoney, withdraw } from "../../../_actions/user.action";
+import * as Yup from 'yup';
 import $ from 'jquery';
 
 
@@ -18,6 +19,10 @@ function Wallet() {
 
     const dispatch = useDispatch();
     const auth = useSelector((state) => state.user);
+    const [cards, setCards] = useState([]);
+
+
+
     const [gigAmount, setGigAmount] = useState(0);
     const [pendingAmount, setPendingAmount] = useState(0);
     const [withdrawalAmount, setWithdrawalAmount] = useState(0);
@@ -31,12 +36,14 @@ function Wallet() {
 
     useEffect(() => {
       setIsLoading(true);
-      dispatch(getRevenues()).then((response) => {
-         setGigAmount(response.gigAmount);
+      dispatch(getCard()).then((response) => {
+        setCards(response.cards);
+        setIsLoading(false);
+         /*setGigAmount(response.gigAmount);
          setPendingAmount(response.pendingAmount);
          setWithdrawalAmount(response.withdrawalAmount);
          setRevenues(response.revenues);
-         setIsLoading(false)
+         setIsLoading(false)*/
       })
     }, []);
 
@@ -63,7 +70,52 @@ function Wallet() {
 
    return (
 
-      <Fragment>
+        <Formik
+
+            enableReinitialize
+            initialValues={{
+                id:  '',
+                amount:  ''
+            }
+            }
+
+            validationSchema={Yup.object().shape({
+                id: Yup.string()
+                    .required('Card is required'),
+                amount: Yup.string()
+                    .required('Amount is required')
+            })}
+            onSubmit={(values, { setSubmitting, resetForm }) => {
+
+                let data = {
+                    description: values.id,
+                    amount: values.amount,
+                };
+                
+                 dispatch(addMoney(data)).then(res => {
+                  
+                 })
+                
+                resetForm();
+                setSubmitting(false);
+            }}>
+
+            {props => {
+                const {
+                    values,
+                    touched,
+                    errors,
+                    dirty,
+                    isSubmitting,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    setFieldValue,
+                    handleReset,
+                } = props;
+
+                return (
+                    <Fragment>
 
       {isLoading && <div style={{position: 'fixed', opacity: 0.7, top: 0, width: '100%', height: '100%', background: '#000', zIndex: 99 }} >
                     <Loader style={{position: 'absolute', zIndex: 99, top: '30%', left: '45%' }} visible={isLoading} type="Rings" color="#00BFFF" height={100} width={100} />
@@ -91,17 +143,26 @@ function Wallet() {
                            <div className="col-md-8">
                               <div className="rs-detail">
                                 <div className="row">
-                                <div className="col-md-9">
+                                <div className="col-md-12">
+                                 <form onSubmit={handleSubmit}>
                                  <p> Add Amount </p>
-                                 <input type="text" name="amount" value={price} onChange={handleChange} className="form-control input-lg decimal" placeholder="Enter Amount"  />
-
+                                 <Field name="amount" value={values.amount} onChange={handleChange} onChange={handleChange} className={'form-control decimal' + (errors.delivery_time && errors.delivery_time && errors.delivery_time && errors.delivery_time ? ' is-invalid' : '')} placeholder="Enter Amount"  />
+                                  <ErrorMessage name="amount" component="div" className="error-message" />
+                                  <br /><br />
                                  <p> Card </p>
-                                  <select name="enable_sound" className="form-control">
-                                     <option value="yes"> Yes </option>
-                                     <option value="no"> No </option>
-                                  </select>
+                                  <Field component="select" name="id" className="form-control"  onChange={handleChange} className={'form-control' + (errors.delivery_time && errors.delivery_time && errors.delivery_time && errors.delivery_time ? ' is-invalid' : '')}>
+                                     <option value=""> Select Card </option>
+                                     { cards && cards.map(card => (<option key={card._id} value={card._id}> {card.brand}  &nbsp; **** **** **** {card.lastFour} </option>)) }
+                                  </Field>
+                                  <ErrorMessage name="id" component="div" className="error-message" />
+                                  <br /><br />
+                                  <button className="btn btn-success ml-2" data-toggle="modal" data-target="#stripe_Modal">Submit</button>
+                                  </form>
+
                                   </div>
                                   </div>
+
+
                               </div>
                            </div>
                            <div className="col-md-4">
@@ -114,12 +175,7 @@ function Wallet() {
                      </div>
                   </div>
                </div>
-               <div className="withdrawBox mb-3">
-                  <label className="lead"> Withdraw To: </label>
-                  <button className="btn btn-success ml-2" data-toggle="modal" data-target="#stripe_Modal">
-                  <i className="fa fa-credit-card"></i> Card
-                  </button>
-               </div>
+               
                <div className="listingDatatTable">
                   <table className="table table-striped dataTable" id="cus-table-2" width="100%">
                      <thead>
@@ -150,49 +206,16 @@ function Wallet() {
    </div>
 </div>
 
-<div id="stripe_Modal" className="modal fade">
-   <div className="modal-dialog">
-      <div className="modal-content">
-         <div className="modal-header">
-            <h5 className="modal-title"> Withdraw/Transfer Funds To Card </h5>
-            <button className="close" data-dismiss="modal"><span> &times; </span></button>
-         </div>
-         <div className="modal-body">
-            <center>
-               <p className="lead">
-                  Your revenue funds will be transferred to: 
-                  <br /> <strong> **** **** **** 1234 </strong>
-               </p>
-                  <input type="hidden" name="method" value="paypal" />
-                  <div className="form-group row">
-                     <label className="col-md-3 col-form-label font-weight-bold">Amount</label>
-                     <div className="col-md-8">
-                        <div className="input-group">
-                           <span className="input-group-addon font-weight-bold"> $ </span>
-                           <input type="text" name="amount" value={price} onChange={handleChange} className="form-control input-lg decimal"  placeholder={gigSetting && gigSetting.minimumWithdrawalLimit+" Minimum"}  />
-                        </div>
-                     </div>
-                  </div>
-                  <div className="form-group row">
-                     <div className="col-md-8 offset-md-3"> 
-                        <button type="submit" onClick={() => { transfer('STRIPE') } } className="btn btn-success form-control">Transfer</button>
-                     </div>
-                  </div>
-            </center>
-         </div>
-         <div className="modal-footer">
-            <button className="btn btn-secondary" data-dismiss="modal">Close</button>
-         </div>
-      </div>
-   </div>
-</div>
-
 </div>
 
 
 
       </Fragment>
-   );
-}
+                );
+            }}
+        </Formik>
+    );
+};
+
 
 export default Wallet;

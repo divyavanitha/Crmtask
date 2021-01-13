@@ -89,3 +89,11 @@ export const GIG_SUBCATEGORY = 'GIG_SUBCATEGORY';
 export const REQUEST_GIGS = 'REQUEST_GIGS';
 export const SENT_OFFER = 'SENT_OFFER';
 export const VIEW_OFFER = 'VIEW_OFFER';
+
+
+export const CARDS = 'CARDS';
+export const ADDCARD = 'ADDCARD';
+export const PAYOUTCARDS = 'PAYOUTCARDS';
+export const ADDPAYOUTCARD = 'ADDPAYOUTCARD';
+export const WALLET = 'WALLET';
+
