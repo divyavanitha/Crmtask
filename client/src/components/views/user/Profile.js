@@ -50,6 +50,7 @@ const Profile = (props) => {
       setCountrylist(value);
       if (value) {
          setFieldValue('country', value);
+         console.log(value);
          const state = dispatch(getState(value));
          console.log('state', state);
          if (state && state.responseData.states) {

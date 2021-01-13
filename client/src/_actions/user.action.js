@@ -308,19 +308,19 @@ export const getCountry = (data) => async dispatch => {
 export const getState = (id) => async dispatch => {
     const states = await axios.get(`/api/states/${id}`)
     console.log('state', states);
-    /*dispatch({
+    dispatch({
         type: GET_STATE,
         payload: states.data
-    });*/
+    });
     return states.data;
 }
 
 export const getCity = (id) => async dispatch => {
     const cities = await axios.get(`/api/cities/${id}`)
-   /* dispatch({
+    dispatch({
         type: GET_CITY,
         payload: cities.data
-    });*/
+    });
     return cities.data;
 }
 

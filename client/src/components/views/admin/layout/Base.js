@@ -63,6 +63,8 @@ import Sms from "../settings/Sms";
 import Mail from "../settings/Mail";
 import Push from "../settings/Push";
 import Payment from "../settings/Payment";
+import Pending from "../payouts/Pending";
+
 
 
 const Base = () => {
@@ -153,6 +155,7 @@ const Base = () => {
             <Route path="/admin/settings/seller" component={Seller}></Route>
             <Route path="/admin/settings/gig" component={GigSetting}></Route>
             <Route path="/admin/settings/pricing" component={Pricing}></Route>
+            <Route path="/admin/pending" component={Pending}></Route>
 
           </Switch>
 
