@@ -13,6 +13,7 @@ const requestController = require('../controllers/request.controller');
 const cartController = require('../controllers/cart.controller');
 const cardController = require('../controllers/card.controller');
 
+
 router.get('/pages/list/:type', (req, res) => {
   homeController.pagesList(req, res);
 });
@@ -67,11 +68,16 @@ router.get('/skills', (req, res) => {
   authController.skill(req, res);
 });
 
+router.get('/user', middleware.user, (req, res) => {
+  homeController.findUser(req, res);
+});
+
 router.get('/profile', middleware.user, (req, res) => {
   profilecontroller.getProfile(req, res);
 });
 
 router.post('/profile', [middleware.user, middleware.upload( path.join(__dirname, '../storage/images/user/') ).fields([{ name: 'profile_photo', maxCount: 4 }, { name: 'cover_photo', maxCount: 1 }]) ],  (req, res) => {
+  console.log(err);
   profilecontroller.updateProfile(req, res);
 });
 
@@ -327,6 +333,27 @@ router.get('/cards/payout', middleware.user, (req, res) => {
   cardController.getPayoutCard(req, res);
 });
 
+
+
+router.get('/seller/buyer', middleware.user, (req, res) => {
+  homeController.sellerBuyer(req, res);
+});
+
+router.get('/notifications',middleware.user, (req, res) => {
+  homeController.notifications(req, res);
+});
+
+router.delete('/notifications/:id', middleware.user, (req, res) => {
+  homeController.deleteNotification(req, res);
+});
+
+router.get('/buyit/again', middleware.user, (req, res) => {
+  homeController.buyItAgain(req, res);
+});
+
+router.get('/profile/gigs/:id', (req, res) => {
+  homeController.profileGigs(req, res);
+});
 
 router.post('/card/add', middleware.user, (req, res) => {
   cardController.addCard(req, res);

@@ -81,7 +81,11 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500).json( helper.response(  { status: err.status || 500, error : err }   ));
+  let code = err.status || 500;
+  if(err.code == "LIMIT_FILE_SIZE"){
+    code = 422;
+  }
+  res.status(code).json( helper.response(  { status: code, error : err, message: err.message }   ));
 });
 
 module.exports = app;

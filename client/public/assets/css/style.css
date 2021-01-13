@@ -52,6 +52,15 @@ btn {
     background-image: none;
 }
 
+#start_selling {
+    background-image: -webkit-linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(../public/images/selling.jpeg) !important;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(../public/images/selling.jpeg) !important;
+    background-size: cover;
+    background-position: center;
+    height: 60vh;
+    background-attachment: fixed;
+}
+
 .btn-larger.disabled,
 .btn-larger[disabled],
 fieldset[disabled] .btn-larger,

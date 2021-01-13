@@ -1,5 +1,6 @@
 
 const { Setting } = require('./../models/setting');
+const { User } = require('../models/user');
 const { Order } = require('../models/Order');
 const { Rating } = require('../models/Rating');
 const { SubCategory } = require('../models/SubCategory');
@@ -22,6 +23,7 @@ const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
 const helper = require('../services/helper.js');
+const { Notification } = require('../models/Notification');
 const db = require('../services/model.js');
 const ObjectId = require('mongoose').Types.ObjectId; 
 
@@ -119,8 +121,37 @@ exports.sellerOrderList = async (req, res) => {
         let cancelled_order = await db._get(Order, {seller: req.user._id, status: "CANCELLED"}, {}, {populate: "gig"});
 
         let active_order = await db._get(Order, {seller: req.user._id, status:  {$in : ["PROGRESS", "CANCELLATION REQUESTED", "REVISION REQUESTED", "DELIVERED"]} }, {}, {populate: "gig"});
+        var date = new Date();
+        console.log(new Date(date.getFullYear(), date.getMonth(), 1));
+        console.log(new Date(date.getFullYear(), date.getMonth() + 1, 0));
 
-        const response = helper.response({ data: {"orders": orders, "delivered_order": delivered_order, "completed_order": completed_order, "cancelled_order": cancelled_order, "active_order": active_order } });
+        let earnings = await Order.aggregate([
+            { $match: { seller: new ObjectId(req.user._id), status: "COMPLETED" } },
+            {
+                $group:
+                {
+                    _id: "$seller",
+                    total: { $sum: '$total' }
+                }
+            }
+        ]);
+
+        let balance_amount = await Order.aggregate([
+            { $match: { seller: new ObjectId(req.user._id), status: { $nin: ["CANCELLED", "COMPLETED"] } } },
+            {
+                $group:
+                {
+                    _id: "$seller",
+                    total: { $sum: '$total' }
+                }
+            }
+        ]);
+
+
+
+        console.log(balance_amount);
+
+        const response = helper.response({ data: {"orders": orders, "delivered_order": delivered_order, "completed_order": completed_order, "cancelled_order": cancelled_order, "active_order": active_order, "earnings": earnings, "balance_amount": balance_amount } });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -469,7 +500,7 @@ exports.addFavouritetoCart = async (req, res) => {
 exports.revenues = async (req, res) => {
     try {
 
-        let revenues = await db._get(Order, { seller: req.user._id, status: 'COMPLETED' }, { total: 1, adminCommission: 1, completed_at: 1 });
+        let revenues = await db._get(Order, { seller: req.user._id, status: 'COMPLETED' }, { total: 1, commission: 1, completed_at: 1 });
 
         let withdrawalAmount = await Withdrawal.aggregate([
             { $match : { user: new ObjectId(req.user._id), status: 'COMPLETED' } },
@@ -478,7 +509,7 @@ exports.revenues = async (req, res) => {
 
         let pendingAmount = await Order.aggregate([
             { $match : { seller: new ObjectId(req.user._id), status: 'COMPLETED' } },
-            { $project: { "pending": { "$subtract": [ "$total", "$adminCommission" ] }} },
+            { $project: { "pending": { "$subtract": [ "$total", "$commission" ] }} },
             { $group : { "_id": "$seller", total : { $sum : "$pending" } } }
         ])
 
@@ -578,7 +609,7 @@ exports.getRecent = async (req, res) => {
 
     try {
 
-        let recent = await db._get(View, { user: req.user._id }, {}, {populate: ['gig']});
+        let recent = await db._get(View, { user: req.user._id }, {}, {populate: ['gig', 'user']});
 
         const data = { recent };
 
@@ -704,6 +735,24 @@ exports.orderRating = async (req, res) => {
 
 }
 
+exports.findUser = async (req, res) => {
+    try {
+        let user = await db._find(User, { _id: req.user._id }, {}, { populate: 
+            [{ path: 'country', model: 'Country', select: 'name' },
+            { path: 'city', model: 'city', select: 'name' },
+            { path: 'state', model: 'state', select: 'name' }
+            ]});
+
+        const data = { user };
+
+        const response = helper.response({ data });
+        return res.status(response.statusCode).json(response);
+        
+    } catch (err) {
+        console.log(err);
+    }
+};
+
 exports.gigSubCatoegory = async (req, res) => {
     try {
 
@@ -732,6 +781,125 @@ exports.requestGigs = async (req, res) => {
         const response = helper.response({ data });
 
         return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.notifications = async (req, res) => {
+
+    try {
+        let notification = await db._get(Notification, { receiver: req.user._id }, {}, {sort: { _id: -1 }, populate: "sender" });
+        
+        const data = { notification };
+
+        const response = helper.response({ data });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.deleteNotification = async (req, res) => {
+    try {
+        let notification = await db._delete(Notification, {"_id":req.params.id});
+
+        const response = helper.response({ message: res.__('deleted') });
+        return res.status(response.statusCode).json(response);
+        
+    }
+    catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                res.status(422).send(err.errors[i].message);
+            }
+        } else {
+            res.status(422).send(err);
+        }
+    }
+
+};
+
+exports.buyItAgain = async (req, res) => {
+    try {
+        let order = await db._get(Order, {buyer:req.user._id}, {}, {populate: ["gig","seller"]});
+
+        const data = { order };
+
+        const response = helper.response({ data });
+
+        return res.status(response.statusCode).json(response);
+        
+    }
+    catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                res.status(422).send(err.errors[i].message);
+            }
+        } else {
+            res.status(422).send(err);
+        }
+    }
+
+};
+
+exports.profileGigs = async (req, res) => {
+    try {
+        let gig = await db._get(Gig, {user:req.params.id, status: "ACTIVE"}, {}, { populate: [ 
+            { path: "user", populate: { path: 'country', model: 'Country', select: 'name' } }, 
+            { path: "user", populate: { path: 'city', model: 'city', select: 'name' } }, 
+            { path: "category", select: 'name'}, 
+            { path: "subCategory", select: 'name'}
+            ] });
+
+        const data = { gig };
+
+        const response = helper.response({ data });
+
+        return res.status(response.statusCode).json(response);        
+    }
+    catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                res.status(422).send(err.errors[i].message);
+            }
+        } else {
+            res.status(422).send(err);
+        }
+    }
+
+};
+
+
+exports.sellerBuyer = async (req, res) => {
+
+    try {
+
+        let buyer = await db._get(Order, {seller: req.user._id}, {}, {populate: "buyer"});
+        let seller = await db._get(Order, {buyer: req.user._id}, {}, {populate: "seller"});
+/*
+        const unique =  buyer.map(e)
+                    console.log(e);
+                  // store the indexes of the unique objects
+                  .map((e, i, final) => final.indexOf(e) === i && i)
+
+                  // eliminate the false indexes & return unique objects
+                 .filter((e) => arr[e]).map(e => arr[e]);
+
+        return unique;
+*/
+       /* console.log(result);
+        
+        const data = { result, seller };*/
+
+        /*const response = helper.response({ data });
+
+        return res.status(response.statusCode).json(response);*/
 
     } catch (err) {
         console.log(err);

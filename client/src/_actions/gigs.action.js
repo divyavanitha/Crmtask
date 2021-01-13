@@ -136,6 +136,8 @@ export const getGigList = (data) => async dispatch => {
     type: GET_ALLGIGS,
     payload: gig.data
   });
+
+  return gig.data.responseData;
 }
 
 export const submitApproval = (id) => async dispatch => {
@@ -162,43 +164,6 @@ export const changeGigStatus = (data) => async dispatch => {
     }
 }; 
 
-// Get Posts 
-export const getmyallgigs = () => dispatch => {
-  // dispatch(setPostLoading());
-  axios
-    .get('/api/gigs/getmyallgigs')
-    .then(res =>
-      dispatch({
-        type: GET_MYALLGIGS,
-        payload: res.data
-      })
-    )
-    .catch(err =>
-      dispatch({
-        type: GET_MYALLGIGS,
-        payload: null
-      })
-    );
-};
-
-// Get findpostjobbyid
-export const getgigsById = id => dispatch => {
-  //dispatch(setPostLoading());
-  axios
-    .get(`/api/gigs/findgigbyid/${id}`)
-    .then(res =>
-      dispatch({
-        type: GET_GIGSBYID,
-        payload: res.data
-      })
-    )
-    .catch(err =>
-      dispatch({
-        type: GET_GIGSBYID,
-        payload: null
-      })
-    );
-};
 
 // Delete Post
 export const deleteGig = (id) => async dispatch => {
@@ -211,55 +176,3 @@ export const deleteGig = (id) => async dispatch => {
     return e.response.data;
   }
 };
-
-
-// Add Comment
-// export const addComment = (postId, commentData) => dispatch => {
-//   dispatch(clearErrors());
-//   axios
-//     .post(`/api/posts/comment/${postId}`, commentData)
-//     .then(res =>
-//       dispatch({
-//         type: GET_POST,
-//         payload: res.data
-//       })
-//     )
-//     .catch(err =>
-//       dispatch({
-//         type: GET_ERRORS,
-//         payload: err.response.data
-//       })
-//     );
-// };
-
-// // Delete Comment
-// export const deleteComment = (postId, commentId) => dispatch => {
-//   axios
-//     .delete(`/api/posts/comment/${postId}/${commentId}`)
-//     .then(res =>
-//       dispatch({
-//         type: GET_POST,
-//         payload: res.data
-//       })
-//     )
-//     .catch(err =>
-//       dispatch({
-//         type: GET_ERRORS,
-//         payload: err.response.data
-//       })
-//     );
-// };
-
-// Set loading state
-// export const setPostLoading = () => {
-//   return {
-//     type: POST_LOADING
-//   };
-// };
-
-// Clear errors
-// export const clearErrors = () => {
-//   return {
-//     type: CLEAR_ERRORS
-//   };
-// };

@@ -51,8 +51,11 @@ const orderSchema = mongoose.Schema({
     }],
     tips: {
         type: Number,
-        required: true,
         default: 0
+    },
+    tip_status: {
+        type: Number,
+        default: 1
     },
     commission: {
         type: Number,

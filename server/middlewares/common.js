@@ -142,7 +142,6 @@ function permission(req, res, next) {
 }
 
 function upload(destinationPath) {
-
     if (!fs.existsSync(destinationPath)) {
         fs.mkdirSync(destinationPath, { recursive: true });
     }
@@ -156,7 +155,7 @@ function upload(destinationPath) {
         }
     });
 
-    let uploaded = multer({ storage: storage });
+    let uploaded = multer({ storage: storage, limits: { fileSize: (5000 * 1024) } });
     return uploaded;
 }
 

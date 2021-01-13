@@ -56,6 +56,14 @@ const gigSchema = mongoose.Schema({
         type: Array   
     },
     rating: { type: Number },
+    viewCount: { 
+        type: Number,
+        default: 0
+     },
+    completedOrder: {
+        type: Number,
+        default: 0
+    },
     created_at: {
         type: Date,
         default: Date.now

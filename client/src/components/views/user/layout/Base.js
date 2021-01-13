@@ -32,7 +32,7 @@ import SellerOrderList from "../orders/SellerOrderList";
 import SellerOrderDetails from "../orders/SellerOrderDetails";
 import Profile from "../Profile";
 import Account from "../Account";
-import Proposals from "../Profile";
+import MyGigs from "../MyGigs";
 import Dashboard from "../Dashboard";
 import Wallet from "../Wallet";
 import Revenue from "../Revenue";
@@ -44,6 +44,9 @@ import Favourite from "../Favourite";
 import Contact from "../Contact";
 import Referral from "../Referral";
 import Page from "../Page";
+import Notification from "../Notification";
+import StartSelling from "../StartSelling";
+import SellerProfile from "../gigs/SellerProfile";
 
 import "../../../../assets/css/custom.css";
 
@@ -78,6 +81,7 @@ const Base = () => {
             <Switch>
                 <Route exact={true} path="/" component={auth.isAuthenticated ? Home : Landing} />
                 <Route path="/categories/:category/:subcategory" component={CategoryGigList} />
+                <Route path="/profile/:id/:user" component={SellerProfile} />
                 <ProtectedRoute path="/cart-payment-option/:id" component={CartPayment} />
                 <ProtectedRoute path="/cart-payment-option" component={CartPayment} />
                 <ProtectedRoute path="/gigs" component={GigList} />
@@ -99,7 +103,7 @@ const Base = () => {
                 <ProtectedRoute path="/view/offer/:id" component={ViewOffer} />
                 <ProtectedRoute path="/profile" component={Profile} />
                 <ProtectedRoute path="/account" component={Account} />
-                <ProtectedRoute path="/proposals" component={Proposals} />
+                <ProtectedRoute path="/mygigs" component={MyGigs} />
                 <ProtectedRoute path="/dashboard" component={Dashboard} />
                 <ProtectedRoute path="/revenues" component={Revenue} />
                 <ProtectedRoute path="/coupon/create" component={CouponCreate} />
@@ -109,6 +113,8 @@ const Base = () => {
                 <ProtectedRoute path="/purchases" component={Purchase} />
                 <ProtectedRoute path="/favourites" component={Favourite} />
                 <ProtectedRoute path="/contacts" component={Contact} />
+                <ProtectedRoute path="/notifications" component={Notification} />
+                <ProtectedRoute path="/start/selling" component={StartSelling} />
                 <ProtectedRoute path="/referrals" component={Referral} />
                 <Route path="/pages/:page" component={Page} />
 

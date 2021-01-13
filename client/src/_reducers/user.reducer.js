@@ -34,7 +34,12 @@ import {
     ADDCARD,
     PAYOUTCARDS,
     ADDPAYOUTCARD,
-    WALLET
+    WALLET,
+    FIND_USER,
+    GET_SELLER_BUYER,
+    GET_NOTIFICATION,
+    BUY_IT_AGAIN,
+    PROFILE_GIGS
 
 } from '../_actions/types';
 
@@ -108,6 +113,16 @@ const userReducer = (state = initialState, action) => {
             return { ...state, recent: action.payload }
         case FAVOURITE_GIGS:
             return { ...state, favourites: action.payload }
+        case FIND_USER:
+            return { ...state, find_user: action.payload }
+        case GET_NOTIFICATION:
+            return { ...state, notification: action.payload }
+        case GET_SELLER_BUYER:
+            return { ...state, seller_buyer: action.payload }
+        case BUY_IT_AGAIN:
+            return { ...state, buy_it: action.payload}
+        case PROFILE_GIGS:
+        return { ...state, profile_gigs: action.payload}
         case ADD_FAVOURITE_GIG:
             let data = {...state}
             let response = action.payload;

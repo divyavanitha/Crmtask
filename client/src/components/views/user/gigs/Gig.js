@@ -47,7 +47,7 @@ function Gig(props) {
                                 <img src={props.list.user ? props.list.user.profilePhoto : ""} className="rounded-circle" width="32" height="32" />
                             </span>
                             <div className="seller-info-wrapper">
-                                <a href={props.list.user ? props.list.user.firstName : ""} className="seller-name">{props.list.user ? props.list.user.firstName : ""} {props.list.user ? props.list.user.lastName : ""}</a>
+                                <Link to={props.list.user ? "/profile/" + props.list.user._id + "/" + props.list.user.firstName : ""} className="seller-name">{props.list.user ? props.list.user.firstName : ""} {props.list.user ? props.list.user.lastName : ""}</Link>
                                 <div className="onePress-seller-tooltip">
                                     {props.list.user.type}
                                 </div>
@@ -62,10 +62,10 @@ function Gig(props) {
                         <div className="rating-badges-container">
                             <span className="proposal-rating">
 
-                            { gigRating != 0 && new Array(Math.ceil(gigRating)).fill(Math.ceil(gigRating)).map(() => <img className='mb-1' src={require('../../../../assets/images/user_rate_full.png')} />  ) }
+                            { gigRating != 0 && new Array(Math.ceil(gigRating)).fill(Math.ceil(gigRating)).map((i) => <img key={i} className='mb-1' src={require('../../../../assets/images/user_rate_full.png')} />  ) }
 
                             { new Array(5 - Math.ceil(gigRating)).fill(0).map((i, j) => <img key={j} className='mb-1' src={require('../../../../assets/images/user_rate_blank.png')} />  ) } 
-                        </span>
+                            </span>
                         </div>
                     </div>
                     <footer className="proposal-card-footer">

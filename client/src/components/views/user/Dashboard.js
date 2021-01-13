@@ -3,10 +3,12 @@ import { withRouter, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from 'react';
 import { getMenu } from "../../../_actions/user.action";
+import moment from 'moment';
 import Gig from "./gigs/Gig"
 
-import { getProfile } from "../../../_actions/profile.action";
+import { findUser, sellerOrderList, getNotification, deleteNotification } from "../../../_actions/user.action";
 
+import $ from 'jquery';
 
 import OwlCarousel from 'react-owl-carousel';
 
@@ -17,13 +19,40 @@ function Dashboard() {
    const dispatch = useDispatch();
 
 
-   const profile = useSelector((state) => state.profile && state.profile.getprofile && state.profile.getprofile.responseData && state.profile.getprofile.responseData.user);
+   const user = useSelector((state) => state.user && state.user.find_user && state.user.find_user.responseData && state.user.find_user.responseData.user);
+   const order_count = useSelector((state) => state.user && state.user.seller_order_list);
+   const seller_buyer = useSelector((state) => state.user && state.user.seller_buyer);
+   const notification = useSelector((state) => state.user && state.user.notification && state.user.notification.responseData && state.user.notification.responseData.notification);
 
    useEffect(() => {
-      dispatch(getProfile())
+      dispatch(findUser())
+      dispatch(sellerOrderList())
+      dispatch(getNotification())
+
+      $('body').on('click', '.delete', function (e) {
+         //alert();
+         var that = $(this);
+         e.preventDefault();
+         const sid = that.data('id');
+         console.log('id', sid);
+         $('.delete-modal').modal("show");
+         $(".delete-modal-btn")
+            .off()
+            .on("click", function () {
+               dispatch(deleteNotification(sid)).then(res => {
+                  //addToast(res.message, { appearance: res.status, autoDismiss: true, })
+                  that.closest('div').remove();
+                  $('.delete-modal').modal("hide");
+                  //window.location.reload();
+
+               })
+
+            });
+      });
+
    }, []);
 
-console.log('useer', profile);
+console.log('useer', order_count && order_count);
    return (
 
       <Fragment>
@@ -104,7 +133,7 @@ console.log('useer', profile);
                <img src={ require('../../../assets/images/sales.png') } className="img-fluid center-block" alt="none" />
                <h4>Start Selling</h4>
                <p>Sell your services to millions of people all over the world.</p>
-               <button className="btn get_btn"> GET STARTED </button>
+               <Link to="/start/selling" target="_blank" className="btn get_btn"> GET STARTED </Link>
             </div>
          </div>
          <br />
@@ -115,28 +144,28 @@ console.log('useer', profile);
             <div className="row">
                <div className="col-lg-3 col-sm-12 text-center">
                   <div className="userImg">
-                     <img src={ require('../../../assets/images/comp/profileIcon.png') } className="rounded-circle img-thumbnail img-fluid" />
+                     <img src={ user && user.profilePhoto ? user && user.profilePhoto : window.location.href+"public/images/images_1608630531.png" } className="rounded-circle img-thumbnail img-fluid" />
                   </div>
                </div>
                <div className="col-lg-9 col-sm-12 text-lg-left text-center ">
                   <div className="row mb-3">
                      <div className="col-6 col-lg-4">
                         <h6><i className="fa fa-globe pr-1"></i> Country</h6>
-                        <h4 className="text-muted">United States</h4>
+                        <h4 className="text-muted">{user && user.country ? user && user.country.name : ""}</h4>
                      </div>
                      <div className="col-6 col-lg-8">
                         <h6><i className="fa fa-star pr-1"></i> Positive Ratings</h6>
-                        <h4 className="text-muted"> 100%</h4>
+                        <h4 className="text-muted"> {Math.round(user && user.ratingPercent)}%</h4>
                      </div>
                   </div>
                   <div className="row">
                      <div className="col-6 col-sm-4">
                         <h6><i className="fa fa-truck pr-1"></i> Recent Delivery</h6>
-                        <h4 className="text-muted">November 07, 2020</h4>
+                        <h4 className="text-muted">{ moment(user && user.recentDelivery).format('MMMM DD, YYYY') }</h4>
                      </div>
                      <div className="col-6 col-lg-8">
                         <h6><i className="fa fa-clock-o pr-1"></i> Member Since</h6>
-                        <h4 className="text-muted">June 28, 2019</h4>
+                        <h4 className="text-muted">{ moment(user && user.createdAt).format('MMMM DD, YYYY') }</h4>
                      </div>
                   </div>
                </div>
@@ -153,7 +182,7 @@ console.log('useer', profile);
                               <img width="" src={ require('../../../assets/images/comp/completed.png') } alt="completed" />
                            </div>
                            <h5 className="text-muted pt-2"> Orders Completed</h5>
-                           <h3 className="text-success">18</h3>
+                           <h3 className="text-success">{user && user.completedOrder}</h3>
                         </div>
                      </div>
                      <div className="col-md-4 text-left">
@@ -162,7 +191,7 @@ console.log('useer', profile);
                               <img width="" src={ require('../../../assets/images/comp/box.png') } alt="box" />
                            </div>
                            <h5 className="text-muted pt-2">Delivered Orders</h5>
-                           <h3 className="text-success">1</h3>
+                           <h3 className="text-success">{order_count && order_count.delivered_order.length}</h3>
                         </div>
                      </div>
                      <div className="col-md-4 text-left">
@@ -171,7 +200,7 @@ console.log('useer', profile);
                               <img width="" src={ require('../../../assets/images/comp/cancellation.png') } alt="cancellation" />
                            </div>
                            <h5 className="text-muted pt-2">Orders Cancelled</h5>
-                           <h3 className="text-success">20</h3>
+                           <h3 className="text-success">{order_count && order_count.cancelled_order.length}</h3>
                         </div>
                      </div>
                   </div>
@@ -182,7 +211,7 @@ console.log('useer', profile);
                               <img width="" src={ require('../../../assets/images/comp/debt.png') } alt="debt" />
                            </div>
                            <h5 className="text-muted pt-2"> Sales In Queue</h5>
-                           <h3 className="text-success">19</h3>
+                           <h3 className="text-success">{order_count && order_count.active_order.length}</h3>
                         </div>
                      </div>
                      <div className="col-md-4 text-left">
@@ -191,7 +220,7 @@ console.log('useer', profile);
                               <img width="" src={ require('../../../assets/images/comp/accounting.png') } alt="accounting" />
                            </div>
                            <h5 className="text-muted pt-2"> Balance</h5>
-                           <h3 className="text-success">&#036;1,124.00</h3>
+                           <h3 className="text-success">&#036;{(order_count && order_count.earnings.length > 0) ? order_count && order_count.earnings[0].total : "0.00"}</h3>
                         </div>
                      </div>
                      <div className="col-md-4 text-left">
@@ -200,7 +229,7 @@ console.log('useer', profile);
                               <img width="" src={ require('../../../assets/images/comp/financial.png') } alt="financial" />
                            </div>
                            <h5 className="text-muted pt-2"> Earnings(Month) </h5>
-                           <h3 className="text-success">&#036;85.00</h3>
+                           <h3 className="text-success">&#036;{(order_count && order_count.balance_amount.length > 0) ? order_count && order_count.balance_amount[0].total : "0.00"}</h3>
                         </div>
                      </div>
                   </div>
@@ -212,7 +241,7 @@ console.log('useer', profile);
                <ul className="nav nav-tabs card-header-tabs">
                   <li className="nav-item">
                      <a href="#notifications" data-toggle="tab" className="nav-link make-black active">
-                     Notifications <span className="badge badge-success">201 </span>
+                     Notifications <span className="badge badge-success">{notification && notification.length} </span>
                      </a>
                   </li>
                   <li className="nav-item">
@@ -225,20 +254,20 @@ console.log('useer', profile);
             <div className="card-body">
                <div className="tab-content dashboard">
                   <div id="notifications" className="tab-pane fade show active mt-3">
-                     <div className="header-message-div-unread">
-                        <a href="" className="float-right delete text-danger">
-                        <i className="fa fa-times-circle fa-lg"></i>  
-                        </a>
-                        <a href="">
-                           <img src={ require('../../../assets/images/comp/profileIcon.png') } width="50" height="50" className="rounded-circle" />
-                           <strong className="heading">pat</strong>
-                           <p className="message">Has just sent you an order.</p>
-                           <p className="date text-muted"> November 09, 2020</p>
-                        </a>
-                     </div>
+                     {notification && notification.map((list, index) => (<div className="header-message-div-unread">
+                        <Link data-id={list._id} className="float-right delete text-danger delete">
+                        <i className="fa fa-times-circle fa-lg delete"></i>  
+                        </Link>
+                         <Link target="_blank" to={list.type == "ORDER" ? "/order/details/"+list.orderId : (list.type == "GIG" ? "/gigs" : "/buyer/requests")}>
+                           <img src={list.sender ? list.sender.profilePhoto : window.location.href+"public/images/images_1608630531.png"} width="50" height="50" className="rounded-circle" />
+                           <strong className="heading">{list.sender ? list.sender.firstName : "Admin"}</strong>
+                           <p className="message">{list.message}</p>
+                           <p className="date text-muted"> {moment(list.created_at).format('MMMM DD, YYYY')}</p>
+                        </Link>
+                     </div>))}
                      <div className="p-3">
-                        <a href="" className="btn btn-success btn-block">
-                        See All              </a>
+                         <Link to="/notifications" target="_blank" className="ml-0 btn btn-success btn-block">See All</Link>
+                        
                      </div>
                   </div>
                   <div id="inbox" className="tab-pane fade mt-3">
@@ -263,7 +292,22 @@ console.log('useer', profile);
 </div>
 </div>
 
+    <div className="modal delete-modal" tabIndex="-1" role="basic" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div className="modal-dialog">
+               <div className="modal-content">
+                  <div className="modal-header">
+                     <h4 className="modal-title">Confirm Delete</h4>
+                  </div>
+                  <div className="modal-body p-2"> Are you sure want to delete? </div>
+                  <div className="modal-footer">
+                     <button type="button" className="btn default" data-dismiss="modal">Close</button>
+                     <button type="button" data-value="1" className="btn btn-danger delete-modal-btn">Delete</button>
+                  </div>
+               </div>
 
+            </div>
+
+         </div>
 
       </Fragment>
    );

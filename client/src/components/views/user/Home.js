@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { getMenu, getSlide, getGigWithoutAuth, getRecent, getFavourites, addFavourite  } from "../../../_actions/user.action";
+import { getMenu, getSlide, getGigWithoutAuth, getRecent, getFavourites, addFavourite, buyItAgain  } from "../../../_actions/user.action";
 import Gig from "./gigs/Gig"
 
 
@@ -20,11 +20,13 @@ function Home() {
       dispatch(getSlide())
       dispatch(getGigWithoutAuth())
       dispatch(getRecent())
+      dispatch(buyItAgain())
    }, []);
 
    const slide = useSelector((state) => state.user && state.user.slide && state.user.slide.responseData && state.user.slide.responseData.slides);
    const gig = useSelector((state) => state.user && state.user.gigs && state.user.gigs.responseData && state.user.gigs.responseData.gigs);
    const recent = useSelector((state) => state.user && state.user.recent);
+   const buyit = useSelector((state) => state.user && state.user.buy_it && state.user.buy_it.responseData && state.user.buy_it.responseData.order);
 
    return (
 
@@ -35,7 +37,7 @@ function Home() {
                   <div className="card rounded-0 mb-3 welcome-box">
                      <div className="card-body pb-2 card_user">
                         <center>
-                           <img src={require('../../../assets/images/img-03.jpg')} className="img-fluid rounded-circle mb-3" />
+                           <img src={auth.user && auth.user.profilePhoto ? auth.user && auth.user.profilePhoto : require('../../../assets/images/img-03.jpg')} className="img-fluid rounded-circle mb-3" />
                         </center>
                         <h5>Welcome <span className="text-success">{auth.user && auth.user.firstName}</span> </h5>
                         <hr />
@@ -47,208 +49,43 @@ function Home() {
                      <h3 className="buy_head mt-2">Buy It Again</h3>
                      <div id="demo" className="carousel slide" data-ride="carousel">
                         <div className="carousel-inner " role="listbox">
-                           <div className="carousel-item active">
+                           {buyit && buyit.map((r, index) => (<div key={r._id} className={ index == 0 ? "carousel-item active" : "carousel-item"}>
                               <div className="proposal-card-base mp-proposal-card">
-                                 <a href="proposals/Timiex/i-will-design-a-professional-wordpress-website-for-your-business">
-                                    <img src={require('../../../assets/images/proposals/website-design-logo-png_1590561828.png')}
-                                       className="img-fluid" />
-                                 </a>
-                                 <div className="proposal-card-caption">
+                                <Link to={r.seller ? "/gig/" + r.seller.firstName + "/" + r.gig.title : ""}>
+                                    <img src={r.gig.photo[0] ? r.gig.photo[0].photo : ""} className="img-fluid" />
+                                </Link>
+                                <div className="proposal-card-caption">
                                     <div className="proposal-seller-info">
-                                       <span className="fit-avatar s24">
-                                          <img src={require('../../../assets/images/userlisting/img-02.jpg')} className="rounded-circle" width="32"
-                                             height="32" />
-                                       </span>
-                                       <div className="seller-info-wrapper">
-                                          <a href="Timiex" className="seller-name">Timiex</a>
-                                          <div className="onePress-seller-tooltip">
-                                             New Seller
+                                        <span className="fit-avatar s24">
+                                            <img src={r.seller ? r.seller.profilePhoto : ""} className="rounded-circle" width="32" height="32" />
+                                        </span>
+                                        <div className="seller-info-wrapper">
+                                            <a href={r.seller ? r.seller.firstName : ""} className="seller-name">{r.seller ? r.seller.firstName : ""} {r.seller ? r.seller.lastName : ""}</a>
+                                            <div className="onePress-seller-tooltip">
+                                                {r.seller ? r.seller.type : ""}
+                                            </div>
+                                        </div>
                                     </div>
-                                       </div>
-                                    </div>
-                                    <a href="proposals/Timiex/i-will-design-a-professional-wordpress-website-for-your-business"
-                                       className="proposal-link-main">
-                                       <h3>I will design a professional WordPress website for your business </h3>
-                                    </a>
+                                    <Link to={r.seller ? "/gig/" + r.seller.firstName + "/" + r.gig.title : ""} className="proposal-link-main js-proposal-card-imp-data">
+                                        <h3>{r.gig.title}</h3>
+                                    </Link>
                                     <div className="rating-badges-container">
-                                       <span className="proposal-rating">
-                                          <i className="fa fa-star"></i>
-                                          <span>
-                                             <strong>0.0</strong>
-                                       (0)
-                                       </span>
-                                       </span>
-                                    </div>
-                                 </div>
-                                 <footer className="proposal-card-footer">
-                                    <div className="proposal-price">
-                                       <a className="js-proposal-card-imp-data">
-                                          <small>Starting At</small>&#036;35.00 </a>
-                                    </div>
-                                 </footer>
-                              </div>
-                           </div>
-                           <div className="carousel-item ">
-                              <div className="proposal-card-base mp-proposal-card">
-                                 <a href="proposals/Timiex/i-will-design-a-professional-wordpress-website-for-your-business">
-                                    <img src={require('../../../assets/images/proposals/website-design-logo-png_1590561828.png')}
-                                       className="img-fluid" />
-                                 </a>
-                                 <div className="proposal-card-caption">
-                                    <div className="proposal-seller-info">
-                                       <span className="fit-avatar s24">
-                                          <img src={require('../../../assets/images/userlisting/img-02.jpg')} className="rounded-circle" width="32"
-                                             height="32" />
-                                       </span>
-                                       <div className="seller-info-wrapper">
-                                          <a href="Timiex" className="seller-name">Timiex</a>
-                                          <div className="onePress-seller-tooltip">
-                                             New Seller
-                                    </div>
-                                       </div>
-                                    </div>
-                                    <a href="proposals/Timiex/i-will-design-a-professional-wordpress-website-for-your-business"
-                                       className="proposal-link-main">
-                                       <h3>I will design a professional WordPress website for your business </h3>
-                                    </a>
-                                    <div className="rating-badges-container">
-                                       <span className="proposal-rating">
-                                          <i className="fa fa-star"></i>
-                                          <span>
-                                             <strong>0.0</strong>
-                                       (0)
-                                       </span>
-                                       </span>
-                                    </div>
-                                 </div>
-                                 <footer className="proposal-card-footer">
-                                    <div className="proposal-price">
-                                       <a className="js-proposal-card-imp-data">
-                                          <small>Starting At</small>&#036;35.00 </a>
-                                    </div>
-                                 </footer>
-                              </div>
-                           </div>
-                           <div className="carousel-item ">
-                              <div className="proposal-card-base mp-proposal-card">
-                                 <a href="proposals/RayTay90/i-will-sell-2000-inspirational-quotes">
-                                    <img src={require('../../../assets/images/proposals/quote-1342706_1280_1588263608.png')} className="img-fluid" />
-                                 </a>
-                                 <div className="proposal-card-caption">
-                                    <div className="proposal-seller-info">
-                                       <span className="fit-avatar s24">
-                                          <img src={require('../../../assets/images/userlisting/img-04.jpg')} className="rounded-circle" width="32"
-                                             height="32" />
-                                       </span>
-                                       <div className="seller-info-wrapper">
-                                          <a href="RayTay90" className="seller-name">RayTay90</a>
-                                          <div className="onePress-seller-tooltip">
-                                             Level One
-                                    </div>
-                                       </div>
-                                    </div>
-                                    <a href="proposals/RayTay90/i-will-sell-2000-inspirational-quotes"
-                                       className="proposal-link-main">
-                                       <h3>I will sell 2000 Inspirational quotes</h3>
-                                    </a>
-                                    <div className="rating-badges-container">
-                                       <span className="proposal-rating">
-                                          <i className="fa fa-star"></i>
-                                          <span>
-                                             <strong>4.6</strong>
-                                       (5)
+                                        <span className="proposal-rating">
+                                            <i className="fa fa-star"></i>
+                                            <span>
+                                                <strong>{r.seller ? Math.ceil(r.seller.rating) : "3"}</strong>
                                     </span>
-                                       </span>
+                                        </span>
                                     </div>
-                                 </div>
-                                 <footer className="proposal-card-footer">
+                                </div>
+                                <footer className="proposal-card-footer">
                                     <div className="proposal-price">
-                                       <a className="js-proposal-card-imp-data">
-                                          <small>Starting At</small>&#036;20.00 </a>
+                                        <a>
+                                            <small>STARTING AT</small>&#036;{r.gig.pricing[0] ? r.gig.pricing[0].price : "0.00"} </a>
                                     </div>
-                                 </footer>
-                              </div>
-                           </div>
-                           <div className="carousel-item ">
-                              <div className="proposal-card-base mp-proposal-card">
-                                 <a href="proposals/Patricia/e-book-on-how-to-be-a-successful-entreprenuer">
-                                    <img src={require('../../../assets/images/proposals/fall-3723738_1920_1588260783.png')} className="img-fluid" />
-                                 </a>
-                                 <div className="proposal-card-caption">
-                                    <div className="proposal-seller-info">
-                                       <span className="fit-avatar s24">
-                                          <img src={require('../../../assets/images/userlisting/img-06.jpg')} className="rounded-circle" width="32"
-                                             height="32" />
-                                       </span>
-                                       <div className="seller-info-wrapper">
-                                          <a href="Patricia" className="seller-name">Patricia</a>
-                                          <div className="onePress-seller-tooltip">
-                                             Level One
-                                    </div>
-                                       </div>
-                                    </div>
-                                    <a href="proposals/Patricia/e-book-on-how-to-be-a-successful-entreprenuer"
-                                       className="proposal-link-main">
-                                       <h3>E-book on how to be a successful entreprenuer </h3>
-                                    </a>
-                                    <div className="rating-badges-container">
-                                       <span className="proposal-rating">
-                                          <i className="fa fa-star"></i>
-                                          <span>
-                                             <strong>4.3</strong>
-                                       (6)
-                                    </span>
-                                       </span>
-                                    </div>
-                                 </div>
-                                 <footer className="proposal-card-footer">
-                                    <div className="proposal-price">
-                                       <a className="js-proposal-card-imp-data">
-                                          <small>Starting At</small>&#036;10.00 </a>
-                                    </div>
-                                 </footer>
-                              </div>
-                           </div>
-                           <div className="carousel-item ">
-                              <div className="proposal-card-base mp-proposal-card">
-                                 <a href="proposals/mir_digimarket/i-will-create-a-professional-custom-explainer-video">
-                                    <img src={require('../../../assets/images/postImg/img-03.jpg')} className="img-fluid" />
-                                 </a>
-                                 <div className="proposal-card-caption">
-                                    <div className="proposal-seller-info">
-                                       <span className="fit-avatar s24">
-                                          <img src={require('../../../assets/images/userlisting/img-02.jpg')} className="rounded-circle" width="32"
-                                             height="32" />
-                                       </span>
-                                       <div className="seller-info-wrapper">
-                                          <a href="mir_digimarket" className="seller-name">mir_digimarket</a>
-                                          <div className="onePress-seller-tooltip">
-                                             Level Two
-                                    </div>
-                                       </div>
-                                    </div>
-                                    <a href="proposals/mir_digimarket/i-will-create-a-professional-custom-explainer-video"
-                                       className="proposal-link-main">
-                                       <h3>I Will Create A Professional Custom Explainer Video</h3>
-                                    </a>
-                                    <div className="rating-badges-container">
-                                       <span className="proposal-rating">
-                                          <i className="fa fa-star"></i>
-                                          <span>
-                                             <strong>4.8</strong>
-                                             (22)
-                                          </span>
-                                       </span>
-                                    </div>
-                                 </div>
-                                 <footer className="proposal-card-footer">
-                                    <div className="proposal-price">
-                                       <a className="js-proposal-card-imp-data">
-                                          <small>Starting At</small>&#036;10.00 </a>
-                                    </div>
-                                 </footer>
-                              </div>
-                           </div>
+                                </footer>
+                            </div>
+                           </div>))}              
                         </div>
                         {/* <!-- Left and right controls --> */}
                         <a className="carousel-control-prev" href="#demo" data-slide="prev">
@@ -267,29 +104,29 @@ function Home() {
                            {recent && recent.map((r, index) => (
                               <div key={r._id} className={ index == 0 ? "carousel-item active" : "carousel-item"}>
                               <div className="proposal-card-base mp-proposal-card">
-                    <Link to={r.gig.user ? "/gig/" + r.gig.user.firstName + "/" + r.gig.title : ""}>
+                    <Link to={r.user ? "/gig/" + r.user.firstName + "/" + r.gig.title : ""}>
                         <img src={r.gig.photo[0] ? r.gig.photo[0].photo : ""} className="img-fluid" />
                     </Link>
                     <div className="proposal-card-caption">
                         <div className="proposal-seller-info">
                             <span className="fit-avatar s24">
-                                <img src={r.gig.user ? r.gig.user.profilePhoto : ""} className="rounded-circle" width="32" height="32" />
+                                <img src={r.user ? r.user.profilePhoto : ""} className="rounded-circle" width="32" height="32" />
                             </span>
                             <div className="seller-info-wrapper">
-                                <a href={r.gig.user ? r.gig.user.firstName : ""} className="seller-name">{r.gig.user ? r.gig.user.firstName : ""} {r.gig.user ? r.gig.user.lastName : ""}</a>
+                                <a href={r.user ? r.user.firstName : ""} className="seller-name">{r.user ? r.user.firstName : ""} {r.user ? r.user.lastName : ""}</a>
                                 <div className="onePress-seller-tooltip">
-                                    Level Two
+                                    {r.user ? r.user.type : ""}
                                 </div>
                             </div>
                         </div>
-                        <Link to={r.gig.user ? "/gig/" + r.gig.user.firstName + "/" + r.gig.title : ""} className="proposal-link-main js-proposal-card-imp-data">
+                        <Link to={r.user ? "/gig/" + r.user.firstName + "/" + r.gig.title : ""} className="proposal-link-main js-proposal-card-imp-data">
                             <h3>{r.gig.title}</h3>
                         </Link>
                         <div className="rating-badges-container">
                             <span className="proposal-rating">
                                 <i className="fa fa-star"></i>
                                 <span>
-                                    <strong>{r.gig.user ? r.gig.user.rating : "3"}</strong> (22)
+                                    <strong>{r.user ? Math.ceil(r.user.rating) : "3"}</strong> 
                         </span>
                             </span>
                         </div>

@@ -8,12 +8,19 @@ const notificationSchema = mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'users'
     },
-    senderName: {
+    senderType: {
         type: String
     },
-    user: { 
+    receiver: { 
         type: Schema.Types.ObjectId, 
         ref: 'users' 
+    },
+    type: {
+        type: String,
+        required: true
+    },
+    orderId: {
+        type: Schema.Types.ObjectId
     },
     message: {
         type: String
@@ -32,4 +39,4 @@ const notificationSchema = mongoose.Schema({
 })
 
 
-exports.Order = mongoose.model('notifications', notificationSchema);
+exports.Notification = mongoose.model('notifications', notificationSchema);

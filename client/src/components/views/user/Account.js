@@ -9,12 +9,13 @@ import AccountSettings from "./AccountSettings.js";
 
 import { getCountry, getState, getCity, getLanguage, getCard, getPayoutCard, addCard, addPayoutCard } from "../../../_actions/user.action";
 
-const Profile = (props) => {
+const Account = (props) => {
 
    const dispatch = useDispatch();
    let history = useHistory();
    const params = useParams();
    const auth = useSelector((state) => state.user);
+   const profile = useSelector((state) => state.profile && state.profile.getprofile && state.profile.getprofile.responseData && state.profile.getprofile.responseData.user);
    const [card, setCard] = useState('');
    const cards = useSelector((state) => state.user.cards);
    const payoutCards = useSelector((state) => state.user.payout_cards);
@@ -113,10 +114,6 @@ const Profile = (props) => {
                 data.append("profile_photo", values.profile_photo);
 
                 
-                 dispatch(updateProfile(data)).then(res => {
-                    //window.location.reload();
-                 })
-                
 
                 setSubmitting(false);
 
@@ -157,16 +154,16 @@ const Profile = (props) => {
                            {/* <!-- <hr /> --> */}
                            <ul className="nav nav-pills flex-column mt-2">
                               <li className="nav-item">
-                                 <Link to="profile" className="nav-link">
+                                 <Link to="/profile" className="nav-link">
                                     Profile Settings            </Link>
                               </li>
                               <li className="nav-item">
-                                 <Link to="account" className="nav-link active">
+                                 <Link to="/account" className="nav-link active">
                                     Account Settings              </Link>
                               </li>
                               <li className="nav-item">
-                                 <Link to="proposals" className="nav-link">
-                                    My proposal                    </Link>
+                                 <Link to="/mygigs" className="nav-link">
+                                    My Gigs                    </Link>
                               </li>
                            </ul>
                         </div>
@@ -615,4 +612,4 @@ const Profile = (props) => {
    );
 };
 
-export default Profile;
+export default Account;

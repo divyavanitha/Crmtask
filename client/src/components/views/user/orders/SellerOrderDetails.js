@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import moment from 'moment';
 import Loader from 'react-loader-spinner'
 import $ from 'jquery';
 import { getSellerOrderDetails, getRating, getCancelReason } from "../../../../_actions/user.action";
@@ -222,7 +223,7 @@ const Cart = (props) => {
                                                       {/* card-body Starts */}
                                                       <div className="row">
                                                          <div className="col-md-2">
-                                                            <img src="assets/images/videosales.png" className="img-fluid d-lg-block d-md-block d-none" />
+                                                            <img src={(order_details && order_details.gig.photo.length > 0) ? order_details && order_details.gig.photo[0].photo : ""} className="img-fluid d-lg-block d-md-block d-none" />
                                                          </div>
                                                          <div className="col-md-10">
                                                             <h1 className="text-success float-right d-lg-block d-md-block d-none">&#036;{order_details && order_details.price}</h1>
@@ -231,7 +232,7 @@ const Cart = (props) => {
                                                                <small>
                                                                {console.log('text',order_details && order_details)}
                                                                  
-                                                                  <Link to={order_details && order_details.seller ? "/gig/" + order_details.seller.firstName + "/" + order_details.gig._id : ""} target="_blank" className="text-success">
+                                                                  <Link to={order_details && order_details.seller ? "/gig/" + order_details.seller.firstName + "/" + order_details.gig.title : ""} target="_blank" className="text-success">
                                                                      View Proposal/Service               </Link>
                                                                </small>
                                                             </h4>
@@ -241,7 +242,7 @@ const Cart = (props) => {
                                                                   {order_details && order_details.buyer.firstName} {order_details && order_details.buyer.lastName}               </a>
                                              | <span className="font-weight-bold ml-1"> Status: </span>
                                                                {status ? status :  order_details && order_details.status}             | <span className="font-weight-bold ml-1"> Date: </span>
-                                                               {order_details && order_details.created_at}             | <span className="font-weight-bold ml-1"> Order Revisions: </span>
+                                                               { moment(order_details && order_details.created_at).format('MMMM DD, YYYY') }             | <span className="font-weight-bold ml-1"> Order Revisions: </span>
                                                                {order_details && order_details.revisions} | <span className="font-weight-bold ml-1"> Revisions Used: </span>
                                                                {order_details && order_details.used_revisions.length}
                                                             </p>
@@ -332,7 +333,7 @@ const Cart = (props) => {
                                                 {/* message-div Ends */}
 
                                        {order_details && order_details.delivery_status.map((list, index) => (<div key={list._id} className="message-div">
-                                           <img src="https://www.gigtodo.com//user_images/ty_1574032240.png" width="50" height="50" className="message-image" />
+                                           <img src={order_details && order_details.seller.profilePhoto} width="50" height="50" className="message-image" />
 
                                              <h5>
 
@@ -345,7 +346,7 @@ const Cart = (props) => {
                                              {list.deliveredMessage}
 
                                                  <a href={list.delivery_file} className='d-block mt-2 ml-1' target='_blank'>
-                                                   <i className='fa fa-download'></i> {list.delivery_file}
+                                                   <i className='fa fa-download'></i> {(list.delivery_file).substring((list.delivery_file).lastIndexOf('/') + 1)}
                                                  </a>
                                                
                                              </p>
@@ -359,8 +360,8 @@ const Cart = (props) => {
                                           <h5 className="text-center"><i className="fa fa-pencil-square-o"></i> Revison Requested By {order_details && order_details.buyer.firstName} </h5>
                                         </div>
                                       </div>) : "" }
-                                      {order_details && order_details.used_revisions ? order_details && order_details.used_revisions.map((list, index) => (<div className="message-div-hover">
-                                        <img src="https://www.gigtodo.com//user_images/cool-profile-picastures-coo_1602176634.png" width="50" height="50" className="message-image" />
+                                      {order_details && order_details.used_revisions ? order_details && order_details.used_revisions.map((list, index) => (<div key={index} className="message-div-hover">
+                                        <img src={order_details && order_details.buyer.profilePhoto} width="50" height="50" className="message-image" />
                                               
                                       <h5><a href="#" className="seller-buyer-name"> {order_details && order_details.buyer.firstName} </a></h5>
 
@@ -368,8 +369,9 @@ const Cart = (props) => {
 
                                       {list.revision_message}
 
-                                      <a href="orderIncludes/download?order_id=1608&c_id=1382" className="d-block mt-2 ml-1" target='_blank'>
-                                        <i className="fa fa-download"></i> {list.revision_file}</a>
+                                      <a href={list.revision_file} className='d-block mt-2 ml-1' target='_blank'>
+                                       <i className='fa fa-download'></i> {(list.revision_file).substring((list.revision_file).lastIndexOf('/') + 1)}
+                                      </a>
                                       </p>
 
                                       <p className="text-right text-muted mb-0"> {list.updated_at} </p>
@@ -427,7 +429,7 @@ const Cart = (props) => {
                                               
                                           <div className="message-div mt-3">
 
-                                            <img src="https://www.gigtodo.com//user_images/ty_1574032240.png" width="50" height="50" className="message-image" />
+                                            <img src={order_details && order_details.buyer.profilePhoto} width="50" height="50" className="message-image" />
                                                           
                                             <h5><a href="#" className="seller-buyer-name"> {order_details && order_details.buyer.firstName} </a></h5>
 
@@ -503,7 +505,7 @@ const Cart = (props) => {
 
                                               {(order_details && order_details.buyer_rated == 1) ? <li className="star-rating-row">
                                                   <span className="user-picture">
-                                                      <img src="https://www.gigtodo.com/user_images/ty_1574032240.png" width="60" height="60" />
+                                                      <img src={order_details && order_details.buyer.profilePhoto} width="60" height="60" />
                                                   </span>
                                                   <h4>
                                                       <a href="#" className="mr-1 text-success">{order_details && order_details.buyer.firstName} </a>
@@ -523,7 +525,7 @@ const Cart = (props) => {
                                                             {seller_rating.map((list, index) => (<span key = {index} className="fa fa-star checked" style={{color: "#EEBD01"}}></span>))}
                                                         </h4>
                                                       <span className="user-picture">
-                                                          <img src="https://www.gigtodo.com//user_images/cool-profile-picastures-coo_1602176634.png" width="40" height="40" />
+                                                          <img src={order_details && order_details.seller.profilePhoto} width="40" height="40" />
                                                       </span>
                                                       <div className="msg-body">
                                                           {ratings && ratings.sellerComment}
@@ -625,7 +627,7 @@ const Cart = (props) => {
                                                                   <label className="font-weight-bold"> Cancellation Request Reason </label>
                                                                   <select name="cancellation_reason" onChange={handleChange} className="form-control">
                                                                      <option className="hidden"> Select Cancellation Reason </option>
-                                                                     {cancel_reason && cancel_reason.map((list, index) => (<option value={list.reason}> {list.reason}. </option>))}
+                                                                     {cancel_reason && cancel_reason.map((list, index) => (<option key={index} value={list.reason}> {list.reason}. </option>))}
                                                                      
                                                                   </select>
                                                                </div>

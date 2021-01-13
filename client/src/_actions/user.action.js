@@ -40,7 +40,12 @@ import {
     ADDCARD,
     PAYOUTCARDS,
     ADDPAYOUTCARD,
-    WALLET
+    WALLET,
+    FIND_USER,
+    GET_SELLER_BUYER,
+    GET_NOTIFICATION,
+    BUY_IT_AGAIN,
+    PROFILE_GIGS
 } from './types';
 
 
@@ -195,6 +200,33 @@ export const getCategory = (data) => async dispatch => {
     });
 }
 
+export const getNotification = () => async dispatch => {
+    const notification = await axios.get(`/api/notifications`)
+    dispatch({
+        type: GET_NOTIFICATION,
+        payload: notification.data
+    });
+}
+
+export const deleteNotification = (id) => async dispatch => {
+    try {
+        let response = await axios.delete(`/api/notifications/${id}`);
+        response.data.status = 'success';
+        return response.data;
+    } catch (e) {
+        e.response.data.status = 'error';
+        return e.response.data;
+    }
+};
+
+export const buyItAgain = () => async dispatch => {
+    const buyit = await axios.get(`/api/buyit/again`)
+    dispatch({
+        type: BUY_IT_AGAIN,
+        payload: buyit.data
+    });
+}
+
 export const getDeliveryTime = (data) => async dispatch => {
     const delivery_time = await axios.get(`/api/delivery/time`, data)
     dispatch({
@@ -252,6 +284,18 @@ export const getGigbyId = (id) => async dispatch => {
     return response.data;
 };
 
+export const profileGigs = (id) => async dispatch => {
+
+    let response = await axios.get(`/api/profile/gigs/${id}`);
+
+    dispatch({
+        type: PROFILE_GIGS,
+        payload: response.data
+    })
+    response.data.status = 'success';
+    return response.data;
+};
+
 export const getCountry = (data) => async dispatch => {
     const countries = await axios.get(`/api/countries`)
     dispatch({
@@ -291,7 +335,7 @@ export const getLanguage = (data) => async dispatch => {
 
 
 export const getGigbyName = (name) => async dispatch => {
-    //try {
+    try {
         let response = await axios.get(`/api/gig/detail/${name}`);
         dispatch({
             type: FIND_GIG,
@@ -299,12 +343,12 @@ export const getGigbyName = (name) => async dispatch => {
         });
         response.data.status = 'success';
         return response.data;
-    /*} catch (e) {
+    } catch (e) {
         console.log(e);
         e.response.data.status = 'error';
         if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
         return e.response.data;
-    }*/
+    }
 };
 
 export const getGigbyCategory = (data) => async dispatch => {
@@ -319,7 +363,7 @@ export const getGigbyCategory = (data) => async dispatch => {
 };
 
 export const getCartbyId = (id) => dispatch => {
-    console.log('id', id);
+
     axios
         .get(`/api/cart/${id}`)
         .then(res => {
@@ -399,6 +443,39 @@ export const deleteCart = (id) => async dispatch => {
     }
 };
 
+export const findUser = (id) => async dispatch => {
+    try {
+        let response = await axios.get(`/api/user`);
+
+        dispatch({
+            type: FIND_USER,
+            payload: response.data
+        });
+
+        response.data.status = 'success';
+        return response.data;
+    } catch (e) {
+        e.response.data.status = 'error';
+        return e.response.data;
+    }
+};
+
+export const sellerBuyer = (id) => async dispatch => {
+    try {
+        let response = await axios.get(`/api/seller/buyer`);
+
+        dispatch({
+            type: GET_SELLER_BUYER,
+            payload: response.data
+        });
+
+        response.data.status = 'success';
+        return response.data;
+    } catch (e) {
+        e.response.data.status = 'error';
+        return e.response.data;
+    }
+};
 
 
 export const buyerOrderList = (data) => async dispatch => {
@@ -634,7 +711,6 @@ export const withdraw = (data) => async dispatch => {
 };
 
 export const getRating = (id) => async dispatch => {
-    console.log('id', id);
     const ratings = await axios.get(`/api/rating/${id}`)
     dispatch({
         type: GET_RATING,

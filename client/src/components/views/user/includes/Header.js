@@ -3,11 +3,12 @@ import { withRouter, Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { logout } from "../../../../_actions/user.action";
+import moment from 'moment';
 import $ from 'jquery';
 import Login from '../auth/Login';
 import Register from '../auth/Register';
 import ForgotPassword from '../auth/ForgotPassword';
-import { getCartList } from "../../../../_actions/user.action";
+import { getCartList, findUser, getNotification } from "../../../../_actions/user.action";
 
 function Header() {
     const dispatch = useDispatch();
@@ -24,17 +25,11 @@ function Header() {
     }
 
     useEffect(() => {
+        dispatch(getNotification())
+        dispatch(findUser())
         dispatch(getCartList())
+        
         $(document).ready(function () {
-
-            /*$(function () {
-                $('[data-toggle="tooltip"]').tooltip();
-            });
-            $(function () {
-                $('[data-toggle="popover"]').popover();
-            });*/
-
-            //// Categories Dropdown Code
 
             $("body").on("mouseover", ".top-nav-item", function () {
                 $(".body-sub-width").addClass("display-none");
@@ -42,8 +37,6 @@ function Header() {
                 var node_id = $(this).data('node-id');
                 $(this).addClass("active");
                 $(".body-sub-width[data-node-id=" + node_id + "]").removeClass("display-none");
-
-
             });
 
             $(".mainHtml .cat-nav").on("mouseleave", function () {
@@ -234,6 +227,8 @@ function Header() {
     }, []);
 
     const cart = useSelector((state) => state.user && state.user.cart_lists && state.user.cart_lists.carts);
+    const notification = useSelector((state) => state.user && state.user.notification && state.user.notification.responseData && state.user.notification.responseData.notification);
+    const user = useSelector((state) => state.user && state.user.find_user && state.user.find_user.responseData && state.user.find_user.responseData.user);
 
     return (
 
@@ -297,14 +292,41 @@ function Header() {
                                     </span>
                                 </a>
                             </li>*/}
-                                <li className="logged-in-link d-none d-sm-block d-md-block d-lg-block">
-                                <a className="menuItem" href="" title="Notifications">
-                                    <span className="onePress-icon nav-icon onePress-icon-relative">
-                                        <i className="fa fa-bell-o fa-lg" style={{ fontSize: "1.4em" }}></i>
-                                    </span>
-                                </a>
+                            
+                            <li className="logged-in-link">
+                                <div className="dropdown user-menu">
+                                    <a href="" title="Notifications" id="usermenu" className="user menuItem" 
+                                        data-toggle="dropdown" >
+                                        <span className="onePress-icon nav-icon onePress-icon-relative">
+                                            <i className="fa fa-bell-o fa-lg" style={{ fontSize: "1.4em" }}></i>
+                                        </span>
+                                    </a>
+
+                                    <div className="dropdown-menu" style={{ minWidth: '332px', width: 'auto!important', zIndex: '2000' }} >
+                                        <h3 className="dropdown-header"> Notifications ({notification && notification.length}) 
+                                        <Link className="float-right make-black" to="/notifications" style={{color:"black"}}>View Notifications</Link>
+                                        </h3>
+                                        <div style={{ overflow: 'hidden', overflowY: 'scroll', height: '200px' }}>
+                                        {notification && notification.map((list, index) => (<div key={index} className="header-message-div">
+                                                
+                                                <Link target="_blank" to={list.type == "ORDER" ? "/order/details/"+list.orderId : (list.type == "GIG" ? "/gigs" : "/buyer/requests")}>
+                                                <img src={list.sender ? list.sender.profilePhoto : window.location.href+"public/images/images_1608630531.png"} className="rounded-circle" width="50" height="50" /><strong className="heading">{list.sender ? list.sender.firstName : "Admin"}</strong>
+                                                <p className="message text-truncate">{list.message}</p>
+                                                <p className="date text-muted">{moment(list.created_at).format('MMMM DD, YYYY')}</p></Link>
+                                                
+
+                                            </div>))}
+                                        </div>
+                                            
+                                            <div className="mt-2"><center className="pl-2 pr-2">
+                                            <Link to="/notifications" style={{ color: '#fff' }} className="ml-0 btn btn-success btn-block">See All</Link></center>
+                                            </div>
+                                    </div>
+
+                                </div>
                             </li>
                             <li className="logged-in-link">
+
                                 <a className="menuItem" href="message" title="Cart">
                                     <span className="onePress-icon nav-icon onePress-icon-relative">
                                         <i className="fa fa-envelope-o" style={{ fontSize: "1.4em" }} aria-hidden="true"></i>
@@ -333,7 +355,7 @@ function Header() {
                                 <div className="dropdown user-menu">
                                     <a href="#" id="usermenu" className="user dropdown-toggle menuItem" style={{ marginTop: "17px" }}
                                         data-toggle="dropdown">
-                                        <img src={require('../../../../assets/images/userlisting/img-03.jpg')} width="27" height="27" className="rounded-circle" /> &nbsp;
+                                        <img src={auth.user && auth.user.profilePhoto ? auth.user && auth.user.profilePhoto : require('../../../../assets/images/userlisting/img-03.jpg')} width="27" height="27" className="rounded-circle" /> &nbsp;
                                         <span className="name">{auth.user && auth.user.firstName}</span>
                                     </a>
 

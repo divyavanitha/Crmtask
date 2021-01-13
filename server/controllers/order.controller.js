@@ -2,6 +2,8 @@ const express = require("express");
 const { Cart } = require('../models/Cart');
 const { Order } = require('../models/Order');
 const { Setting } = require('./../models/setting');
+const { Notification } = require('../models/Notification');
+const { Gig } = require('../models/gigs');
 const { User } = require('../models/user');
 const { Admin } = require('../models/admin');
 const { Rating } = require('../models/Rating');
@@ -41,7 +43,7 @@ exports.checkout = async (req, res) => {
             var carts = await db._get(Cart, { user: req.user._id }, {}, { populate: "gig" });
         }
         let total = 0;
-
+console.log('carts', carts);
         if (carts.length > 0) {
             for (let i in carts) {
 
@@ -49,24 +51,50 @@ exports.checkout = async (req, res) => {
 
                 let orderId = 'FIV' + Math.floor(100000 + Math.random() * 900000);
 
-                let setting = await db._find(Setting, {}, { createdAt: 0, updatedAt: 0 });
-
                 let user = await User.findById(carts[i].gig.user);
+                var buyer = await User.findById(req.user._id);
+                var admin = await db._find(Admin);
+                let setting = await db._find(Setting, {}, { createdAt: 0, updatedAt: 0 });
 
                 if ((setting.seller.levelTwoRating == user.ratingPercent) && (setting.seller.levelTwoCompletedOrder == user.completedOrder)) {
                     var commission = ((total * setting.pricing.commissionLevelTwo) / 100);
+                    let balance = total - commission;
+                    if(req.body.payment_mode == "WALLET"){
+                        buyer.wallet = buyer.wallet - total;
+                        user.wallet += balance;
+                    }
+                    admin.wallet += commission;
                 }
                 if ((setting.seller.levelOneRating == user.ratingPercent) && (setting.seller.levelOneCompletedOrder == user.completedOrder)) {
-                    
                     var commission = ((total * setting.pricing.commissionLevelOne) / 100);
+                    let balance = total - commission;
+                    if(req.body.payment_mode == "WALLET"){
+                        buyer.wallet = buyer.wallet - total;
+                        user.wallet += balance;
+                    }
+                    admin.wallet += commission;
 
                 }
                 if ((setting.seller.topRatedRating == user.ratingPercent) && (setting.seller.topRatedCompletedOrder == user.completedOrder)) {
                     var commission = ((total * setting.pricing.commissionTopRated) / 100);
+                    let balance = total - commission;
+                    if(req.body.payment_mode == "WALLET"){
+                        buyer.wallet = buyer.wallet - total;
+                        user.wallet += balance;
+                    }
+                    admin.wallet += commission;
                 }
                 if (user.type == "NEWSELLER") {
                     var commission = ((total * setting.pricing.commission) / 100);
+                    let balance = total - commission;
+                    if(req.body.payment_mode == "WALLET"){
+                        buyer.wallet -= total;
+                        user.wallet += balance;
+                    }
+                    admin.wallet += commission;
                 }
+
+
 
                 var order = {
                     orderId: orderId,
@@ -87,6 +115,18 @@ exports.checkout = async (req, res) => {
 
                 let orders = await db._store(Order, order);
 
+                let notification = {
+                    sender: orders.buyer,
+                    senderType: "BUYER",
+                    receiver: orders.seller,
+                    type: "ORDER",
+                    orderId: orders._id,
+                    message: "Has just sent you an offer on your request click here to view."
+                }
+                await db._store(Notification, notification);
+                await db._update(User, { _id: orders.seller }, user);
+                await db._update(User, { _id: orders.buyer }, buyer);
+                await db._update(Admin, {}, admin);
                 await db._delete(Cart, { "_id": carts[i]._id });
 
                 let tot_carts = await db._get(Cart, { user: req.user._id });
@@ -190,52 +230,37 @@ exports.updateOrder = async (req, res) => {
             console.log('delivery', delivery);
             order.status = (req.body.status).toUpperCase();
 
+            var notification = {
+                sender: order.seller,
+                senderType: "SELLER",
+                receiver: order.buyer,
+                type: "ORDER",
+                orderId: order._id,
+                message: "Delivered your order."
+            }
+            
+
         } else if ((req.body.status).toUpperCase() == "COMPLETED") {
 
             order.status = (req.body.status).toUpperCase();
 
             var user = await User.findById(order.seller);
-            var buyer = await User.findById(order.buyer);
-            var admin = await db._find(Admin);
-            let setting = await db._find(Setting, {}, { createdAt: 0, updatedAt: 0 });
+            var gig = await Gig.findById(order.gig);
 
-        if ((setting.seller.levelTwoRating == user.ratingPercent) && (setting.seller.levelTwoCompletedOrder == user.completedOrder)) {
-            let comission = ((order.total * setting.pricing.commissionLevelTwo) / 100);
-            let balance = order.total - comission;
-            if(order.payment_mode == "WALLET"){
-                buyer.wallet = buyer.wallet - order.total;
-                user.wallet += balance;
-            }
-            admin.wallet += comission;
-        }
-        if ((setting.seller.levelOneRating == user.ratingPercent) && (setting.seller.levelOneCompletedOrder == user.completedOrder)) {
-            let comission = ((order.total * setting.pricing.commissionLevelOne) / 100);
-            let balance = order.total - comission;
-            if(order.payment_mode == "WALLET"){
-                buyer.wallet = buyer.wallet - order.total;
-                user.wallet += balance;
-            }
-            admin.wallet += comission;
+            user.recentDelivery = new Date();
+            user.completedOrder += 1;
 
-        }
-        if ((setting.seller.topRatedRating == user.ratingPercent) && (setting.seller.topRatedCompletedOrder == user.completedOrder)) {
-            let comission = ((order.total * setting.pricing.commissionTopRated) / 100);
-            let balance = order.total - comission;
-            if(order.payment_mode == "WALLET"){
-                buyer.wallet = buyer.wallet - order.total;
-                user.wallet += balance;
+            gig.completedOrder +=1;
+
+            var notification = {
+                sender: order.buyer,
+                senderType: "BUYER",
+                receiver: order.seller,
+                type: "ORDER",
+                orderId: order._id,
+                message: "Completed your order."
             }
-            admin.wallet += comission;
-        }
-        if (user.type == "NEWSELLER") {
-            let comission = ((order.total * setting.pricing.commission) / 100);
-            let balance = order.total - comission;
-            if(order.payment_mode == "WALLET"){
-                buyer.wallet = buyer.wallet - order.total;
-                user.wallet += balance;
-            }
-            admin.wallet += comission;
-        }
+
 
 
         } else if ((req.body.status).toUpperCase() == "REVISION REQUESTED") {
@@ -269,18 +294,46 @@ exports.updateOrder = async (req, res) => {
 
             order.status = (req.body.status).toUpperCase();
 
+            var notification = {
+                sender: order.buyer,
+                senderType: "BUYER",
+                receiver: order.seller,
+                type: "ORDER",
+                orderId: order._id,
+                message: "Requested for a revision."
+            }
+
         } else if ((req.body.status).toUpperCase() == "CANCELLATION REQUESTED") {
 
             order.status = (req.body.status).toUpperCase();
             order.cancellation_reason = req.body.cancellation_reason;
             order.cancellation_message = req.body.cancellation_message;
             order.cancelled_by = req.body.cancelled_by;
+
+            if(req.user._id == order.buyer){
+                var sender = order.buyer;
+                var receiver = order.seller;
+                var sender_type = "BUYER";
+            }else if (req.user._id == order.seller){
+                var sender = order.seller;
+                var receiver = order.buyer;
+                var sender_type = "SELLER";
+            }
+
+            var notification = {
+                sender: sender,
+                senderType: sender_type,
+                receiver: receiver,
+                type: "ORDER",
+                orderId: order._id,
+                message: "Wants to cancel the order."
+            }
         }
 
         let orders = await db._update(Order, { _id: req.body.id }, order);
         await db._update(User, { _id: order.seller }, user);
-        await db._update(User, { _id: order.buyer }, buyer);
-        await db._update(Admin, {}, admin);
+        await db._update(Gig, { _id: order.gig }, gig);
+        await db._store(Notification, notification);
         const response = helper.response({ message: res.__('updated'), data: order });
         return res.status(response.statusCode).json(response);
 
@@ -321,17 +374,56 @@ exports.cancel = async (req, res) => {
 
         let order = await Order.findById(req.body.id);
 
-        if ((req.body.cancel_status).toUpperCase() == "Accepted") {
+        if ((req.body.cancel_status).toUpperCase() == "ACCEPTED") {
             order.CancelRequestStatus = (req.body.cancel_status).toUpperCase();
             order.status = "CANCELLED";
+
+            if(req.user._id == order.buyer){
+                var sender = order.buyer;
+                var receiver = order.seller;
+                var sender_type = "BUYER";
+            }else if (req.user._id == order.seller){
+                var sender = order.seller;
+                var receiver = order.buyer;
+                var sender_type = "SELLER";
+            }
+
+            var notification = {
+                sender: sender,
+                senderType: sender_type,
+                receiver: receiver,
+                type: "ORDER",
+                orderId: order._id,
+                message: "Accepted cancellation request."
+            }
+
         } else {
             order.CancelRequestStatus = (req.body.cancel_status).toUpperCase();
             order.status = "PROGRESS";
+
+            if(req.user._id == order.buyer){
+                var sender = order.buyer;
+                var receiver = order.seller;
+                var sender_type = "BUYER";
+            }else if (req.user._id == order.seller){
+                var sender = order.seller;
+                var receiver = order.buyer;
+                var sender_type = "SELLER";
+            }
+
+            var notification = {
+                sender: sender,
+                senderType: sender_type,
+                receiver: receiver,
+                type: "ORDER",
+                orderId: order._id,
+                message: "Declined your cancellation request."
+            }
         }
 
 
         let orders = await db._update(Order, { _id: req.body.id }, order);
-
+        await db._store(Notification, notification);
         const response = helper.response({ message: res.__('inserted') });
         return res.status(response.statusCode).json(response);
 
@@ -348,14 +440,20 @@ exports.cancel = async (req, res) => {
 }
 
 exports.tips = async (req, res) => {
+    if(req.body.tip_status == 1){
+        var schema = Joi.object().options({ abortEarly: false }).keys({
+            id: Joi.string().required().label("Order Id"),
+            tips: Joi.number().required().label("Tip Amount"),
+            tip_message: Joi.string().required().label("Tip Message")
 
-    const schema = Joi.object().options({ abortEarly: false }).keys({
-        id: Joi.string().required().label("Order Id"),
-        tips: Joi.number().required().label("Tip Amount"),
-        tip_message: Joi.string().required().label("Tip Message")
+        }).unknown(true);
+    }else {
+        var schema = Joi.object().options({ abortEarly: false }).keys({
+            id: Joi.string().required().label("Order Id")
 
-    }).unknown(true);
+        }).unknown(true);
 
+    }
     const { error } = schema.validate(req.body);
 
     let errorMessage = {};
@@ -372,15 +470,35 @@ exports.tips = async (req, res) => {
 
     try {
 
+        let order_detail = await Order.findById(req.body.id);
+        var user = await User.findById(order_detail.seller);
+        var buyer = await User.findById(order_detail.buyer);
 
-        let order = {
-            tips: req.body.tips,
-            tip_message: req.body.tip_message
-        }
+            let order = {
+                tips: req.body.tips,
+                tip_message: req.body.tip_message,
+                tip_status: req.body.tip_status
+            }
 
+            if(order_detail.payment_mode == "WALLET"){
+                buyer.wallet -= req.body.tips;
+                user.wallet += req.body.tips;
+            }
+            if(req.body.tip_status == 1){
+                var notification = {
+                    sender: req.user._id,
+                    senderType: "BUYER",
+                    receiver: order_detail.seller,
+                    type: "ORDER",
+                    orderId: order_detail._id,
+                    message: "Has given you "+req.body.tips+" tip."
+                }
+            }
 
         let orders = await db._update(Order, { _id: req.body.id }, order);
-
+        await db._update(User, { _id: order_detail.seller }, user);
+        await db._update(User, { _id: order_detail.buyer }, buyer);
+        await db._store(Notification, notification);
         const response = helper.response({ message: res.__('inserted') });
         return res.status(response.statusCode).json(response);
 
@@ -442,6 +560,8 @@ exports.rating = async (req, res) => {
 
         let user = await User.findById(order.seller);
 
+        var gig = await Gig.findById(order.gig);
+
         let order_count = await db._count(Order, { seller: order.seller });
 
         let setting = await db._find(Setting, {}, { createdAt: 0, updatedAt: 0 });
@@ -460,6 +580,15 @@ exports.rating = async (req, res) => {
 
                 order.buyer_rated = 1;
 
+                var notification = {
+                    sender: order.buyer,
+                    senderType: "BUYER",
+                    receiver: order.seller,
+                    type: "ORDER",
+                    orderId: order._id,
+                    message: "Please review and rate your buyer."
+                }
+
             } else {
                 var rating = {
                     sellerRating: req.body.seller_rating,
@@ -471,7 +600,15 @@ exports.rating = async (req, res) => {
                 }
 
                 order.seller_rated = 1;
-                user.completedOrder += 1;
+
+                var notification = {
+                    sender: order.seller,
+                    senderType: "SELLER",
+                    receiver: order.buyer,
+                    type: "ORDER",
+                    orderId: order._id,
+                    message: "Please review and rate your seller."
+                }
             }
             await db._update(Rating, { _id: rate._id }, rating);
 
@@ -488,6 +625,15 @@ exports.rating = async (req, res) => {
                 }
 
                 order.buyer_rated = 1;
+
+                var notification = {
+                    sender: order.buyer,
+                    senderType: "BUYER",
+                    receiver: order.seller,
+                    type: "ORDER",
+                    orderId: order._id,
+                    message: "Please review and rate your buyer."
+                }
             } else {
                 var rating = {
                     orderId: req.body.order_id,
@@ -500,7 +646,15 @@ exports.rating = async (req, res) => {
                 }
 
                 order.seller_rated = 1;
-                user.completedOrder += 1;
+
+                var notification = {
+                    sender: order.seller,
+                    senderType: "SELLER",
+                    receiver: order.buyer,
+                    type: "ORDER",
+                    orderId: order._id,
+                    message: "Please review and rate your seller."
+                }
             }
 
             await db._store(Rating, rating);
@@ -519,10 +673,23 @@ exports.rating = async (req, res) => {
             }
         ]);
 
+        let gig_rate = await Rating.aggregate([
+            { $match: { seller: order.seller, gig: order.gig } },
+            {
+                $group:
+                {
+                    _id: "$seller",
+                    average: { $avg: '$buyerRating' }
+                }
+            }
+        ]);
+
 
         user.gig = order.gig;
         user.ratingPercent = (total_rate[0].total / (order_count * 5) * 100);
         user.rating = total_rate[0].average;
+
+        gig.rating = gig_rate[0].average;
 
         if ((setting.seller.levelTwoRating == user.ratingPercent) && (setting.seller.levelTwoCompletedOrder == user.completedOrder)) {
             user.type = "LEVELTWO";
@@ -536,6 +703,8 @@ exports.rating = async (req, res) => {
         }
 
         await db._update(User, { _id: order.seller }, user);
+        await db._update(Gig, { _id: order.gig }, gig);
+        await db._store(Notification, notification);
         let orders = await db._update(Order, { _id: req.body.order_id }, order);
 
         const response = helper.response({ message: res.__('inserted') });

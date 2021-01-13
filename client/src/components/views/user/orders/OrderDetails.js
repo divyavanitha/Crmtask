@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import $ from 'jquery';
+import moment from 'moment';
 import { getBuyerOrderDetails, getRating, getCancelReason} from "../../../../_actions/user.action";
 import { rating, updateOrder, cancel, tips } from "../../../../_actions/order.action";
 
@@ -85,13 +86,22 @@ const Cart = (props) => {
         })
     }
 
-    const Tips = async () => {
+    const Tips = async (status) => {
 
-        let data = {
+        if(status == "0"){
+          var data = {
+                id: params.id,
+                tip_status: status
+          };
+        }else {
+          var data = {
                 id: params.id,
                 tip_message: $("textarea[name=tip_message]").val(),
-                tips: $("input[name=tips]").val()
-        };
+                tips: $("input[name=tips]").val(),
+                tip_status: status
+          };
+        }
+        
         
         dispatch(tips(data)).then(res => {
           console.log('id',res.responseData);
@@ -113,7 +123,7 @@ const Cart = (props) => {
 
         $("#tipModal").modal('hide');
 
-     if(order_details && order_details.tips == 0 && order_details && order_details.status == "COMPLETED" && order_details && order_details.buyer_rated == 1){
+     if(order_details && order_details.status == "COMPLETED" && order_details && order_details.buyer_rated == 1 && order_details && order_details.tip_status != 0 && order_details && order_details.tips == 0){
         $("#tipModal").modal('show');
      }else{
         $("#tipModal").modal('hide');
@@ -223,13 +233,13 @@ const Cart = (props) => {
                                                       {/* card-body Starts */}
                                                       <div className="row">
                                                          <div className="col-md-2">
-                                                            <img src="assets/images/videosales.png" className="img-fluid d-lg-block d-md-block d-none" />
+                                                            <img src={(order_details && order_details.gig.photo.length > 0) ? order_details && order_details.gig.photo[0].photo : ""} className="img-fluid d-lg-block d-md-block d-none" />
                                                          </div>
                                                          <div className="col-md-10">
                                                             <h1 className="text-success float-right d-lg-block d-md-block d-none">&#036;{order_details && order_details.price}</h1>
                                                             <h4>
                                                                Order Number {order_details && order_details.orderId}              <small>
-                                                                  <Link to={order_details && order_details.seller ? "/gig/" + order_details.seller.firstName + "/" + order_details.gig._id : ""} target="_blank" className="text-success">
+                                                                  <Link to={order_details && order_details.seller ? "/gig/" + order_details.seller.firstName + "/" + order_details.gig.title : ""} target="_blank" className="text-success">
                                                                      View Proposal/Service               </Link>
                                                                </small>
                                                             </h4>
@@ -239,7 +249,7 @@ const Cart = (props) => {
                                                                   {order_details && order_details.seller.firstName} {order_details && order_details.seller.lastName}               </a>
                                              | <span className="font-weight-bold ml-1"> Status: </span>
                                              {order_details && order_details.status}              | <span className="font-weight-bold ml-1"> Date: </span>
-                                                               {order_details && order_details.created_at}             | <span className="font-weight-bold ml-1"> Order Revisions:  </span>
+                                                               { moment(order_details && order_details.created_at).format('MMMM DD, YYYY') }             | <span className="font-weight-bold ml-1"> Order Revisions:  </span>
                                                                {order_details && order_details.revisions}
                                                             </p>
                                                          </div>
@@ -350,7 +360,7 @@ const Cart = (props) => {
                                     </div> : ""}
 
                                     {order_details && order_details.delivery_status.map((list, index) => (<div key={list._id} className="message-div">
-                                           <img src="https://www.gigtodo.com//user_images/ty_1574032240.png" width="50" height="50" className="message-image" />
+                                           <img src={order_details && order_details.seller.profilePhoto} width="50" height="50" className="message-image" />
 
                                              <h5>
 
@@ -362,8 +372,8 @@ const Cart = (props) => {
 
                                              {list.deliveredMessage}
 
-                                                 <a href='orderIncludes/download?order_id=1611&c_id=1376' className='d-block mt-2 ml-1' target='_blank'>
-                                                   <i className='fa fa-download'></i> {list.delivery_file}
+                                                 <a href={list.delivery_file} className='d-block mt-2 ml-1' target='_blank'>
+                                                   <i className='fa fa-download'></i> {(list.delivery_file).substring((list.delivery_file).lastIndexOf('/') + 1)}
                                                  </a>
                                                
                                              </p>
@@ -380,7 +390,7 @@ const Cart = (props) => {
                                         </div>
                                       </div> ) : "" }
                                       {order_details && order_details.used_revisions ? order_details && order_details.used_revisions.map((list, index) => (<div key={list._id} className="message-div-hover">
-                                        <img src="https://www.gigtodo.com//user_images/cool-profile-picastures-coo_1602176634.png" width="50" height="50" className="message-image" />
+                                        <img src={order_details && order_details.buyer.profilePhoto} width="50" height="50" className="message-image" />
                                               
                                       <h5><a href="#" className="seller-buyer-name"> {order_details && order_details.buyer.firstName} </a></h5>
 
@@ -388,8 +398,9 @@ const Cart = (props) => {
 
                                       {list.revision_message}
 
-                                      <a href="orderIncludes/download?order_id=1608&c_id=1382" className="d-block mt-2 ml-1" target='_blank'>
-                                        <i className="fa fa-download"></i> {list.revision_file}</a>
+                                      <a href={list.revision_file} className='d-block mt-2 ml-1' target='_blank'>
+                                       <i className='fa fa-download'></i> {(list.revision_file).substring((list.revision_file).lastIndexOf('/') + 1)}
+                                      </a>
                                       </p>
 
                                       <p className="text-right text-muted mb-0"> {list.updated_at} </p>
@@ -408,7 +419,7 @@ const Cart = (props) => {
 
 
                                       <div className="message-div">
-                                        <img src="https://www.gigtodo.com//user_images/cool-profile-picastures-coo_1602176634.png" width="50" height="50" className="message-image" />            
+                                        <img src={order_details && order_details.seller.profilePhoto} width="50" height="50" className="message-image" />            
                                       <h5><a href="#" className="seller-buyer-name"> {order_details && order_details.seller.firstName} </a></h5>
 
                                       <p className="message-desc">{order_details && order_details.cancellation_message}</p>
@@ -452,7 +463,7 @@ const Cart = (props) => {
                                         
                                         <div className="message-div">
 
-                                        <img src="https://www.gigtodo.com//user_images/ty_1574032240.png" width="50" height="50" className="message-image" />
+                                        <img src={order_details && order_details.seller.profilePhoto} width="50" height="50" className="message-image" />
                                           <h5><a href="#" className="seller-buyer-name"> {order_details && order_details.buyer.firstName} </a></h5>
                                           <p className="message-desc">{order_details && order_details.tip_message}</p>
                                           <p className="text-right text-muted mb-0"> December 08, 2020 </p>
@@ -523,7 +534,7 @@ const Cart = (props) => {
 
                                               <li className="star-rating-row">
                                                   <span className="user-picture">
-                                                      <img src="https://www.gigtodo.com/user_images/ty_1574032240.png" width="60" height="60" />
+                                                      <img src={order_details && order_details.buyer.profilePhoto} width="60" height="60" />
                                                   </span>
                                                   <h4>
                                                       <a href="#" className="mr-1 text-success">{order_details && order_details.buyer.firstName} </a>
@@ -543,7 +554,7 @@ const Cart = (props) => {
                                                             {seller_rating.map((list, index) => (<span key = {index} className="fa fa-star checked" style={{color: "#EEBD01"}}></span>))}
                                                         </h4>
                                                       <span className="user-picture">
-                                                          <img src="https://www.gigtodo.com//user_images/cool-profile-picastures-coo_1602176634.png" width="40" height="40" />
+                                                          <img src={order_details && order_details.seller.profilePhoto} width="40" height="40" />
                                                       </span>
                                                       <div className="msg-body">
                                                           {ratings && ratings.sellerComment}
@@ -752,7 +763,7 @@ const Cart = (props) => {
                         </div>
                         <div className="modal-body text-center">
                           <button className="btn btn-success btn-lg mr-2" data-toggle="modal" data-target="#tipModal2" data-dismiss="modal">Yes, Add Tip</button>
-                          <button className="btn btn-success btn-lg" data-dismiss="modal">No, Thanks</button>
+                          <button className="btn btn-success btn-lg" onClick={ () => Tips("0") } data-dismiss="modal">No, Thanks</button>
                         </div>
                       </div>
                     </div>
@@ -781,7 +792,7 @@ const Cart = (props) => {
 
                               <textarea name="tip_message" onChange={handleChange} className="form-control mb-3" rows="4" placeholder="Leave Your Seller A Message."></textarea>
 
-                              <button onClick={Tips} className="btn btn-success"> Submit Tip </button>     
+                              <button onClick={ () => Tips("1") } className="btn btn-success"> Submit Tip </button>     
                         </div>
                       </div>
                     </div>
