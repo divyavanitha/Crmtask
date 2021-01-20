@@ -61,7 +61,8 @@ exports.listRequests = async (req, res) => {
 exports.deleteRequest = async (req, res) => {
     try {
         let requests = await db._delete(Request, {"_id":req.params.id});
-
+        await db._delete(RequestOffer, {request: req.params.id});
+        
         const response = helper.response({ message: res.__('deleted') });
         return res.status(response.statusCode).json(response);
         
