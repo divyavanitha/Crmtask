@@ -244,7 +244,7 @@ const BuyerRequest = (props) => {
                               {offer && offer.map((list, index) => (<tr key={index} id="request_tr_367">
                                  <td>
                                     <a href="">
-                                    <img src={list.request.files} className="request-img rounded-circle" />
+                                    <img src={list.request.files ? list.request.files : ""} className="request-img rounded-circle" />
                                     </a>
                                     <div className="request-description">
                                        <h6> 

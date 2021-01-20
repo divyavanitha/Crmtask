@@ -59,7 +59,7 @@ console.log('carts', carts);
                 if ((setting.seller.levelTwoRating == user.ratingPercent) && (setting.seller.levelTwoCompletedOrder == user.completedOrder)) {
                     var commission = ((total * setting.pricing.commissionLevelTwo) / 100);
                     let balance = total - commission;
-                    if(req.body.payment_mode == "WALLET"){
+                    if((req.body.payment_mode).toUpperCase() == "WALLET"){
                         buyer.wallet = buyer.wallet - total;
                         user.wallet += balance;
                     }
@@ -68,7 +68,7 @@ console.log('carts', carts);
                 if ((setting.seller.levelOneRating == user.ratingPercent) && (setting.seller.levelOneCompletedOrder == user.completedOrder)) {
                     var commission = ((total * setting.pricing.commissionLevelOne) / 100);
                     let balance = total - commission;
-                    if(req.body.payment_mode == "WALLET"){
+                    if((req.body.payment_mode).toUpperCase() == "WALLET"){
                         buyer.wallet = buyer.wallet - total;
                         user.wallet += balance;
                     }
@@ -78,7 +78,7 @@ console.log('carts', carts);
                 if ((setting.seller.topRatedRating == user.ratingPercent) && (setting.seller.topRatedCompletedOrder == user.completedOrder)) {
                     var commission = ((total * setting.pricing.commissionTopRated) / 100);
                     let balance = total - commission;
-                    if(req.body.payment_mode == "WALLET"){
+                    if((req.body.payment_mode).toUpperCase() == "WALLET"){
                         buyer.wallet = buyer.wallet - total;
                         user.wallet += balance;
                     }
@@ -87,7 +87,7 @@ console.log('carts', carts);
                 if (user.type == "NEWSELLER") {
                     var commission = ((total * setting.pricing.commission) / 100);
                     let balance = total - commission;
-                    if(req.body.payment_mode == "WALLET"){
+                    if((req.body.payment_mode).toUpperCase() == "WALLET"){
                         buyer.wallet -= total;
                         user.wallet += balance;
                     }

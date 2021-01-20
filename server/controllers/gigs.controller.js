@@ -1,5 +1,6 @@
 const express = require("express");
 const { User } = require("../models/user");
+const { Admin } = require('../models/admin');
 const { Gig } = require('../models/gigs');
 const { Order } = require('../models/Order');
 const { Rating } = require('../models/Rating');
@@ -758,17 +759,26 @@ exports.gigStatus = async (req, res) => {
     try {
 console.log(req.body);
         let gig = await db._find(Gig, {_id:req.body.id});
-        
+        let user = await User.findById(req.user._id);
+        var admin = await db._find(Admin);
+        let setting = await db._find(Setting, {}, { createdAt: 0, updatedAt: 0 });
+        console.log(setting.gig.featuredGigDuration);
         if((req.body.status).toUpperCase() == "ADD_FEATURE"){
             gig.featured = true;
             let features = [];
             data ={
                 payment_option: (req.body.payment_option).toUpperCase(),
-                price: req.body.feature_price,
-                duration: req.body.feature_duration
+                price: setting.gig.featuredGigPrice,
+                duration: setting.gig.featuredGigDuration
             }
             features.push(data);
             gig.feature_payment = features;
+
+            if((req.body.payment_option).toUpperCase() == "WALLET"){
+                user.wallet = user.wallet - setting.gig.featuredGigPrice;
+                admin.wallet += setting.gig.featuredGigPrice;
+            }
+
         }else if((req.body.status).toUpperCase() == "PAUSE"){
             gig.status = "PAUSE";
         }else if((req.body.status).toUpperCase() == "UNPAUSE"){
@@ -776,7 +786,8 @@ console.log(req.body);
         }
 
         let gigs = await db._update(Gig, { _id: req.body.id }, gig);
-
+        await db._update(User, { _id: req.user._id }, user);
+        await db._update(Admin, {}, admin);
         const response = helper.response({ message: res.__('updated') });
         return res.status(response.statusCode).json(response);
         

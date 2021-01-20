@@ -215,7 +215,7 @@ router.delete('/gig/delete/:id', middleware.user, function(req, res){
 router.get('/gig/submit/approval/:id', middleware.user, function(req, res){
   gigController.submitApproval(req, res);
 });
-router.post('/change/gigstatus', (req, res) => {
+router.post('/change/gigstatus', middleware.user, (req, res) => {
   gigController.gigStatus(req, res);
 });
 
