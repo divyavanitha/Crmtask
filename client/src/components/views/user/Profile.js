@@ -18,12 +18,14 @@ const Profile = (props) => {
    const [countrylist, setCountrylist] = useState([]);
    const [stateList, setStateList] = useState([]);
    const [cityList, setCityList] = useState([]);
+   const [state, setState] = useState('');
+   const [city, setCity] = useState('');
    const offer = useSelector((state) => state.request && state.request.view_offer && state.request.view_offer.responseData);
    const countries = useSelector((state) => state.user && state.user.countries && state.user.countries.responseData && state.user.countries.responseData.countries);
    const profile = useSelector((state) => state.profile && state.profile.getprofile && state.profile.getprofile.responseData && state.profile.getprofile.responseData.user);
    useEffect(() => {
       dispatch(getProfile()).then((profile) => {
-         console.log('profile', profile);
+         
          dispatch(getState(profile.user.country)).then((response) => {
             setStateList(response.responseData.states);
          });
@@ -37,7 +39,6 @@ const Profile = (props) => {
 
 
 
-
    }, []);
 
 
@@ -48,28 +49,24 @@ const Profile = (props) => {
 
    const handleCountryChange = async (value, setFieldValue) => {
       setCountrylist(value);
+      setFieldValue('country', value);
       if (value) {
-         setFieldValue('country', value);
-         console.log(value);
-         const state = dispatch(getState(value));
-         console.log('state', state);
-         if (state && state.responseData.states) {
-            setStateList(state.responseData.states)
-         }
+         dispatch(getState(value)).then((response) => {
+            setStateList(response.responseData.states);
+            setCityList([]);
+         });
       }
 
    }
 
    const handleStateChange = async (value, setFieldValue) => {
-      //setStateList(value);
-      console.log('state_id', value);
       if (value) {
-         setFieldValue('state', value);
-         const city = await dispatch(getCity(value));
-         console.log('city', city);
-         if (city && city.responseData.cities) {
-            setCityList(city.responseData.cities)
-         }
+
+       setFieldValue('state', value);
+       setState(value);
+         dispatch(getCity(value)).then((response) => {
+            setCityList(response.responseData.cities);
+         });
       }
 
    }
@@ -131,8 +128,6 @@ const Profile = (props) => {
             data.append("description", values.description);
             data.append("cover_photo", values.cover_photo);
             data.append("profile_photo", values.profile_photo);
-
-            console.log(values.profile_photo);
 
             dispatch(updateProfile(data)).then(res => {
                //window.location.reload();
@@ -246,7 +241,7 @@ const Profile = (props) => {
                                                 <div className="form-group row">
                                                    <label className="col-md-4 col-form-label"> State </label>
                                                    <div className="col-md-8">
-                                                      {countrylist && (<Fragment><select name="state" className={'form-control' + (errors.state && touched.state ? ' is-invalid' : '')} value={profile && profile.state} onChange={(e) => { handleStateChange(e.currentTarget.value, setFieldValue) }} >
+                                                      {countrylist && (<Fragment><select name="state" className={'form-control' + (errors.state && touched.state ? ' is-invalid' : '')} value={ state != '' ? state : profile && profile.state } onChange={(e) => { handleStateChange(e.currentTarget.value, setFieldValue) }} >
 
                                                          <option value="">Select state</option>
 
@@ -260,9 +255,9 @@ const Profile = (props) => {
                                                 {/* <!-- form-group row Ends --> */}
                                                 <div className="form-group row">
                                                    <label className="col-md-4 col-form-label"> City </label>
-                                                   {console.log(profile && profile.city)}
+                                                   
                                                    <div className="col-md-8">
-                                                      {stateList && (<Fragment><select name="city" className={'form-control' + (errors.city && touched.city ? ' is-invalid' : '')} value={profile && profile.city} onChange={(e) => { setFieldValue('city', e.currentTarget.value); }} >
+                                                      {stateList && (<Fragment><select name="city" className={'form-control' + (errors.city && touched.city ? ' is-invalid' : '')} value={ city != '' ? city : profile && profile.city} onChange={(e) => { setFieldValue('city', e.currentTarget.value); setCity(e.currentTarget.value); }} >
 
                                                          <option value="">Select City</option>
 

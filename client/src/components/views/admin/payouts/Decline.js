@@ -2,7 +2,6 @@ import React, { Fragment, Dispatch, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { useToasts } from 'react-toast-notifications';
-import { changeWithdrawlStatus } from "../../../../_actions/admin/request.action";
 
 import $ from 'jquery';
 import 'datatables.net';
@@ -20,6 +19,10 @@ const Pending = () => {
 
   useEffect(() => {
 
+  $('body').on('click', '.userdetails', function (e) {
+      e.preventDefault();
+      history.push('/admin/userdetails/' + $(this).data('id'))
+    });
 
     $('#datatable').DataTable({
       language: {
@@ -43,7 +46,7 @@ const Pending = () => {
       "processing": true,
       "serverSide": true,
       "ajax": {
-        "url": '/api/admin/withdrawl?type=pending',
+        "url": '/api/admin/withdrawl?type=decline',
         "type": "GET",
         data: function (data) {
 
@@ -91,31 +94,16 @@ const Pending = () => {
         { "data": "status" },
         {
           "data": function (data, type, row) {
-            var button = `<a title="Approve" data-id=`+data._id+` data-status="APPROVE" class="change-status"><i class="fa fa-thumbs-up"></i></a> &nbsp`;
-           
-            button +=  `<a title="Decline" class="change-status" data-id=`+data._id+` data-status="DECLINE"><i class="fa fa-thumbs-down"></i></a>&nbsp`;
-            button +=  `<a title="user-details" data-id=`+data._id+` ><i class="fa fa-info-circle"></i></a>`;
-
+            console.log(data);
+            var button =  `<a title="user-details" class="userdetails" data-id=`+data.user._id+` ><i class="fa fa-info-circle"></i></a>`;
             return button;
-
-
           }
         }
 
       ]
     });
 
-    $('body').on('click', '.change-status', function () {
-
-      var id = $(this).data('id');
-      var status = $(this).data('status');
-
-      dispatch(changeWithdrawlStatus(id, status)).then(res => {
-
-        addToast(res.message, { appearance: res.status, autoDismiss: true, })
-        window.location.reload();
-      })
-    });
+    
 
   }, []);
 

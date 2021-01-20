@@ -535,7 +535,7 @@ exports.revenues = async (req, res) => {
 
 }
 
-exports.withdrawalList = async (req, res) => {
+exports.withdrawlList = async (req, res) => {
     try {
 
         let withdrawals = await db._get(Withdrawal, { user: req.user._id });
@@ -554,7 +554,7 @@ exports.withdrawalList = async (req, res) => {
 
 }
 
-exports.withdrawal = async (req, res) => {
+exports.withdrawl = async (req, res) => {
 
     const schema = Joi.object().options({ abortEarly: false }).keys({
         price: Joi.number().required().label("Amount"),

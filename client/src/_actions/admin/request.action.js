@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { GET_REQUESTS } from "./types";
+import { GET_REQUESTS, USER_DETAILS } from "./types";
 
 export const getBuyerRequests = () => async dispatch => {
     try {
@@ -42,3 +42,31 @@ export const changeRequestStatus = (id, status) => async dispatch => {
     }
 };
 
+export const changeWithdrawlStatus = (id, status) => async dispatch => {
+    try {
+        let token = localStorage.adminToken;
+        let response = await axios.get(`/api/admin/withdrawl/changestatus/${id}/${status}`, { headers: { 'Authorization': `${token}` } });
+        response.data.status = 'success';
+        return response.data;
+    } catch (e) {
+        e.response.data.status = 'error';
+        return e.response.data;
+    }
+};
+
+
+export const sellerDetails = (id) => async dispatch => {
+    try {
+        let token = localStorage.adminToken;
+        let response = await axios.get(`/api/admin/userdetails/${id}`, { headers: { 'Authorization': `${token}` } });
+        dispatch({
+            type: USER_DETAILS,
+            payload: response.data
+        })
+    } catch (e) {
+        dispatch({
+            type: USER_DETAILS,
+            payload: null
+        })
+    }
+};

@@ -77,7 +77,6 @@ router.get('/profile', middleware.user, (req, res) => {
 });
 
 router.post('/profile', [middleware.user, middleware.upload( path.join(__dirname, '../storage/images/user/') ).fields([{ name: 'profile_photo', maxCount: 4 }, { name: 'cover_photo', maxCount: 1 }]) ],  (req, res) => {
-  console.log(err);
   profilecontroller.updateProfile(req, res);
 });
 
@@ -156,11 +155,11 @@ router.get('/revenues', middleware.user, (req, res) => {
 });
 
 router.get('/withdrawal', middleware.user, (req, res) => {
-  homeController.withdrawalList(req, res);
+  homeController.withdrawlList(req, res);
 });
 
 router.post('/withdrawal', middleware.user, (req, res) => {
-  homeController.withdrawal(req, res);
+  homeController.withdrawl(req, res);
 });
 
 router.get('/recent', middleware.user, (req, res) => {

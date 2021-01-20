@@ -62,7 +62,7 @@ exports.updateProfile = async (req, res) => {
     if (error) return res.status(response.statusCode).json(response);
 
     try {
-        //console.log(req.body.id);
+        
         const user = {
             firstName: req.body.first_name,
             lastName: req.body.last_name,
@@ -76,13 +76,13 @@ exports.updateProfile = async (req, res) => {
             description: req.body.description,
             state: req.body.state
         }
-        //console.log(JSON.stringify(req.files));
+       
 
         if(req.files['profile_photo']) user.profilePhoto = req.protocol + '://' + req.get('host') + "/images/user/" + (req.files['profile_photo'][0].filename);
         if(req.files['cover_photo']) user.coverPhoto = req.protocol + '://' + req.get('host') + "/images/user/" + (req.files['cover_photo'][0].filename);
 
 
-        //let users = await db._update(User, { _id: req.body.id }, user);
+        let users = await db._update(User, { _id: req.body.id }, user);
 
         const response = helper.response({ message: res.__('updated') });
         return res.status(response.statusCode).json(response);
@@ -101,7 +101,7 @@ exports.updateProfile = async (req, res) => {
 exports.updateLanguage = async (req, res) => {
     const schema = Joi.object().options({ abortEarly: false }).keys({
         id: Joi.string().required().label("User Id"),
-        language_id: Joi.array().required().label("Language Id"),
+        language: Joi.array().required().label("Language"),
         level: Joi.array().required().label("Language Level")
 
     }).unknown(true);
@@ -126,9 +126,9 @@ exports.updateLanguage = async (req, res) => {
 
         let language = [];
 
-        for (let i in req.body.language_id) {
+        for (let i in req.body.language) {
             let lang = {
-                language: req.body.language_id[i],
+                language: req.body.language[i],
                 level: req.body.level[i]
             }
             language.push(lang);

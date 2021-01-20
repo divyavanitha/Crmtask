@@ -2,12 +2,15 @@ const express = require("express");
 const { Request } = require("../../models/Request");
 const { RequestOffer } = require('../../models/RequestOffer');
 const { Notification } = require('../../models/Notification');
+const { Order } = require('../../models/Order');
 const { Admin } = require('../../models/admin');
 const helper = require('../../services/helper.js');
+const { Withdrawal } = require("../../models/Withdrawal");
+const { Gig } = require('../../models/gigs');
 const db = require('../../services/model.js');
 const Joi = require('@hapi/joi');
 const _ = require('lodash');
-
+const ObjectId = require('mongoose').Types.ObjectId; 
 
 exports.listRequests = async (req, res) => {
 
@@ -120,3 +123,166 @@ exports.changeStatus = async (req, res) => {
     }
 
 };
+
+exports.withdrawlList = async (req, res) => {
+    console.log(req.query);
+    try {
+        let count, withdrawl;
+
+
+        if(!req.query.length) req.query.length = 10;
+        else req.query.length = parseInt(req.query.length);
+        if(!req.query.page) req.query.page = 1;
+        else req.query.page = parseInt(req.query.page);
+
+        let skip = (req.query.page * req.query.length) - req.query.length;
+
+        let pending_count = await db._count(Withdrawal, {status: "PENDING"});
+        let decline_count = await db._count(Withdrawal, {status: "DECLINE"});
+        let completed_count = await db._count(Withdrawal, {status: "COMPLETED"});
+
+        if((req.query.type).toUpperCase() == "PENDING"){
+             withdrawl = await db._get(Withdrawal, { status: "PENDING" }, {}, {populate: "user"});
+             count = pending_count;
+        }else if((req.query.type).toUpperCase() == "DECLINE"){   
+             withdrawl = await db._get(Withdrawal, { status: "DECLINE" }, {}, {populate: "user"});
+             count = decline_count;
+        }else{
+             withdrawl = await db._get(Withdrawal, { status: "APPROVE" }, {}, {populate: "user"});
+             count = completed_count;
+        }
+        
+        const data = { 
+            withdrawl
+        };
+
+        const response = helper.response({ data: helper.paginate(req, data, count) });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.withdrawlChangeStatus = async (req, res) => {
+    try {
+
+        var admin = await db._find(Admin);
+
+        const withdrawl = {
+            status: req.params.status,
+        }
+
+        if((req.params.status).toUpperCase() == "APPROVE"){
+            var notification = {
+                sender: admin._id,
+                senderType: "ADMIN",
+                receiver: req.user,
+                type: "WITHDRAWL",
+                message: "Has approved your Withdrawl Request."
+            }
+        }else if((req.params.status).toUpperCase() == "DECLINE"){
+            var notification = {
+                sender: admin._id,
+                senderType: "ADMIN",
+                receiver: req.user,
+                type: "WITHDRAWL",
+                message: "Has declined your Withdrawl Request."
+            }
+        }
+
+        let requests = await db._update(Withdrawal, { _id: req.params.id }, withdrawl);
+        await db._store(Notification, notification);
+        const response = helper.response({ message: res.__('updated') });
+        return res.status(response.statusCode).json(response);
+        
+    }
+    catch (err) {
+        if (err[0] != undefined) {
+            for (i in err.errors) {
+                res.status(422).send(err.errors[i].message);
+            }
+        } else {
+            res.status(422).send(err);
+        }
+    }
+
+};
+
+exports.sellerDetails = async (req, res) => {
+    try {
+
+        let orders = await db._get(Order, {seller: req.params.id}, {}, { populate: [ 
+            { path: "seller", populate: { path: 'country', model: 'Country', select: 'name' } }
+            ] });
+
+        let delivered_order = await db._get(Order, {seller: req.params.id, status: "DELIVERED"});
+
+        let completed_order = await db._get(Order, {seller: req.params.id, status: "COMPLETED"});
+
+        let cancelled_order = await db._get(Order, {seller: req.params.id, status: "CANCELLED"});
+
+        let active_order = await db._get(Order, {seller: req.params.id, status:  {$in : ["PROGRESS", "CANCELLATION REQUESTED", "REVISION REQUESTED", "DELIVERED"]} });
+
+
+        var date = new Date();
+        console.log(new Date(date.getFullYear(), date.getMonth(), 1));
+        console.log(new Date(date.getFullYear(), date.getMonth() + 1, 0));
+
+        let earnings = await Order.aggregate([
+            { $match: { seller: new ObjectId(req.params.id), status: "COMPLETED" } },
+            {
+                $group:
+                {
+                    _id: "$seller",
+                    total: { $sum: '$total' }
+                }
+            }
+        ]);
+
+        let balance_amount = await Order.aggregate([
+            { $match: { seller: new ObjectId(req.params.id), status: { $nin: ["CANCELLED", "COMPLETED"] } } },
+            {
+                $group:
+                {
+                    _id: "$seller",
+                    total: { $sum: '$total' }
+                }
+            }
+        ]);
+
+        let withdrawl = await Withdrawal.aggregate([
+            { $match: { user: new ObjectId(req.params.id), status: "APPROVE" } },
+            {
+                $group:
+                {
+                    _id: "$user",
+                    total: { $sum: '$price' }
+                }
+            }
+        ]);
+
+        let pending_withdrawl = await Withdrawal.aggregate([
+            { $match: { user: new ObjectId(req.params.id), status: "PENDING" } },
+            {
+                $group:
+                {
+                    _id: "$user",
+                    total: { $sum: '$price' }
+                }
+            }
+        ]);
+
+        let gig = await db._get(Gig, { user: req.params.id, status: "ACTIVE", deleted_at: null });
+
+
+        const response = helper.response({ data: {"orders": orders, "delivered_order": delivered_order, "completed_order": completed_order, "cancelled_order": cancelled_order, "active_order": active_order, "earnings": earnings, "balance_amount": balance_amount, "withdrawl": withdrawl, "pending_withdrawl": pending_withdrawl, "gig": gig } });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}

@@ -49,9 +49,9 @@ const Sidepanel = () => {
                                 <a className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i className="menu-icon fa fa fa-money"></i> Payouts </a>
                                 <ul className="sub-menu children dropdown-menu">
-                                    <li><i className="fa fa-arrow-circle-right"></i><Link to="/admin/pending"> Pending </Link></li>
-                                    <li><i className="fa fa-arrow-circle-right"></i><Link to="/admin"> Declined </Link></li>
-                                    <li><i className="fa fa-arrow-circle-right"></i><Link to="/admin"> Completed </Link></li>
+                                    <li><i className="fa fa-arrow-circle-right"></i><Link to="/admin/pending/withdrawl"> Pending </Link></li>
+                                    <li><i className="fa fa-arrow-circle-right"></i><Link to="/admin/decline/withdrawl"> Declined </Link></li>
+                                    <li><i className="fa fa-arrow-circle-right"></i><Link to="/admin/approve/withdrawl"> Completed </Link></li>
                                 </ul>
                             </li>
 

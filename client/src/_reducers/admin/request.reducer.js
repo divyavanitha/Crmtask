@@ -1,4 +1,4 @@
-import { GET_REQUESTS } from "../../_actions/admin/types";
+import { GET_REQUESTS, USER_DETAILS } from "../../_actions/admin/types";
 
 const intialState = {
   requests: []
@@ -11,6 +11,11 @@ const requestReducer = (state = intialState, action) => {
       return {
         ...state,
         requests: action.payload
+      };
+    case USER_DETAILS:
+      return {
+        ...state,
+        details: action.payload
       };
     default:
       return state;

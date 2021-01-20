@@ -295,6 +295,16 @@ router.post('/gig/request/modification',  (req, res) => {
   gigController.requestModification(req, res);
 });
 
+router.get('/withdrawl', (req, res) => {
+  requestController.withdrawlList(req, res);
+});
+router.get('/withdrawl/changestatus/:id/:status', (req, res) => {
+  requestController.withdrawlChangeStatus(req, res);
+});
+router.get('/userdetails/:id', (req, res) => {
+  requestController.sellerDetails(req, res);
+});
+
 
 router.get('/settings', (req, res) => {
   settingController.getSetting(req, res);

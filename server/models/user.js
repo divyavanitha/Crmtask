@@ -49,7 +49,7 @@ const userSchema = mongoose.Schema({
     city: { type: String, ref: 'city' },
     state: { type: String, ref: 'state' },
     language: [{
-        language: { type: Schema.Types.ObjectId, ref: 'Language' },
+        language: { type: String },
         level: { type: String },
         status: { type: Boolean, default: false }
     }],

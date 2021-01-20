@@ -34,3 +34,4 @@ export const UPDATE_ADMIN_GENERAL = 'UPDATE_ADMIN_GENERAL';
 export const RBA = 'ROLE_BASED_ACCESS';
 export const FIND_GIG = 'ADMIN_FIND_GIG';
 export const GET_GIGS = 'ADMIN_GIGS';
+export const USER_DETAILS = 'USER_DETAILS';
