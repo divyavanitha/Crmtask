@@ -154,7 +154,7 @@ console.log('useer', order_count && order_count);
                                  </div>
                                  <div className="col-6 col-lg-8">
                                     <h6><i className="fa fa-star pr-1"></i> Positive Ratings</h6>
-                                    <h4 className="text-muted"> {Math.round(user && user.ratingPercent)}%</h4>
+                                    <h4 className="text-muted"> {user && user.ratingPercent ? Math.round(user && user.ratingPercent) : "0"}%</h4>
                                  </div>
                               </div>
                               <div className="row">
