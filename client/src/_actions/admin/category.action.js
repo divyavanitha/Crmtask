@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { GET_CATEGORIES, FIND_CATEGORY } from "./types";
+import { GET_CATEGORIES, FIND_CATEGORY, CATEGORY_LIST } from "./types";
 
 export const getCategories = () => async dispatch => {
     try {
@@ -13,6 +13,23 @@ export const getCategories = () => async dispatch => {
     } catch (e) {
         dispatch({
             type: GET_CATEGORIES,
+            payload: null
+        })
+    }
+};
+
+export const categoryList = () => async dispatch => {
+    try {
+        let token = localStorage.adminToken;
+        let response = await axios.get('/api/admin/list/category');
+        console.log('response', response);
+        dispatch({
+            type: CATEGORY_LIST,
+            payload: response.data
+        })
+    } catch (e) {
+        dispatch({
+            type: CATEGORY_LIST,
             payload: null
         })
     }

@@ -275,8 +275,10 @@ exports.removePayoutCard = async (req, res) => {
 
 exports.addMoney = async (req, res) => {
     try {
-
+console.log(req.body);
         let card = await db._find(Card, { _id: req.body.id });
+
+        console.log(card);
 
         let setting = await db._find(Setting, {}, {createdAt: 0, updatedAt: 0 });
         let stripePayment = setting.payment.filter(pay => pay.name === 'STRIPE');

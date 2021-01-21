@@ -181,3 +181,20 @@ exports.changeStatus = async (req, res) => {
     }
 
 };
+
+exports.categorylist = async (req, res) => {
+    try {
+
+        let categories = await db._get(Category);
+
+        const data = { categories };
+
+        const response = helper.response({ data });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}

@@ -64,6 +64,9 @@ router.get('/get/category/:id', (req, res) => {
 router.get('/category/changestatus/:id/:status', (req, res) => {
   categoryController.changeStatus(req, res);
 });
+router.get('/list/category', (req, res) => {
+  categoryController.categorylist(req, res);
+});
 
 
 router.get('/subcategory', (req, res) => {

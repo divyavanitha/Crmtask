@@ -5,6 +5,7 @@ import { getMenu } from "../../../_actions/user.action";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import Gig from "./gigs/Gig";
 import OwlCarousel from 'react-owl-carousel';
+import moment from 'moment';
 import { getBuyerRequest, requestOffer, sentOffer } from "../../../_actions/request.action";
 import { gigSubCatoegory, requestGigs, getDeliveryTime } from "../../../_actions/user.action";
 import * as Yup from 'yup';
@@ -209,7 +210,7 @@ const BuyerRequest = (props) => {
                                        </ul>
                                     </div>
                                  </td>                                 
-                                 <td> {list.created_at} </td>
+                                 <td> { moment(list.created_at).format('MMMM DD, YYYY') } </td>
                                  <td> 
                                     {list.duration}
                                     

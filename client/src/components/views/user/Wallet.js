@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import moment from 'moment';
 import Loader from 'react-loader-spinner';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import { getCard, addMoney, withdraw } from "../../../_actions/user.action";
+import { getCard, addMoney, withdraw, findUser } from "../../../_actions/user.action";
 import * as Yup from 'yup';
 import $ from 'jquery';
 
@@ -29,10 +29,13 @@ function Wallet() {
     const [price, setPrice] = useState("");
     const [revenues, setRevenues] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [wallet, setWallet] = useState(0);
 
     let settings = useSelector((state) => state.settings);
 
     let gigSetting = settings.settings && settings.settings.gig;
+
+    const user = useSelector((state) => state.user && state.user.find_user && state.user.find_user.responseData && state.user.find_user.responseData.user);
 
     useEffect(() => {
       setIsLoading(true);
@@ -45,6 +48,9 @@ function Wallet() {
          setRevenues(response.revenues);
          setIsLoading(false)*/
       })
+
+      dispatch(findUser())
+      setWallet(user && user.wallet);
     }, []);
 
     const handleChange = ({currentTarget: input}) => {
@@ -56,7 +62,6 @@ function Wallet() {
          price: price,
          payment_mode: paymentMode
       }
-      console.log()
       if(price && price != 0 && price >= (gigSetting && gigSetting.minimumWithdrawalLimit)) {
          setIsLoading(true);
          dispatch(withdraw(data)).then((response) => {
@@ -67,6 +72,7 @@ function Wallet() {
       }
     }
 
+    
 
    return (
 
@@ -86,9 +92,9 @@ function Wallet() {
                     .required('Amount is required')
             })}
             onSubmit={(values, { setSubmitting, resetForm }) => {
-
+                console.log("values", values);
                 let data = {
-                    description: values.id,
+                    id: values.id,
                     amount: values.amount,
                 };
                 
@@ -127,7 +133,7 @@ function Wallet() {
       <div className="col-md-12">
          <h2 className="pull-left">Revenue Earned</h2>
          <p className="lead pull-right">
-            Available For Withdrawal: <span className="font-weight-bold text-success"> &#036;{auth.user && auth.user.wallet}</span>
+            Available For Withdrawal: <span className="font-weight-bold text-success"> &#036;{wallet}</span>
          </p>
       </div>
       <div className="col-md-12">
@@ -156,7 +162,7 @@ function Wallet() {
                                   </Field>
                                   <ErrorMessage name="id" component="div" className="error-message" />
                                   <br /><br />
-                                  <button className="btn btn-success ml-2" data-toggle="modal" data-target="#stripe_Modal">Submit</button>
+                                  <button type="submit" className="btn btn-success ml-2" data-toggle="modal" data-target="#stripe_Modal">Submit</button>
                                   </form>
 
                                   </div>
@@ -168,7 +174,7 @@ function Wallet() {
                            <div className="col-md-4">
                               <div className="rs-detail">
                                  <p> Available Income </p>
-                                 <h2> &#036;{auth.user && auth.user.wallet}</h2>
+                                 <h2> &#036;{wallet}</h2>
                               </div>
                            </div>
                         </div>

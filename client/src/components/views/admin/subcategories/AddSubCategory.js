@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 
 
 import { addSubCategory, getSubCategorybyId, updateSubCategory } from "../../../../_actions/admin/subcategory.action";
-import { getCategories } from "../../../../_actions/admin/category.action";
+import { categoryList } from "../../../../_actions/admin/category.action";
 
 const AddSubCategory = (props) => {
     const dispatch = useDispatch();
@@ -20,12 +20,13 @@ const AddSubCategory = (props) => {
 
         // Update the document title using the browser API
 
-        dispatch(getCategories());
+        dispatch(categoryList());
         dispatch(getSubCategorybyId(params.id))
 
     }, [params.id]);
     const subcategory = useSelector(state => state.subcategories && state.subcategories.subcategory && state.subcategories.subcategory.responseData.sub_category);
-    const categories = useSelector(state => state.categories && state.categories.categories.responseData && state.categories.categories.responseData.data.categories);
+    const categories = useSelector(state => state.categories && state.categories.list && state.categories.list.responseData && state.categories.list.responseData.categories);
+    console.log(categories);
 
     return (
 

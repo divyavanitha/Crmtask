@@ -1,4 +1,4 @@
-import { GET_CATEGORIES, FIND_CATEGORY, DELETE_CATEGORY } from "../../_actions/admin/types";
+import { GET_CATEGORIES, FIND_CATEGORY, DELETE_CATEGORY, CATEGORY_LIST } from "../../_actions/admin/types";
 
 const intialState = {
   categories: []
@@ -21,6 +21,11 @@ const categoryReducer = (state = intialState, action) => {
       return {
         ...state,
         deleteCategory: action.payload
+      };
+    case CATEGORY_LIST:
+      return {
+        ...state,
+        list: action.payload
       };
     default:
       return state;
