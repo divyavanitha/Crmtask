@@ -578,7 +578,10 @@ exports.withdrawl = async (req, res) => {
 
     try {
 
-        if(req.user.wallet >= req.body.price) {
+
+        let user = await db._find(User, {_id: req.user._id});
+
+        if(user.wallet >= req.body.price) {
 
             let data = {
                 refId: 'P-' + Math.floor(100000 + Math.random() * 900000), 
@@ -590,7 +593,14 @@ exports.withdrawl = async (req, res) => {
 
             let withdrawal = await db._store(Withdrawal, data);
 
-            const response = helper.response({ message: res.__('inserted'), data: withdrawal });
+            let withdrawalAmount = await Withdrawal.aggregate([
+            { $match : { user: new ObjectId(req.user._id), status: 'COMPLETED' } },
+            { $group : { "_id": "$user", total : { $sum : "$price" } } }
+            ])
+
+            const resp = { withdrawal, user, withdrawalAmount };
+
+            const response = helper.response({ message: res.__('inserted'), data: resp });
 
             return res.status(response.statusCode).json(response);
 

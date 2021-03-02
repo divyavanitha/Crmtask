@@ -188,6 +188,68 @@ exports.register = async (req, res) => {
     }
 };
 
+exports.changePassword = async (req, res) => {
+        let userid = req.user._id;
+        const schema = Joi.object().options({ abortEarly: false }).keys({
+            old_password: Joi.string().label("Old Password"),
+            new_password: Joi.string().label("New Password"),
+            confirm_password: Joi.string().label("Confirm Password"),
+        }).unknown(true);
+
+        const { error } = schema.validate(req.body);
+        const errors = { };
+        if (error) {
+            for (let err of error.details) {
+                errors[err.path[0]] = (err.message).replace(/"/g, "");
+            }
+        }
+
+        if (error) return res.status(422).json( helper.response(  { status: 422, error : errors }   ));
+
+            try {
+                let user = await db._find(User, {_id: req.user._id});
+                const salt = await bcrypt.genSalt(10);
+
+                let newPassword = await bcrypt.hash(req.body.new_password, salt);
+
+                if (await bcrypt.compare(req.body.old_password, user.password) != true) {
+
+                    var response = helper.response({ status: 400, message: 'Check your old password.', data: [] });
+                   
+                } else if (await bcrypt.compare(req.body.new_password, user.password)) {
+                    var response = helper.response({ status: 400, message: 'Please enter a password which is not similar then current password.', data: [] });
+                } else {
+                    await db._update(User, {_id: req.user._id}, {$set: {password: newPassword}});
+                    var response = helper.response({ status: 200, message: 'Password updated successfully.', data: [] });
+                }
+
+                return res.status(response.statusCode).json(response);
+            } catch (err) {
+                console.log(err)
+                if (err[0] != undefined) {
+                    for (i in err.errors) {
+                        const response = helper.response({ status: 422, error : err.errors[i].message });
+                        return res.status(response.statusCode).json(response);
+                    }
+                } else {
+                    let message = null;
+                    let errors = { };
+                    if(err._message) message = err._message;
+                    if(err.errors) {
+                        for (let key in err.errors) {
+                            if (Object.keys(err.errors[key]).length > 0) {
+                                let removePath = (err.errors[key].properties.message).replace(/Path /g, "");
+                                errors[err.errors[key].properties.path] = (removePath).replace(/`/g, "");
+                            }
+                       }
+                    }
+                    
+                    const response = helper.response({ status: 422, message: message, error : errors });
+                    return res.status(response.statusCode).json(response);
+                }
+            }
+}
+
 exports.social = async (req, res) => {
    
     try {

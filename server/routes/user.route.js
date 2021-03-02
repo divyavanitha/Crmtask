@@ -38,6 +38,10 @@ router.post('/register', (req, res) => {
   authController.register(req, res);
 });
 
+router.post('/change/password', middleware.user, (req, res) => {
+  authController.changePassword(req, res);
+});
+
 router.post('/social', (req, res) => {
   authController.social(req, res);
 });
@@ -366,12 +370,20 @@ router.post('/wallet', middleware.user, (req, res) => {
   cardController.addMoney(req, res);
 });
 
-router.delete('/card/remove', middleware.user, (req, res) => {
+router.get('/wallet', middleware.user, (req, res) => {
+  cardController.getWallet(req, res);
+});
+
+router.delete('/card/remove/:id', middleware.user, (req, res) => {
   cardController.removeCard(req, res);
 });
 
 router.delete('/card/payout/remove', middleware.user, (req, res) => {
   cardController.removePayoutCard(req, res);
+});
+
+router.get('/default/card/:id', middleware.user, (req, res) => {
+  cardController.defaultCard(req, res);
 });
 
 

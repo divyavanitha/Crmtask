@@ -66,7 +66,6 @@ exports._find = async (model, projection = {}, selection = {}, options = {}) => 
 exports._update = async (model, condition = {}, document, options = {}) => {
     try {
         const query = await model.findOneAndUpdate(condition, document, { new: true });
-
         return true;
 
     } catch (err) {

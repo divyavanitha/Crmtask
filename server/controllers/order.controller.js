@@ -94,8 +94,6 @@ console.log('carts', carts);
                     admin.wallet += commission;
                 }
 
-
-
                 var order = {
                     orderId: orderId,
                     coupon: req.body.coupon_id,

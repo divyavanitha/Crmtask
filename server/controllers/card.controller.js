@@ -5,6 +5,7 @@ const db = require('../services/model.js');
 const { Setting } = require('./../models/setting');
 const { Gig } = require('../models/gigs');
 const { User } = require('../models/user');
+const { PaymentLog } = require('../models/PaymentLog');
 const Joi = require('@hapi/joi');
 const Stripe = require('stripe');
 const _ = require('lodash');
@@ -32,7 +33,7 @@ exports.getPayoutCard = async (req, res) => {
     try {
 
 
-        let cards = await db._get(Card, {user: req.user._id, type: 'PAYOUT'}, {isDefault : 1, funding : 1, brand : 1, lastFour : 1 });
+        let cards = await db._find(Card, {user: req.user._id, type: 'PAYOUT'}, {isDefault : 1, funding : 1, brand : 1, lastFour : 1 });
 
         const data = {  cards };
 
@@ -79,7 +80,7 @@ exports.addCard = async (req, res) => {
 
             let isDefault;
 
-            if(cards.length > 0) {
+            /*if(cards.length > 0) {
                 if(req.body.default) {
                     isDefault = 1;
                     await db._updateMany(Card, {user: req.user._id, type: 'CHARGE' }, {"$set":{"isDefault": false}});
@@ -87,6 +88,12 @@ exports.addCard = async (req, res) => {
                 
             } else {
                 isDefault = 1;
+            }*/
+
+            if(defaultCard){
+                isDefault = false;
+            }else{
+                isDefault = true;
             }
 
             const cardData = {
@@ -101,7 +108,7 @@ exports.addCard = async (req, res) => {
                         isDefault: isDefault
                     }
 
-            const existingCard = await db._find(Card, {lastFour: customer.sources.data[0].last4});
+            const existingCard = await db._find(Card, {user: req.user._id, lastFour: customer.sources.data[0].last4});
 
             if(existingCard) {
 
@@ -160,8 +167,13 @@ exports.addPayoutCard = async (req, res) => {
                   },
                 });
 
+                let existCard = await db._find(Card, { user: req.user._id, type: 'PAYOUT' });
 
-                const cardData = {
+                if(existCard){
+                    await db._delete(Card, {_id: existCard._id });
+                }
+
+                    const cardData = {
                             name: req.body.name,
                             user: req.user._id,
                             funding: accountToken.card.funding,
@@ -169,8 +181,7 @@ exports.addPayoutCard = async (req, res) => {
                             brand: accountToken.card.brand,
                             cardId: accountToken.card.id,
                             customerId: account.id,
-                            type: 'PAYOUT',
-                            isDefault: req.body.default
+                            type: 'PAYOUT'
                         }
 
                 const user = await db._find(User, { _id: req.user._id });
@@ -180,23 +191,23 @@ exports.addPayoutCard = async (req, res) => {
                 let data;
 
                 if(existingCard) {
-
+                    console.log("a")
                     await db._update(Card, { customerId: user.stripeId }, cardData);
                     const card = await db._find(Card, { cardId: accountToken.card.id });
                     data = { card };
 
                 } else {
-
+                    console.log("b")
                     const card = await db._store(Card, cardData);
                     data = { card };
                 }
-
+                
                 user.stripeId = account.id;
 
                 await db._update(User, { _id: req.user._id }, user);
 
                 const response = helper.response({ data });
-
+                console.log("eCard", response)
                 return res.status(response.statusCode).json(response);
             } else {
 
@@ -225,15 +236,28 @@ exports.removeCard = async (req, res) => {
         if(secret_key) {
             const stripe = Stripe(secret_key);
 
-            let card = await db._find(Card, { _id: req.body.id });
+            let card = await db._find(Card, { _id: req.params.id });
 
-            const deleted = await stripe.customers.del(
+            console.log("card", card);
+
+            const customer = await stripe.customers.del(
               card.customerId
             );
 
-            if(deleted.deleted) await db._delete(Card, {_id: req.body.id });
+            if(customer.deleted) await db._delete(Card, {_id: req.params.id });
 
-            const response = helper.response({ message: res.__('deleted') });
+            let card_default = await db._get(Card, {user: req.user._id, type: 'CHARGE'});
+
+            if(card_default.length > 0){
+                if(card.isDefault == true){
+                    console.log(card_default[0], "q")
+                    card_default[0].isDefault = 1;
+                }
+                console.log("card_default", card_default);
+                await db._update(Card, { _id: card_default[0]._id }, card_default[0]);
+                
+            }
+            const response = helper.response({ message: res.__('deleted'), data: card_default });
             return res.status(response.statusCode).json(response);
         }
 
@@ -272,10 +296,50 @@ exports.removePayoutCard = async (req, res) => {
 
 }
 
+exports.defaultCard = async (req, res) => {
+    try {
+        let setting = await db._find(Setting, {}, {createdAt: 0, updatedAt: 0 });
+        let stripePayment = setting.payment.filter(pay => pay.name === 'STRIPE');
+
+        let secret_key = stripePayment.length > 0 && stripePayment[0].credentials ? stripePayment[0].credentials.filter(credential => credential.name === 'secret_key')[0].value : '';
+
+        if(secret_key) {
+            let card = await db._find(Card, { _id: req.params.id });
+
+            await db._updateMany(Card, {}, {$set: {isDefault: false}});
+
+            card.isDefault = true;
+
+            await db._update(Card, { _id: req.params.id }, card);
+            
+            let updated_card = await db._get(Card, {user: req.user._id, type: 'CHARGE'});
+
+            const response = helper.response({ message: res.__('updated'), data: updated_card });
+            return res.status(response.statusCode).json(response);
+        }
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.getWallet = async (req, res) => {
+    try {
+
+        let walletHistory = await db._get(PaymentLog, {user: req.user._id, service: "ADDMONEY"})
+        const response = helper.response({ message: res.__('updated'), data: walletHistory });
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 
 exports.addMoney = async (req, res) => {
     try {
-console.log(req.body);
+        console.log(req.body);
         let card = await db._find(Card, { _id: req.body.id });
 
         console.log(card);
@@ -287,6 +351,15 @@ console.log(req.body);
             let currency = stripePayment.length > 0 && stripePayment[0].credentials ? stripePayment[0].credentials.filter(credential => credential.name === 'currency')[0].value : '';
             let secret_key = stripePayment.length > 0 && stripePayment[0].credentials ? stripePayment[0].credentials.filter(credential => credential.name === 'secret_key')[0].value : '';
             if(currency && secret_key) {
+                let random = "FIV"+ Math.floor(Math.random() * (10000 - 1)) + 1;
+                console.log("random", random);
+                let paymentLog = {
+                    transaction_code: random,
+                    service: "ADDMONEY",
+                    payment_mode: "STRIPE",
+                    amount: req.body.amount,
+                    user: req.user._id
+                }
                 const stripe = Stripe(secret_key);
                 const charge = await stripe.charges.create({
                   amount: req.body.amount*100,
@@ -295,21 +368,32 @@ console.log(req.body);
                 });
 
                 let response;
-
+                let message;
+                let status;
+                const user = await db._find(User, { _id: req.user._id });
                 if(charge.status == 'succeeded') {
-
-                    const user = await db._find(User, { _id: req.user._id });
-
+                    
                     user.wallet += parseFloat(req.body.amount);
 
-                    await db._update(User, { _id: req.user._id }, user);
+                    paymentLog.status = "Paid";
 
-                    data = { wallet: user.wallet, amount: parseFloat(req.body.amount) };
-                    response = helper.response({ data: data, message: "Amount successfully added to wallet!" });
+                    await db._update(User, { _id: req.user._id }, user);
+                     message = "Amount successfully added to wallet!";
+                     status = 200;
 
                 } else {
-                    response = helper.response({ status: 500, message: 'Payment Failed!' });
+                    paymentLog.status = "Failed";
+                     message = "Payment Failed!";
+                     status = 500;
                 }
+
+                await db._store(PaymentLog, paymentLog);
+
+                let walletHistory = await db._get(PaymentLog, {user: req.user._id, service: "ADDMONEY"})
+
+                data = { wallet: user.wallet, amount: parseFloat(req.body.amount), paymentHistory: walletHistory };
+
+                response = helper.response({ status: status, data: data, message: message });
 
                 return res.status(response.statusCode).json(response);
             } else {

@@ -148,9 +148,10 @@ exports.updateCart = async (req, res) => {
                 quantity: req.body.quantity
             }
 
-        let carts= await db._update(Cart, { _id: req.body.id }, cart);
+        await db._update(Cart, { _id: req.body.id }, cart);
+        let carts = await db._find(Cart, { _id: req.body.id } );
 
-         const response = helper.response({ message: res.__('updated') });
+         const response = helper.response({ message: res.__('updated'), data: carts });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {

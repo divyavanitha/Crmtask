@@ -6,6 +6,7 @@ const { Order } = require('../../models/Order');
 const { Admin } = require('../../models/admin');
 const helper = require('../../services/helper.js');
 const { Withdrawal } = require("../../models/Withdrawal");
+const { User } = require('../../models/user');
 const { Gig } = require('../../models/gigs');
 const db = require('../../services/model.js');
 const Joi = require('@hapi/joi');
@@ -146,10 +147,10 @@ exports.withdrawlList = async (req, res) => {
              withdrawl = await db._get(Withdrawal, { status: "PENDING" }, {}, {populate: "user"});
              count = pending_count;
         }else if((req.query.type).toUpperCase() == "DECLINE"){   
-             withdrawl = await db._get(Withdrawal, { status: "DECLINE" }, {}, {populate: "user"});
+             withdrawl = await db._get(Withdrawal, { status: "DECLINED" }, {}, {populate: "user"});
              count = decline_count;
         }else{
-             withdrawl = await db._get(Withdrawal, { status: "APPROVE" }, {}, {populate: "user"});
+             withdrawl = await db._get(Withdrawal, { status: "COMPLETED" }, {}, {populate: "user"});
              count = completed_count;
         }
         
@@ -172,11 +173,15 @@ exports.withdrawlChangeStatus = async (req, res) => {
 
         var admin = await db._find(Admin);
 
-        const withdrawl = {
-            status: req.params.status,
-        }
+        let withdrawl = await db._find(Withdrawal, { _id: req.params.id, status: "PENDING" });
 
-        if((req.params.status).toUpperCase() == "APPROVE"){
+        let user = await db._find(User, {_id: withdrawl.user});
+
+        withdrawl.status = req.params.status;
+        
+
+        if((req.params.status).toUpperCase() == "COMPLETED"){
+            user.wallet = (user.wallet - withdrawl.price);
             var notification = {
                 sender: admin._id,
                 senderType: "ADMIN",
@@ -184,7 +189,8 @@ exports.withdrawlChangeStatus = async (req, res) => {
                 type: "WITHDRAWL",
                 message: "Has approved your Withdrawl Request."
             }
-        }else if((req.params.status).toUpperCase() == "DECLINE"){
+        }else if((req.params.status).toUpperCase() == "DECLINED"){
+
             var notification = {
                 sender: admin._id,
                 senderType: "ADMIN",
@@ -193,10 +199,10 @@ exports.withdrawlChangeStatus = async (req, res) => {
                 message: "Has declined your Withdrawl Request."
             }
         }
-
+        await db._update(User, { _id: withdrawl.user }, user);
         let requests = await db._update(Withdrawal, { _id: req.params.id }, withdrawl);
         await db._store(Notification, notification);
-        const response = helper.response({ message: res.__('updated') });
+        const response = helper.response({ message: res.__('updated'), data: withdrawl });
         return res.status(response.statusCode).json(response);
         
     }
@@ -227,6 +233,8 @@ exports.sellerDetails = async (req, res) => {
 
         let active_order = await db._get(Order, {seller: req.params.id, status:  {$in : ["PROGRESS", "CANCELLATION REQUESTED", "REVISION REQUESTED", "DELIVERED"]} });
 
+        let user = await db._find(User, {_id: req.params.id}, {}, {populate: {path: 'country', model: 'Country'}});
+
 
         var date = new Date();
         console.log(new Date(date.getFullYear(), date.getMonth(), 1));
@@ -255,7 +263,7 @@ exports.sellerDetails = async (req, res) => {
         ]);
 
         let withdrawl = await Withdrawal.aggregate([
-            { $match: { user: new ObjectId(req.params.id), status: "APPROVE" } },
+            { $match: { user: new ObjectId(req.params.id), status: "COMPLETED" } },
             {
                 $group:
                 {
@@ -279,7 +287,7 @@ exports.sellerDetails = async (req, res) => {
         let gig = await db._get(Gig, { user: req.params.id, status: "ACTIVE", deleted_at: null });
 
 
-        const response = helper.response({ data: {"orders": orders, "delivered_order": delivered_order, "completed_order": completed_order, "cancelled_order": cancelled_order, "active_order": active_order, "earnings": earnings, "balance_amount": balance_amount, "withdrawl": withdrawl, "pending_withdrawl": pending_withdrawl, "gig": gig } });
+        const response = helper.response({ data: {"orders": orders, "delivered_order": delivered_order, "completed_order": completed_order, "cancelled_order": cancelled_order, "active_order": active_order, "earnings": earnings, "balance_amount": balance_amount, "withdrawl": withdrawl, "pending_withdrawl": pending_withdrawl, "gig": gig, "user": user } });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
