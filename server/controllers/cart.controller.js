@@ -144,14 +144,17 @@ exports.updateCart = async (req, res) => {
 
     try {
            
-            var cart = {
+            var value = {
                 quantity: req.body.quantity
             }
 
-        await db._update(Cart, { _id: req.body.id }, cart);
-        let carts = await db._find(Cart, { _id: req.body.id } );
+        await db._update(Cart, { _id: req.body.id }, value);
+        let cart = await db._find(Cart, { _id: req.body.id } );
+        let carts = await db._get(Cart, {user: req.user._id}, {}, { populate: [ { path: "gig", populate:[{path: "category", model: "category"}, {path: "subCategory", model: "SubCategory"}] }, "Package" ] } );
 
-         const response = helper.response({ message: res.__('updated'), data: carts });
+        let data = {cart, carts}
+
+         const response = helper.response({ message: res.__('updated'), data });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {

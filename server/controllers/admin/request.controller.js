@@ -178,23 +178,22 @@ exports.withdrawlChangeStatus = async (req, res) => {
         let user = await db._find(User, {_id: withdrawl.user});
 
         withdrawl.status = req.params.status;
-        
+
 
         if((req.params.status).toUpperCase() == "COMPLETED"){
             user.wallet = (user.wallet - withdrawl.price);
             var notification = {
                 sender: admin._id,
+                receiver: user._id,
                 senderType: "ADMIN",
-                receiver: req.user,
                 type: "WITHDRAWL",
                 message: "Has approved your Withdrawl Request."
             }
         }else if((req.params.status).toUpperCase() == "DECLINED"){
-
             var notification = {
                 sender: admin._id,
+                receiver: user._id,
                 senderType: "ADMIN",
-                receiver: req.user,
                 type: "WITHDRAWL",
                 message: "Has declined your Withdrawl Request."
             }

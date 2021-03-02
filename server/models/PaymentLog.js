@@ -20,6 +20,7 @@ const paymentLogSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    order: { type: Schema.Types.ObjectId, ref: 'Order' },
     user: { type: Schema.Types.ObjectId, ref: 'users' },
     seller: { type: Schema.Types.ObjectId, ref: 'users' },
     status: {

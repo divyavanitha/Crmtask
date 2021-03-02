@@ -31,8 +31,6 @@ function Notification() {
          var that = $(this);
          e.preventDefault();
          const sid = that.data('id');
-         console.log('id', sid);
-         console.log(that.closest('tr'));
          $('.delete-modal').modal("show");
          $(".delete-modal-btn")
             .off()
@@ -52,7 +50,6 @@ function Notification() {
 
 const notification = useSelector((state) => state.user && state.user.notification && state.user.notification.responseData && state.user.notification.responseData.notification);
 
-console.log('notification',notification);
    return (
 
       <Fragment>
@@ -77,11 +74,11 @@ console.log('notification',notification);
                               <td className="inbox-seller">
                                  <img src={list.sender ? list.sender.profilePhoto : window.location.href+"public/images/images_1608630531.png"} className="rounded-circle" />
                                  <h6 className="mb-4">
-                                 <Link target="_blank" to={list.type == "ORDER" ? "/order/details/"+list.orderId : (list.type == "GIG" ? "/gigs" : "/buyer/requests")}>{list.sender ? list.sender.firstName : "Admin"}</Link>
+                                 <Link target="_blank" to={list.type == "ORDER" ? "/order/details/"+list.orderId : (list.type == "GIG" ? "/gigs" : (list.type == "WITHDRAWL" ? "/withdrawal/requests" : "/buyer/requests"))}>{list.sender ? list.sender.firstName : "Admin"}</Link>
                                  </h6>
                               </td>
                               <td width="400">
-                                 <Link target="_blank" to={list.type == "ORDER" ? "/order/details/"+list.orderId : (list.type == "GIG" ? "/gigs" : "/buyer/requests")}>
+                                 <Link target="_blank" to={list.type == "ORDER" ? "/order/details/"+list.orderId : (list.type == "GIG" ? "/gigs" : (list.type == "WITHDRAWL" ? "/withdrawal/requests" : "/buyer/requests"))}>
                                     {list.message}             
                                  </Link>
                               </td>

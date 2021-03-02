@@ -314,7 +314,7 @@ function Header() {
                                         <div style={{ overflow: 'hidden', overflowY: 'scroll', height: '200px' }}>
                                         {notification && notification.map((list, index) => (<div key={index} className="header-message-div">
                                                 
-                                                <Link target="_blank" to={list.type == "ORDER" ? "/order/details/"+list.orderId : (list.type == "GIG" ? "/gigs" : "/buyer/requests")}>
+                                                <Link target="_blank" to={list.type == "ORDER" ? "/order/details/"+list.orderId : (list.type == "GIG" ? "/gigs" : list.type == "WITHDRAWL" ? "/withdrawal/requests" : "/buyer/requests")}>
                                                 <img src={list.sender ? list.sender.profilePhoto : window.location.href+"public/images/images_1608630531.png"} className="rounded-circle" width="50" height="50" /><strong className="heading">{list.sender ? list.sender.firstName : "Admin"}</strong>
                                                 <p className="message text-truncate">{list.message}</p>
                                                 <p className="date text-muted">{moment(list.created_at).format('MMMM DD, YYYY')}</p></Link>

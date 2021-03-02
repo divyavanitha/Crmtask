@@ -18,7 +18,7 @@ const Cart = (props) => {
    const params = useParams();
    let history = useHistory();
 
-    const auth = useSelector((state) => state.user);
+   const auth = useSelector((state) => state.user);
 
    const [total, setTotal] = useState(0);
 
@@ -27,7 +27,7 @@ const Cart = (props) => {
       dispatch(getCartList())
       dispatch(getCartbyId(params.id))
 
-      $(document).ready(function () {
+      /*$(document).ready(function () {
          //$('.total-price').html('&#036;10.00');
          $('.processing-fee').hide();
          $('#mobile-money-form').hide();
@@ -142,20 +142,29 @@ const Cart = (props) => {
             $('#shopping-balance-form').hide();
          });
 
-      });
+      });*/
    }, []);
 
+   
+   const changePayment = async (status) => {
 
+      if(status == "STRIPE"){
+         $("#stripe-form").css("display", "block")
+         $("#shopping-balance-form").css("display", "none")
+
+      }else{
+         $("#stripe-form").css("display", "none")
+         $("#shopping-balance-form").css("display", "block")
+      }
+   }
 
    const cart = useSelector((state) => state.user && state.user.cart_lists && state.user.cart_lists.carts);
 
    const cart_details = useSelector((state) => state.user && state.user.cart_details && state.user.cart_details.responseData && state.user.cart_details.responseData.carts);
-   console.log('cart_details', cart_details);
    let cartCount = useSelector((state) => state.user.cart_count);
 
    $(document).ready(function () {
       var len = cart && cart;
-      console.log('cart1', len);
       var total = 0;
       if (params.id) {
          total = cart_details && cart_details.price
@@ -187,7 +196,7 @@ const Cart = (props) => {
                  .required('Tags is required'),*/
          })}
          onSubmit={(values, { setSubmitting, resetForm }) => {
-
+            console.log("values", values)
             let wallet = false;
             if (values.payment_mode == "WALLET") {
                wallet = true;
@@ -207,7 +216,8 @@ const Cart = (props) => {
             
 
             dispatch(checkout(data)).then(res => {
-               history.push('/buying-order-lists')
+               console.log(res,"resp")
+               if(res.statusCode != 422) history.push('/buying-order-lists')
             })
 
             resetForm();
@@ -263,18 +273,29 @@ const Cart = (props) => {
                                  <div className="col-md-12 mb-3">
                                     <div className="card payment-options">
                                        <div className="card-header">
-                                          <h5 className="mt-2"><i className="fa fa-dollar"></i> Available Shopping Balance</h5>
+                                          <h5 className="mt-2"><i className="fa fa-dollar">{auth && auth.user.wallet}</i> Available Shopping Balance</h5>
                                        </div>
                                        <div className="card-body">
                                           <div className="row">
                                              <div className="col-1">
-                                                <input id="shopping-balance" type="radio" name="method" className="form-control radio-input" checked />
+                                                <input id="shopping-balance" onClick={() => changePayment("WALLET")} type="radio" name="method" className="form-control radio-input" checked />
                                              </div>
                                              <div className="col-11">
                                                 <p className="lead mt-2">
                                                    Personal Balance - <b>{auth && auth.user.firstName}</b>
                                                    <span className="text-success font-weight-bold">&#036;{params.id ? cart_details && cart_details.price : total}</span>
                                                 </p>
+                                             </div>
+
+                                             <div className="col-1">
+                                                <input id="stripe" onClick={() => changePayment("STRIPE")} type="radio" name="method" className="form-control radio-input" />
+                                             </div>
+                                             <div className="col-11">
+                                                <p className="lead mt-2">
+                                                   Stripe - <b>{auth && auth.user.firstName}</b>
+                                                   <span className="text-success font-weight-bold">&#036;{params.id ? cart_details && cart_details.price : total}</span>
+                                                </p>
+                                                
                                              </div>
                                           </div>
                                        </div>
@@ -349,19 +370,21 @@ const Cart = (props) => {
                                     <hr className="processing-fee" />
                                     <p>Total <span className="float-right font-weight-bold total-price">&#036;{params.id ? cart_details && cart_details.price : total}</span></p>
                                     <hr />
-                                    <form onSubmit={handleSubmit} encType="multipart/form-data" id="shopping-balance-form">
-                                       <input type="hidden" name="total" onChange={handleChange} value={values.total} />
+                                    <form onSubmit={handleSubmit} encType="multipart/form-data" id="shopping-balance-form" style={{display: "block"}} >
+                                       
                                        <button type="submit" onClick={() => setFieldValue("payment_mode", "WALLET")} name="cart_submit_order" className="btn btn-lg btn-success btn-block">
                                           Pay With Shopping Balance
-                           </button>
+                                       </button>
+                                    </form>
+                                    <form onSubmit={handleSubmit} encType="multipart/form-data" style={{display: "none"}} id="stripe-form">
+                                       
+                                       <button type="submit" onClick={() => setFieldValue("payment_mode", "STRIPE")} name="cart_submit_order" className="btn btn-lg btn-success btn-block">
+                                          Pay With Stripe
+                                       </button>
                                     </form>
                                     <div id="paypal-form" className="paypal-button-container"></div>
-                                    <form action="" method="post" id="credit-card-form">
-                                       {/* credit-card-form Starts */}
-                                       <input name='stripe' type='submit' className="btn btn-lg btn-success btn-block" value='Pay With Credit Card' />
-                                    </form>
-                                    {/* credit-card-form Ends */}
-                                    <form action="" method="post" id="mercadopago-form">
+                                       {/* credit-card-form Ends */}
+                                    {/* <form action="" method="post" id="mercadopago-form">
                                        <input type="submit" name="mercadopago" className="btn btn-lg btn-success btn-block" value="Pay With Mercadopago" />
                                     </form>
                                     <form action="" method="post" id="coinpayments-form">
@@ -370,7 +393,7 @@ const Cart = (props) => {
                                     <form action="" method="post" id="paystack-form">
 
                                        <button type="submit" name="paystack" className="btn btn-lg btn-success btn-block">Pay With Paystack</button>
-                                    </form>
+                                    </form> */}
 
                                  </div>
                               </div>

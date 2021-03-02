@@ -206,6 +206,7 @@ export const getNotification = () => async dispatch => {
         type: GET_NOTIFICATION,
         payload: notification.data
     });
+    return notification.data;
 }
 
 export const deleteNotification = (id) => async dispatch => {
@@ -419,6 +420,7 @@ export const getCartList = (data) => async dispatch => {
             type: GET_CART_LIST,
             payload: cart.data.responseData
         });
+        return cart.data.responseData
     } catch (e) {
         console.log(e)
     }

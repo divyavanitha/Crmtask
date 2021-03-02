@@ -7,5 +7,6 @@
 	"inserted": "inserted",
 	"deleted": "deleted",
 	"created": "created",
-	"No favourotes.": "No favourotes."
+	"No favourotes.": "No favourotes.",
+	"low_wallet_amount": "low_wallet_amount"
 }

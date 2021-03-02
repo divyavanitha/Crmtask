@@ -1,5 +1,6 @@
 const express = require("express");
 const { Cart } = require('../models/Cart');
+const { Card } = require('../models/Card');
 const { Order } = require('../models/Order');
 const { Setting } = require('./../models/setting');
 const { Notification } = require('../models/Notification');
@@ -8,10 +9,12 @@ const { User } = require('../models/user');
 const { Admin } = require('../models/admin');
 const { Rating } = require('../models/Rating');
 const { CancellationRequest } = require('../models/CancellationRequest');
+const { PaymentLog } = require('../models/PaymentLog');
 const helper = require('../services/helper.js');
 const db = require('../services/model.js');
 const Joi = require('@hapi/joi');
 const _ = require('lodash');
+const Stripe = require('stripe');
 
 exports.checkout = async (req, res) => {
 
@@ -36,15 +39,21 @@ exports.checkout = async (req, res) => {
 
     if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
-    try {
+    //try {
         if (req.body.id) {
             var carts = await db._get(Cart, { _id: req.body.id }, {}, { populate: "gig" });
         } else {
             var carts = await db._get(Cart, { user: req.user._id }, {}, { populate: "gig" });
         }
         let total = 0;
-console.log('carts', carts);
+
+        let totalCartPrice = 0;
+
         if (carts.length > 0) {
+            for(let i in carts){
+                totalCartPrice += carts[i].price * carts[i].quantity; 
+            }
+            console.log("tot", totalCartPrice)
             for (let i in carts) {
 
                 total = total + (carts[i].price * carts[i].quantity);
@@ -56,45 +65,144 @@ console.log('carts', carts);
                 var admin = await db._find(Admin);
                 let setting = await db._find(Setting, {}, { createdAt: 0, updatedAt: 0 });
 
+                let balance = 0;
+                let commission = 0;
+                let paymentResponse;
+
                 if ((setting.seller.levelTwoRating == user.ratingPercent) && (setting.seller.levelTwoCompletedOrder == user.completedOrder)) {
-                    var commission = ((total * setting.pricing.commissionLevelTwo) / 100);
-                    let balance = total - commission;
-                    if((req.body.payment_mode).toUpperCase() == "WALLET"){
-                        buyer.wallet = buyer.wallet - total;
-                        user.wallet += balance;
-                    }
-                    admin.wallet += commission;
+                    commission = ((total * setting.pricing.commissionLevelTwo) / 100);
+                    balance = total - commission;        
                 }
                 if ((setting.seller.levelOneRating == user.ratingPercent) && (setting.seller.levelOneCompletedOrder == user.completedOrder)) {
-                    var commission = ((total * setting.pricing.commissionLevelOne) / 100);
-                    let balance = total - commission;
-                    if((req.body.payment_mode).toUpperCase() == "WALLET"){
-                        buyer.wallet = buyer.wallet - total;
-                        user.wallet += balance;
-                    }
-                    admin.wallet += commission;
-
+                    commission = ((total * setting.pricing.commissionLevelOne) / 100);
+                    balance = total - commission;
                 }
                 if ((setting.seller.topRatedRating == user.ratingPercent) && (setting.seller.topRatedCompletedOrder == user.completedOrder)) {
-                    var commission = ((total * setting.pricing.commissionTopRated) / 100);
-                    let balance = total - commission;
-                    if((req.body.payment_mode).toUpperCase() == "WALLET"){
-                        buyer.wallet = buyer.wallet - total;
-                        user.wallet += balance;
-                    }
-                    admin.wallet += commission;
+                    commission = ((total * setting.pricing.commissionTopRated) / 100);
+                    balance = total - commission;      
                 }
                 if (user.type == "NEWSELLER") {
-                    var commission = ((total * setting.pricing.commission) / 100);
-                    let balance = total - commission;
-                    if((req.body.payment_mode).toUpperCase() == "WALLET"){
-                        buyer.wallet -= total;
-                        user.wallet += balance;
-                    }
-                    admin.wallet += commission;
+                    commission = ((total * setting.pricing.commission) / 100);
+                    balance = total - commission;
                 }
 
-                var order = {
+                let paymentLog = {};
+                let random = "FIV"+ Math.floor(Math.random() * (10000 - 1)) + 1;
+                if((req.body.payment_mode).toUpperCase() == "WALLET"){
+                    console.log("wa",buyer.wallet);
+                    console.log("wa1",totalCartPrice)
+                    if(buyer.wallet >= totalCartPrice){
+
+                        paymentLog.transaction_code = random;
+                        paymentLog.service = "ORDER";
+                        paymentLog.payment_mode = "WALLET";
+                        paymentLog.amount = totalCartPrice;
+                        paymentLog.user = req.user._id;
+                        
+                        buyer.wallet = buyer.wallet - totalCartPrice;
+                        user.wallet += balance;
+                        paymentResponse = "Success";
+                    }else{
+                        const response = helper.response({ message: res.__('low_wallet_amount'), status: 422 });
+                        return res.status(response.statusCode).json(response);
+                    } 
+                }else if((req.body.payment_mode).toUpperCase() == "STRIPE"){
+                    let stripePayment = setting.payment.filter(pay => pay.name === 'STRIPE');
+
+                    let card = await db._find(Card, { user: req.user._id, isDefault: true });
+        
+                    if(stripePayment) {
+                        let currency = stripePayment.length > 0 && stripePayment[0].credentials ? stripePayment[0].credentials.filter(credential => credential.name === 'currency')[0].value : '';
+                        let secret_key = stripePayment.length > 0 && stripePayment[0].credentials ? stripePayment[0].credentials.filter(credential => credential.name === 'secret_key')[0].value : '';
+                        if(currency && secret_key) {
+                          
+                            paymentLog.transaction_code = random;
+                            paymentLog.service = "ORDER";
+                            paymentLog.payment_mode = "STRIPE";
+                            paymentLog.amount = totalCartPrice;
+                            paymentLog.user = req.user._id;
+
+                            const stripe = Stripe(secret_key);
+                            const charge = await stripe.charges.create({
+                              amount: totalCartPrice*100,
+                              currency: currency,
+                              customer: card.customerId
+                            });
+
+                            let response;
+                            let message;
+                            let status;
+                            const user = await db._find(User, { _id: req.user._id });
+                            if(charge.status == 'succeeded') {                               
+                                 paymentResponse = "Success";  
+                                 paymentLog.status = "Paid";
+                                 
+                            } else {
+                                 paymentResponse = "Failure";  
+                                 paymentLog.status = "Failed";
+                                
+                            }
+
+                            
+                        } else {
+
+                            const errorResponse = helper.response({ status: 500, error: 'Currency not available!' });
+
+                            return res.status(errorResponse.statusCode).json(errorResponse);
+                        }
+                    }
+                }
+    
+                admin.wallet += commission;
+
+                if(paymentResponse == "Success"){
+                    var order = {
+                        orderId: orderId,
+                        coupon: req.body.coupon_id,
+                        wallet: req.body.wallet,
+                        payment_mode: req.body.payment_mode,
+                        buyer: req.user._id,
+                        seller: carts[i].gig.user,
+                        gig: carts[i].gig._id,
+                        quantity: carts[i].quantity,
+                        price: carts[i].price,
+                        total: total,
+                        commission: commission,
+                        status: "PROGRESS",
+                        deliveryTime: carts[i].deliveryTime,
+                        revisions: carts[i].revisions
+                    }
+
+                    let orders = await db._store(Order, order);
+
+                    paymentLog.order = orders._id;
+
+                    let notification = {
+                        sender: orders.buyer,
+                        senderType: "BUYER",
+                        receiver: orders.seller,
+                        type: "ORDER",
+                        orderId: orders._id,
+                        message: "Has just sent you an offer on your request click here to view."
+                    }
+                    await db._store(Notification, notification);
+                    
+                    await db._delete(Cart, { "_id": carts[i]._id });
+
+                    let tot_carts = await db._get(Cart, { user: req.user._id });
+
+                    await db._store(PaymentLog, paymentLog);
+                    await db._update(User, { _id: user._id }, user);
+                    await db._update(User, { _id: buyer._id }, buyer);
+                    await db._update(Admin, {}, admin);
+
+                    const response = helper.response({ message: res.__('inserted'), data: tot_carts });
+                    return res.status(response.statusCode).json(response);
+                }else{
+                    const response = helper.response({ message: "Payment Failed", status: 422 });
+                    return res.status(response.statusCode).json(response);
+                }
+                /*var order = {
                     orderId: orderId,
                     coupon: req.body.coupon_id,
                     wallet: req.body.wallet,
@@ -122,15 +230,17 @@ console.log('carts', carts);
                     message: "Has just sent you an offer on your request click here to view."
                 }
                 await db._store(Notification, notification);
-                await db._update(User, { _id: orders.seller }, user);
-                await db._update(User, { _id: orders.buyer }, buyer);
-                await db._update(Admin, {}, admin);
+                
                 await db._delete(Cart, { "_id": carts[i]._id });
 
                 let tot_carts = await db._get(Cart, { user: req.user._id });
 
+                await db._update(User, { _id: user._id }, user);
+                await db._update(User, { _id: buyer._id }, buyer);
+                await db._update(Admin, {}, admin);
+
                 const response = helper.response({ message: res.__('inserted'), data: tot_carts });
-                return res.status(response.statusCode).json(response);
+                return res.status(response.statusCode).json(response);*/
             }
         } else {
             const response = helper.response({ message: res.__('cart_empty') });
@@ -140,7 +250,7 @@ console.log('carts', carts);
 
 
 
-    } catch (err) {
+    /*} catch (err) {
         if (err[0] != undefined) {
             for (i in err.errors) {
                 return res.status(422).json(err.errors[i].message);
@@ -148,10 +258,9 @@ console.log('carts', carts);
         } else {
             return res.status(422).json(err);
         }
-    }
+    }*/
 
 }
-
 
 
 exports.updateOrder = async (req, res) => {

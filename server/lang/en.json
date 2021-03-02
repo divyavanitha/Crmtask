@@ -8,5 +8,6 @@
 	"inserted": "Successfully inserted!",
 	"created": "Successfully created!",
 	"cart_empty": "Your Cart is empty",
-	"No favourotes.": "No favourotes."
+	"No favourotes.": "No favourotes.",
+	"low_wallet_amount": "Your Wallet amount is lower than payable amount."
 }

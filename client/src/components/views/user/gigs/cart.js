@@ -25,7 +25,9 @@ const Cart = (props) => {
 
    useEffect(() => {
       
-      dispatch(getCartList())
+      dispatch(getCartList()).then(res => {
+        if((res && res.carts.length) > 0) setCart(res && res.carts)
+      })
       $('body').on('click', '.delete', function (e) {
          var that = $(this);
          e.preventDefault();
@@ -57,14 +59,7 @@ const Cart = (props) => {
 
    }, []);
 
-   const carts = useSelector((state) => state.user && state.user.cart_lists && state.user.cart_lists.carts);
-
    let cartCount = useSelector((state) => state.user.cart_count);
-
-   useEffect(() => {
-      setCart(carts && carts)
-   })
-
 
     const addQuantity = (e, id, qty) => {
         let data = {
@@ -72,9 +67,9 @@ const Cart = (props) => {
          quantity: qty+1
         }
         dispatch(updateCart(data)).then(res => {
-            console.log(res && res.price)
-            setQuantity(res && res.quantity)
-            setTotalPrice((res && res.price) * (res && res.quantity))
+            setQuantity(res && res.cart.quantity)
+            setTotalPrice((res && res.cart.price) * (res && res.cart.quantity))
+            setCart(res && res.carts)
             updateTotal()
         })
     }
@@ -87,8 +82,9 @@ const Cart = (props) => {
         }
 
         dispatch(updateCart(data)).then(res => {
-            setQuantity(res && res.quantity)
-            setTotalPrice((res && res.price) * (res && res.quantity))
+            setQuantity(res && res.cart.quantity)
+            setTotalPrice((res && res.cart.price) * (res && res.cart.quantity))
+            setCart(res && res.carts)
             updateTotal()
         })
     }
@@ -103,7 +99,7 @@ const Cart = (props) => {
  
       var total = 0;
       $.each(len, function (index, value) {
-         let qty = (quantity !=0) ? quantity : value.quantity;
+         let qty = value.quantity;
          total = total + ((value.price) * (qty));
       });
    
@@ -176,7 +172,7 @@ const Cart = (props) => {
                                                 <ul className="ml-0 mb-2" style={{ listStyleType: "circle" }}>
                                                 </ul>
                                              </a>
-                                             <a href="javascript:;" data-id={list._id} className="text-muted remove-link delete">
+                                             <a href="" data-id={list._id} className="text-muted remove-link delete">
                                                 <i className="fa fa-times"></i> Remove Proposal </a>
                                           </div>
                                        </div>
@@ -184,15 +180,15 @@ const Cart = (props) => {
                                        <h6 className="clearfix">
                                           Proposal/Service Quantity
                                           <strong className="float-right price ml-2 mt-2">
-                                             &#036;{(totalPrice != 0) ? totalPrice : ((list.price) * (list.quantity))}
+                                             &#036;{((list.price) * (list.quantity))}
                                           </strong>
                                           <div className="quantity-control" style={{float:"right"}}>
                                               <div className="increase ">
-                                                  <a className="btn btn-plus" onClick={(e) => addQuantity(e,list._id, ((quantity != 0) ? quantity : list.quantity))}>+</a>
+                                                  <a className="btn btn-plus" onClick={(e) => addQuantity(e,list._id, (list.quantity))}>+</a>
                                               </div>
-                                              <span className="quantity"><input className="form-control numbers" onChange={updateQuantity} value={(quantity != 0) ? quantity : list.quantity}  min="1" maxLength="2" style={{ width: '50px', textAlign: 'center', padding: '10px' }} name="quantity" /></span>
+                                              <span className="quantity"><input className="form-control numbers" onChange={updateQuantity} value={list.quantity}  min="1" maxLength="2" style={{ width: '50px', textAlign: 'center', padding: '10px' }} name="quantity" /></span>
                                               <div className="decrease ">
-                                                  <a className="btn btn-plus" onClick={(e) => removeQuantity(e, list._id, ((quantity != 0) ? quantity : list.quantity))}>-</a>
+                                                  <a className="btn btn-plus" onClick={(e) => removeQuantity(e, list._id, (list.quantity))}>-</a>
                                               </div>
                                           </div>
 
