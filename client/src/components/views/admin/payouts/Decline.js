@@ -59,13 +59,11 @@ const Pending = () => {
 
         },
         dataFilter: function (response) {
-          console.log('fgh',response);
           var data = JSON.parse(response);
           var json = {};
           json.recordsTotal = data.responseData.total;
           json.recordsFiltered = data.responseData.total;
           json.data = data.responseData.data.withdrawl;
-          console.log('sfsd',json);
           return JSON.stringify(json); // return JSON string
         }
       },
@@ -94,7 +92,6 @@ const Pending = () => {
         { "data": "status" },
         {
           "data": function (data, type, row) {
-            console.log(data);
             var button =  `<a title="user-details" class="userdetails" data-id=`+data.user._id+` ><i class="fa fa-info-circle"></i></a>`;
             return button;
           }

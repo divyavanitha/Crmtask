@@ -697,7 +697,7 @@ export const getWithdrawals = () => async dispatch => {
 
 };
 
-export const withdraw = (data) => async dispatch => {
+export const withdrawl = (data) => async dispatch => {
 
     try {
 
@@ -775,6 +775,42 @@ export const getCard = () => async dispatch => {
 
 };
 
+export const getWallet = () => async dispatch => {
+
+    try {
+        const response = await axios.get(`/api/wallet`);
+
+        return response.data.responseData;
+
+    } catch (e) {
+        console.log(e);
+    }
+
+};
+
+export const removeCard = (id) => async dispatch => {
+    try {
+        let response = await axios.delete(`/api/card/remove/${id}`);
+        response.data.status = 'success';
+        return response.data;
+    } catch (e) {
+        e.response.data.status = 'error';
+        return e.response.data;
+    }
+};
+
+export const defaultCard = (id, status) => async dispatch => {
+    try {
+        let response = await axios.get(`/api/default/card/${id}`);
+        response.data.status = 'success';
+        return response.data;
+    } catch (e) {
+        e.response.data.status = 'error';
+        return e.response.data;
+    }
+};
+
+
 export const getPayoutCard = () => async dispatch => {
 
     try {
@@ -817,12 +853,6 @@ export const addPayoutCard = (data) => async dispatch => {
 
     try {
         const response = await axios.post(`/api/card/payout/add`, data);
-
-         dispatch({
-            type: ADDPAYOUTCARD,
-            payload: response.data.responseData.card
-        })
-
         return response.data.responseData;
 
     } catch (e) { }
@@ -844,6 +874,30 @@ export const addMoney = (data) => async dispatch => {
     } catch (e) {
         
     }
+
+};
+
+export const changePassword = (data) => async dispatch => {
+
+    try {
+
+        const response = await axios.post(`/api/change/password`, data);
+
+        return response.data.responseData;
+
+    } catch (e) { }
+
+};
+
+export const updateCart = (data) => async dispatch => {
+
+    try {
+
+        const response = await axios.patch(`/api/cart`, data);
+
+        return response.data.responseData;
+
+    } catch (e) { }
 
 };
 

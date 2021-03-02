@@ -59,14 +59,17 @@ export const sellerDetails = (id) => async dispatch => {
     try {
         let token = localStorage.adminToken;
         let response = await axios.get(`/api/admin/userdetails/${id}`, { headers: { 'Authorization': `${token}` } });
+        console.log("response", response)
         dispatch({
             type: USER_DETAILS,
             payload: response.data
         })
+        return response.data;
     } catch (e) {
         dispatch({
             type: USER_DETAILS,
             payload: null
         })
+        return e.response.data;
     }
 };

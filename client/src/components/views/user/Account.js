@@ -7,7 +7,8 @@ import * as Yup from 'yup';
 import $ from 'jquery';
 import AccountSettings from "./AccountSettings.js";
 
-import { getCountry, getState, getCity, getLanguage, getCard, getPayoutCard, addCard, addPayoutCard } from "../../../_actions/user.action";
+import { getCountry, getState, getCity, getLanguage, getCard, getPayoutCard, addCard, addPayoutCard, removeCard, defaultCard, changePassword } from "../../../_actions/user.action";
+import { getProfile } from "../../../_actions/profile.action";
 
 const Account = (props) => {
 
@@ -17,16 +18,33 @@ const Account = (props) => {
    const auth = useSelector((state) => state.user);
    const profile = useSelector((state) => state.profile && state.profile.getprofile && state.profile.getprofile.responseData && state.profile.getprofile.responseData.user);
    const [card, setCard] = useState('');
-   const cards = useSelector((state) => state.user.cards);
-   const payoutCards = useSelector((state) => state.user.payout_cards);
+   const cardData = useSelector((state) => state.user.cards);
+   const payoutCardData = useSelector((state) => state.user.payout_cards);
+   const [cards, setCards] = useState(cardData)
+   const [payoutCards, setPayoutCards] = useState(payoutCardData)
 
    useEffect(() => {
+      dispatch(getProfile())
+      dispatch(getCard()).then((response) => {
+         console.log("res", response.cards);
 
-      dispatch(getCard())
+         setCards(response && response.cards);
+           
+      })
 
+      dispatch(getPayoutCard()).then((response) => {
+         console.log("res", response);
+
+         setPayoutCards(response && response.cards);
+           
+      })
+   
    }, []);
 
+
    const addcard = () => {
+
+
       if(card == 'PAYOUT') {
 
          let data = {
@@ -37,7 +55,16 @@ const Account = (props) => {
             cvc: $('input[name=cvc]').val(),
          }
 
-         dispatch(addPayoutCard(data))
+       dispatch(addPayoutCard(data)).then((response) => {
+
+         console.log("pay", response && response.card)
+
+         setPayoutCards(response && response.card);
+
+         $('#stripe-modal').modal("hide");
+           
+       })
+         
 
       } else if(card == 'CHARGE') {
 
@@ -48,10 +75,30 @@ const Account = (props) => {
             exp_year: $('input[name=year]').val(),
             cvc: $('input[name=cvc]').val(),
          }
-
          dispatch(addCard(data))
+         $('#stripe-modal').modal("hide");
 
       }
+   }
+
+   const removecard = (id, e) => {
+       dispatch(removeCard(id)).then((response) => {
+         let c = cards.filter((res) => res._id !== id);
+         setCards(response && response.responseData);
+           
+       })
+   }
+
+   const defaultcard = (id) => {
+
+      dispatch(defaultCard(id)).then((response) => {
+
+         console.log("car", response && response.responseData)
+
+         setCards(response && response.responseData);
+           
+       })
+
    }
 
 
@@ -62,59 +109,31 @@ const Account = (props) => {
          enableReinitialize
          initialValues={{
                id: profile ? profile._id : '',
-               first_name: profile ? profile.firstName : '',
-               last_name: profile ? profile.lastName : '',
-               email: profile ? profile.email : '',
-               mobile: profile ? profile.mobile : '',
-               city: profile ? profile.city : '',
-               country: profile ? profile.country : '',
-               state: profile ? profile.state : '',
-               profile_photo: profile ? profile.profilePhoto : '',
-               cover_photo: profile ? profile.coverPhoto : '',
-               headline: profile ? profile.headline : '',
-               description: profile ? profile.description : ''
+               old_password: '',
+               new_password: '',
+               confirm_password: '',
          }
          }
 
-         validationSchema={Yup.object().shape({
-            first_name: Yup.string()
-                    .required('First Name is required'),
-            last_name: Yup.string()
-                    .required('Last Name is required'),
-            email: Yup.string()
-                    .required('Email is required'),
-            mobile: Yup.string()
-                    .required('Mobile is required'),
-            city: Yup.string()
-                    .required('City is required'),
-            country: Yup.string()
-                    .required('Country is required'),
-            state: Yup.string()
-                    .required('State is required'),
-            headline: Yup.string()
-                    .required('Headline is required'),
-            description: Yup.string()
-                    .required('Description is required')
-           
-         })}
+         /*validationSchema={Yup.object().shape({
+            old_password: Yup.string()
+                    .required('Old Password is required'),
+            new_pasword: Yup.string()
+                    .required('New Password is required'),
+            confirm_password: Yup.string()
+                    .required('Confirm Password is required')
+         })}*/
          onSubmit={(values, { setSubmitting, resetForm }) => {
             console.log("value", values);
-                const data = new FormData();
-                data.append("id", profile._id);
-                data.append("first_name", values.first_name);
-                data.append("last_name", values.last_name);
-                data.append("email", values.email);
-                data.append("mobile", values.mobile);
-                data.append("city", values.city);
-                data.append("country", values.country);
-                data.append("state", values.state);
-                data.append("headline", values.headline);
-                data.append("description", values.description);
-                data.append("cover_photo", values.cover_photo);
-                data.append("profile_photo", values.profile_photo);
+                const data = {
+                  id: profile._id,
+                  new_password: values.new_password,
+                  old_password: values.old_password,
+                  confirm_password: values.confirm_password
+                }
 
                 
-
+                dispatch(changePassword(data))
                 setSubmitting(false);
 
          }}>
@@ -184,7 +203,7 @@ const Account = (props) => {
                <form method="post" className="clearfix mb-3">
    
                   <div className="form-group row">
-                     { cards && cards.map(card => <div className="col-md-12 mb-3"><div className="col-md-2" style={{ padding: '10px', background: '#ededed'}}> {card.brand} </div> <div className="col-md-2" style={{ padding: '10px', background: '#ededed'}}>{card.isDefault ? <span style={{background: '#3A6CFF', color: '#fff', padding: '5px', borderRadius: '5px' }}>Default</span> : ""}</div> <div className="col-md-4" style={{ padding: '10px', background: '#ededed'}}>**** **** **** {card.lastFour}</div><div className="col-md-2"> <a style={{background: '#e00606', color: '#fff', padding: '5px', borderRadius: '5px', float: 'left', marginTop: '5px' }}>X Remove</a> </div> </div>) }
+                     { cards && cards.map(card => <div className="col-md-12 mb-3 cards"><div className="col-md-2" style={{ padding: '10px', background: '#ededed'}}> {card.brand} </div> <div className="col-md-2" style={{ padding: '10px', background: '#ededed'}}>{card.isDefault ? <a ><span style={{background: '#3A6CFF', color: '#fff', padding: '5px', borderRadius: '5px' }}>Default</span></a> : <a onClick={(e) => { defaultcard(card._id, "CHARGE") }}><span style={{color: 'black', padding: '5px', borderRadius: '5px' }}>Set Default</span></a>}</div> <div className="col-md-4" style={{ padding: '10px', background: '#ededed'}}>**** **** **** {card.lastFour}</div><div className="col-md-2"> <a style={{background: '#e00606', color: '#fff', padding: '5px', borderRadius: '5px', float: 'left', marginTop: '5px' }} onClick={(e) => { removecard(card._id, e) }} >X Remove</a> </div> </div>) }
                      
                   </div>
 
@@ -194,11 +213,11 @@ const Account = (props) => {
                <h5 className="mb-4"> Payout Cards (Debit) </h5>
                <form method="post" className="clearfix mb-3">
                   <div className="form-group row">
-                     { payoutCards && payoutCards.map(card => <div className="col-md-12 mb-3"><div className="col-md-2" style={{ padding: '10px', background: '#ededed'}}> {card.brand} </div> <div className="col-md-2" style={{ padding: '10px', background: '#ededed'}}>{card.isDefault ? <span style={{background: '#3A6CFF', color: '#fff', padding: '5px', borderRadius: '5px' }}>Default</span> : ""}</div> <div className="col-md-4" style={{ padding: '10px', background: '#ededed'}}>**** **** **** {card.lastFour}</div><div className="col-md-2"> <a style={{background: '#e00606', color: '#fff', padding: '5px', borderRadius: '5px', float: 'left', marginTop: '5px' }}>X Remove</a> </div> </div>) }
+                     {payoutCards && payoutCards ? (<div className="col-md-12 mb-3"><div className="col-md-2" style={{ padding: '10px', background: '#ededed'}}> {payoutCards && payoutCards.brand} </div> <div className="col-md-2" style={{ padding: '10px', background: '#ededed'}}>{<a ><span style={{background: '#3A6CFF', color: '#fff', padding: '5px', borderRadius: '5px' }}>Default</span></a>}</div> <div className="col-md-4" style={{ padding: '10px', background: '#ededed'}}>**** **** **** {payoutCards && payoutCards.lastFour}</div> </div>) : ""}
                      
                   </div>
 
-                  <a href="" data-toggle="modal" data-target="#stripe-modal" className="btn btn-success float-right"  onClick={() => { setCard('PAYOUT') }} >{ payoutCards && payoutCards.length > 0 ? 'Change Card' : 'Add Card' } </a>
+                  <a href="" data-toggle="modal" data-target="#stripe-modal" className="btn btn-success float-right"  onClick={() => { setCard('PAYOUT') }} >{ payoutCards && payoutCards ? 'Change Card' : 'Add Card' } </a>
                </form>
                <hr />
                {/*<h5 className="mb-4"> REAL-TIME NOTIFICATIONS </h5>
@@ -226,26 +245,26 @@ const Account = (props) => {
                      </form>
                      <hr />*/}
                <h5 className="mb-4"> Change Password </h5>
-               <form method="post" className="clearfix mb-3">
+               <form onSubmit={handleSubmit} encType="multipart/form-data">
                   <div className="form-group row">
                      <label className="col-md-4 col-form-label"> Enter Old Password </label>
                      <div className="col-md-8">
-                        <input type="text" name="old_pass" className="form-control" required="" />
+                        <Field type="password" onChange={handleChange} name="old_password" value={values.old_password} className="form-control" required="" />
                      </div>
                   </div>
                   <div className="form-group row">
                      <label className="col-md-4 col-form-label"> Enter New Password </label>
                      <div className="col-md-8">
-                        <input type="text" name="new_pass" className="form-control" required="" />
+                        <Field type="password" onChange={handleChange} name="new_password" value={values.new_password} className="form-control" required="" />
                      </div>
                   </div>
                   <div className="form-group row">
                      <label className="col-md-4 col-form-label"> Confirm New Password </label>
                      <div className="col-md-8">
-                        <input type="text" name="new_pass_again" className="form-control" required="" />
+                        <Field type="password" onChange={handleChange} name="confirm_password" value={values.confirm_password} className="form-control" required="" />
                      </div>
                   </div>
-                  <button type="submit" name="change_password" className="btn btn-success float-right">
+                  <button type="submit" className="btn btn-success float-right">
                      Change Password  </button>
                </form>
 
@@ -571,27 +590,27 @@ const Account = (props) => {
                                     <div className="modal-body">
                                         <form onSubmit={handleSubmit} >
                                             <div className="form-group">
-                                                <Field type="text" name="name" value={values.name} onChange={handleChange} placeholder="Enter Your Name" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} />
+                                                <Field type="text" name="name" value={values.name} onChange={handleChange} required placeholder="Enter Your Name" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} />
                                                 <ErrorMessage name="name" component="div" className="invalid-feedback" />
                                             </div>
                                             <div className="form-group">
-                                                <Field type="text" name="number" value={values.number} maxLength="16" onChange={handleChange} placeholder="Enter Card Number" className={'form-control numbers' + (errors.number && touched.number ? ' is-invalid' : '')} />
+                                                <Field type="text" required name="number" value={values.number} maxLength="16" onChange={handleChange} placeholder="Enter Card Number" className={'form-control numbers' + (errors.number && touched.number ? ' is-invalid' : '')} />
                                                 <ErrorMessage name="number" component="div" className="invalid-feedback" />
                                             </div>
                                             <div className="form-group">
                                                 <div className="row">
                                                     <div className="col-md-4 col-sm-12">
-                                                        <Field type="text" name="month" value={values.month} maxLength="2" onChange={handleChange} placeholder="Month" className={'form-control numbers' + (errors.month && touched.month ? ' is-invalid' : '')} />
+                                                        <Field type="text" required name="month" value={values.month} maxLength="2" onChange={handleChange} placeholder="Month" className={'form-control numbers' + (errors.month && touched.month ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="month" component="div" className="invalid-feedback" />
                                                     </div>
                                                     
                                                     <div className="col-md-4 col-sm-12">
-                                                        <Field type="text" name="year" value={values.year} maxLength="4" onChange={handleChange} placeholder="Year" className={'form-control numbers' + (errors.year && touched.year ? ' is-invalid' : '')} />
+                                                        <Field type="text" required name="year" value={values.year} maxLength="4" onChange={handleChange} placeholder="Year" className={'form-control numbers' + (errors.year && touched.year ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="year" component="div" className="invalid-feedback" />
                                                     </div>
                                                     
                                                     <div className="col-md-4 col-sm-12">
-                                                        <Field type="text" name="cvc" value={values.cvc} maxLength="3" onChange={handleChange} placeholder="CVC" className={'form-control numbers' + (errors.cvc && touched.cvc ? ' is-invalid' : '')} />
+                                                        <Field type="text" required name="cvc" value={values.cvc} maxLength="3" onChange={handleChange} placeholder="CVC" className={'form-control numbers' + (errors.cvc && touched.cvc ? ' is-invalid' : '')} />
                                                         <ErrorMessage name="cvc" component="div" className="invalid-feedback" />
                                                     </div>
 

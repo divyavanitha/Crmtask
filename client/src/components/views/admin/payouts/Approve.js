@@ -17,9 +17,14 @@ const Pending = () => {
   const dispatch = useDispatch();
   let history = useHistory();
 
+
   useEffect(() => {
 
-
+    $('body').on('click', '.userdetails', function (e) {
+      e.preventDefault();
+      history.push('/admin/userdetails/' + $(this).data('id'))
+    });
+    
     $('#datatable').DataTable({
       language: {
         searchPlaceholder: "Search"
@@ -55,13 +60,11 @@ const Pending = () => {
 
         },
         dataFilter: function (response) {
-          console.log('fgh',response);
           var data = JSON.parse(response);
           var json = {};
           json.recordsTotal = data.responseData.total;
           json.recordsFiltered = data.responseData.total;
           json.data = data.responseData.data.withdrawl;
-          console.log('sfsd',json);
           return JSON.stringify(json); // return JSON string
         }
       },
@@ -90,7 +93,7 @@ const Pending = () => {
         { "data": "status" },
         {
           "data": function (data, type, row) {
-            var button =  `<a title="user-details" data-id=`+data._id+` ><i class="fa fa-info-circle"></i></a>`;
+            var button =  `<a title="user-details" class="userdetails" data-id=`+data.user._id+` ><i class="fa fa-info-circle"></i></a>`;
             return button;
           }
         }

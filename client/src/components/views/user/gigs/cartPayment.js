@@ -150,7 +150,7 @@ const Cart = (props) => {
    const cart = useSelector((state) => state.user && state.user.cart_lists && state.user.cart_lists.carts);
 
    const cart_details = useSelector((state) => state.user && state.user.cart_details && state.user.cart_details.responseData && state.user.cart_details.responseData.carts);
-console.log('cart_details', cart_details);
+   console.log('cart_details', cart_details);
    let cartCount = useSelector((state) => state.user.cart_count);
 
    $(document).ready(function () {
@@ -161,7 +161,7 @@ console.log('cart_details', cart_details);
          total = cart_details && cart_details.price
       } else {
          $.each(len, function (index, value) {
-            total = total + value.price;
+            total = total + ((value.price) * (value.quantity));
          });
       }
       setTotal(total);

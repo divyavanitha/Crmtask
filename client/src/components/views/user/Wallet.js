@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import moment from 'moment';
 import Loader from 'react-loader-spinner';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import { getCard, addMoney, withdraw, findUser } from "../../../_actions/user.action";
+import { getCard, addMoney, withdrawl, findUser, getWallet } from "../../../_actions/user.action";
 import * as Yup from 'yup';
 import $ from 'jquery';
 
@@ -21,8 +21,6 @@ function Wallet() {
     const auth = useSelector((state) => state.user);
     const [cards, setCards] = useState([]);
 
-
-
     const [gigAmount, setGigAmount] = useState(0);
     const [pendingAmount, setPendingAmount] = useState(0);
     const [withdrawalAmount, setWithdrawalAmount] = useState(0);
@@ -30,12 +28,14 @@ function Wallet() {
     const [revenues, setRevenues] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [wallet, setWallet] = useState(0);
+    const [paymentHistory, setPaymentHistory] = useState([]);
 
     let settings = useSelector((state) => state.settings);
 
     let gigSetting = settings.settings && settings.settings.gig;
 
     const user = useSelector((state) => state.user && state.user.find_user && state.user.find_user.responseData && state.user.find_user.responseData.user);
+
 
     useEffect(() => {
       setIsLoading(true);
@@ -50,8 +50,15 @@ function Wallet() {
       })
 
       dispatch(findUser())
+      setIsLoading(true);
+      dispatch(getWallet()).then((response) => {
+        console.log("responseData",response)
+        setPaymentHistory(response)
+        setIsLoading(false);
+      })
       setWallet(user && user.wallet);
-    }, []);
+      
+    }, [user && user.wallet]);
 
     const handleChange = ({currentTarget: input}) => {
       if(input.value) setPrice(input.value)
@@ -64,7 +71,7 @@ function Wallet() {
       }
       if(price && price != 0 && price >= (gigSetting && gigSetting.minimumWithdrawalLimit)) {
          setIsLoading(true);
-         dispatch(withdraw(data)).then((response) => {
+         dispatch(withdrawl(data)).then((response) => {
             $('#stripe_Modal').modal('hide');
             setIsLoading(false)
             setPrice("");
@@ -99,7 +106,9 @@ function Wallet() {
                 };
                 
                  dispatch(addMoney(data)).then(res => {
-                  
+                  console.log('res', res.paymentHistory)
+                  setWallet(res.wallet)
+                  setPaymentHistory(res.paymentHistory)
                  })
                 
                 resetForm();
@@ -131,9 +140,9 @@ function Wallet() {
 <div className="container mt-5 mb-3">
    <div className="row">
       <div className="col-md-12">
-         <h2 className="pull-left">Revenue Earned</h2>
+         <h2 className="pull-left">Add Money</h2>
          <p className="lead pull-right">
-            Available For Withdrawal: <span className="font-weight-bold text-success"> &#036;{wallet}</span>
+            Available Wallet: <span className="font-weight-bold text-success"> &#036;{wallet}</span>
          </p>
       </div>
       <div className="col-md-12">
@@ -173,7 +182,7 @@ function Wallet() {
                            </div>
                            <div className="col-md-4">
                               <div className="rs-detail">
-                                 <p> Available Income </p>
+                                 <p> Available Wallet </p>
                                  <h2> &#036;{wallet}</h2>
                               </div>
                            </div>
@@ -186,19 +195,21 @@ function Wallet() {
                   <table className="table table-striped dataTable" id="cus-table-2" width="100%">
                      <thead>
                         <tr>
+                           <th>Transaction code</th>
                            <th>Date</th>
-                           <th>For</th>
+                           <th>Payment Mode</th>
                            <th>Amount</th>
                         </tr>
                      </thead>
                      <tbody>
-                     {revenues && revenues.map((revenue, index) => (
+                     {paymentHistory && paymentHistory.map((payment, index) => (
                         <tr key={index}>
-                           <td>{ moment(revenue.completed_at).format('MMMM DD, YYYY') }</td>
+                           <td>{ payment.transaction_code }</td>
+                           <td>{ moment(payment.created_at).format('MMMM DD, YYYY') }</td>
                            <td> 
-                              Order Revenue (<Link to={"/order/details/"+revenue._id} className="text-success"> View Order </Link>)
+                              { payment.payment_mode }
                            </td>
-                           <td className="text-success"> +&#036;{revenue.total-revenue.adminCommission} </td>
+                           <td> +&#036;{payment.amount} </td>
                         </tr>
                      ))}
                      </tbody>

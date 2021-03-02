@@ -20,13 +20,12 @@ const Pending = () => {
   const params = useParams();
   console.log(params);
   useEffect(() => {
-
     dispatch(sellerDetails(params.id))
 
   }, []);
 
   const details = useSelector((state) => state.requests && state.requests.details && state.requests.details.responseData);
-  console.log(details);
+  console.log(details && details.user);
 
   return (
     <Fragment>
@@ -63,7 +62,7 @@ const Pending = () => {
     <h4 className="h4">
 
         <i className="fa fa-info-circle text-success"></i>  
-        {details && details.orders[0] && details.orders[0].seller.firstName}'s Info
+        {details && details.user.firstName}'s Info
 
     </h4>
 
@@ -76,14 +75,14 @@ const Pending = () => {
             <div className="seller-info mb-3">
 
                 
-                <img src={details && details.orders[0] && details.orders[0].seller.profilePhoto} className="rounded img-fluid" />
+                <img src={details && details.user.profilePhoto} className="rounded img-fluid" />
 
                 
                 <div className="seller-info-title">
 
-                    <span className="seller-info-inner text-capitalize"> {details && details.orders[0] && details.orders[0].seller.firstName} </span>
+                    <span className="seller-info-inner text-capitalize"> {details && details.user.firstName} </span>
 
-                    <span className="seller-info-type"> {details && details.orders[0] && details.orders[0].seller.country ? details && details.orders[0] && details.orders[0].seller.country.name : ""} </span>
+                    <span className="seller-info-type"> {details && details.user.country ? details && details.user.name : ""} </span>
 
 
                 </div>
@@ -96,33 +95,32 @@ const Pending = () => {
 
                     <p className="lead">
 
-                        <span className="font-weight-bold"> Full Name : </span> {details && details.orders[0] && details.orders[0].seller.firstName} {details && details.orders[0] && details.orders[0].seller.lastName}
+                        <span className="font-weight-bold"> Full Name : </span> {details && details.user.firstName} {details && details.user.lastName}
                     </p>
 
 
                     <p className="lead">
 
-                        <span className="font-weight-bold"> Username : </span> {details && details.orders[0] && details.orders[0].seller.firstName}
+                        <span className="font-weight-bold"> Username : </span> {details && details.user.firstName}
                     </p>
 
                     <p className="lead">
-                        <span className="font-weight-bold"> Email : </span> {details && details.orders[0] && details.orders[0].seller.email}
+                        <span className="font-weight-bold"> Email : </span> {details && details.user.email}
                     </p>
 
                 
                     <p className="lead">
-                        <span className="font-weight-bold"> Phone : </span> {details && details.orders[0] && details.orders[0].seller.mobile}                     
+                        <span className="font-weight-bold"> Phone : </span> {details && details.user.mobile}                     
                     </p>
                     
                     <p className="lead">
-
-                        <span className="font-weight-bold"> Level : </span> {details && details.orders[0] && details.orders[0].seller.type}
+                     <span className="font-weight-bold"> Level : </span> {details && details.user.type}
                     </p>
 
                     <p className="lead">
 
                         <span className="font-weight-bold">Main Conversational Language :</span>
-                        {details && details.orders[0] && details.orders[0].seller.language.map((list, index) => (
+                        {details && details.user.language.map((list, index) => (
                           <span>{list.language}</span>))} 
                     </p>
 
@@ -143,13 +141,13 @@ const Pending = () => {
 
                     <p className="lead">
 
-                        <span className="font-weight-bold"> Country : </span> {details && details.orders[0] && details.orders[0].seller.country ? details && details.orders[0] && details.orders[0].seller.country.name : ""}
+                        <span className="font-weight-bold"> Country : </span> {details && details.user.country ? details && details.user && details && details.user.country.name : ""}
                     </p>
 
 
                     <p className="lead">
 
-                        <span className="font-weight-bold"> Register Date : </span> { moment(details && details.orders[0] && details.orders[0].seller.created_at).format('MMMM DD, YYYY') }
+                        <span className="font-weight-bold"> Register Date : </span> { moment(details && details.user.created_at).format('MMMM DD, YYYY') }
                     </p>
 
                 </div>
@@ -159,7 +157,7 @@ const Pending = () => {
                 <h5 className="text-muted font-weight-bold"> Headline </h5>
 
                 <p>
-                    {details && details.orders[0] && details.orders[0].seller.headline}                
+                    {details && details.user.headline}                
                 </p>
 
             </div>
@@ -170,7 +168,7 @@ const Pending = () => {
 
                 <h5 className="text-muted font-weight-bold">About</h5>
 
-                <p>{details && details.orders[0] && details.orders[0].seller.description}</p>
+                <p>{details && details.user.description}</p>
 
             </div>
 
@@ -178,7 +176,7 @@ const Pending = () => {
 
         <div className="col-md-8">
 
-            <h3 className="pb-1">{details && details.orders[0] && details.orders[0].seller.firstName}'s Orders </h3>
+            <h3 className="pb-1">{details && details.user.firstName}'s Orders </h3>
 
             <div className="row box" style={{height:"auto"}}>
 
@@ -226,7 +224,7 @@ const Pending = () => {
 
             </div>
 
-            <h3 className="pb-1">{details && details.orders[0] && details.orders[0].seller.firstName}'s Earnings</h3>
+            <h3 className="pb-1">{details && details.user.firstName}'s Earnings</h3>
 
             <div className="row box" style={{height:"auto"}}>
 
@@ -260,14 +258,14 @@ const Pending = () => {
                     <p> Availble Income </p>
 
                     <h2>
-                          {details && details.orders[0] && details.orders[0].seller.wallet}               
+                          {details && details.user.wallet}               
                     </h2>
 
                 </div>
 
             </div>
 
-            <h2>{details && details.orders[0] && details.orders[0].seller.firstName}'s Proposals/Services</h2>
+            <h2>{details && details.user.firstName}'s Proposals/Services</h2>
 
             <div className="table-responsive pt-1">
 

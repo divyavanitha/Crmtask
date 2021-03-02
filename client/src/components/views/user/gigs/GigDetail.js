@@ -448,7 +448,7 @@ const GigDetail = (props) => {
                                                     <ul className="buyables m-b-25 list-unstyled ">
                                                         <li className="basket-item mb-4">
                                                             <span className="item "><span className="name"><span>Quantity:</span></span></span>
-                                                            <div className="quantity-control ">
+                                                            <div className="quantity-control">
                                                                 <div className="increase ">
                                                                     <a className="btn btn-plus" onClick={addQuantity}>+</a>
                                                                 </div>

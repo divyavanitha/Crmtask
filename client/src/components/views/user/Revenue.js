@@ -1,10 +1,10 @@
 import React, { Fragment, useState } from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter, Link, useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import moment from 'moment';
 import Loader from 'react-loader-spinner';
-import { getMenu, getRevenues, withdraw } from "../../../_actions/user.action";
+import { getMenu, getRevenues, withdrawl, findUser } from "../../../_actions/user.action";
 import Gig from "./gigs/Gig";
 import $ from 'jquery';
 
@@ -17,17 +17,21 @@ import OwlCarousel from 'react-owl-carousel';
 function Revenue() {
 
     const dispatch = useDispatch();
+    let history = useHistory();
     const auth = useSelector((state) => state.user);
     const [gigAmount, setGigAmount] = useState(0);
     const [pendingAmount, setPendingAmount] = useState(0);
     const [withdrawalAmount, setWithdrawalAmount] = useState(0);
     const [price, setPrice] = useState("");
     const [revenues, setRevenues] = useState([]);
+    const [wallet, setWallet] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
 
     let settings = useSelector((state) => state.settings);
 
     let gigSetting = settings.settings && settings.settings.gig;
+
+    const user = useSelector((state) => state.user && state.user.find_user && state.user.find_user.responseData && state.user.find_user.responseData.user);
 
     useEffect(() => {
       setIsLoading(true);
@@ -38,7 +42,9 @@ function Revenue() {
          setRevenues(response.revenues);
          setIsLoading(false)
       })
-    }, []);
+      dispatch(findUser())
+      setWallet(user && user.wallet)
+    }, [user && user.wallet]);
 
     const handleChange = ({currentTarget: input}) => {
       if(input.value) setPrice(input.value)
@@ -52,10 +58,13 @@ function Revenue() {
 
       if(price && price != 0 && price >= (gigSetting && gigSetting.minimumWithdrawalLimit)) {
          setIsLoading(true);
-         dispatch(withdraw(data)).then((response) => {
+         dispatch(withdrawl(data)).then((response) => {
+          console.log("data", response)
             $('#stripe_Modal').modal('hide');
             setIsLoading(false)
             setPrice("");
+            setWallet(response && response.user && response.user.wallet)
+            history.push("/withdrawal/requests");
          })
       }
     }
@@ -75,7 +84,7 @@ function Revenue() {
       <div className="col-md-12">
          <h2 className="pull-left">Revenue Earned</h2>
          <p className="lead pull-right">
-            Available For Withdrawal: <span className="font-weight-bold text-success"> &#036;{auth.user && auth.user.wallet}</span>
+            Available For Withdrawal: <span className="font-weight-bold text-success"> &#036;{wallet}</span>
          </p>
       </div>
       <div className="col-md-12">
@@ -109,7 +118,7 @@ function Revenue() {
                            <div className="col-md-3">
                               <div className="rs-detail">
                                  <p> Available Income </p>
-                                 <h2> &#036;{auth.user && auth.user.wallet}</h2>
+                                 <h2> &#036;{wallet}</h2>
                               </div>
                            </div>
                         </div>

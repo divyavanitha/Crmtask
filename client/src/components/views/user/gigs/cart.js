@@ -6,7 +6,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import $ from 'jquery';
 import "./Gig.css";
-import { getGigbyId, createOrder, getPackage, addCart, getCartList, deleteCart } from "../../../../_actions/user.action";
+import { getGigbyId, createOrder, getPackage, addCart, getCartList, deleteCart, updateCart } from "../../../../_actions/user.action";
 
 import OwlCarousel from 'react-owl-carousel';
 
@@ -18,11 +18,15 @@ const Cart = (props) => {
    let history = useHistory();
 
    const [total, setTotal] = useState(0);
+   const [quantity, setQuantity] = useState(0);
+   const [totalPrice, setTotalPrice] = useState(0);
+   const [cart, setCart] = useState([]);
+
 
    useEffect(() => {
+      
       dispatch(getCartList())
       $('body').on('click', '.delete', function (e) {
-         //alert();
          var that = $(this);
          e.preventDefault();
          const sid = that.data('id');
@@ -51,28 +55,64 @@ const Cart = (props) => {
             });
       });
 
-      /*$('body').on('change', 'input[name=quantity]', function(){
-          alert();
-      }); */
-
-
-
    }, []);
 
-   const cart = useSelector((state) => state.user && state.user.cart_lists && state.user.cart_lists.carts);
+   const carts = useSelector((state) => state.user && state.user.cart_lists && state.user.cart_lists.carts);
 
    let cartCount = useSelector((state) => state.user.cart_count);
 
-   $(document).ready(function () {
+   useEffect(() => {
+      setCart(carts && carts)
+   })
+
+
+    const addQuantity = (e, id, qty) => {
+        let data = {
+         id: id,
+         quantity: qty+1
+        }
+        dispatch(updateCart(data)).then(res => {
+            console.log(res && res.price)
+            setQuantity(res && res.quantity)
+            setTotalPrice((res && res.price) * (res && res.quantity))
+            updateTotal()
+        })
+    }
+
+    const removeQuantity = (e, id, qty) => {
+        let qua = quantity-1;
+        let data = {
+         id: id,
+         quantity: (qua != 0) ? (qty)-1 : 1
+        }
+
+        dispatch(updateCart(data)).then(res => {
+            setQuantity(res && res.quantity)
+            setTotalPrice((res && res.price) * (res && res.quantity))
+            updateTotal()
+        })
+    }
+
+    const updateQuantity = ({currentTarget: input}) => {
+
+    }
+
+    const updateTotal = () => {
+    
       var len = cart && cart;
-      console.log('cart1', len);
+ 
       var total = 0;
       $.each(len, function (index, value) {
-         total = total + value.price;
+         let qty = (quantity !=0) ? quantity : value.quantity;
+         total = total + ((value.price) * (qty));
       });
-
+   
       setTotal(total);
-   });
+    }
+
+    $(document).ready(function () {
+      updateTotal()
+    });
 
    return (
 
@@ -121,9 +161,9 @@ const Cart = (props) => {
                         </div>
                         <div className="row cart-add-sect" id="cart-show">
                            <div className="col-md-7">
-                              {cart && cart.map((list) => (<div className="card cart-card mb-3" key={list._id} >
+                              <div className="card cart-card mb-3" >
                                  <div className="card-body">
-                                    <div className="cart-proposal">
+                                    {cart && cart.map((list) => (<div className="cart-proposal" key={list._id}>
                                        <div className="row">
                                           <div className="col-lg-3 mb-2">
                                              <a className="proposalImg" href="">
@@ -143,17 +183,25 @@ const Cart = (props) => {
                                        <hr />
                                        <h6 className="clearfix">
                                           Proposal/Service Quantity
-                        <strong className="float-right price ml-2 mt-2">
-                                             &#036;{list.price}
+                                          <strong className="float-right price ml-2 mt-2">
+                                             &#036;{(totalPrice != 0) ? totalPrice : ((list.price) * (list.quantity))}
                                           </strong>
-                                          <input type="text" name="quantity" onChange={handleChange} className="float-right form-control quantity" data-proposal_id="4" value={list.quantity} />
+                                          <div className="quantity-control" style={{float:"right"}}>
+                                              <div className="increase ">
+                                                  <a className="btn btn-plus" onClick={(e) => addQuantity(e,list._id, ((quantity != 0) ? quantity : list.quantity))}>+</a>
+                                              </div>
+                                              <span className="quantity"><input className="form-control numbers" onChange={updateQuantity} value={(quantity != 0) ? quantity : list.quantity}  min="1" maxLength="2" style={{ width: '50px', textAlign: 'center', padding: '10px' }} name="quantity" /></span>
+                                              <div className="decrease ">
+                                                  <a className="btn btn-plus" onClick={(e) => removeQuantity(e, list._id, ((quantity != 0) ? quantity : list.quantity))}>-</a>
+                                              </div>
+                                          </div>
 
                                        </h6>
                                        <hr />
-                                    </div>
-                                    <h3 className="float-right">Total: &#036;{list.price} </h3>
+                                    </div>))}
+                                    <h3 className="float-right">Total: &#036;{total} </h3>
                                  </div>
-                              </div>))}
+                              </div>
                            </div>
                            <div className="col-md-5">
                               <div className="card">
