@@ -214,10 +214,10 @@ exports.changePassword = async (req, res) => {
 
                 if (await bcrypt.compare(req.body.old_password, user.password) != true) {
 
-                    var response = helper.response({ status: 400, message: 'Check your old password.', data: [] });
+                    var response = helper.response({ status: 422, message: 'Check your old password.', data: [] });
                    
                 } else if (await bcrypt.compare(req.body.new_password, user.password)) {
-                    var response = helper.response({ status: 400, message: 'Please enter a password which is not similar then current password.', data: [] });
+                    var response = helper.response({ status: 422, message: 'Please enter a password which is not similar then current password.', data: [] });
                 } else {
                     await db._update(User, {_id: req.user._id}, {$set: {password: newPassword}});
                     var response = helper.response({ status: 200, message: 'Password updated successfully.', data: [] });

@@ -7,14 +7,14 @@ import * as Yup from 'yup';
 import moment from 'moment';
 import Loader from 'react-loader-spinner'
 import $ from 'jquery';
-import { getSellerOrderDetails, getRating, getCancelReason } from "../../../../_actions/user.action";
+import { getOrderDetails, getRating, getCancelReason } from "../../../../_actions/user.action";
 import { updateOrder, rating, cancel } from "../../../../_actions/order.action";
 
 import OwlCarousel from 'react-owl-carousel';
-
+import { useToasts } from 'react-toast-notifications'
 
 const Cart = (props) => {
-
+   const { addToast } = useToasts()
    const dispatch = useDispatch();
    const params = useParams();
    let history = useHistory();
@@ -22,46 +22,19 @@ const Cart = (props) => {
 
    const [total, setTotal] = useState(0);
    const [status, setStatus] = useState("");
+   const [order_details, setOrderDetails] = useState();
+   const [ratings, setRatings] = useState();
 
    useEffect(() => {
-      dispatch(getSellerOrderDetails(params.id))
-      dispatch(getRating(params.id))
+      dispatch(getOrderDetails(params.id)).then(res => {
+        console.log("res", res);
+        setOrderDetails(res.responseData.order);
+      })
+      dispatch(getRating(params.id)).then(res => {
+        setRatings(res.responseData.ratings)
+      })
       dispatch(getCancelReason("seller"))
-      //$(document).ready(function () {
-
-         // Sticky Code start //
-         //$("#order-status-bar").sticky({ topSpacing:0,zIndex:500});
-         // Sticky code ends //
-         ////  Countdown Timer Code Starts  ////
-         // Set the date we're counting down to
-
-         //var countDownDate = new Date("Nov 20, 2020 10:43:07").getTime();
-         // Update the count down every 1 second
-         /*var x = setInterval(function () {
-            var now = new Date();
-            var nowUTC = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-            var distance = countDownDate - nowUTC;
-            // Time calculations for days, hours, minutes and seconds
-            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            document.getElementById("days").innerHTML = days;
-            document.getElementById("hours").innerHTML = hours;
-            document.getElementById("minutes").innerHTML = minutes;
-            document.getElementById("seconds").innerHTML = seconds;
-            // If the count down is over, write some text 
-            if (distance < 0) {
-               clearInterval(x);
-               $("#countdown-timer .countdown-number").addClass("countdown-number-late");
-               document.getElementById("days").innerHTML = "<span class='red-color'>The</span>";
-               document.getElementById("hours").innerHTML = "<span class='red-color'>Order</span>";
-               document.getElementById("minutes").innerHTML = "<span class='red-color'>is</span>";
-               document.getElementById("seconds").innerHTML = "<span class='red-color'>Late!</span>";
-            }
-         }, 1000);
-
-      });*/
+      
 
       $("body").on("click", ".review", function(){
 
@@ -74,10 +47,11 @@ const Cart = (props) => {
 
             dispatch(rating(data)).then(res => {
                 console.log('id',res.responseData);
-                //history.push('/buyer-order-lists')
-                window.location.reload();
+                setRatings(res.responseData.ratings)
+                setOrderDetails(res.responseData.orders);
+                addToast(res.message, { appearance: res.status, autoDismiss: true, })  
                  
-              })
+            })
       });
 
 
@@ -112,9 +86,9 @@ const Cart = (props) => {
         })
     }
 
-   const order_details = useSelector((state) => state.user && state.user.seller_order_details && state.user.seller_order_details.responseData && state.user.seller_order_details.responseData.order);
+   //const order_details = useSelector((state) => state.user && state.user.seller_order_details && state.user.seller_order_details.responseData && state.user.seller_order_details.responseData.order);
 
-   const ratings = useSelector((state) => state.user && state.user.rating  && state.user.rating.responseData && state.user.rating.responseData.ratings);
+   //const ratings = useSelector((state) => state.user && state.user.rating  && state.user.rating.responseData && state.user.rating.responseData.ratings);
 
    const cancel_reason = useSelector((state) => state.user && state.user.cancel_reason && state.user.cancel_reason.responseData && state.user.cancel_reason.responseData.CancelReasons);
    console.log('order', ratings);
@@ -150,13 +124,14 @@ const Cart = (props) => {
                 data.append("delivery_file", values.delivery_file);
                 data.append("status", "Delivered");
 
-                
+          
                 dispatch(updateOrder(data)).then(res => {
-                  
-                  console.log('id',res.responseData);
+                  console.log('id',res);
                   setStatus(res.responseData.status);
+                  setOrderDetails(res.responseData);
+                  addToast(res.message, { appearance: res.status, autoDismiss: true, })
                   $('#deliver-order-modal').modal("hide");
-                  window.location.reload();
+                 
                 })
             
             resetForm();

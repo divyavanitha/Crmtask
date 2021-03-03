@@ -495,26 +495,6 @@ export const buyerOrderList = (data) => async dispatch => {
 
 };
 
-export const getBuyerOrderDetails = (id) => async dispatch => {
-
-    axios
-        .get(`/api/buyer/orderdetails/${id}`)
-        .then(res => {
-            dispatch({
-                type: BUYER_ORDER_DETAILS,
-                payload: res.data
-            })
-        }
-        )
-        .catch(e =>
-            dispatch({
-                type: BUYER_ORDER_DETAILS,
-                payload: null
-            })
-        );
-
-};
-
 export const sellerOrderList = (data) => async dispatch => {
 
     try {
@@ -530,23 +510,28 @@ export const sellerOrderList = (data) => async dispatch => {
 
 };
 
-export const getSellerOrderDetails = (id) => async dispatch => {
+export const getOrderDetails = (id) => async dispatch => {
 
-    axios
-        .get(`/api/seller/orderdetails/${id}`)
-        .then(res => {
-            dispatch({
-                type: SELLER_ORDER_DETAILS,
-                payload: res.data
-            })
-        }
-        )
-        .catch(e =>
-            dispatch({
-                type: SELLER_ORDER_DETAILS,
-                payload: null
-            })
-        );
+    try{
+        let response = await axios.get(`/api/get/orderdetails/${id}`);
+
+        dispatch({
+            type: SELLER_ORDER_DETAILS,
+            payload: response.data
+        });
+
+        response.data.status = 'success';
+        return response.data;
+    } catch (e) {
+
+        dispatch({
+            type: SELLER_ORDER_DETAILS,
+            payload: null
+        })
+
+        e.response.data.status = 'error';
+        return e.response.data;
+    }
 
 };
 
@@ -713,11 +698,18 @@ export const withdrawl = (data) => async dispatch => {
 };
 
 export const getRating = (id) => async dispatch => {
-    const ratings = await axios.get(`/api/rating/${id}`)
-    dispatch({
-        type: GET_RATING,
-        payload: ratings.data
-    });
+    try{
+        const response = await axios.get(`/api/rating/${id}`)
+        dispatch({
+            type: GET_RATING,
+            payload: response.data
+        });
+        response.data.status = 'success';
+        return response.data;
+    }catch(e) {
+        e.response.data.status = 'error';
+        return e.response.data;
+    }
 }
 
 export const gigSubCatoegory = (data) => async dispatch => {
@@ -844,10 +836,14 @@ export const addCard = (data) => async dispatch => {
             type: ADDCARD,
             payload: response.data.responseData.card
         })
+        response.data.status = 'success';
+        return response.data;
 
-        return response.data.responseData;
-
-    } catch (e) { }
+    } catch (e) {
+        e.response.data.status = 'error';
+        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        return e.response.data;
+    }
 
 };
 
@@ -855,9 +851,14 @@ export const addPayoutCard = (data) => async dispatch => {
 
     try {
         const response = await axios.post(`/api/card/payout/add`, data);
-        return response.data.responseData;
+        response.data.status = 'success';
+        return response.data;
 
-    } catch (e) { }
+    } catch (e) { 
+        e.response.data.status = 'error';
+        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        return e.response.data;
+    }
 
 };
 
@@ -870,11 +871,13 @@ export const addMoney = (data) => async dispatch => {
             type: WALLET,
             payload: response.data.responseData
         })
-
-        return response.data.responseData;
+        response.data.status = 'success';
+        return response.data;
 
     } catch (e) {
-        
+        e.response.data.status = 'error';
+        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        return e.response.data;
     }
 
 };
@@ -884,10 +887,14 @@ export const changePassword = (data) => async dispatch => {
     try {
 
         const response = await axios.post(`/api/change/password`, data);
+        response.data.status = 'success';
+        return response.data;
 
-        return response.data.responseData;
-
-    } catch (e) { }
+    } catch (e) { 
+        e.response.data.status = 'error';
+        if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
+        return e.response.data;
+    }
 
 };
 

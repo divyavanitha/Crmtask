@@ -50,8 +50,6 @@ exports.getPayoutCard = async (req, res) => {
 
 exports.addCard = async (req, res) => {
     try {
-
-
         let setting = await db._find(Setting, {}, {createdAt: 0, updatedAt: 0 });
         let stripePayment = setting.payment.filter(pay => pay.name === 'STRIPE');
 
@@ -80,16 +78,6 @@ exports.addCard = async (req, res) => {
 
             let isDefault;
 
-            /*if(cards.length > 0) {
-                if(req.body.default) {
-                    isDefault = 1;
-                    await db._updateMany(Card, {user: req.user._id, type: 'CHARGE' }, {"$set":{"isDefault": false}});
-                }
-                
-            } else {
-                isDefault = 1;
-            }*/
-
             if(defaultCard){
                 isDefault = false;
             }else{
@@ -117,11 +105,11 @@ exports.addCard = async (req, res) => {
                 return res.status(errorResponse.statusCode).json(errorResponse);
             }
 
-            const card = await db._store(Card, cardData);
-
+            await db._store(Card, cardData);
+            let card = await db._get(Card, {user: req.user._id, type: 'CHARGE'}, {isDefault : 1, funding : 1, brand : 1, lastFour : 1 });
             const data = {  card };
 
-            const response = helper.response({ data });
+            const response = helper.response({ data, message: res.__('card_added') });
             return res.status(response.statusCode).json(response);
         }
 
@@ -378,12 +366,12 @@ exports.addMoney = async (req, res) => {
                     paymentLog.status = "Paid";
 
                     await db._update(User, { _id: req.user._id }, user);
-                     message = "Amount successfully added to wallet!";
+                     message = res.__('wallet_added');
                      status = 200;
 
                 } else {
                     paymentLog.status = "Failed";
-                     message = "Payment Failed!";
+                     message = res.__('payment_failed');
                      status = 500;
                 }
 

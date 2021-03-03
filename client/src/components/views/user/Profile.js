@@ -8,9 +8,10 @@ import $ from 'jquery';
 
 import { getCountry, getState, getCity, getLanguage } from "../../../_actions/user.action";
 import { updateProfile, getProfile } from "../../../_actions/profile.action";
+import { useToasts } from 'react-toast-notifications'
 
 const Profile = (props) => {
-
+   const { addToast } = useToasts()
    const dispatch = useDispatch();
    let history = useHistory();
    const params = useParams();
@@ -19,6 +20,7 @@ const Profile = (props) => {
    const [stateList, setStateList] = useState([]);
    const [cityList, setCityList] = useState([]);
    const [state, setState] = useState('');
+   const [isLoading, setIsLoading] = useState(false);
    const [city, setCity] = useState('');
    const offer = useSelector((state) => state.request && state.request.view_offer && state.request.view_offer.responseData);
    const countries = useSelector((state) => state.user && state.user.countries && state.user.countries.responseData && state.user.countries.responseData.countries);
@@ -128,8 +130,10 @@ const Profile = (props) => {
             data.append("description", values.description);
             data.append("cover_photo", values.cover_photo);
             data.append("profile_photo", values.profile_photo);
-
+            setIsLoading(true)
             dispatch(updateProfile(data)).then(res => {
+               addToast(res.message, { appearance: res.status, autoDismiss: true, })
+               setIsLoading(false)
                //window.location.reload();
             })
 

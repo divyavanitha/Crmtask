@@ -10,7 +10,7 @@ import * as Yup from 'yup';
 import $ from 'jquery';
 import "./Gig.css";
 import { getGigbyId, getGigbyName, getPackage, addCart } from "../../../../_actions/user.action";
-
+import { useToasts } from 'react-toast-notifications'
 import OwlCarousel from 'react-owl-carousel';
 import {
   EmailShareButton,
@@ -28,7 +28,7 @@ import {
 
 
 const GigDetail = (props) => {
-
+    const { addToast } = useToasts()
     const dispatch = useDispatch();
     const params = useParams();
     let history = useHistory();
@@ -162,11 +162,13 @@ const GigDetail = (props) => {
                 if (values.action == "cart") {
                     setIsLoading(true)
                     dispatch(addCart(data)).then(res => {
+                        addToast(res.message, { appearance: res.status, autoDismiss: true, })
                         setIsLoading(false)
                     }).catch(e => {})
                 } else {
                     setIsLoading(true)
                     dispatch(addCart(data)).then(res => {
+                        addToast(res.message, { appearance: res.status, autoDismiss: true, })
                         history.push('/cart-payment-option/' + res.responseData.carts._id)
                         setIsLoading(false)
                     }).catch(e => {})

@@ -304,16 +304,12 @@ router.get('/buyer/orderlist', middleware.user, function(req, res){
   homeController.buyerOrderList(req, res);
 });
 
-router.get('/buyer/orderdetails/:id', middleware.user, (req, res) => {
-  homeController.buyerOrderDetails(req, res);
-});
-
 router.get('/seller/orderlist', middleware.user, function(req, res){
   homeController.sellerOrderList(req, res);
 });
 
-router.get('/seller/orderdetails/:id', middleware.user, (req, res) => {
-  homeController.sellerOrderDetails(req, res);
+router.get('/get/orderdetails/:id', middleware.user, (req, res) => {
+  homeController.getOrderDetails(req, res);
 });
 
 router.get('/rating/:id', middleware.user, (req, res) => {

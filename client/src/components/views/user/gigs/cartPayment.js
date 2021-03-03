@@ -6,7 +6,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import $ from 'jquery';
 import "./Gig.css";
-import { getGigbyId, getPackage, addCart, getCartList, deleteCart, getCartbyId } from "../../../../_actions/user.action";
+import { getGigbyId, getPackage, addCart, getCartList, deleteCart, getCartbyId, findUser } from "../../../../_actions/user.action";
 import { checkout } from "../../../../_actions/order.action";
 
 import OwlCarousel from 'react-owl-carousel';
@@ -26,123 +26,8 @@ const Cart = (props) => {
       
       dispatch(getCartList())
       dispatch(getCartbyId(params.id))
+      dispatch(findUser())
 
-      /*$(document).ready(function () {
-         //$('.total-price').html('&#036;10.00');
-         $('.processing-fee').hide();
-         $('#mobile-money-form').hide();
-         $('#paypal-form').hide();
-         $('#mercadopago-form').hide();
-         $('#coinpayments-form').hide();
-         $('#credit-card-form').hide();
-         $('#2checkout-form').hide();
-         $('#paystack-form').hide();
-
-
-         $('#shopping-balance').click(function () {
-            //$('.total-price').html('&#036;10.00');
-            $('.processing-fee').hide();
-            $('#credit-card-form').hide();
-            $('#2checkout-form').hide();
-            $('#coinpayments-form').hide();
-            $('#mercadopago-form').hide();
-            $('#paypal-form').hide();
-            $('#paystack-form').hide();
-            $('#shopping-balance-form').show();
-         });
-
-         $('#paypal').click(function () {
-            //$('.total-price').html('&#036;10.50');
-            $('.processing-fee').show();
-            $('#mobile-money-form').hide();
-            $('#credit-card-form').hide();
-            $('#2checkout-form').hide();
-            $('#paypal-form').show();
-            $('#shopping-balance-form').hide();
-            $('#coinpayments-form').hide();
-            $('#paystack-form').hide();
-            $('#mercadopago-form').hide();
-         });
-
-         $('#credit-card').click(function () {
-            //$('.total-price').html('&#036;10.50');
-            $('.processing-fee').show();
-            $('#mobile-money-form').hide();
-            $('#credit-card-form').show();
-            $('#2checkout-form').hide();
-            $('#paypal-form').hide();
-            $('#shopping-balance-form').hide();
-            $('#coinpayments-form').hide();
-            $('#paystack-form').hide();
-            $('#mercadopago-form').hide();
-         });
-
-         $('#2checkout').click(function () {
-            //$('.total-price').html('&#036;10.50');
-            $('.processing-fee').show();
-            $('#mobile-money-form').hide();
-            $('#credit-card-form').hide();
-            $('#2checkout-form').show();
-            $('#paypal-form').hide();
-            $('#shopping-balance-form').hide();
-            $('#coinpayments-form').hide();
-            $('#paystack-form').hide();
-            $('#mercadopago-form').hide();
-         });
-
-         $('#mobile-money').click(function () {
-            //$('.total-price').html('&#036;10.50');
-            $('.processing-fee').show();
-            $('#mobile-money-form').show();
-            $('#credit-card-form').hide();
-            $('#paypal-form').hide();
-            $('#shopping-balance-form').hide();
-            $('#coinpayments-form').hide();
-            $('#paystack-form').hide();
-            $('#mercadopago-form').hide();
-         });
-
-         $('#coinpayments').click(function () {
-            //$('.total-price').html('&#036;10.50');
-            $('.processing-fee').show();
-            $('#mercadopago-form').hide();
-            $('#mobile-money-form').hide();
-            $('#credit-card-form').hide();
-            $('#2checkout-form').hide();
-            $('#coinpayments-form').show();
-            $('#paypal-form').hide();
-            $('#paystack-form').hide();
-            $('#shopping-balance-form').hide();
-         });
-
-         $('#paystack').click(function () {
-            //$('.col-md-5 .card br').hide();
-            $('.total-price').html('&#036;10.50');
-            $('.processing-fee').show();
-            $('#mercadopago-form').hide();
-            $('#mobile-money-form').hide();
-            $('#credit-card-form').hide();
-            $('#2checkout-form').hide();
-            $('#coinpayments-form').hide();
-            $('#paystack-form').show();
-            $('#paypal-form').hide();
-            $('#shopping-balance-form').hide();
-         });
-
-         $('#mercadopago').click(function () {
-            //$('.total-price').html('&#036;10.50');
-            $('.processing-fee').show();
-            $('#mercadopago-form').show();
-            $('#mobile-money-form').hide();
-            $('#credit-card-form').hide();
-            $('#2checkout-form').hide();
-            $('#coinpayments-form').hide();
-            $('#paypal-form').hide();
-            $('#paystack-form').hide();
-            $('#shopping-balance-form').hide();
-         });
-
-      });*/
    }, []);
 
    
@@ -162,6 +47,8 @@ const Cart = (props) => {
 
    const cart_details = useSelector((state) => state.user && state.user.cart_details && state.user.cart_details.responseData && state.user.cart_details.responseData.carts);
    let cartCount = useSelector((state) => state.user.cart_count);
+
+   const user = useSelector((state) => state.user && state.user.find_user && state.user.find_user.responseData && state.user.find_user.responseData.user);
 
    $(document).ready(function () {
       var len = cart && cart;
@@ -273,20 +160,22 @@ const Cart = (props) => {
                                  <div className="col-md-12 mb-3">
                                     <div className="card payment-options">
                                        <div className="card-header">
-                                          <h5 className="mt-2"><i className="fa fa-dollar">{auth && auth.user.wallet}</i> Available Shopping Balance</h5>
+                                          <h5 className="mt-2"><i className="fa fa-dollar">{user && user.wallet}</i> Available Shopping Balance</h5>
                                        </div>
                                        <div className="card-body">
                                           <div className="row">
-                                             <div className="col-1">
+                                          
+                                             {((user && user.wallet) >= (params.id ? cart_details && cart_details.price : total)) ? <div className="col-1">
                                                 <input id="shopping-balance" onClick={() => changePayment("WALLET")} type="radio" name="method" className="form-control radio-input" checked />
-                                             </div>
-                                             <div className="col-11">
+                                             </div> : "" }
+                                             {((user && user.wallet) >= (params.id ? cart_details && cart_details.price : total)) ? <div className="col-11">
                                                 <p className="lead mt-2">
                                                    Personal Balance - <b>{auth && auth.user.firstName}</b>
                                                    <span className="text-success font-weight-bold">&#036;{params.id ? cart_details && cart_details.price : total}</span>
                                                 </p>
-                                             </div>
-
+                                             </div> : "" }
+                                         
+                                          
                                              <div className="col-1">
                                                 <input id="stripe" onClick={() => changePayment("STRIPE")} type="radio" name="method" className="form-control radio-input" />
                                              </div>
@@ -297,8 +186,11 @@ const Cart = (props) => {
                                                 </p>
                                                 
                                              </div>
+
                                           </div>
-                                       </div>
+
+                                          </div>
+                                       
                                     </div>
                                  </div>
                                  {/* <div className="col-md-12 mb-3">

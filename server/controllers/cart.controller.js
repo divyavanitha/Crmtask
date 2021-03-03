@@ -105,7 +105,7 @@ exports.addcart = async (req, res) => {
 
         let count = await db._count(Cart, {user: req.user._id} );
 
-        const response = helper.response({ message: res.__('inserted'), data: {"carts": carts, "count": count } });
+        const response = helper.response({ message: res.__('cart_added'), data: {"carts": carts, "count": count } });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {

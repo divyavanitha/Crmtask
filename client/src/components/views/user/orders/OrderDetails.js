@@ -6,26 +6,34 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import $ from 'jquery';
 import moment from 'moment';
-import { getBuyerOrderDetails, getRating, getCancelReason} from "../../../../_actions/user.action";
+import { getOrderDetails, getRating, getCancelReason} from "../../../../_actions/user.action";
 import { rating, updateOrder, cancel, tips } from "../../../../_actions/order.action";
-
+import { useToasts } from 'react-toast-notifications'
 import OwlCarousel from 'react-owl-carousel';
 
 
 const Cart = (props) => {
-
+   const { addToast } = useToasts()
    const dispatch = useDispatch();
    const params = useParams();
    let history = useHistory();
 
    const [total, setTotal] = useState(0);
    const [buyerRating, setBuyerRating] = useState("");
+   const [order_details, setOrderDetails] = useState();
+   const [status, setStatus] = useState("");
+   const [isLoading, setIsLoading] = useState(false);
+   const [ratings, setRatings] = useState();
 
    useEffect(() => {
 
-      dispatch(getBuyerOrderDetails(params.id))
+      dispatch(getOrderDetails(params.id)).then(res => {
+        setOrderDetails(res.responseData.order);
+      })
       
-      dispatch(getRating(params.id))
+      dispatch(getRating(params.id)).then(res => {
+        setRatings(res.responseData.ratings)
+      })
 
       dispatch(getCancelReason("buyer"))
 
@@ -34,9 +42,13 @@ const Cart = (props) => {
                 id: params.id,
                 status: "Completed"
             };
+            setIsLoading(true)
             dispatch(updateOrder(data)).then(res => {
-              console.log('id',res.responseData);
-              window.location.reload();              
+              console.log('id',res);
+              setStatus(res.responseData.status);
+              setOrderDetails(res.responseData);
+              addToast(res.message, { appearance: res.status, autoDismiss: true, })  
+              setIsLoading(false)              
             })
       });
 
@@ -48,9 +60,13 @@ const Cart = (props) => {
         data.append("revison_message", $("textarea[name^=revison_message]").val());
         data.append("revision_file", input.files[0]);
         data.append("status", "Revision Requested");
+        setIsLoading(true)
         dispatch(updateOrder(data)).then(res => {
-          console.log('id',res.responseData);
-          window.location.reload();           
+          console.log('id',res);
+          setStatus(res.responseData.status);
+          setOrderDetails(res.responseData);
+          addToast(res.message, { appearance: res.status, autoDismiss: true, })  
+          setIsLoading(false)        
         })
 
       });
@@ -60,11 +76,11 @@ const Cart = (props) => {
    const sendCancelRequest = async () => {
 
         let data = {
-                id: params.id,
-                cancellation_message: $("textarea[name=cancellation_message]").val(),
-                cancellation_reason: $("select[name=cancellation_reason] option:selected").val(),
-                cancelled_by: "seller",
-                status: "Cancellation Requested"
+            id: params.id,
+            cancellation_message: $("textarea[name=cancellation_message]").val(),
+            cancellation_reason: $("select[name=cancellation_reason] option:selected").val(),
+            cancelled_by: "seller",
+            status: "Cancellation Requested"
         };
         
         dispatch(updateOrder(data)).then(res => {
@@ -104,16 +120,10 @@ const Cart = (props) => {
         
         
         dispatch(tips(data)).then(res => {
-          console.log('id',res.responseData);
-          window.location.reload();           
+          setOrderDetails(res.responseData);
+          addToast(res.message, { appearance: res.status, autoDismiss: true, })           
         })
     }
-
-
-   const order_details = useSelector((state) => state.user && state.user.buyer_order_details && state.user.buyer_order_details.responseData && state.user.buyer_order_details.responseData.gig);
-
-   const ratings = useSelector((state) => state.user && state.user.rating  && state.user.rating.responseData && state.user.rating.responseData.ratings);
-
    const cancel_reason = useSelector((state) => state.user && state.user.cancel_reason && state.user.cancel_reason.responseData && state.user.cancel_reason.responseData.CancelReasons);
 
    console.log('order', cancel_reason);
@@ -154,7 +164,7 @@ const Cart = (props) => {
                  .required('Tags is required'),*/
          })}
          onSubmit={(values, { setSubmitting, resetForm }) => {
-            console.log('values', values);
+
             let data = {
                 order_id: params.id,
                 buyer_rating: values.rating,
@@ -165,8 +175,9 @@ const Cart = (props) => {
             
               dispatch(rating(data)).then(res => {
                 console.log('id',res.responseData);
-                //history.push('/buyer-order-lists')
-                window.location.reload();
+                setRatings(res.responseData.ratings);
+                setOrderDetails(res.responseData.orders);
+                addToast(res.message, { appearance: res.status, autoDismiss: true, })  
                  
               })
            
@@ -201,7 +212,7 @@ const Cart = (props) => {
                               </h5>
                               <h5 className="float-right mt-2">
                                  Status: <span className="text-muted">
-                                    {order_details && order_details.status}         </span>
+                                    {status ? status : order_details && order_details.status}         </span>
                               </h5>
                            </div>
                         </div>

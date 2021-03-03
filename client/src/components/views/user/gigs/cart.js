@@ -9,10 +9,11 @@ import "./Gig.css";
 import { getGigbyId, createOrder, getPackage, addCart, getCartList, deleteCart, updateCart } from "../../../../_actions/user.action";
 
 import OwlCarousel from 'react-owl-carousel';
-
+import { useToasts } from 'react-toast-notifications'
 
 const Cart = (props) => {
-
+  
+   const { addToast } = useToasts()
    const dispatch = useDispatch();
    const params = useParams();
    let history = useHistory();

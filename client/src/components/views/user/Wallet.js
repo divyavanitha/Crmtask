@@ -8,7 +8,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { getCard, addMoney, withdrawl, findUser, getWallet } from "../../../_actions/user.action";
 import * as Yup from 'yup';
 import $ from 'jquery';
-
+import { useToasts } from 'react-toast-notifications'
 
 
 import OwlCarousel from 'react-owl-carousel';
@@ -16,7 +16,7 @@ import OwlCarousel from 'react-owl-carousel';
 
 
 function Wallet() {
-
+    const { addToast } = useToasts()
     const dispatch = useDispatch();
     const auth = useSelector((state) => state.user);
     const [cards, setCards] = useState([]);
@@ -50,11 +50,11 @@ function Wallet() {
       })
 
       dispatch(findUser())
-      setIsLoading(true);
+     
       dispatch(getWallet()).then((response) => {
         console.log("responseData",response)
         setPaymentHistory(response)
-        setIsLoading(false);
+        
       })
       setWallet(user && user.wallet);
       
@@ -104,11 +104,13 @@ function Wallet() {
                     id: values.id,
                     amount: values.amount,
                 };
-                
+                setIsLoading(true);
                  dispatch(addMoney(data)).then(res => {
-                  console.log('res', res.paymentHistory)
-                  setWallet(res.wallet)
-                  setPaymentHistory(res.paymentHistory)
+                  console.log('res', res)
+                  addToast(res.message, { appearance: res.status, autoDismiss: true, })
+                  setWallet(res.responseData.wallet)
+                  setPaymentHistory(res.responseData.paymentHistory)
+                  setIsLoading(false)
                  })
                 
                 resetForm();

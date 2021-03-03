@@ -69,6 +69,7 @@ const Base = () => {
 
     return (
         <Fragment>
+        <ToastProvider>
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>{site && site.title}</title>
@@ -121,6 +122,7 @@ const Base = () => {
             </Switch>
 
             <Footer />
+        </ToastProvider>
 
         </Fragment>
     );

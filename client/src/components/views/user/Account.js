@@ -9,9 +9,10 @@ import AccountSettings from "./AccountSettings.js";
 
 import { getCountry, getState, getCity, getLanguage, getCard, getPayoutCard, addCard, addPayoutCard, removeCard, defaultCard, changePassword } from "../../../_actions/user.action";
 import { getProfile } from "../../../_actions/profile.action";
+import { useToasts } from 'react-toast-notifications'
 
 const Account = (props) => {
-
+   const { addToast } = useToasts()
    const dispatch = useDispatch();
    let history = useHistory();
    const params = useParams();
@@ -56,11 +57,8 @@ const Account = (props) => {
          }
 
        dispatch(addPayoutCard(data)).then((response) => {
-
-         console.log("pay", response && response.card)
-
          setPayoutCards(response && response.card);
-
+         addToast(response.message, { appearance: response.status, autoDismiss: true, })
          $('#stripe-modal').modal("hide");
            
        })
@@ -75,8 +73,12 @@ const Account = (props) => {
             exp_year: $('input[name=year]').val(),
             cvc: $('input[name=cvc]').val(),
          }
-         dispatch(addCard(data))
-         $('#stripe-modal').modal("hide");
+         dispatch(addCard(data)).then(res => {
+            setCards(res && res.responseData.card);
+            addToast(res.message, { appearance: res.status, autoDismiss: true, })
+            $('#stripe-modal').modal("hide");
+         })
+         
 
       }
    }
@@ -133,7 +135,9 @@ const Account = (props) => {
                 }
 
                 
-                dispatch(changePassword(data))
+                dispatch(changePassword(data)).then(res => {
+                  addToast(res.message, { appearance: res.status, autoDismiss: true, })
+                })
                 setSubmitting(false);
 
          }}>

@@ -39,7 +39,7 @@ exports.checkout = async (req, res) => {
 
     if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
-    //try {
+    try {
         if (req.body.id) {
             var carts = await db._get(Cart, { _id: req.body.id }, {}, { populate: "gig" });
         } else {
@@ -47,16 +47,11 @@ exports.checkout = async (req, res) => {
         }
         let total = 0;
 
-        let totalCartPrice = 0;
-
         if (carts.length > 0) {
-            for(let i in carts){
-                totalCartPrice += carts[i].price * carts[i].quantity; 
-            }
-            console.log("tot", totalCartPrice)
+          
             for (let i in carts) {
 
-                total = total + (carts[i].price * carts[i].quantity);
+                total = carts[i].price * carts[i].quantity;
 
                 let orderId = 'FIV' + Math.floor(100000 + Math.random() * 900000);
 
@@ -89,17 +84,16 @@ exports.checkout = async (req, res) => {
                 let paymentLog = {};
                 let random = "FIV"+ Math.floor(Math.random() * (10000 - 1)) + 1;
                 if((req.body.payment_mode).toUpperCase() == "WALLET"){
-                    console.log("wa",buyer.wallet);
-                    console.log("wa1",totalCartPrice)
-                    if(buyer.wallet >= totalCartPrice){
+                    if(buyer.wallet >= total){
 
                         paymentLog.transaction_code = random;
                         paymentLog.service = "ORDER";
                         paymentLog.payment_mode = "WALLET";
-                        paymentLog.amount = totalCartPrice;
+                        paymentLog.amount = total;
                         paymentLog.user = req.user._id;
+                        paymentLog.status = "Paid";
                         
-                        buyer.wallet = buyer.wallet - totalCartPrice;
+                        buyer.wallet = buyer.wallet - total;
                         user.wallet += balance;
                         paymentResponse = "Success";
                     }else{
@@ -119,12 +113,12 @@ exports.checkout = async (req, res) => {
                             paymentLog.transaction_code = random;
                             paymentLog.service = "ORDER";
                             paymentLog.payment_mode = "STRIPE";
-                            paymentLog.amount = totalCartPrice;
+                            paymentLog.amount = total;
                             paymentLog.user = req.user._id;
 
                             const stripe = Stripe(secret_key);
                             const charge = await stripe.charges.create({
-                              amount: totalCartPrice*100,
+                              amount: total*100,
                               currency: currency,
                               customer: card.customerId
                             });
@@ -189,59 +183,18 @@ exports.checkout = async (req, res) => {
                     
                     await db._delete(Cart, { "_id": carts[i]._id });
 
-                    let tot_carts = await db._get(Cart, { user: req.user._id });
-
                     await db._store(PaymentLog, paymentLog);
-                    await db._update(User, { _id: user._id }, user);
-                    await db._update(User, { _id: buyer._id }, buyer);
+                    await db._update(User, { _id: orders.seller }, user);
+                    await db._update(User, { _id: orders.buyer }, buyer);
                     await db._update(Admin, {}, admin);
 
-                    const response = helper.response({ message: res.__('inserted'), data: tot_carts });
-                    return res.status(response.statusCode).json(response);
-                }else{
-                    const response = helper.response({ message: "Payment Failed", status: 422 });
-                    return res.status(response.statusCode).json(response);
+                    
                 }
-                /*var order = {
-                    orderId: orderId,
-                    coupon: req.body.coupon_id,
-                    wallet: req.body.wallet,
-                    payment_mode: req.body.payment_mode,
-                    buyer: req.user._id,
-                    seller: carts[i].gig.user,
-                    gig: carts[i].gig._id,
-                    quantity: carts[i].quantity,
-                    price: carts[i].price,
-                    total: total,
-                    commission: commission,
-                    status: "PROGRESS",
-                    deliveryTime: carts[i].deliveryTime,
-                    revisions: carts[i].revisions
-                }
-
-                let orders = await db._store(Order, order);
-
-                let notification = {
-                    sender: orders.buyer,
-                    senderType: "BUYER",
-                    receiver: orders.seller,
-                    type: "ORDER",
-                    orderId: orders._id,
-                    message: "Has just sent you an offer on your request click here to view."
-                }
-                await db._store(Notification, notification);
-                
-                await db._delete(Cart, { "_id": carts[i]._id });
-
-                let tot_carts = await db._get(Cart, { user: req.user._id });
-
-                await db._update(User, { _id: user._id }, user);
-                await db._update(User, { _id: buyer._id }, buyer);
-                await db._update(Admin, {}, admin);
-
-                const response = helper.response({ message: res.__('inserted'), data: tot_carts });
-                return res.status(response.statusCode).json(response);*/
+               
             }
+            let tot_carts = await db._get(Cart, { user: req.user._id });
+            const response = helper.response({ message: res.__('inserted'), data: tot_carts });
+            return res.status(response.statusCode).json(response);
         } else {
             const response = helper.response({ message: res.__('cart_empty') });
             return res.status(response.statusCode).json(response);
@@ -250,7 +203,7 @@ exports.checkout = async (req, res) => {
 
 
 
-    /*} catch (err) {
+    } catch (err) {
         if (err[0] != undefined) {
             for (i in err.errors) {
                 return res.status(422).json(err.errors[i].message);
@@ -258,7 +211,7 @@ exports.checkout = async (req, res) => {
         } else {
             return res.status(422).json(err);
         }
-    }*/
+    }
 
 }
 
@@ -303,11 +256,11 @@ exports.updateOrder = async (req, res) => {
         })
     }
 
-    /*const errorResponse = helper.response({ status: 422, error: errorMessage });
+    const errorResponse = helper.response({ status: 422, error: errorMessage });
 
     if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
-    try {*/
+    try {
         let order = await Order.findById(req.body.id);
         if ((req.body.status).toUpperCase() == "DELIVERED") {
             const arr = order.delivery_status;
@@ -437,14 +390,15 @@ exports.updateOrder = async (req, res) => {
             }
         }
 
-        let orders = await db._update(Order, { _id: req.body.id }, order);
+        await db._update(Order, { _id: req.body.id }, order);
+        let orders = await db._find(Order, {_id: req.body.id}, {}, { populate: ["gig","buyer","seller"] });
         await db._update(User, { _id: order.seller }, user);
         await db._update(Gig, { _id: order.gig }, gig);
         await db._store(Notification, notification);
-        const response = helper.response({ message: res.__('updated'), data: order });
+        const response = helper.response({ message: res.__('updated'), data: orders, status: 200 });
         return res.status(response.statusCode).json(response);
 
-    /*} catch (err) {
+    } catch (err) {
         if (err[0] != undefined) {
             for (i in err.errors) {
                 return res.status(422).json(err.errors[i].message);
@@ -452,7 +406,7 @@ exports.updateOrder = async (req, res) => {
         } else {
             return res.status(422).json(err);
         }
-    }*/
+    }
 }
 
 exports.cancel = async (req, res) => {
@@ -587,9 +541,70 @@ exports.tips = async (req, res) => {
                 tip_status: req.body.tip_status
             }
 
-            if(order_detail.payment_mode == "WALLET"){
-                buyer.wallet -= req.body.tips;
-                user.wallet += req.body.tips;
+            let paymentLog = {};
+
+            if((order_detail.payment_mode).toUpperCase() == "WALLET"){
+                if(buyer.wallet >= req.body.tips){
+
+                    paymentLog.transaction_code = random;
+                    paymentLog.service = "TIPS";
+                    paymentLog.payment_mode = "WALLET";
+                    paymentLog.amount = req.body.tips;
+                    paymentLog.user = req.user._id;
+                    paymentLog.status = "Paid";
+                    
+                    buyer.wallet -= req.body.tips;
+                    user.wallet += req.body.tips;
+                    paymentResponse = "Success";
+                }else{
+                    const response = helper.response({ message: res.__('low_wallet_amount'), status: 422 });
+                    return res.status(response.statusCode).json(response);
+                } 
+            }else if((order_detail.payment_mode).toUpperCase() == "STRIPE"){
+                let stripePayment = setting.payment.filter(pay => pay.name === 'STRIPE');
+
+                let card = await db._find(Card, { user: req.user._id, isDefault: true });
+    
+                if(stripePayment) {
+                    let currency = stripePayment.length > 0 && stripePayment[0].credentials ? stripePayment[0].credentials.filter(credential => credential.name === 'currency')[0].value : '';
+                    let secret_key = stripePayment.length > 0 && stripePayment[0].credentials ? stripePayment[0].credentials.filter(credential => credential.name === 'secret_key')[0].value : '';
+                    if(currency && secret_key) {
+                      
+                        paymentLog.transaction_code = random;
+                        paymentLog.service = "TIPS";
+                        paymentLog.payment_mode = "STRIPE";
+                        paymentLog.amount = req.body.tips;
+                        paymentLog.user = req.user._id;
+
+                        const stripe = Stripe(secret_key);
+                        const charge = await stripe.charges.create({
+                          amount: req.body.tips*100,
+                          currency: currency,
+                          customer: card.customerId
+                        });
+
+                        let response;
+                        let message;
+                        let status;
+                        const user = await db._find(User, { _id: req.user._id });
+                        if(charge.status == 'succeeded') {                               
+                             paymentResponse = "Success";  
+                             paymentLog.status = "Paid";
+                             
+                        } else {
+                             paymentResponse = "Failure";  
+                             paymentLog.status = "Failed";
+                            
+                        }
+
+                        
+                    } else {
+
+                        const errorResponse = helper.response({ status: 500, error: 'Currency not available!' });
+
+                        return res.status(errorResponse.statusCode).json(errorResponse);
+                    }
+                }
             }
             if(req.body.tip_status == 1){
                 var notification = {
@@ -602,11 +617,12 @@ exports.tips = async (req, res) => {
                 }
             }
 
-        let orders = await db._update(Order, { _id: req.body.id }, order);
+        await db._update(Order, { _id: req.body.id }, order);
+        let orders = await db._find(Order, {_id: req.body.id}, {}, { populate: ["gig","buyer","seller"] });
         await db._update(User, { _id: order_detail.seller }, user);
         await db._update(User, { _id: order_detail.buyer }, buyer);
         await db._store(Notification, notification);
-        const response = helper.response({ message: res.__('inserted') });
+        const response = helper.response({ message: res.__('tips_added'), data: orders  });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -812,9 +828,11 @@ exports.rating = async (req, res) => {
         await db._update(User, { _id: order.seller }, user);
         await db._update(Gig, { _id: order.gig }, gig);
         await db._store(Notification, notification);
-        let orders = await db._update(Order, { _id: req.body.order_id }, order);
-
-        const response = helper.response({ message: res.__('inserted') });
+        await db._update(Order, { _id: req.body.order_id }, order);
+        let ratings = await db._find(Rating, {orderId: req.body.order_id});
+        let orders = await db._find(Order, {_id: req.body.order_id}, {}, { populate: ["gig","buyer","seller"] });
+        let data = {ratings, orders}
+        const response = helper.response({ message: res.__('rated'), data , status: 200 });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {

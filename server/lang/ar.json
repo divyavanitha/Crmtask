@@ -8,5 +8,9 @@
 	"deleted": "deleted",
 	"created": "created",
 	"No favourotes.": "No favourotes.",
-	"low_wallet_amount": "low_wallet_amount"
+	"low_wallet_amount": "low_wallet_amount",
+	"cart_added": "cart_added",
+	"wallet_added": "wallet_added",
+	"card_added": "card_added",
+	"rated": "rated"
 }

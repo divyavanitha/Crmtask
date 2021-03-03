@@ -92,22 +92,6 @@ exports.buyerOrderList = async (req, res) => {
 
 }
 
-exports.buyerOrderDetails = async (req, res) => {
-    try {
-
-        let gig = await db._find(Order, {_id: req.params.id}, {}, { populate: ["gig","seller","buyer"] });
-
-        const data = { gig };
-
-        const response = helper.response({ data: data });
-
-        return res.status(response.statusCode).json(response);
-
-    } catch (err) {
-        console.log(err);
-    }
-
-}
 
 exports.sellerOrderList = async (req, res) => {
     try {
@@ -160,7 +144,7 @@ exports.sellerOrderList = async (req, res) => {
 
 }
 
-exports.sellerOrderDetails = async (req, res) => {
+exports.getOrderDetails = async (req, res) => {
     try {
 
         let order = await db._find(Order, {_id: req.params.id}, {}, { populate: ["gig","buyer","seller"] });
