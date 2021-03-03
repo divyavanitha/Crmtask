@@ -12,5 +12,6 @@
 	"cart_added": "cart_added",
 	"wallet_added": "wallet_added",
 	"card_added": "card_added",
-	"rated": "rated"
+	"rated": "rated",
+	"tips_added": "tips_added"
 }

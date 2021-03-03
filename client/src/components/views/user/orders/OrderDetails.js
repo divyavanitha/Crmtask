@@ -82,10 +82,13 @@ const Cart = (props) => {
             cancelled_by: "seller",
             status: "Cancellation Requested"
         };
-        
+        setIsLoading(true)
         dispatch(updateOrder(data)).then(res => {
-          console.log('id',res.responseData);
-          window.location.reload();           
+          console.log('id',res);
+          setStatus(res.responseData.status);
+          setOrderDetails(res.responseData);
+          addToast(res.message, { appearance: res.status, autoDismiss: true, })  
+          setIsLoading(false)               
         })
     }
 
@@ -97,8 +100,10 @@ const Cart = (props) => {
                 
          };
         dispatch(cancel(data)).then(res => {
-          console.log('id',res.responseData);
-          window.location.reload();           
+          console.log('id',res);
+          setStatus(res.responseData.status);
+          setOrderDetails(res.responseData);
+          addToast(res.message, { appearance: res.status, autoDismiss: true, })              
         })
     }
 
@@ -121,12 +126,11 @@ const Cart = (props) => {
         
         dispatch(tips(data)).then(res => {
           setOrderDetails(res.responseData);
-          addToast(res.message, { appearance: res.status, autoDismiss: true, })           
+          addToast(res.message, { appearance: res.status, autoDismiss: true, })
+          $("#tipModal2").modal("hide");           
         })
     }
    const cancel_reason = useSelector((state) => state.user && state.user.cancel_reason && state.user.cancel_reason.responseData && state.user.cancel_reason.responseData.CancelReasons);
-
-   console.log('order', cancel_reason);
 
    let buyer_rating = new Array(ratings && ratings.buyerRating).fill(0);
    let seller_rating = new Array(ratings && ratings.sellerRating).fill(0);

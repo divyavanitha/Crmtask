@@ -27,7 +27,6 @@ const Cart = (props) => {
 
    useEffect(() => {
       dispatch(getOrderDetails(params.id)).then(res => {
-        console.log("res", res);
         setOrderDetails(res.responseData.order);
       })
       dispatch(getRating(params.id)).then(res => {
@@ -66,10 +65,13 @@ const Cart = (props) => {
                 cancelled_by: "seller",
                 status: "Cancellation Requested"
         };
-        
+        setIsLoading(true)
         dispatch(updateOrder(data)).then(res => {
-          console.log('id',res.responseData);
-          window.location.reload();           
+          console.log('id',res);
+          setStatus(res.responseData.status);
+          setOrderDetails(res.responseData);
+          addToast(res.message, { appearance: res.status, autoDismiss: true, })  
+          setIsLoading(false)      
         })
     }
 
@@ -81,17 +83,14 @@ const Cart = (props) => {
                 
          };
         dispatch(cancel(data)).then(res => {
-          console.log('id',res.responseData);
-          window.location.reload();           
+          console.log('id',res);
+          setStatus(res.responseData.status);
+          setOrderDetails(res.responseData);
+          addToast(res.message, { appearance: res.status, autoDismiss: true, })           
         })
     }
 
-   //const order_details = useSelector((state) => state.user && state.user.seller_order_details && state.user.seller_order_details.responseData && state.user.seller_order_details.responseData.order);
-
-   //const ratings = useSelector((state) => state.user && state.user.rating  && state.user.rating.responseData && state.user.rating.responseData.ratings);
-
    const cancel_reason = useSelector((state) => state.user && state.user.cancel_reason && state.user.cancel_reason.responseData && state.user.cancel_reason.responseData.CancelReasons);
-   console.log('order', ratings);
 
    let buyer_rating = new Array(ratings && ratings.buyerRating).fill(0);
    let seller_rating = new Array(ratings && ratings.sellerRating).fill(0);

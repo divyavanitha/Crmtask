@@ -193,64 +193,7 @@ const Cart = (props) => {
                                        
                                     </div>
                                  </div>
-                                 {/* <div className="col-md-12 mb-3">
-                        <div className="card payment-options">
-                           <div className="card-header">
-                              <h5 className="mt-2"><i className="fa fa-credit-card"></i> Payment Options</h5>
-                           </div>
-                           <div className="card-body">
-                              <div className="row">
-                                 <div className="col-1">
-                                    <input id="paypal" type="radio" name="method" className="form-control radio-input" 
-                                       />
-                                 </div>
-                                 <div className="col-11">
-                                    <img src="assets/images/payment/paypal.png" height="50" className="ml-2 width-xs-100" />
-                                 </div>
-                              </div>
-                              <hr />
-                              <div className="row">
-                                 <div className="col-1">
-                                    <input id="credit-card" type="radio" name="method" className="form-control radio-input"
-                                       />
-                                 </div>
-                                 <div className="col-11">
-                                    <img src="assets/images/payment/credit_cards.jpg" height="50" className="ml-2 width-xs-100" />
-                                 </div>
-                              </div>
-                              <hr />
-                              <div className="row">
-                                 <div className="col-1">
-                                    <input id="mercadopago" type="radio" name="method" className="form-control radio-input"
-                                       />
-                                 </div>
-                                 <div className="col-11">
-                                    <img src="assets/images/payment/mercadopago.png" height="50" className="ml-2 width-xs-100" />
-                                 </div>
-                              </div>
-                              <hr />
-                              <div className="row">
-                                 <div className="col-1">
-                                    <input id="coinpayments" type="radio" name="method" className="form-control radio-input"
-                                       />
-                                 </div>
-                                 <div className="col-11">
-                                    <img src="assets/images/payment/coinpayments.png" height="50" className="ml-2 width-xs-100" />
-                                 </div>
-                              </div>
-                              <hr />
-                              <div className="row">
-                                 <div className="col-1">
-                                    <input id="paystack" type="radio" name="method" className="form-control radio-input"
-                                       />
-                                 </div>
-                                 <div className="col-11">
-                                    <img src="assets/images/payment/paystack.png" height="50" className="ml-2 width-xs-100" />
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div> */}
+                                 
                               </div>
                            </div>
                            <div className="col-md-5">
@@ -274,25 +217,12 @@ const Cart = (props) => {
                                           Pay With Stripe
                                        </button>
                                     </form>
-                                    <div id="paypal-form" className="paypal-button-container"></div>
-                                       {/* credit-card-form Ends */}
-                                    {/* <form action="" method="post" id="mercadopago-form">
-                                       <input type="submit" name="mercadopago" className="btn btn-lg btn-success btn-block" value="Pay With Mercadopago" />
-                                    </form>
-                                    <form action="" method="post" id="coinpayments-form">
-                                       <button type="submit" name="coinpayments" className="btn btn-lg btn-success btn-block">Pay With Coinpayments</button>
-                                    </form>
-                                    <form action="" method="post" id="paystack-form">
-
-                                       <button type="submit" name="paystack" className="btn btn-lg btn-success btn-block">Pay With Paystack</button>
-                                    </form> */}
-
+                                    
                                  </div>
                               </div>
                            </div>
                         </div>
-                        {/* </div> 
-       </div> */}
+                     
                      </div>
                   </div>
 

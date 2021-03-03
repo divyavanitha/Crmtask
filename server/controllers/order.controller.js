@@ -483,9 +483,10 @@ exports.cancel = async (req, res) => {
         }
 
 
-        let orders = await db._update(Order, { _id: req.body.id }, order);
+        await db._update(Order, { _id: req.body.id }, order);
         await db._store(Notification, notification);
-        const response = helper.response({ message: res.__('inserted') });
+        let orders = await db._find(Order, {_id: req.body.id}, {}, { populate: ["gig","buyer","seller"] });
+        const response = helper.response({ message: res.__('inserted'), data: orders });
         return res.status(response.statusCode).json(response);
 
     } catch (err) {
@@ -534,6 +535,7 @@ exports.tips = async (req, res) => {
         let order_detail = await Order.findById(req.body.id);
         var user = await User.findById(order_detail.seller);
         var buyer = await User.findById(order_detail.buyer);
+        let setting = await db._find(Setting, {}, { createdAt: 0, updatedAt: 0 });
 
             let order = {
                 tips: req.body.tips,
@@ -542,7 +544,7 @@ exports.tips = async (req, res) => {
             }
 
             let paymentLog = {};
-
+            let random = "FIV"+ Math.floor(Math.random() * (10000 - 1)) + 1;
             if((order_detail.payment_mode).toUpperCase() == "WALLET"){
                 if(buyer.wallet >= req.body.tips){
 

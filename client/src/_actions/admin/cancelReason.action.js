@@ -4,7 +4,7 @@ import { GET_CANCEL_REASONS, FIND_CANCEL_REASON } from "./types";
 
 export const getCancelReasons = () => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.get('/api/admin/cancel/reason', { headers: { 'Authorization': `${token}` } });
         dispatch({
             type: GET_CANCEL_REASONS,
@@ -19,7 +19,7 @@ export const getCancelReasons = () => async dispatch => {
 };
 
 export const getCancelReasonbyId = (id) => dispatch => {
-    let token = localStorage.admin_token;
+    let token = localStorage.adminToken;
     axios
         .get(`/api/admin/get/cancel/reason/${id}`, { headers: { 'Authorization': `${token}` } })
         .then(res => {
@@ -39,7 +39,7 @@ export const getCancelReasonbyId = (id) => dispatch => {
 
 export const addCancelReason = (data) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.post('/api/admin/cancel/reason', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -52,7 +52,7 @@ export const addCancelReason = (data) => async dispatch => {
 
 export const updateCancelReason = (data) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.patch('/api/admin/cancel/reason', data, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -65,7 +65,7 @@ export const updateCancelReason = (data) => async dispatch => {
 
 export const deleteCancelReason = (id) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.delete(`/api/admin/cancel/reason/${id}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;
@@ -78,7 +78,7 @@ export const deleteCancelReason = (id) => async dispatch => {
 
 export const changeCancelReasonStatus = (id, status) => async dispatch => {
     try {
-        let token = localStorage.admin_token;
+        let token = localStorage.adminToken;
         let response = await axios.get(`/api/admin/cancel/reason/changestatus/${id}/${status}`, { headers: { 'Authorization': `${token}` } });
         response.data.status = 'success';
         return response.data;

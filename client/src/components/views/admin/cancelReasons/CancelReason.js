@@ -71,9 +71,9 @@ const Category = () => {
       "ajax": {
         "url": '/api/admin/cancel/reason',
         "type": "GET",
-            "headers": {
-                "Authorization": localStorage.admin_token
-            },
+        "headers": {
+            "Authorization": localStorage.adminToken
+        },
         data: function (data) {
 
           var info = $('#datatable').DataTable().page.info();
