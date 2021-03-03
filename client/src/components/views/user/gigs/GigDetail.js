@@ -160,17 +160,17 @@ const GigDetail = (props) => {
                 if(values.package_id == ""); delete data["package_id"]; 
 
                 if (values.action == "cart") {
-                    setIsLoading(true)
+                    
                     dispatch(addCart(data)).then(res => {
                         addToast(res.message, { appearance: res.status, autoDismiss: true, })
-                        setIsLoading(false)
+                       
                     }).catch(e => {})
                 } else {
-                    setIsLoading(true)
+                    
                     dispatch(addCart(data)).then(res => {
                         addToast(res.message, { appearance: res.status, autoDismiss: true, })
                         history.push('/cart-payment-option/' + res.responseData.carts._id)
-                        setIsLoading(false)
+                        
                     }).catch(e => {})
                 }
                 resetForm();
