@@ -332,11 +332,11 @@ function Header() {
                             </li>
                             <li className="logged-in-link">
 
-                                <a className="menuItem" href="message" title="Cart">
+                                <Link className="menuItem" to="/chat" title="Chat">
                                     <span className="onePress-icon nav-icon onePress-icon-relative">
                                         <i className="fa fa-envelope-o" style={{ fontSize: "1.4em" }} aria-hidden="true"></i>
                                     </span>
-                                </a>
+                                </Link>
                             </li>
 
                             <li className="logged-in-link d-none d-sm-block d-md-block d-lg-block">

@@ -77,9 +77,11 @@ border-bottom: none;
 .popup-support-wrap .breadcrumbs .fa-home,
 .contacts-sidebar .active,
 .page-link,
-.proposal-unfavorite,
 .dil{
 color:#3a6cff !important;
+}
+.proposal-unfavorite{
+   color: #e91e63 !important;
 }
 .order-page .nav-link.active,
 .order-page .seller-buyer-name {
@@ -792,6 +794,11 @@ display: none;
    box-sizing: border-box;
 }
 
+.form-control:focus{
+   box-shadow: none;
+   border-color: #333;
+}
+
 textarea.form-control{
    height: auto;
 }
@@ -981,9 +988,9 @@ label.col-form-label {
    margin: -10px 0 0 0;
 }
 
-.mpRight .proposal-card-base.mp-proposal-card {}
+.proposal-card-base.mp-proposal-card {}
 
-.mpRight .proposal-card-base.mp-proposal-card > a img {
+.proposal-card-base.mp-proposal-card > a img {
    height: 160px;
    object-fit: cover;
 }
@@ -1270,6 +1277,12 @@ div#demo1 .carousel-item img{
     background: none !important;
     border-left: 1px solid #ddd;
     border-radius: 0;
+}
+.main .bannerFormBox {
+   top: -80px;
+}
+.main .bannerFormBox .form-control, .main .bannerFormBox .input-group-append {
+   top: 0;
 }
 
 .popularService h1{ text-align: center; }
@@ -1800,7 +1813,7 @@ span.custom-control-indicator {}
    background: transparent;
 }
 .proposals-container table.table thead tr th{
-       font-size: 11px;
+       font-size: 12px;
     color: #333333;
     text-transform: uppercase;
     display: table-cell;
@@ -1820,9 +1833,22 @@ span.custom-control-indicator {}
     border-bottom: 1px solid #F5F6FA;
     white-space: nowrap;
 }
-.proposals-container table.table tbody tr td button.btn{
+#ticket-list table.table tbody tr td{
+   padding-top: 5px;
+   padding-bottom: 5px;
+}
+#ticket-list table.table tbody tr td .btn{
+   padding-top: 10px;
+   padding-bottom: 10px;
+}
+.proposals-container table.table tbody tr td .order-proposal-title{
+   font-size: 13px;
+   margin: 0;
+}
+.proposals-container table.table tbody tr td button.btn.dropdown-toggle{
    padding: 0;
-   width: 30px; height: 30px;
+   width: 30px; 
+   height: 30px;
 }
 .proposals-container table.table tbody tr td button.btn:focus{
    box-shadow: none;
@@ -2068,6 +2094,7 @@ span.custom-control-indicator {}
     position: relative;
     top: 10px;
 }
+
 .filterSearchBox+.clearfix {
     margin-top: 20px;
     display: block;
@@ -2080,7 +2107,9 @@ span.custom-control-indicator {}
     background: linear-gradient(90deg, rgb(255, 255, 255) 0%, rgb(245, 246, 250) 20%, rgb(245, 246, 250) 80%, rgb(255, 255, 255) 100%);
     box-shadow: 0 0px 8px -8px #ccc;
 }
-
+.dataTables_wrapper.noFilters .filterSearchBox+.clearfix{
+   display: none;
+}
 .filterSearchBox+.clearfix+.customDatatable {
     margin-top: 10px;
 }
@@ -2343,6 +2372,15 @@ table.dataTable thead th.sorting:after, table.dataTable thead th.sorting_asc:aft
    max-height:80px;
    max-width: 145px;
 }
+
+/* favorites style start */
+.dashboardContainer.favorites-container .proposal-card-base.mp-proposal-card {
+    box-shadow: none;
+    /* background: #f5f5f5; */
+    border: 1px solid #eee;
+}
+/* favorites style end */
+
 
 
 @media only screen and (max-width: 768px){

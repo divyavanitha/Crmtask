@@ -30,6 +30,7 @@ import BuyerOrderList from "../orders/BuyerOrderList";
 import OrderDetails from "../orders/OrderDetails";
 import SellerOrderList from "../orders/SellerOrderList";
 import SellerOrderDetails from "../orders/SellerOrderDetails";
+import Chat from "../Chat";
 import Profile from "../Profile";
 import Account from "../Account";
 import MyGigs from "../MyGigs";
@@ -85,6 +86,7 @@ const Base = () => {
                 <Route path="/profile/:id/:user" component={SellerProfile} />
                 <ProtectedRoute path="/cart-payment-option/:id" component={CartPayment} />
                 <ProtectedRoute path="/cart-payment-option" component={CartPayment} />
+                <ProtectedRoute path="/chat" component={Chat} />
                 <ProtectedRoute path="/gigs" component={GigList} />
                 <ProtectedRoute path="/gig/pricing/:id" component={Pricing} />
                 <ProtectedRoute path="/gig/faq/:id" component={Faq} />
