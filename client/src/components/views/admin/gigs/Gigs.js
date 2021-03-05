@@ -133,7 +133,7 @@ const Gigs = () => {
         {
           "data": function (data, type, row) {
             console.log('data', data);
-            var button = `<a title="View Proposal" id="view-proposal" data-name=`+data.user.firstName+` data-title=`+data.title+` target="_blank"> <i class="fa fa-eye"></i> </a> &nbsp;`
+            var button = `<a title="View Proposal" id="view-proposal" data-name=`+data.user.firstName+` data-title="`+data.title+`" target="_blank"> <i class="fa fa-eye"></i> </a> &nbsp;`
             if(data.status == "PAUSE" || data.status == "PENDING" || data.status == "DECLINE"){
                if(data.featured == false){
                   button += `<a class="change-status d-none" data-id=`+data._id+` data-status="ADD_FEATURE" title="Make Your Proposal Featured"><i class="fa fa-star"></i></a> &nbsp;`
