@@ -46,6 +46,7 @@ const Gigs = () => {
 
 
     $('body').on('click', '#view-proposal', function(e){
+      console.log($(this).data('title'))
       window.open('/gig/' + $(this).data('name') + '/'+$(this).data('title'), '_blank');
     });
 
@@ -131,8 +132,8 @@ const Gigs = () => {
         { "data": "status" },
         {
           "data": function (data, type, row) {
-            console.log('data', data);
-            var button = `<a title="View Proposal" id="view-proposal" data-name=`+data.user.firstName+` data-title=`+data.title+` target="_blank"> <i class="fa fa-eye"></i> </a> &nbsp;`
+            console.log('data', data.title);
+            var button = `<a title="View Proposal" id="view-proposal" data-name=`+data.user.firstName+` data-title="`+data.title+`" target="_blank"> <i class="fa fa-eye"></i> </a> &nbsp;`
 
              if(data.featured == false){
                 button += `<a class="change-status" data-id=`+data._id+` data-status="ADD_FEATURE" title="Make Your Proposal Featured"><i class="fa fa-star"></i></a> &nbsp;`
@@ -163,10 +164,8 @@ const Gigs = () => {
         dispatch(changeGigStatus(id, status)).then(res => {
           addToast(res.message, { appearance: res.status, autoDismiss: true, })
           window.location.reload(); 
-          
         });
     });
-
 
   }, []);
 

@@ -287,7 +287,8 @@ const Faq = (props) => {
                         <div className="form-group">
                           <CKEditor
                             editor={ClassicEditor}
-                            data=''
+                            data={values.description}
+                           
                             onReady={editor => {
                               // You can store the "editor" and use when it is needed.
                               console.log('Editor is ready to use!', editor);
