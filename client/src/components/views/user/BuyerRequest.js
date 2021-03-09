@@ -324,7 +324,7 @@ const BuyerRequest = (props) => {
                {gig.gig && gig.gig.map((list, index) => (<div key={list._id}>
                <div className="proposal-picture">
 
-                  <input type="radio" id="radio" className="radio-custom" data-title={list.title} onChange={(e) =>  {console.log("dfsd");  setFieldValue("gig_id", list._id) }}  />
+                  <input type="radio" id="radio" className="radio-custom" data-title={list.title} name="gig_id" value={list._id}  />
 
                   <label for="radio" className="radio-custom-label"></label>
 

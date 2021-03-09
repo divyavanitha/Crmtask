@@ -202,6 +202,13 @@ console.log('offer', offer && offer.offers);
                   </p>
                </div>
                <hr />
+               <div className="payment-options mb-2">
+                  <input type="radio" value="stripe" name="payment_option" id="stripe" className="radio-custom" />
+                  <label for="stripe" className="radio-custom-label"></label>
+                  <span className="lead font-weight-bold"> Stripe </span>
+                  
+               </div>
+               <hr />
                                                             
             </div>
          </div>
