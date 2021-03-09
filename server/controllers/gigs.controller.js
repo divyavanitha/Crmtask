@@ -77,8 +77,6 @@ exports.getGigDetails = async (req, res) => {
 
             let recent = await db._find(View, { gig: req.params.id, user: user._id });
 
-            gig.viewCount += 1;
-
             if(!recent) {
 
                 let data = {

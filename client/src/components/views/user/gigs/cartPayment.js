@@ -8,12 +8,12 @@ import $ from 'jquery';
 import "./Gig.css";
 import { getGigbyId, getPackage, addCart, getCartList, deleteCart, getCartbyId, findUser } from "../../../../_actions/user.action";
 import { checkout } from "../../../../_actions/order.action";
-
+import { useToasts } from 'react-toast-notifications'
 import OwlCarousel from 'react-owl-carousel';
 
 
 const Cart = (props) => {
-
+   const { addToast } = useToasts()
    const dispatch = useDispatch();
    const params = useParams();
    let history = useHistory();
@@ -103,7 +103,7 @@ const Cart = (props) => {
             
 
             dispatch(checkout(data)).then(res => {
-               console.log(res,"resp")
+               addToast(res.message, { appearance: res.status, autoDismiss: true, })
                if(res.statusCode != 422) history.push('/buying-order-lists')
             })
 

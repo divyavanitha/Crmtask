@@ -72,15 +72,15 @@ exports.sendMail = async (req, res) => {
 exports.buyerOrderList = async (req, res) => {
     try {
 
-        let orders = await db._get(Order, {buyer: req.user._id}, {}, {populate: "gig"});
+        let orders = await db._get(Order, {buyer: req.user._id}, {}, {populate: "gig", sort:{_id: -1}});
 
-        let delivered_order = await db._get(Order, {buyer: req.user._id, status: "DELIVERED"}, {}, {populate: "gig"});
+        let delivered_order = await db._get(Order, {buyer: req.user._id, status: "DELIVERED"}, {}, {populate: "gig", sort:{_id: -1}});
 
-        let completed_order = await db._get(Order, {buyer: req.user._id, status: "COMPLETED"}, {}, {populate: "gig"});
+        let completed_order = await db._get(Order, {buyer: req.user._id, status: "COMPLETED"}, {}, {populate: "gig", sort:{_id: -1}});
 
-        let cancelled_order = await db._get(Order, {buyer: req.user._id, status: "CANCELLED"}, {}, {populate: "gig"});
+        let cancelled_order = await db._get(Order, {buyer: req.user._id, status: "CANCELLED"}, {}, {populate: "gig", sort:{_id: -1}});
 
-        let active_order = await db._get(Order, {buyer: req.user._id, status:  {$in : ["PROGRESS", "CANCELLATION REQUESTED", "REVISION REQUESTED", "DELIVERED"]}  }, {}, {populate: "gig"});
+        let active_order = await db._get(Order, {buyer: req.user._id, status:  {$in : ["PROGRESS", "CANCELLATION REQUESTED", "REVISION REQUESTED", "DELIVERED"]}  }, {}, {populate: "gig", sort:{_id: -1}});
 
         const response = helper.response({ data: {"orders": orders, "delivered_order": delivered_order, "completed_order": completed_order, "cancelled_order": cancelled_order, "active_order": active_order } });
 
@@ -96,15 +96,15 @@ exports.buyerOrderList = async (req, res) => {
 exports.sellerOrderList = async (req, res) => {
     try {
 
-        let orders = await db._get(Order, {seller: req.user._id}, {}, {populate: "gig"});
+        let orders = await db._get(Order, {seller: req.user._id}, {}, {populate: "gig", sort:{_id: -1}});
 
-        let delivered_order = await db._get(Order, {seller: req.user._id, status: "DELIVERED"}, {}, {populate: "gig"});
+        let delivered_order = await db._get(Order, {seller: req.user._id, status: "DELIVERED"}, {}, {populate: "gig", sort:{_id: -1}});
 
-        let completed_order = await db._get(Order, {seller: req.user._id, status: "COMPLETED"}, {}, {populate: "gig"});
+        let completed_order = await db._get(Order, {seller: req.user._id, status: "COMPLETED"}, {}, {populate: "gig", sort:{_id: -1}});
 
-        let cancelled_order = await db._get(Order, {seller: req.user._id, status: "CANCELLED"}, {}, {populate: "gig"});
+        let cancelled_order = await db._get(Order, {seller: req.user._id, status: "CANCELLED"}, {}, {populate: "gig", sort:{_id: -1}});
 
-        let active_order = await db._get(Order, {seller: req.user._id, status:  {$in : ["PROGRESS", "CANCELLATION REQUESTED", "REVISION REQUESTED", "DELIVERED"]} }, {}, {populate: "gig"});
+        let active_order = await db._get(Order, {seller: req.user._id, status:  {$in : ["PROGRESS", "CANCELLATION REQUESTED", "REVISION REQUESTED", "DELIVERED"]} }, {}, {populate: "gig", sort:{_id: -1}});
         var date = new Date();
         console.log(new Date(date.getFullYear(), date.getMonth(), 1));
         console.log(new Date(date.getFullYear(), date.getMonth() + 1, 0));

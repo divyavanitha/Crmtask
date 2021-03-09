@@ -35,16 +35,17 @@ exports.checkout = async (req, res) => {
         })
     }
 
-    const errorResponse = helper.response({ status: 422, error: errorMessage });
+    /*const errorResponse = helper.response({ status: 422, error: errorMessage });
 
     if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
-    try {
+    try {*/
         if (req.body.id) {
             var carts = await db._get(Cart, { _id: req.body.id }, {}, { populate: "gig" });
         } else {
             var carts = await db._get(Cart, { user: req.user._id }, {}, { populate: "gig" });
         }
+
         let total = 0;
 
         if (carts.length > 0) {
@@ -104,8 +105,9 @@ exports.checkout = async (req, res) => {
                     let stripePayment = setting.payment.filter(pay => pay.name === 'STRIPE');
 
                     let card = await db._find(Card, { user: req.user._id, isDefault: true });
-        
-                    if(stripePayment) {
+                    console.log("req", card)
+                    if(stripePayment && (card != null)) {
+
                         let currency = stripePayment.length > 0 && stripePayment[0].credentials ? stripePayment[0].credentials.filter(credential => credential.name === 'currency')[0].value : '';
                         let secret_key = stripePayment.length > 0 && stripePayment[0].credentials ? stripePayment[0].credentials.filter(credential => credential.name === 'secret_key')[0].value : '';
                         if(currency && secret_key) {
@@ -140,13 +142,18 @@ exports.checkout = async (req, res) => {
                             
                         } else {
 
-                            const errorResponse = helper.response({ status: 500, error: 'Currency not available!' });
+                            const errorResponse = helper.response({ status: 422, message: 'Currency not Available!' });
 
                             return res.status(errorResponse.statusCode).json(errorResponse);
                         }
+                    }else {
+
+                            const errorResponse = helper.response({ status: 422, message: 'Please Add Credit Card in Your Account!' });
+
+                            return res.status(errorResponse.statusCode).json(errorResponse);
                     }
                 }
-    
+                
                 admin.wallet += commission;
 
                 if(paymentResponse == "Success"){
@@ -188,22 +195,22 @@ exports.checkout = async (req, res) => {
                     await db._update(User, { _id: orders.buyer }, buyer);
                     await db._update(Admin, {}, admin);
 
-                    
+                let tot_carts = await db._get(Cart, { user: req.user._id });
+                const response = helper.response({ message: res.__('order_placed'), data: tot_carts });
+                return res.status(response.statusCode).json(response);   
                 }
-               
+                
             }
-            let tot_carts = await db._get(Cart, { user: req.user._id });
-            const response = helper.response({ message: res.__('inserted'), data: tot_carts });
-            return res.status(response.statusCode).json(response);
+            
         } else {
-            const response = helper.response({ message: res.__('cart_empty') });
+            const response = helper.response({ message: res.__('cart_empty'), status: 422 });
             return res.status(response.statusCode).json(response);
         }
 
 
 
 
-    } catch (err) {
+    /*} catch (err) {
         if (err[0] != undefined) {
             for (i in err.errors) {
                 return res.status(422).json(err.errors[i].message);
@@ -211,7 +218,7 @@ exports.checkout = async (req, res) => {
         } else {
             return res.status(422).json(err);
         }
-    }
+    }*/
 
 }
 

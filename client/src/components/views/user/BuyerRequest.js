@@ -14,6 +14,7 @@ import $ from 'jquery';
 const BuyerRequest = (props) => {
    const dispatch = useDispatch();
    let history = useHistory();
+   let auth = useSelector((state) => state.user);
    let [gig, setGig] = useState([]);
    let [gigId, setGigId] = useState(0);
    let [gigTitle, setGigTitle] = useState("");
@@ -308,7 +309,7 @@ const BuyerRequest = (props) => {
 
             <div className="request-summary">
                                       
-               <img src="https://www.gigtodo.com/user_images/cool-profile-picastures-coo_1602176634.png" width="50" height="50" className="rounded-circle" />
+               <img src={auth.user && auth.user.profilePhoto ? auth.user && auth.user.profilePhoto : require('../../../assets/images/img-03.jpg')} width="50" height="50" className="rounded-circle" />
             
                <div id="request-description">
 
@@ -323,7 +324,7 @@ const BuyerRequest = (props) => {
                {gig.gig && gig.gig.map((list, index) => (<div key={list._id}>
                <div className="proposal-picture">
 
-                  <input type="radio" id="radio" className="radio-custom" data-title={list.title} name="gig_id" value={list._id} />
+                  <input type="radio" id="radio" className="radio-custom" data-title={list.title} onChange={(e) =>  {console.log("dfsd");  setFieldValue("gig_id", list._id) }}  />
 
                   <label for="radio" className="radio-custom-label"></label>
 
