@@ -1,63 +1,118 @@
+const express = require("express");
+const mongoose = require('mongoose');
+const helper = require('../services/helper.js');
+const db = require('../services/model.js');
+const { Message } = require('../models/Message');
+const { Conversation } = require('../models/Conversation');
+const Joi = require('@hapi/joi');
+const _ = require('lodash');
 
-// const chatuser=require('./chat/user');
-// const deletecontroller=require('./chat/delete');
-// const chatRoomcontroller=require('./chat/chatRoom');
-
-
-// require library modules
-const mongoose = require("mongoose"); // database driver
-
-// load database collection
-const {Chat,validate} = require("../models/chat");
-
-// load validation depending upon inputs
-//const validateChatDetailsInput = require("../validations/chat");
-
-// TODO: test the chat route
-exports.test = async (req, res, next) => {
-  res.json({
-    success: true
-  });
-};
-
-// TODO: insert new chat
-exports.insertChat = async (req, res, next) => {
-//   const { errors, isValid } = true;
-//   if (!isValid) {
-//     // if chat data is not valid
-//     res.status(400).json(errors);
-//   } else {
-   
+exports.getConversation = async (req, res) => {
     try {
-        const { error } = validate(req.body);
-        const errors = {};
-        if (error) {
-            for (let err of error.details) {
-                errors[err.path[0]] = (err.message).replace(/"/g, "");
-            }
-        }
-        if (error) return res.status(422).json(errors);
-        console.log("res.user",req.user)
-      const newChat = new Chat({
-        user:req.user._id,
-        name: req.user.name,
-        content: req.body.content
-      });
-      console.log("newChat",newChat);
-      const chat = await newChat.save();
-      res.json(chat);
-    } catch (err) {
-      console.log(err);
-    }
-//   }
-};
 
-// TODO: view all chats
-exports.getAllChats = async (req, res, next) => {
-  try {
-    const chat = await Chat.find();
-    res.json(chat);
-  } catch (err) {
-    console.log(err);
-  }
-};
+        let from = mongoose.Types.ObjectId(req.user._id);
+
+        let userList = await db._get(Conversation, { participants: { "$in" : [from]} }, {lastMessage: 1, date : 1}, {populate: {path: 'participants', select: 'firstName lastName'}});
+
+        const data = { userList };
+
+        const response = helper.response({ data });
+
+        return res.status(response.statusCode).json(response); 
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+
+
+exports.getConversationList = async (req, res) => {
+    try {
+
+        let me = mongoose.Types.ObjectId(req.user._id);
+        let other = mongoose.Types.ObjectId(req.params.id);
+
+        let userList = await db._get(Message, {
+                $or: [
+                    { $and: [{ to: me }, { from: other }] },
+                    { $and: [{ to: other }, { from: me }] },
+                ],
+            }, {message: 1, date : 1}, {populate: [{path: 'from', select: 'firstName lastName'}, {path: 'to', select: 'firstName lastName'}] } );
+
+        const data = { userList };
+
+        const response = helper.response({ data });
+
+        return res.status(response.statusCode).json(response); 
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+exports.sendMessage = async (req, res) => {
+
+    try {
+
+        let from = mongoose.Types.ObjectId(req.user._id);
+        let to = mongoose.Types.ObjectId(req.body.to);
+
+        let conversationData = {
+                    participants: [req.user._id, req.body.to], 
+                    lastMessage: req.body.message, 
+                    date: Date.now()
+                }
+
+
+        let conversation =  await db._update(Conversation, {
+                participants: {
+                    $all: [
+                        { $elemMatch: { $eq: from } },
+                        { $elemMatch: { $eq: to } },
+                    ],
+                },
+            }, conversationData);
+
+        let messageData = {
+                        conversation: conversation._id,
+                        to: req.body.to,
+                        from: req.user._id,
+                        message: req.body.message
+                        };
+
+        let message = await db._store(Message, messageData);
+
+        const data = { message };
+
+        const response = helper.response({ data });
+
+        let room_name;
+
+        if( req.user._id < to){
+          room_name=req.user._id+'_'+to;
+        }
+        else{
+          room_name=to+'_'+req.user._id;
+        }
+
+        console.log(room_name);
+
+        req.io.sockets.in(room_name).emit('newMessage', messageData );
+
+    //   console.log(req.io.sockets.in('a').emit('newMessage', messageData ));
+
+       // req.io.sockets.in('a').emit('newMessage', messageData );
+
+        //req.io.sockets.emit('messages', req.body.body);
+
+        return res.status(response.statusCode).json(response); 
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+

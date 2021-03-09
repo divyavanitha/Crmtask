@@ -27,7 +27,7 @@ if (localStorage.token) {
   const decoded = jwt_decode(localStorage.token);
 
   axios.get("/api/profile").then((response) => {
-    console.log(response)
+    //console.log(response)
   }).catch((err) => {
 
   });
