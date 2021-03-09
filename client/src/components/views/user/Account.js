@@ -592,7 +592,7 @@ const Account = (props) => {
                                         <button className="close" type="button" data-dismiss="modal"><span>&times;</span></button>
                                     </div>
                                     <div className="modal-body">
-                                        <form onSubmit={handleSubmit} >
+                                       
                                             <div className="form-group">
                                                 <Field type="text" name="name" value={values.name} onChange={handleChange} required placeholder="Enter Your Name" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} />
                                                 <ErrorMessage name="name" component="div" className="invalid-feedback" />
@@ -621,8 +621,7 @@ const Account = (props) => {
                                                 </div>
                                             </div>
                                             <button onClick={addcard} className="btn btn-success btn-block">Add Card</button>
-                                        </form>
-                                      
+                                        
                                     </div>
                                 </div>
                             </div>

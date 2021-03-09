@@ -24,6 +24,8 @@ const Cart = (props) => {
    const [status, setStatus] = useState("");
    const [isLoading, setIsLoading] = useState(false);
    const [ratings, setRatings] = useState();
+   const [validateCancelMsg, setValidateCancelMsg] = useState("");
+   const [validateCancelReason, setValidateCancelReason] = useState("");
 
    useEffect(() => {
 
@@ -75,11 +77,24 @@ const Cart = (props) => {
 
    const sendCancelRequest = async () => {
 
+    let cancellation_message = $("textarea[name=cancellation_message]").val();
+    let cancellation_reason = $("select[name=cancellation_reason] option:selected").val();
+
+    console.log(cancellation_message, cancellation_reason)
+
+      if(cancellation_message == ""){
+        setValidateCancelMsg("Please Enter Your Cancellation Message")
+      }else if(cancellation_reason == ""){
+        setValidateCancelReason("Please Enter Your Cancellation Reason")
+      }
+
+      if(cancellation_message != "" && cancellation_reason != ""){
+
         let data = {
             id: params.id,
             cancellation_message: $("textarea[name=cancellation_message]").val(),
             cancellation_reason: $("select[name=cancellation_reason] option:selected").val(),
-            cancelled_by: "seller",
+            cancelled_by: "buyer",
             status: "Cancellation Requested"
         };
         setIsLoading(true)
@@ -90,6 +105,7 @@ const Cart = (props) => {
           addToast(res.message, { appearance: res.status, autoDismiss: true, })  
           setIsLoading(false)               
         })
+      }
     }
 
     const sendCancel = async (status) => {
@@ -666,15 +682,17 @@ const Cart = (props) => {
                                                             <h3 className="text-center mb-3"> Order Cancellation Request</h3>
                                                             
                                                                <div className="form-group">
-                                                                  <textarea name="cancellation_message" placeholder="Please be as detailed as possible..." rows="10" onChange={handleChange} className="form-control" required></textarea>
+                                                                  <textarea name="cancellation_message" placeholder="Please be as detailed as possible..." required rows="10" onChange={handleChange} className="form-control" required></textarea>
+                                                                  {validateCancelMsg &&  <span style={{color: "red"}}> {validateCancelMsg} </span> }
                                                                </div>
                                                                <div className="form-group">
                                                                   <label className="font-weight-bold"> Cancellation Request Reason </label>
-                                                                  <select name="cancellation_reason" onChange={handleChange} className="form-control">
-                                                                     <option className="hidden"> Select Cancellation Reason </option>
+                                                                  <select name="cancellation_reason" onChange={handleChange} required className="form-control">
+                                                                     <option className="hidden" value=""> Select Cancellation Reason </option>
                                                                      {cancel_reason && cancel_reason.map((list, index) => (<option value={list.reason}> {list.reason}. </option>))}
                                                                      
                                                                   </select>
+                                                                  {validateCancelReason && <span style={{color: "red"}}> {validateCancelReason} </span> }
                                                                </div>
                                                                <button name="submit_cancellation_request" className="btn btn-success float-right submit_cancellation_request" onClick={sendCancelRequest}> Submit Cancellation Request </button>
                                                             

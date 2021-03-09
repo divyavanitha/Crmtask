@@ -83,26 +83,26 @@ exports.deleteRequest = async (req, res) => {
 exports.changeStatus = async (req, res) => {
     try {
 
-        let req = await db._find(Request, { _id: req.params.id });
+        let requestData = await db._find(Request, { _id: req.params.id });
         var admin = await db._find(Admin);
 
         const request = {
             status: req.params.status,
         }
 
-        if(req.params.status == "APPROVE"){
+        if((req.params.status).toUpperCase() == "APPROVE"){
             var notification = {
                 sender: admin._id,
                 senderType: "ADMIN",
-                receiver: req.user,
+                receiver: requestData.user,
                 type: "REQUEST",
                 message: "Has approved your Request. Thanks for posting."
             }
-        }else if(req.params.status == "DECLINE"){
+        }else if((req.params.status).toUpperCase() == "DECLINE"){
             var notification = {
                 sender: admin._id,
                 senderType: "ADMIN",
-                receiver: req.user,
+                receiver: requestData.user,
                 type: "REQUEST",
                 message: "Has declined your Request. Please submit a valid Request."
             }

@@ -25,16 +25,22 @@ const Gallery = (props) => {
 
   let history = useHistory();
   const params = useParams();
+  let [existingFile, setExistingFile] = useState([]);  
   useEffect(() => {
-    dispatch(getGigbyId(params.id))
+    dispatch(getGigbyId(params.id)).then(res => {
+      console.log("file", res.responseData.gig.photo)
+      setExistingFile(res.responseData.gig.photo)
+    })
 
   }, [params.id]);
   let files = [];
   let [file, setFile] = useState([]);
+  
 
   const onDrop = useCallback(acceptedFiles => {
 
     files.push(acceptedFiles);
+    console.log("fff", files)
     setFile(files);
   }, []);
 
@@ -45,6 +51,19 @@ const Gallery = (props) => {
     minSize: 0,
     maxSize,
   });
+
+  const remove = (removeFile, e) => {
+    e.stopPropagation();
+    console.log(removeFile);
+    const newFiles = [...file];     
+    file.splice(removeFile, 1);    
+    console.log("accept", acceptedFiles)
+   
+    alert("Are You Sure You Want to delete?");
+   
+    setFile(file);
+     
+  };
 
 
 
@@ -178,10 +197,15 @@ console.log( ( gig && gig.photo.length > 0 ) || data.get("photo[]") !== null );*
                               console.log(reader.error);
                             };
 
-                            return (<img style={{ padding: '10px', width: '150px' }} key={i} id={i} src={reader.result} alt={f[0].name} />)
+                            return (<div style={{position: "relative", float:"left"}}><i className="fa fa-trash text-red" style={{position: "absolute", left: "6px", top: "-3px"}} onClick={(e) => remove(i, e)}></i><img style={{ padding: '10px', width: '150px' }} key={i} id={i} src={thumb} alt={f[0].name} /></div>)
 
                           }
+
                           )}
+
+                          { existingFile.map((f, i) => {
+                             return (<div style={{position: "relative", float:"left"}}><img style={{ padding: '10px', width: '150px' }} key={i} id={i} src={f.photo} alt={f.photo} /></div>)
+                          })}
                         </div>
                         <ErrorMessage name="photo" component="div" className="invalid-feedback" />
 

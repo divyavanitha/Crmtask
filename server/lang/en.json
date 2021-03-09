@@ -15,6 +15,6 @@
 	"payment_failed": "Payment Failed",
 	"card_added": "Card Added Successfully",
 	"tips_added": "Your tips credited to seller's account",
-	"rated": "Rated Successfully"
-
+	"rated": "Rated Successfully",
+	"order_placed": "Order Placed"
 }

@@ -77,8 +77,6 @@ exports.getGigDetails = async (req, res) => {
 
             let recent = await db._find(View, { gig: req.params.id, user: user._id });
 
-            gig.viewCount += 1;
-
             if(!recent) {
 
                 let data = {
@@ -484,9 +482,14 @@ exports.updateFaq = async(req, res) => {
             //console.log('index',index);
         /*if (index === -1) {
             for(let i in req.body.question) {*/
-                let faq = {
-                    question: req.body.question,
-                    answer: req.body.answer 
+                if(req.body.action == "faq"){
+                    let faq = {
+                        question: req.body.question,
+                        answer: req.body.answer 
+                    }
+
+                    index = faq;
+                    gig.faq = index;
                 }
 
                 //faqs.push(faq);
@@ -503,9 +506,9 @@ exports.updateFaq = async(req, res) => {
             }
             
         }*/
-        index = faq;
-        gig.faq = index;
+        
         gig.description = req.body.description;
+        
         let updated_gig = await Gig.findById(gig._id);
         let gigs = await db._update(Gig, { _id: req.body.id }, gig);
 

@@ -13,5 +13,6 @@
 	"wallet_added": "wallet_added",
 	"card_added": "card_added",
 	"rated": "rated",
-	"tips_added": "tips_added"
+	"tips_added": "tips_added",
+	"order_placed": "order_placed"
 }

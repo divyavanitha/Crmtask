@@ -71,6 +71,9 @@ const User = () => {
       "ajax": {
         "url": '/api/admin/user',
         "type": "GET",
+        "headers": {
+            "Authorization": localStorage.adminToken
+        },
         data: function (data) {
 
           var info = $('#datatable').DataTable().page.info();

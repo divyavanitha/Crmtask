@@ -330,6 +330,7 @@ const GigDetail = (props) => {
                                             <div className="card-header">
                                                 <h3>Frequently Asked Questions</h3>
                                             </div>
+                                            {console.log("faq", gig && gig.faq)}
                                             <div className="card-body proposal-desc">
                                             {gig && gig.faq.map((faq, i) => (
                                                 <Fragment key={i}>

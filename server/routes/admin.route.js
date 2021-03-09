@@ -253,7 +253,7 @@ router.get('/cancel/reason/changestatus/:id/:status', middleware.admin, (req, re
   cancelReasonController.changeStatus(req, res);
 });
 
-router.get('/user/:id/id', (req, res) => {
+router.get('/user', (req, res) => {
   userController.listusers(req, res);
 });
 router.post('/user', (req, res) => {

@@ -131,7 +131,7 @@ const Gigs = () => {
           "data": function (data, type, row) {
             console.log('data', data);
             
-            var button = `<a title="View Proposal" id="view-proposal" data-name=`+data.user.firstName+` data-title=`+data.title+` target="_blank"> <i class="fa fa-eye"></i> </a> &nbsp;`
+            var button = `<a title="View Proposal" id="view-proposal" data-name=`+data.user.firstName+` data-title="`+data.title+`" target="_blank"> <i class="fa fa-eye"></i> </a> &nbsp;`
 
              if(data.status == "PAUSE"){
                   button += `<a title="Unpause Proposal" class="change-status" data-id=`+data._id+` data-status="UNPAUSE"><i class="fa fa-refresh"></i> </a> &nbsp`;

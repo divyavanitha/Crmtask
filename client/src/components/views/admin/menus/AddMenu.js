@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import $ from 'jquery';
 
 import { addMenu, getMenubyId, updateMenu } from "../../../../_actions/admin/menu.action";
-import { getCategories } from "../../../../_actions/admin/category.action";
+import { categoryList } from "../../../../_actions/admin/category.action";
 
 const AddMenu = (props) => {
     const { addToast } = useToasts()
@@ -20,13 +20,13 @@ const AddMenu = (props) => {
     const params = useParams();
     useEffect(() => {
 
-        dispatch(getCategories());
+        dispatch(categoryList());
         dispatch(getMenubyId(params.id))
 
     }, [params.id]);
     const menu = useSelector(state => state.menus && state.menus.menus && state.menus.menus.responseData && state.menus.menus.responseData.menu);
-    const categories = useSelector(state => state.categories && state.categories.categories.responseData && state.categories.categories.responseData.data.categories);
-    console.log(menu);
+    const categories = useSelector(state => state.categories && state.categories.list && state.categories.list.responseData && state.categories.list.responseData.categories);
+    console.log(categories);
 
     return (
 
@@ -163,7 +163,7 @@ const AddMenu = (props) => {
                                                         </Field>
                                                         <ErrorMessage name="category" component="div" className="invalid-feedback" />
                                                     </div>
-                                                </div>
+                                                </div> 
                                                 <div className="form-group row">
                                                     <label className="col-md-4 control-label"> Image : </label>
                                                     <div className="col-md-6">

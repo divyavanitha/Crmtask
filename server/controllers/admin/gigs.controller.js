@@ -80,6 +80,7 @@ exports.gigStatus = async (req, res) => {
                 type: "GIG",
                 message: "Has approved your Gig. Thanks for posting."
             }
+            await db._store(Notification, notification);
 
         }else if((req.params.status).toUpperCase() == "DECLINE"){
             gig.status = "DECLINE";
@@ -91,15 +92,17 @@ exports.gigStatus = async (req, res) => {
                 type: "GIG",
                 message: "Has declined your gig. Please submit a valid gig. "
             }
+            await db._store(Notification, notification);
         }
 
         let gigs = await db._update(Gig, { _id: req.params.id }, gig);
-        await db._store(Notification, notification);
+        
         const response = helper.response({ message: res.__('updated') });
         return res.status(response.statusCode).json(response);
         
     }
     catch (err) {
+        console.log("eer", err)
         if (err[0] != undefined) {
             for (i in err.errors) {
                 res.status(422).send(err.errors[i].message);
