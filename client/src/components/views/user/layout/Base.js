@@ -86,6 +86,7 @@ const Base = () => {
                 <Route path="/profile/:id/:user" component={SellerProfile} />
                 <ProtectedRoute path="/cart-payment-option/:id" component={CartPayment} />
                 <ProtectedRoute path="/cart-payment-option" component={CartPayment} />
+                <ProtectedRoute path="/chat/:id" component={Chat} />
                 <ProtectedRoute path="/chat" component={Chat} />
                 <ProtectedRoute path="/gigs" component={GigList} />
                 <ProtectedRoute path="/gig/pricing/:id" component={Pricing} />

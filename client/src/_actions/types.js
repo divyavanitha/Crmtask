@@ -25,9 +25,6 @@ export const GET_ERRORS = 'get_errors';
 export const GET_CATEGORY = 'GET_CATEGORY';
 export const GET_SUBCATEGORY = 'GET_SUBCATEGORY';
 
-export const GET_CHATS = 'get_chat';
-export const AFTER_POST_MESSAGE = 'after_post_message';
-
 export const GET_MENUS = 'GET_MENUS';
 
 export const GET_CART_LIST = 'GET_CART_LIST';
@@ -107,3 +104,5 @@ export const PAYOUTCARDS = 'PAYOUTCARDS';
 export const ADDPAYOUTCARD = 'ADDPAYOUTCARD';
 export const WALLET = 'WALLET';
 
+export const GET_USERS = 'GET_USERS';
+export const GET_CHATS = 'GET_CHATS';

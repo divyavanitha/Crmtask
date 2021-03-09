@@ -8,10 +8,11 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cookieParser = require("cookie-parser");
 var session = require('express-session');
-const socketio = require('socket.io');
 const Log = new (require('./config/winston'));
 const i18n = require('i18n');
 const helper = require('./services/helper.js');
+const http = require("http"); 
+const socketIo = require("socket.io"); 
 
 i18n.configure({ 
   locales: ['en', 'ar'], 
@@ -27,10 +28,20 @@ const admin = require('./routes/admin.route');
 
 const app = express();
 
-const server = require("http").createServer(app);
-const io = require("socket.io")(server);
-
 dotenv.config(); 
+
+// Create the http server 
+const server = require('http').createServer(app); 
+  
+// Create the Socket IO server on  
+// the top of http server 
+const io = socketIo(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+}); 
+
 
 app.use(i18n.init);
 app.use((req, res, next) => {
@@ -38,6 +49,10 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use((req, res, next) => {
+  req.io = io;
+  next();
+});
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -88,4 +103,30 @@ app.use(function(err, req, res, next) {
   res.status(code).json( helper.response(  { status: code, error : err, message: err.message }   ));
 });
 
-module.exports = app;
+io.sockets.on('connection', function(socket) {
+
+  socket.on('joinRoom', function(newroom) {
+
+    socket.join(newroom);
+
+    io.sockets.in(newroom).emit('socketStatus', { message: 'you are connected to chat '+ newroom });
+
+    io.sockets.in(newroom).emit('newMessage', { message: 'test ' });
+
+  });
+
+  socket.on('joinChatRoom', function(newroom) {
+
+    socket.join(newroom);
+
+    io.sockets.in(newroom).emit('socketStatus', { message: 'you are connected to private chat '+ newroom });
+
+  });
+
+  socket.on('disconnect', function() {
+
+  });
+
+});
+
+module.exports = { app: app, server: server }; 

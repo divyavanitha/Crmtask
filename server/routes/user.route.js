@@ -12,6 +12,7 @@ const orderController = require('../controllers/order.controller');
 const requestController = require('../controllers/request.controller');
 const cartController = require('../controllers/cart.controller');
 const cardController = require('../controllers/card.controller');
+const chatController = require('../controllers/chat.controller');
 
 
 router.get('/pages/list/:type', (req, res) => {
@@ -382,6 +383,21 @@ router.get('/default/card/:id', middleware.user, (req, res) => {
   cardController.defaultCard(req, res);
 });
 
+router.get('/chat/users', middleware.user, (req, res) => {
+  chatController.getConversation(req, res);
+});
+
+router.get('/chat/:id', middleware.user, (req, res) => {
+  chatController.getConversationList(req, res);
+});
+
+router.post('/chat', [middleware.user, middleware.upload( path.join(__dirname, '../storage/images/gig/') ).fields([{ name: 'photo[]', maxCount: 4 }]) ], (req, res) => {
+  chatController.sendMessage(req, res);
+});
+
+/*router.post('/chat', middleware.user, (req, res) => {
+  chatController.sendMessage(req, res);
+});*/
 
 /*router.post('/reset-password', authController.forgetpassword)
 
