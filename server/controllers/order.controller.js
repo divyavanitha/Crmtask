@@ -96,6 +96,7 @@ exports.checkout = async (req, res) => {
                         
                         buyer.wallet = buyer.wallet - total;
                         user.wallet += balance;
+                        admin.wallet += commission;
                         paymentResponse = "Success";
                     }else{
                         const response = helper.response({ message: res.__('low_wallet_amount'), status: 422 });
@@ -129,7 +130,9 @@ exports.checkout = async (req, res) => {
                             let message;
                             let status;
                             const user = await db._find(User, { _id: req.user._id });
-                            if(charge.status == 'succeeded') {                               
+                            if(charge.status == 'succeeded') {
+                                 user.wallet += balance;      
+                                 admin.wallet += commission;                         
                                  paymentResponse = "Success";  
                                  paymentLog.status = "Paid";
                                  
@@ -154,7 +157,7 @@ exports.checkout = async (req, res) => {
                     }
                 }
                 
-                admin.wallet += commission;
+                
 
                 if(paymentResponse == "Success"){
                     var order = {

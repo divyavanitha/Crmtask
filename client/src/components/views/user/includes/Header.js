@@ -401,7 +401,7 @@ function Header() {
                                 </div>
                             </li>
                             <li className="logged-in-link mr-lg-0 mr-2 d-none d-sm-block d-md-block d-lg-block">
-                              <Link to="/wallet" className="menuItem btn btn-success text-white">${user && user.wallet}</Link>
+                              <Link to="/wallet" className="menuItem btn btn-success text-white">${user && user.wallet ? user && user.wallet : 0}</Link>
                             </li>
                             </ul>)}
 
