@@ -283,9 +283,8 @@ exports.listSlide = async (req, res) => {
     try {
         
         let slides = await db._get(Slide, { status: 1 });
-        let recent = await db._get(View, { user: req.user._id }, {}, {populate: ['gig', 'user']});
 
-        const data = { slides, recent };
+        const data = { slides };
 
         const response = helper.response({ data });
         return res.status(response.statusCode).json(response);

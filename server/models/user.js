@@ -69,7 +69,7 @@ const userSchema = mongoose.Schema({
         type: String
     },
     skill: [{
-        skill: { type: Schema.Types.ObjectId, ref: 'Skill' },
+        skill: { type: String },
         level: { type: String },
     }],
     education: [{

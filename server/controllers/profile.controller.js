@@ -118,20 +118,32 @@ exports.updateLanguage = async (req, res) => {
 
     const response = helper.response({ status: 422, error: errorMessage });
 
-    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
+    if (error) return res.status(response.statusCode).json(response);
 
     try {
 
         let user = await User.findById(ObjectId(req.body.id));
-
+        const arr = user.language;
+        let index = (arr.length - 1);
         let language = [];
-
-        for (let i in req.body.language) {
-            let lang = {
-                language: req.body.language[i],
-                level: req.body.level[i]
+        if (index === -1) {
+            for (let i in req.body.language) {
+                let lang = {
+                    language: req.body.language[i],
+                    level: req.body.level[i]
+                }
+                language.push(lang);
             }
-            language.push(lang);
+        } else {
+            for(let i in req.body.language) {
+                let lang = {
+                    language: req.body.language[i],
+                    level: req.body.level[i]
+                }
+                arr[index+1] = lang;
+                language = arr[index];
+            }
+            
         }
 
         if (language.length > 0) user.language = language;
@@ -155,7 +167,7 @@ exports.updateLanguage = async (req, res) => {
 exports.updateSkill = async (req, res) => {
     const schema = Joi.object().options({ abortEarly: false }).keys({
         id: Joi.string().required().label("User Id"),
-        skill_id: Joi.array().required().label("Skill Id"),
+        skill: Joi.array().required().label("Skill"),
         level: Joi.array().required().label("Skill Level")
 
     }).unknown(true);
@@ -172,20 +184,34 @@ exports.updateSkill = async (req, res) => {
 
     const response = helper.response({ status: 422, error: errorMessage });
 
-    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
+    if (error) return res.status(response.statusCode).json(response);
 
     try {
 
         let user = await User.findById(ObjectId(req.body.id));
 
+        const arr = user.skill;
+        let index = (arr.length - 1);
         let skills = [];
+        if (index === -1) {
 
-        for (let i in req.body.skill_id) {
-            let skill = {
-                skill: req.body.skill_id[i],
-                level: req.body.level[i]
+            for (let i in req.body.skill) {
+                let skill = {
+                    skill: req.body.skill[i],
+                    level: req.body.level[i]
+                }
+                skills.push(skill);
             }
-            skills.push(skill);
+        } else {
+            for(let i in req.body.skill) {
+                let skill = {
+                    skill: req.body.skill[i],
+                    level: req.body.level[i]
+                }
+                arr[index+1] = skill;
+                skills = arr[index];
+            }
+            
         }
 
         if (skills.length > 0) user.skill = skills;
@@ -209,7 +235,7 @@ exports.updateSkill = async (req, res) => {
 exports.updateEducation = async (req, res) => {
     const schema = Joi.object().options({ abortEarly: false }).keys({
         id: Joi.string().required().label("User Id"),
-        country_id: Joi.array().required().label("Country Id"),
+        country: Joi.array().required().label("Country"),
         institute: Joi.array().required().label("Institute"),
         title: Joi.array().required().label("Title"),
         major: Joi.array().required().label("Major"),
@@ -229,23 +255,41 @@ exports.updateEducation = async (req, res) => {
 
     const response = helper.response({ status: 422, error: errorMessage });
 
-    if (error) return res.status(errorResponse.statusCode).json(errorResponse);
+    if (error) return res.status(response.statusCode).json(response);
 
     try {
 
         let user = await User.findById(ObjectId(req.body.id));
-
+        const arr = user.education;
+        let index = (arr.length - 1);
         let education = [];
+        if (index === -1) {
 
-        for (let i in req.body.country_id) {
-            let edu = {
-                country: req.body.country_id[i],
-                institute: req.body.institute[i],
-                title: req.body.title[i],
-                major: req.body.major[i],
-                year: req.body.year[i],
+            for (let i in req.body.country) {
+                let edu = {
+                    country: req.body.country[i],
+                    institute: req.body.institute[i],
+                    title: req.body.title[i],
+                    major: req.body.major[i],
+                    year: req.body.year[i],
+                }
+                education.push(edu);
             }
-            education.push(edu);
+        } else {
+            for(let i in req.body.country) {
+
+                let edu = {
+                    country: req.body.country[i],
+                    institute: req.body.institute[i],
+                    title: req.body.title[i],
+                    major: req.body.major[i],
+                    year: req.body.year[i],
+                }
+                
+                arr[index+1] = edu;
+                education = arr[index];
+            }
+            
         }
 
         if (education.length > 0) user.education = education;
@@ -293,15 +337,32 @@ exports.updateCertification = async (req, res) => {
 
         let user = await User.findById(ObjectId(req.body.id));
 
+        const arr = user.certification;
+        let index = (arr.length - 1);
         let certification = [];
+        if (index === -1) {
 
-        for (let i in req.body.name) {
-            let certify = {
-                certifier: req.body.certifier[i],
-                name: req.body.name[i],
-                year: req.body.year[i],
+            for (let i in req.body.name) {
+                let certify = {
+                    certifier: req.body.certifier[i],
+                    name: req.body.name[i],
+                    year: req.body.year[i],
+                }
+                certification.push(certify);
             }
-            certification.push(certify);
+        } else {
+            for(let i in req.body.name) {
+
+                let certify = {
+                    certifier: req.body.certifier[i],
+                    name: req.body.name[i],
+                    year: req.body.year[i],
+                }
+                
+                arr[index+1] = certify;
+                certification = arr[index];
+            }
+            
         }
 
         if (certification.length > 0) user.certification = certification;

@@ -42,7 +42,11 @@ exports.getConversationList = async (req, res) => {
                 ],
             }, {message: 1, date : 1}, {populate: [{path: 'from', select: 'firstName lastName profilePhoto'}, {path: 'to', select: 'firstName lastName profilePhoto'}] } );
 
-        let user = await db._find(User, {_id: req.params.id});
+        let user = await db._find(User, {_id: req.params.id}, {}, { populate: 
+            [{ path: 'country', model: 'Country', select: 'name' },
+            { path: 'city', model: 'city', select: 'name' },
+            { path: 'state', model: 'state', select: 'name' }
+            ]});
 
         const data = { userList, user };
 
@@ -85,7 +89,8 @@ exports.sendMessage = async (req, res) => {
                         conversation: conversation._id,
                         to: req.body.to,
                         from: req.user._id,
-                        message: req.body.message
+                        message: req.body.message,
+                        type: req.body.type
                         };
 
         let message = await db._store(Message, messageData);
