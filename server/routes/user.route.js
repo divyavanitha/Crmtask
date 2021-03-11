@@ -35,6 +35,10 @@ router.post('/login', (req, res) => {
   authController.login(req, res);
 });
 
+router.get('/freelancer/list', (req, res) => {
+  homeController.freelancerList(req, res);
+});
+
 router.post('/register', (req, res) => {
   authController.register(req, res);
 });
@@ -393,6 +397,10 @@ router.get('/chat/:id', middleware.user, (req, res) => {
 
 router.post('/chat', [middleware.user, middleware.upload( path.join(__dirname, '../storage/images/gig/') ).fields([{ name: 'photo[]', maxCount: 4 }]) ], (req, res) => {
   chatController.sendMessage(req, res);
+});
+
+router.get('/default/card/:id', middleware.user, (req, res) => {
+  cardController.defaultCard(req, res);
 });
 
 /*router.post('/chat', middleware.user, (req, res) => {

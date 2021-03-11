@@ -283,8 +283,9 @@ exports.listSlide = async (req, res) => {
     try {
         
         let slides = await db._get(Slide, { status: 1 });
+        let recent = await db._get(View, { user: req.user._id }, {}, {populate: ['gig', 'user']});
 
-        const data = { slides };
+        const data = { slides, recent };
 
         const response = helper.response({ data });
         return res.status(response.statusCode).json(response);
@@ -328,7 +329,30 @@ exports.listPackage = async (req, res) => {
 
 }
 
+exports.freelancerList = async (req, res) => {
+   try {
 
+        if(!req.query.length) req.query.length = 10;
+        else req.query.length = parseInt(req.query.length);
+        if(!req.query.page) req.query.page = 1;
+        else req.query.page = parseInt(req.query.page);
+
+        let skip = (req.query.page * req.query.length) - req.query.length;
+
+        let freelancers = await db._get(User, null, null, {limit: req.query.length, skip: skip });
+
+        let count = await db._count(User);
+
+        const data = { freelancers };
+
+        const response = helper.response({ data: helper.paginate(req, data, count) });
+
+        return res.status(response.statusCode).json(response);
+
+    } catch (err) {
+        console.log(err);
+    } 
+}
 
 exports.listcategory = async (req, res) => {
     try {

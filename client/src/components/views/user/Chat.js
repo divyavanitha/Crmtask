@@ -6,12 +6,13 @@ import * as Yup from 'yup';
 import io from "socket.io-client";
 import $ from 'jquery';
 
-import { getUserList, getChatList, postMessage } from "../../../_actions/chat.action";
+import { getUserList, getChatList, postMessage, getUser } from "../../../_actions/chat.action";
 
 const Chat = (props) => {
 
    const dispatch = useDispatch();
    const [users, setUsers] = useState([]);
+   const [user, setUser] = useState();
    const [newMessage, setNewMessage] = useState(null);
    const [chats, setChats] = useState([]);
    const history = useHistory();
@@ -22,7 +23,9 @@ const Chat = (props) => {
    var socket = io(process.env.REACT_APP_URL);
 
    const getChat = (id) => {
-      history.push("/chat/"+id);
+     
+         history.push("/chat/"+id);
+      
    }
 
    const scrollToBottom = () => {
@@ -45,7 +48,9 @@ const Chat = (props) => {
          socket.on("socketStatus", (data) => { console.log(data) });
 
          dispatch(getChatList(id)).then((res) => {
+            console.log("res", res)
             if (res.userList) setChats(res.userList);
+            if (res.user) setUser(res.user)
             scrollToBottom();
          });
       }
@@ -186,12 +191,13 @@ const Chat = (props) => {
                               {id ?
 
                                  <div className="userDetailBox convertion-detail">
+                                 {console.log("chaat", chats)}
                                     <div className="user-pro-col">
                                        <div className="row">
                                           <div className="col-md-6">
                                              <div className="profile-detail">
-                                                <h3>Shivansh</h3>
-                                                <p><strong>Offline</strong> | <span className="time">Local Time <i className="fa fa-clock-o" aria-hidden="true"></i> Feb 16, 07:46 AM</span></p>
+                                                <h3>{user && user.firstName}</h3>
+                                                {/* <p><strong>Offline</strong> | <span className="time">Local Time <i className="fa fa-clock-o" aria-hidden="true"></i> Feb 16, 07:46 AM</span></p> */}
                                              </div>
                                           </div>
 
@@ -217,15 +223,22 @@ const Chat = (props) => {
                                     </div>
                                     <div className="row">
                                        <div className="col-md-8">
+
                                           <div className="convertion-list">
                                              <ul>
 
                                                 {chats.map((chat, index) => <li key={index}>
-                                                   <div className="user-img"><img src={require('../../../assets/images/comp/profileIcon.png')} className="rounded-circle" width="50" height="50" /></div>
+                                                   {(chat.from._id === auth.user._id) ? ( <div><div className="user-img"><img src={require('../../../assets/images/comp/profileIcon.png')} className="rounded-circle" width="50" height="50" /></div>
                                                    <div className="user-detail">
-                                                      <b>{chat.firstName} {chat.lastName} <span>{chat.date} |<i className="fa fa-flag" aria-hidden="true"></i> <a href=""> Report</a></span></b>
+                                                      <b>Me <span>{chat.date} |<i className="fa fa-flag" aria-hidden="true"></i> <a href=""> Report</a></span></b>
                                                       <p>{chat.message}</p>
                                                    </div>
+                                                   </div>) : (<div className="float-right"><div className="user-img"><img src={require('../../../assets/images/comp/profileIcon.png')} className="rounded-circle" width="50" height="50" /></div>
+                                                   <div className="user-detail">
+                                                      <b>{chat.from.firstName} {chat.from.lastName} <span>{chat.date} |<i className="fa fa-flag" aria-hidden="true"></i> <a href=""> Report</a></span></b>
+                                                      <p>{chat.message}</p>
+                                                   </div>
+                                                   </div>)}
                                                 </li>)}
 
                                              </ul>
@@ -267,28 +280,28 @@ const Chat = (props) => {
                                              <h3>About</h3>
                                              <div className="profile-name-photo text-center">
                                                 <img src={require('../../../assets/images/comp/profileIcon.png')} className="rounded-circle" width="100px" height="100px" />
-                                                <strong>Shivansh</strong>
+                                                <strong>{user && user.firstName}</strong>
                                                 <p>New Seller</p>
                                              </div>
                                              <div className="other-detail">
                                                 {/*<table>
-                                                                                                   <tr>
-                                                                                                      <td align="left"><i className="fa fa-star" aria-hidden="true"></i> Rating</td>
-                                                                                                      <td align="right">10%</td>
-                                                                                                   </tr>
-                                                                                                   <tr>
-                                                                                                      <td align="left"><i className="fa fa-map-marker" aria-hidden="true"></i> From</td>
-                                                                                                      <td align="right">India</td>
-                                                                                                   </tr>
-                                                                                                   <tr>
-                                                                                                      <td align="left"><i className="fa fa-truck" aria-hidden="true"></i>  Last delivery</td>
-                                                                                                      <td align="right">July 31, 2020</td>
-                                                                                                   </tr>
-                                                                                                   <tr>
-                                                                                                      <td align="left"><i className="fa fa-language" aria-hidden="true"></i> English</td>
-                                                                                                      <td align="right">Conversational</td>
-                                                                                                   </tr>
-                                                                                                </table>*/}
+                                                   <tr>
+                                                      <td align="left"><i className="fa fa-star" aria-hidden="true"></i> Rating</td>
+                                                      <td align="right">10%</td>
+                                                   </tr>
+                                                   <tr>
+                                                      <td align="left"><i className="fa fa-map-marker" aria-hidden="true"></i> From</td>
+                                                      <td align="right">India</td>
+                                                   </tr>
+                                                   <tr>
+                                                      <td align="left"><i className="fa fa-truck" aria-hidden="true"></i>  Last delivery</td>
+                                                      <td align="right">July 31, 2020</td>
+                                                   </tr>
+                                                   <tr>
+                                                      <td align="left"><i className="fa fa-language" aria-hidden="true"></i> English</td>
+                                                      <td align="right">Conversational</td>
+                                                   </tr>
+                                                </table>*/}
                                              </div>
                                           </div>
                                        </div>

@@ -4,6 +4,7 @@ const helper = require('../services/helper.js');
 const db = require('../services/model.js');
 const { Message } = require('../models/Message');
 const { Conversation } = require('../models/Conversation');
+const { User } = require('../models/user');
 const Joi = require('@hapi/joi');
 const _ = require('lodash');
 
@@ -12,7 +13,7 @@ exports.getConversation = async (req, res) => {
 
         let from = mongoose.Types.ObjectId(req.user._id);
 
-        let userList = await db._get(Conversation, { participants: { "$in" : [from]} }, {lastMessage: 1, date : 1}, {populate: {path: 'participants', select: 'firstName lastName'}});
+        let userList = await db._get(Conversation, { participants: { "$in" : [from]} }, {lastMessage: 1, date : 1}, {populate: {path: 'participants', select: 'firstName lastName profilePhoto'}});
 
         const data = { userList };
 
@@ -39,9 +40,11 @@ exports.getConversationList = async (req, res) => {
                     { $and: [{ to: me }, { from: other }] },
                     { $and: [{ to: other }, { from: me }] },
                 ],
-            }, {message: 1, date : 1}, {populate: [{path: 'from', select: 'firstName lastName'}, {path: 'to', select: 'firstName lastName'}] } );
+            }, {message: 1, date : 1}, {populate: [{path: 'from', select: 'firstName lastName profilePhoto'}, {path: 'to', select: 'firstName lastName profilePhoto'}] } );
 
-        const data = { userList };
+        let user = await db._find(User, {_id: req.params.id});
+
+        const data = { userList, user };
 
         const response = helper.response({ data });
 
@@ -52,6 +55,8 @@ exports.getConversationList = async (req, res) => {
     }
 
 }
+
+
 
 exports.sendMessage = async (req, res) => {
 
