@@ -49,6 +49,19 @@ const orderSchema = mongoose.Schema({
         deliveredMessage: { type: String },
         delivery_file: { type: String },
     }],
+    order_message: [{
+        message: { type: String },
+        message_file: { type: String },
+        sent_by: {type: String},
+        created_at: {
+            type: Date,
+            default: Date.now
+        },
+
+    }],
+    service: {
+        type: String
+    },
     tips: {
         type: Number,
         default: 0

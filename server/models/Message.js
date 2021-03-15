@@ -16,12 +16,30 @@ const MessageSchema = new Schema({
         ref: 'users',
     },
     message: {
-        type: String,
-        required: true,
+        type: String
     },
     type: {
         type: String,
         required: true
+    },
+    offer: {
+        gig: { type: Schema.Types.ObjectId, ref: 'gigs' },
+        seller: { type: Schema.Types.ObjectId, ref: 'users' },
+        description: {
+            type: String
+        },
+        duration: {
+            type: String
+        },
+        amount: {
+            type: Number
+        },
+        status: {
+            type: String
+        },
+        order: {
+            type: String
+        }
     },
     date: {
         type: String,

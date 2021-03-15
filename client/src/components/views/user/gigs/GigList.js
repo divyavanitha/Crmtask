@@ -12,6 +12,7 @@ const GigList = (props) => {
    let [payment, setPayment] = useState(0);
    let [filterGig, setFileterGig] = useState([]);
    let [response, setResponse] = useState([]);
+   let [title, setTitle] = useState("");
    let settings = useSelector((state) => state.settings);
 
    let gig = settings.settings && settings.settings.gig;
@@ -66,6 +67,9 @@ const GigList = (props) => {
          e.preventDefault();
          const id = that.data('id');
          const status = that.data('status');
+         const title = that.data('title');
+         setTitle(title);
+
          $('.featured-listing-modal').modal("show");
          $(".feature-modal-btn")
             .off()
@@ -190,7 +194,7 @@ const GigList = (props) => {
                                           <div className="dropdown-menu">
                                              <Link data-id={list._id} to={list.user ? "/gig/" + list.user.firstName + "/" + list.title : ""} className="dropdown-item" target="_blank" > Preview </Link>
 
-                                             {(list.featured == true) ? <Link className="dropdown-item Change-gigstatus text-success">Already Featured </Link> : <Link data-id={list._id} data-status="ADD_FEATURE" className="dropdown-item feature" id="featured-button">Make Proposal Featured</Link>}
+                                             {(list.featured == true) ? <Link className="dropdown-item Change-gigstatus text-success">Already Featured </Link> : <Link data-id={list._id} data-title = {list.title} data-status="ADD_FEATURE" className="dropdown-item feature" id="featured-button">Make Proposal Featured</Link>}
 
                                              <Link data-id={list._id} data-status="Pause" className="dropdown-item Change-gigstatus"> Deactivate Proposal</Link>
 
@@ -411,7 +415,7 @@ const GigList = (props) => {
                            </h4>
                            <p>You are about to pay a feature listing fee for your proposal/service. This will make this proposal/service feature on our "Featured proposal/service" spots. The fee is $25.00 and the duration is {gig && gig.featuredGigDuration} Days. Please use any of the following payment methods below to complete payment.</p>
                            <h4><b>SUMMARY:</b></h4>
-                           <p><b>Proposal Title:</b> i will design a perfect logo for your company</p>
+                           <p><b>Proposal Title:</b> {title}</p>
                            <p><b>Feature Listing Fee:</b> ${gig && gig.featuredGigPrice}</p>
                            <p className="processing-fee" style={{display: "none"}}><b>Processing Fee:</b> $1.25</p>
                            <p><b>Listing Duration:</b> {gig && gig.featuredGigDuration} Days.</p>

@@ -140,7 +140,7 @@ export const getGigList = (data) => async dispatch => {
   return gig.data.responseData;
 }
 
-export const submitApproval = (id) => async dispatch => {
+export const submitApproval = (id) => async () => {
   try {
     let response = await axios.get(`/api/gig/submit/approval/${id}`);
     console.log('data', response);

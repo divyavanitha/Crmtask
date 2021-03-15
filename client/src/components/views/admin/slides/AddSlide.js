@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import $ from 'jquery';
 
 import { addSlide, getSlidebyId, updateSlide } from "../../../../_actions/admin/slide.action";
-import { getCategories } from "../../../../_actions/admin/category.action";
+import { categoryList } from "../../../../_actions/admin/category.action";
 
 const AddSlide = (props) => {
     const { addToast } = useToasts()
@@ -19,13 +19,11 @@ const AddSlide = (props) => {
     let history = useHistory();
     const params = useParams();
     useEffect(() => {
-
-        dispatch(getCategories());
+        dispatch(categoryList());
         dispatch(getSlidebyId(params.id))
-
     }, [params.id]);
     const slide = useSelector(state => state.slides && state.slides.slide && state.slides.slide.responseData.slide);
-    const categories = useSelector(state => state.categories && state.categories.categories.responseData && state.categories.categories.responseData.data.categories);
+    const categories = useSelector(state => state.categories && state.categories.list && state.categories.list.responseData && state.categories.list.responseData.categories);
 
 
     return (

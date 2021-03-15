@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useRef } from 'react';
 import { withRouter, useParams, Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
@@ -26,6 +26,8 @@ const Cart = (props) => {
    const [ratings, setRatings] = useState();
    const [validateCancelMsg, setValidateCancelMsg] = useState("");
    const [validateCancelReason, setValidateCancelReason] = useState("");
+   const message = useRef("");
+   const messageFile = useRef("");
 
    useEffect(() => {
 
@@ -146,6 +148,27 @@ const Cart = (props) => {
           $("#tipModal2").modal("hide");           
         })
     }
+
+    const sendMessage = async () => {
+      console.log("mes", messageFile.current.files)
+
+      const data = new FormData();
+      data.append("id", params.id);
+      data.append("message_file", messageFile.current.files[0]);
+      data.append("message", message.current.value);
+      data.append("sent_by", "buyer");
+
+      console.log("data", data)
+      setIsLoading(true)
+      dispatch(updateOrder(data)).then(res => {
+        console.log('id',res);
+        setStatus(res.responseData.status);
+        setOrderDetails(res.responseData);
+        addToast(res.message, { appearance: res.status, autoDismiss: true, })  
+        setIsLoading(false)               
+      })
+    }
+
    const cancel_reason = useSelector((state) => state.user && state.user.cancel_reason && state.user.cancel_reason.responseData && state.user.cancel_reason.responseData.CancelReasons);
 
    let buyer_rating = new Array(ratings && ratings.buyerRating).fill(0);
@@ -310,7 +333,7 @@ const Cart = (props) => {
                                                                      </td>
                                                                   </tr>
                                                                   <tr>
-                                                                     <td colspan="4"> 
+                                                                     <td colSpan="4"> 
                                                                         <span className="float-right mr-4">
                                                                            <strong>Total : </strong>
                                                       &#036;{order_details && order_details.price}                                   </span>
@@ -494,7 +517,7 @@ const Cart = (props) => {
                                         
                                         <div className="message-div">
 
-                                        <img src={order_details && order_details.seller.profilePhoto} width="50" height="50" className="message-image" />
+                                        <img src={order_details && order_details.buyer.profilePhoto} width="50" height="50" className="message-image" />
                                           <h5><a href="#" className="seller-buyer-name"> {order_details && order_details.buyer.firstName} </a></h5>
                                           <p className="message-desc">{order_details && order_details.tip_message}</p>
                                           <p className="text-right text-muted mb-0"> December 08, 2020 </p>
@@ -620,7 +643,7 @@ const Cart = (props) => {
                               <p className="message-desc">{order_details && order_details.cancellation_message}</p>
                               </div> </div> : ""}
 
-                              
+                                
 
                                 {(order_details && order_details.status == "CANCELLED") ? <div className="order-status-message">
 
@@ -638,8 +661,30 @@ const Cart = (props) => {
 
                                 </div> : ""}
 
+                                {order_details && order_details.order_message.map((list, index) => (<div id="order-conversations" className="mt-3">
+                                    <div className="message-div-hover">
+                                      {(list.sent_by == "buyer") ? (<Fragment> <img src={order_details && order_details.buyer.profilePhoto} width="50" height="50" className="message-image" />
+                                      <h5>
+                                        <a href="#" className="seller-buyer-name"> {order_details && order_details.buyer.firstName} </a>
+                                      </h5></Fragment>) : (<Fragment><img src={order_details && order_details.seller.profilePhoto} width="50" height="50" className="message-image" />
+                                      <h5>
+                                        <a href="#" className="seller-buyer-name"> {order_details && order_details.seller.firstName} </a>
+                                      </h5>
+                                      </Fragment> )}
+                                      <p className="message-desc">
+                                      {list.message}
+                                      </p>
+                                      { list.message_file ? (<a href={list.message_file} className='d-block mt-2 ml-1' target='_blank'>
+                                       <i className='fa fa-download'></i> {(list.message_file).substring((list.message_file).lastIndexOf('/') + 1)}
+                                      </a>) : ""}
+                                      <p className="text-right text-muted mb-0" style={{fontSize: "14px"}}> 
+                                        { moment(list.created_at).format('MMMM DD, YYYY, h:mm:ss a') } 
+                                      </p>
+                                    </div>
+                                </div>))}
+
                                        <div className="proposal_reviews mt-5"></div>
-                                                {(order_details && order_details.status == "PROGRESS" || order_details && order_details.status == "REVISION REQUESTED" || order_details && order_details.status == "DELIVERED") ? <div className="insert-message-box">
+                                                {(order_details && order_details.status == "PENDING" || order_details && order_details.status == "PROGRESS" || order_details && order_details.status == "REVISION REQUESTED" || order_details && order_details.status == "DELIVERED") ? <div className="insert-message-box">
                                                    <div className="float-right">
                                                       <p className="text-muted mt-1">
                                                          {order_details && order_details.seller.firstName} <span className="text-success font-weight-bold"
@@ -649,21 +694,21 @@ const Cart = (props) => {
                                                          02:31 AM
                                                       </p>
                                                    </div>
-                                                   <form id="insert-message-form" className="clearfix">
-                                                      <textarea name="message" rows="5" placeholder="Type your Message Here" className="form-control mb-2"></textarea>
+                                                   {/* <form id="insert-message-form" className="clearfix"> */}
+                                                      <textarea name="message" rows="5" placeholder="Type your Message Here" ref={message} className="form-control mb-2"></textarea>
                                                       <div className="float-left b-2">
                                                          <p id="spamWords" className="mt-1 text-danger d-none"><i className="fa fa-warning"></i> You seem to have typed word(s) that are in violation of our policy. No direct payments or emails allowed.</p>
                                                       </div>
-                                                      <button type="submit" className="btn btn-success float-right">Send</button>
+                                                      <button onClick={() => sendMessage()} type="submit" className="btn btn-success float-right">Send</button>
                                                       <div className="clearfix"></div>
                                                       <p></p>
                                                       <div className="form-row align-items-center message-attacment ml-0 mr-0">
                                                          {/* form-row align-items-center message-attacment Starts */}
                                                          <label className="h6 ml-2 mt-1"> Attach File (optional) </label>
-                                                         <input type="file" name="file" className="form-control-file p-1 mb-2 mb-sm-0" />
+                                                         <input type="file" id="message_file" name="message_file" ref={messageFile} className="form-control" />
                                                       </div>
                                                       {/* form-row align-items-center message-attacment Ends */}
-                                                   </form>
+                                                   {/* </form> */}
                                                 </div> : ""}
                                                 <div id="upload_file_div"></div>
                                                 <div id="message_data_div"></div>

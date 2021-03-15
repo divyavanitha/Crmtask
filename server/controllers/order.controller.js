@@ -173,6 +173,7 @@ exports.checkout = async (req, res) => {
                         total: total,
                         commission: commission,
                         status: "PROGRESS",
+                        service: "ORDER",
                         deliveryTime: carts[i].deliveryTime,
                         revisions: carts[i].revisions
                     }
@@ -270,8 +271,9 @@ exports.updateOrder = async (req, res) => {
 
     if (error) return res.status(errorResponse.statusCode).json(errorResponse);
 
-    try {
+    //try {
         let order = await Order.findById(req.body.id);
+        let notification = {};
         if ((req.body.status).toUpperCase() == "DELIVERED") {
             const arr = order.delivery_status;
             let index = (arr.length - 1);
@@ -279,6 +281,7 @@ exports.updateOrder = async (req, res) => {
             let delivery = [];
 
             if (index === -1) {
+
                 let data = {
                     deliveredMessage: req.body.delivered_message,
                 }
@@ -289,6 +292,7 @@ exports.updateOrder = async (req, res) => {
                 order.delivery_status = delivery;
 
             } else {
+
                 let data = {
                     deliveredMessage: req.body.delivered_message,
                 }
@@ -297,10 +301,10 @@ exports.updateOrder = async (req, res) => {
                 arr[index + 1] = data;
                 delivery = arr[index];
             }
-            console.log('delivery', delivery);
+            
             order.status = (req.body.status).toUpperCase();
 
-            var notification = {
+            notification = {
                 sender: order.seller,
                 senderType: "SELLER",
                 receiver: order.buyer,
@@ -322,7 +326,7 @@ exports.updateOrder = async (req, res) => {
 
             gig.completedOrder +=1;
 
-            var notification = {
+             notification = {
                 sender: order.buyer,
                 senderType: "BUYER",
                 receiver: order.seller,
@@ -364,7 +368,7 @@ exports.updateOrder = async (req, res) => {
 
             order.status = (req.body.status).toUpperCase();
 
-            var notification = {
+            notification = {
                 sender: order.buyer,
                 senderType: "BUYER",
                 receiver: order.seller,
@@ -390,7 +394,7 @@ exports.updateOrder = async (req, res) => {
                 var sender_type = "SELLER";
             }
 
-            var notification = {
+            notification = {
                 sender: sender,
                 senderType: sender_type,
                 receiver: receiver,
@@ -398,17 +402,48 @@ exports.updateOrder = async (req, res) => {
                 orderId: order._id,
                 message: "Wants to cancel the order."
             }
+        }else if(req.body.message){
+            const arr = order.order_message;
+            let index = (arr.length - 1);
+
+            let message = [];
+
+            if (index === -1) {
+                let data = {
+                    message: req.body.message,
+                    sent_by: req.body.sent_by
+                }
+                if (req.files['message_file']) data.message_file = req.protocol + '://' + req.get('host') + "/images/order/" + req.files['message_file'][0].filename;
+
+                message.push(data);
+
+                order.order_message = message;
+
+            } else {
+                let data = {
+                    message: req.body.message,
+                    sent_by: req.body.sent_by
+                }
+                if (req.files['message_file']) data.message_file = req.protocol + '://' + req.get('host') + "/images/order/" + req.files['message_file'][0].filename;
+
+                arr[index + 1] = data;
+                message = arr[index];
+            }
+            console.log('message', message);
+            if((order.status == "PENDING") || (order.status == "PROGRESS")) order.status = "PROGRESS"; 
         }
+
+        
 
         await db._update(Order, { _id: req.body.id }, order);
         let orders = await db._find(Order, {_id: req.body.id}, {}, { populate: ["gig","buyer","seller"] });
         await db._update(User, { _id: order.seller }, user);
         await db._update(Gig, { _id: order.gig }, gig);
-        await db._store(Notification, notification);
+        if((req.body.status).toUpperCase() != "PROGRESS") await db._store(Notification, notification);
         const response = helper.response({ message: res.__('updated'), data: orders, status: 200 });
         return res.status(response.statusCode).json(response);
 
-    } catch (err) {
+    /*} catch (err) {
         if (err[0] != undefined) {
             for (i in err.errors) {
                 return res.status(422).json(err.errors[i].message);
@@ -416,7 +451,7 @@ exports.updateOrder = async (req, res) => {
         } else {
             return res.status(422).json(err);
         }
-    }
+    }*/
 }
 
 exports.cancel = async (req, res) => {

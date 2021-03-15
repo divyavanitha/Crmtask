@@ -7,10 +7,12 @@ import io from "socket.io-client";
 import $ from 'jquery';
 import moment from 'moment';
 import { getUserList, getChatList, postMessage, getUser } from "../../../_actions/chat.action";
-import { gigSubCatoegory, profileGigs, getDeliveryTime } from "../../../_actions/user.action";
-
+import { gigSubCatoegory, getDeliveryTime } from "../../../_actions/user.action";
+import { getGigList } from "../../../_actions/gigs.action";
+import { orderOffer } from "../../../_actions/request.action";
+import { useToasts } from 'react-toast-notifications'
 const Chat = (props) => {
-
+   const { addToast } = useToasts()
    const dispatch = useDispatch();
    const [users, setUsers] = useState([]);
    const [user, setUser] = useState();
@@ -19,6 +21,13 @@ const Chat = (props) => {
    const [gigId, setGigId] = useState(0);
    const [gigTitle, setGigTitle] = useState("");
    const [chats, setChats] = useState([]);
+   const [acceptTitle, setAcceptTitle] = useState("");
+   const [amount, setAmount] = useState("");
+   const [duration, setDuration] = useState("");
+   const [description, setDescription] = useState("");
+   const [messageId, setMessageId] = useState("");
+   const [payment, setPayment] = useState("");
+   const [acceptId, setAcceptId] = useState("");
    const history = useHistory();
    const userList = getUserList();
    const auth = useSelector((state) => state.user);
@@ -52,7 +61,7 @@ const Chat = (props) => {
          socket.on("socketStatus", (data) => { console.log(data) });
 
          dispatch(getChatList(id)).then((res) => {
-            console.log("res", res)
+            
             if (res.userList) setChats(res.userList);
             if (res.user) setUser(res.user)
             scrollToBottom();
@@ -63,9 +72,9 @@ const Chat = (props) => {
             var that = $(this);
             e.preventDefault();
 
-            dispatch(profileGigs(id)).then(res => {
-               console.log('request', res);
-                  setGig(res.responseData.gig); 
+            dispatch(getGigList()).then(res => {
+               
+                  setGig(res.active); 
             })
 
             $('.send-offer-modal').modal("show");
@@ -74,7 +83,6 @@ const Chat = (props) => {
                .on("click", function () {
                   var gig_id = $("input[name='gig_id']:checked").val();
                   var title = $("input[name='gig_id']:checked").data('title');
-                  console.log(gig_id, title);
                   setGigId(gig_id);
                   setGigTitle(title);
                   $('.submit-proposal-details').modal("show");
@@ -99,26 +107,23 @@ const Chat = (props) => {
       dispatch(getDeliveryTime())
 
       if(newMessage) {
+         
          let chatData = [...chats];
 
-         let response = {};
-         response._id = "60422bf03c051561ff56cbe3";
-         response.date = "1615277026893";
-         response.message = newMessage.message;
-         response.participants = [
-            {
-               "_id": "60405ff1edc6f2238a912ada",
-               "firstName": "User",
-               "lastName": "Demo"
-            },
-            {
-               "_id": "6040c1170eb9446922dd87d8",
-               "firstName": "Uday",
-               "lastName": "Demo"
-            }
-         ];
+         /*let response = {};
+         response._id = newMessage.messages._id;
+         response.date = newMessage.messages.date;
+         response.type = newMessage.messages.type;
+         response.message = newMessage.messages.message;
+         if(newMessage.userList.participants) {
 
-         chatData.push(response);
+         }
+         response.participants = newMessage.userList.participants;
+         if(newMessage.messages.type == "offer"){
+         response.offer = newMessage.messages.offer;
+         }
+         console.log(response);*/
+         chatData.push(newMessage);
 
          setChats(chatData);
          scrollToBottom();
@@ -126,9 +131,59 @@ const Chat = (props) => {
 
    }, [newMessage]);
 
+   const submitOffer = async () => {
+      let data = {
+         to: id,
+         type: 'offer',
+         gig: gigId,
+         description: $("textarea[name=description]").val(),
+         duration: $("select[name=delivery_time] option:selected").val(),
+         amount:$("input[name=amount]").val()
+      }
+
+      dispatch(postMessage(data)).then(res => {
+         addToast(res.message, { appearance: res.status, autoDismiss: true, })
+         $('.submit-proposal-details').modal("hide");
+      })
+   }
+
+   const acceptOffer = async (gig_id, title, description, amount, duration, id) => {
+      $('.featured-listing-modal').modal("show");
+      setAcceptId(gig_id)
+      setAcceptTitle(title)
+      setAmount(amount)
+      setDuration(duration)
+      setMessageId(id)
+      setDescription(description)
+   }
+
+   const order = async (payment) => {
+
+         let wallet = (payment == "WALLET") ? true : false; 
+
+         let data = {
+            payment_mode: payment,
+            gig_id: acceptId,
+            amount: amount,
+            duration: duration,
+            message_id: messageId,
+            seller: id,
+            wallet: wallet
+         }
+
+         console.log("value", data)
+         dispatch(orderOffer(data)).then(res => {
+            $('.featured-listing-modal').modal("hide");
+            addToast(res.message, { appearance: res.status, autoDismiss: true, })
+            if(res.statusCode != 422) history.push('/buying-order-lists');
+            
+         })
+   }
+
+
    const deliveryTime = useSelector((state) => state.user && state.user.delivery_times && state.user.delivery_times.responseData && state.user.delivery_times.responseData.deliveryTime);
 
-   socket.on("newMessage", (data) => setNewMessage(data) );
+   socket.on("newMessage", (data) => { setNewMessage(data) } );
 
 
    return (
@@ -151,7 +206,8 @@ const Chat = (props) => {
             data.append("type", "text");
 
             dispatch(postMessage(data)).then(res => {
-                //window.location.reload();
+               
+                //setChats(res.responseData.userList)
             })
 
 
@@ -209,9 +265,9 @@ const Chat = (props) => {
                                  <div className="card-body filters-content">
                                     <ul>
                                        {users && users.map((user, i) => (
-                                          <a onClick={() => getChat(user.participants.find(u => u._id !== auth.user._id)._id)} key={i} className="all unread msg-active">
+                                          <a onClick={() => getChat(user.participants && user.participants.find(u => u._id !== auth.user._id)._id)} key={i} className="all unread msg-active">
                                              <img src={require('../../../assets/images/comp/profileIcon.png')} className="rounded-circle" width="50" height="50" />
-                                             <h3>{user.participants.find(u => u._id !== auth.user._id).firstName}<span className="time">{user.lastMessage && user.date} ago</span></h3>
+                                             <h3>{user && user.participants.find(u => u._id !== auth.user._id).firstName}<span className="time">{user.lastMessage && user.date} ago</span></h3>
                                              <p className="write-msg">{user.lastMessage}</p>
                                           </a>
                                        ))}
@@ -263,12 +319,48 @@ const Chat = (props) => {
 
                                           <div className="convertion-list">
                                              <ul>
-
+                                             
                                                 {chats.map((chat, index) => <li key={index}>
                                                    <div className="user-img"><img src={((chat.from && chat.from.profilePhoto == "") || (chat.from && chat.from.profilePhoto == undefined)) ? require('../../../assets/images/comp/profileIcon.png') : chat.from && chat.from.profilePhoto} className="rounded-circle" width="50" height="50" /></div>
                                                    <div className="user-detail">
                                                       <b>{chat.from && chat.from.firstName} {chat.from && chat.from.lastName}  <span>{chat.date} |<i className="fa fa-flag" aria-hidden="true"></i> <a href=""> Report</a></span></b>
-                                                      <p>{chat.message}</p>
+                                                  
+                                                      {(chat.type != "text") ? (<div class="message-offer card mb-3">
+                                                            <div class="card-header p-2">
+                                                               <h6 class="mt-md-0 mt-2">
+                                                                  {chat.offer && chat.offer.gig && chat.offer.gig.title}         
+                                                                  &nbsp;<span class="price float-right d-sm-block d-none"> ${chat.offer && chat.offer.amount} 
+                                                                  </span>
+                                                               </h6>
+                                                            </div>
+                                                            <div class="card-body p-2">
+                                                               <p> {chat.offer && chat.offer.description} </p>
+                                                               <p class="d-block d-sm-none"> <b> Price / Amount : </b> ${chat.offer && chat.offer.amount} </p>
+                                                               <p> <b> <i class="fa fa-calendar"></i> Delivery Time : </b> {chat.offer && chat.offer.duration} </p>
+                                                               {(chat.from && chat.from._id != auth.user._id) ? (
+                                                                  <div>
+                                                               {(chat.offer && chat.offer.status != "SENT") ? (<button class="btn btn-success rounded-0 mt-2 float-right" disabled>
+                                                                  Offer Accepted       
+                                                               </button>) : (<button onClick={() => acceptOffer((chat.offer && chat.offer.gig && chat.offer.gig._id),(chat.offer && chat.offer.gig && chat.offer.gig.title), (chat.offer && chat.offer.description), (chat.offer && chat.offer.amount),(chat.offer && chat.offer.duration),(chat._id))} class="btn btn-success rounded-0 mt-2 float-right">
+                                                                  Accept Offer     
+                                                               </button>)}
+
+                                                               <Link to={"/order/details/" + chat.offer.order} target="_blank" class="mt-3 mr-3 float-right text-success">
+                                                                  View Order        
+                                                               </Link></div>) : (
+                                                                  <div>
+                                                               {(chat.offer && chat.offer.status == "ORDERED") ? (
+                                                               <Fragment><button class="btn btn-success rounded-0 mt-2 float-right" disabled>
+                                                                  Offer Accepted       
+                                                               </button>
+                                                               <Link to={"/order/details/" + chat.offer.order} target="_blank" class="mt-3 mr-3 float-right text-success">
+                                                                  View Order        
+                                                               </Link></Fragment>) : ""}
+
+                                                               </div>) }
+                                                            </div>
+                                                      </div>) : 
+                                                     <p>{chat.message}</p>}
                                                    </div>
                                                   
                                                 </li>)}
@@ -320,7 +412,7 @@ const Chat = (props) => {
                                                 <table>
                                                    <tr>
                                                       <td align="left"><i className="fa fa-star" aria-hidden="true"></i> Rating</td>
-                                                      <td align="right">{user && user.ratingPercent}%</td>
+                                                      <td align="right">{user && user.ratingPercent ? user && user.ratingPercent : 0}%</td>
                                                    </tr>
                                                    <tr>
                                                       <td align="left"><i className="fa fa-map-marker" aria-hidden="true"></i> From</td>
@@ -357,6 +449,52 @@ const Chat = (props) => {
                   </div>
 
 
+      <div className="modal featured-listing-modal" tabIndex="-1" role="basic" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div className="modal-dialog">
+               <div className="modal-content">
+                  <div className="modal-header">
+                     <h5 className="modal-title"> Make Your Proposal/Service Featured</h5>
+                     <button className="close" data-dismiss="modal"><span>×</span></button>
+                  </div>
+            <div className="modal-body p-0">
+               <div className="order-details">
+                 <div className="request-div">
+                     <h4 className="mb-3">
+                        THIS ORDER IS RELATED TO THE FOLLOWING OFFER:
+                        <span className="total-price float-right d-sm-block d-none">${amount}</span>
+                     </h4>
+                     <p> {description} </p>
+                     <p> <b> Proposal: </b> {acceptTitle} </p>
+                     <p> <b> Price: </b> ${amount} </p>
+                     <p className="processing-fee" style={{display: "none"}}> <b> Processing Fee: </b> $2.50 </p>
+                     <p> <b> Delivery Time: </b> {duration} </p>
+                  </div>
+               </div>
+            </div>
+            <div className="payment-options-list">
+               <div className="payment-options mb-2">
+                  <input type="radio" onChange={() => { setPayment("WALLET") } } name="payment_option" value="wallet" id="shopping-balance" className="radio-custom"  />
+                  <label htmlFor="shopping-balance" className="radio-custom-label"></label>
+                  <span className="lead font-weight-bold"> Shopping Balance </span>
+                  <p className="lead ml-5">
+                  Personal Balance - {auth.user.firstName} <span className="text-success font-weight-bold"> ${auth.user.wallet} </span>
+                  </p>
+               </div>
+               <div className="payment-options mb-2">
+                  <input type="radio" onChange={() => { setPayment("STRIPE") } } name="payment_option" value="wallet" id="shopping-balance" className="radio-custom"  />
+                  <label htmlFor="shopping-balance" className="radio-custom-label"></label>
+                  <span className="lead font-weight-bold"> Stripe </span>
+               </div>
+            </div>
+         <div className="modal-footer">
+            <button className="btn btn-secondary" data-dismiss="modal"> Close </button>
+            <a className={(payment != "") ? "btn btn-success feature-modal-btn" : ""} onClick = {() => order(payment)} name="pay_featured_proposal_listing">{(payment == "WALLET") ? "Pay With Shopping Balance" : (payment == "STRIPE") ? "Pay With Stripe" : ""}</a>
+         </div>
+         </div>
+      </div>
+   </div>
+
+
       <div className="modal send-offer-modal" tabIndex="-1" role="basic" aria-hidden="true" data-backdrop="static" data-keyboard="false">
             <div className="modal-dialog">
                <div className="modal-content">
@@ -383,9 +521,9 @@ const Chat = (props) => {
                {gig && gig.map((list, index) => (<div key={list._id}>
                <div className="proposal-picture">
 
-                  <input type="radio" id="radio" className="radio-custom" data-title={list.title} name="gig_id" value={list._id}  />
+                  <input type="radio" id={list._id} className="radio-custom" onChange={() => { setGigId(list._id) } } data-title={list.title} name="gig_id" checked={gigId == list._id ? true: false} value={list._id}  />
 
-                  <label for="radio" className="radio-custom-label"></label>
+                  <label for={list._id} className="radio-custom-label"></label>
 
                   <img src={list.photo ? list.photo[0].photo : ""} width="50" height="50" style={{ borderRadius: '2% !important' }} />
 
@@ -437,7 +575,7 @@ const Chat = (props) => {
                      <p> {gig.request && gig.request[0].description} </p>
                   </div>
                </div> */}
-               <form onSubmit={handleSubmit} encType="multipart/form-data">
+              {/* <form onSubmit={handleSubmit} encType="multipart/form-data"> */}
                   <div className="selected-proposal p-3">
                      <h5> {gigTitle} </h5>
                      <hr />
@@ -479,9 +617,9 @@ const Chat = (props) => {
             <div className="modal-footer">
                <button type="button" className="btn btn-secondary back" data-dismiss="modal" data-toggle="modal" data-target="#send-offer-modal">Back</button>
 
-               <button type="submit" className="btn btn-success submit-proposal-details-btn">Submit Offer</button>
+               <button type="submit" onClick={() => submitOffer()} className="btn btn-success submit-proposal-details-btn">Submit Offer</button>
             </div>
-         </form>
+        {/* </form> */}
 
       </div>
 

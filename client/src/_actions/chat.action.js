@@ -43,8 +43,8 @@ export const postMessage = (data) => async dispatch => {
     return response.data;
   } catch (e) {
     console.log(e)
-    /*e.response.data.status = 'error';
+    e.response.data.status = 'error';
     if (e.response.data.statusCode === 422) e.response.data.status = 'warning';
-    return e.response.data;*/
+    return e.response.data;
   }
 }

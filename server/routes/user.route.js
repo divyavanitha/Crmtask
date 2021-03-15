@@ -252,7 +252,7 @@ router.get('/cart/:id', middleware.user, function(req, res){
 router.post('/checkout', middleware.user, function(req, res){
   orderController.checkout(req, res);
 });
-router.post('/update/order/status',[middleware.user, middleware.upload( path.join(__dirname, '../storage/images/order/') ).fields([{ name: 'delivery_file', maxCount: 1 }, { name: 'revision_file', maxCount: 1 }]) ], function(req, res){
+router.post('/update/order/status',[middleware.user, middleware.upload( path.join(__dirname, '../storage/images/order/') ).fields([{ name: 'delivery_file', maxCount: 1 }, { name: 'revision_file', maxCount: 1 }, { name: 'message_file', maxCount: 1 }]) ], function(req, res){
   orderController.updateOrder(req, res);
 });
 
