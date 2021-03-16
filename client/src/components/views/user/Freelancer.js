@@ -10,6 +10,7 @@ const Freelancer = (props) => {
 
    const dispatch = useDispatch();
    let history = useHistory();
+   const auth = useSelector((state) => state.user);
    const [freelancers, setFreelancers] = useState([]);
    useEffect(() => {
       dispatch(freelancerList()).then((res) => {
@@ -232,7 +233,7 @@ const Freelancer = (props) => {
                            <img src={list.profilePhoto} width="100" className="rounded img-fluid" />
                               <small className="text-muted mt-1">
                                  <i className='fa fa-circle text-danger'></i>
-                                 Offline     
+                                 {auth.isAuthenticated ? "Online" : "Offline"}     
                               </small>
                            <div className="wt-userdropdown wt-away template-content tipso_style wt-tipso">
                               <img src="images/level_badge_3.png" className="level_badge" />
@@ -268,12 +269,12 @@ const Freelancer = (props) => {
                               </div>
                               <div className="col-lg-3 col-md-12">
                                  <div className="star-rating">
-                                  <i className='fa fa-star'></i>  <i className='fa fa-star'></i>  <i className='fa fa-star'></i>  <i className='fa fa-star'></i>  <i className='fa fa-star-o'></i>            <h4 className="mb-1">4.7/<small className="text-muted font-weight-normal">5</small></h4>
+                                  <i className='fa fa-star'></i>  <i className='fa fa-star'></i>  <i className='fa fa-star'></i>  <i className='fa fa-star'></i>  <i className='fa fa-star-o'></i>            <h4 className="mb-1">{list.rating}/<small className="text-muted font-weight-normal">5</small></h4>
                                  <a>(9 Reviews)</a>
                                  </div>
                               </div>
                            </div>
-                           <p className="lead mb-2 mt-0">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here.</p>
+                           <p className="lead mb-2 mt-0">{list.description}</p>
                            <div className="skills">
                            </div>
                         </div>
