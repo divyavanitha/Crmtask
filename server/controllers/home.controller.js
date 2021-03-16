@@ -338,7 +338,10 @@ exports.freelancerList = async (req, res) => {
 
         let skip = (req.query.page * req.query.length) - req.query.length;
 
-        let freelancers = await db._get(User, null, null, {limit: req.query.length, skip: skip });
+        let freelancers = await db._get(User, null, null, {populate: 
+            [{ path: 'country', model: 'Country', select: 'name' },
+            { path: 'city', model: 'city', select: 'name' },
+            { path: 'state', model: 'state', select: 'name' }], limit: req.query.length, skip: skip });
 
         let count = await db._count(User);
 

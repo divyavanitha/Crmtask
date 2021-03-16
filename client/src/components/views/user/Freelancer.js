@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useHistory } from "react-router-dom";
 //import { useToasts } from 'react-toast-notifications'
 import $ from 'jquery';
-
+import moment from 'moment';
 import { freelancerList } from "../../../_actions/user.action";
 
 const Freelancer = (props) => {
@@ -245,24 +245,24 @@ const Freelancer = (props) => {
                            <div className="row">
                               <div className="col-lg-9 col-md-12">
                                  <a href="fixmywebsite">
-                                 <h6 className="font-weight-normal"><i className="fa fa-check-circle" style={{color:"#00cc8d"}}></i> fixmywebsite </h6>
+                                 <h6 className="font-weight-normal"><i className="fa fa-check-circle" style={{color:"#00cc8d"}}></i> {list.firstName} </h6>
                                  <h5 className="text-success"> Website Fixer </h5>
                                  </a>
                                  <ul className="tagline mb-2 p-0">
                                     <li>
                                        <i className="fa fa-user"></i>
-                                       <strong>Member Since: </strong> January 2, 2018             
+                                       <strong>Member Since: </strong> { moment(list.created_at).format('MMMM DD, YYYY') }             
                                     </li>
                                     <li>
                                        <i className="fa fa-truck fa-flip-horizontal"></i>
-                                       <strong>Recent Delivery: </strong> October 30, 2020               
+                                       <strong>Recent Delivery: </strong> { moment(list.recentDelivery).format('MMMM DD, YYYY') }               
                                     </li>
                                     <li>
                                        <i className="fa fa-map-marker"></i>
-                                       <strong>Country: </strong> France               
+                                       <strong>Country: </strong> {list.country.name}               
                                     </li>
                                     <li>
-                                       <a href="conversations/message.php?seller_id=1"><i className="fa fa-comments-o"></i> <strong>Contact:</strong> fixmywebsite </a>
+                                       <a href="conversations/message.php?seller_id=1"><i className="fa fa-comments-o"></i> <strong>Contact:</strong> {list.firstName} </a>
                                     </li>
                                  </ul>
                               </div>
