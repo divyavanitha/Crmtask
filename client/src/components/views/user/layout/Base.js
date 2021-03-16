@@ -48,6 +48,7 @@ import Page from "../Page";
 import Notification from "../Notification";
 import StartSelling from "../StartSelling";
 import SellerProfile from "../gigs/SellerProfile";
+import Freelancer from "../Freelancer";
 
 import "../../../../assets/css/custom.css";
 
@@ -84,6 +85,7 @@ const Base = () => {
                 <Route exact={true} path="/" component={auth.isAuthenticated ? Home : Landing} />
                 <Route path="/categories/:category/:subcategory" component={CategoryGigList} />
                 <Route path="/profile/:id/:user" component={SellerProfile} />
+                <ProtectedRoute path="/freelancer" component={Freelancer} />
                 <ProtectedRoute path="/cart-payment-option/:id" component={CartPayment} />
                 <ProtectedRoute path="/cart-payment-option" component={CartPayment} />
                 <ProtectedRoute path="/chat/:id" component={Chat} />

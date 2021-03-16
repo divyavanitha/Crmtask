@@ -324,9 +324,9 @@ const BuyerRequest = (props) => {
                {gig.gig && gig.gig.map((list, index) => (<div key={list._id}>
                <div className="proposal-picture">
 
-                  <input type="radio" id="radio" className="radio-custom" data-title={list.title} name="gig_id" value={list._id}  />
+                  <input type="radio" id={list._id} className="radio-custom" onChange={() => { setGigId(list._id) } } data-title={list.title} name="gig_id" checked={gigId == list._id ? true: false}   />
 
-                  <label for="radio" className="radio-custom-label"></label>
+                  <label htmlFor="radio" className="radio-custom-label"></label>
 
                   <img src={list.photo ? list.photo[0].photo : ""} width="50" height="50" style={{ borderRadius: '2% !important' }} />
 
@@ -399,7 +399,7 @@ const BuyerRequest = (props) => {
 
                         <Field component="select" className="form-control float-right" onChange={handleChange} name="delivery_time" className={'form-control' + (errors.delivery_time && errors.delivery_time && errors.delivery_time && errors.delivery_time ? ' is-invalid' : '')}>
                            <option value=""> Select Delivery Time </option>
-                           { deliveryTime && deliveryTime.map((time) => (<option value={time.name}> {time.name} </option> ) ) }
+                           { deliveryTime && deliveryTime.map((time, index) => (<option key={index} value={time.name}> {time.name} </option> ) ) }
                         </Field>
                         <ErrorMessage name='delivery_time' component="div" className="error-message" />
                      </div>

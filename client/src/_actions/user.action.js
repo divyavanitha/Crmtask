@@ -187,9 +187,6 @@ export const getMenu = (data) => async dispatch => {
     } catch (e) {
         console.log(e)
     }
-
-
-
 };
 
 export const getCategory = (data) => async dispatch => {
@@ -207,6 +204,12 @@ export const getNotification = () => async dispatch => {
         payload: notification.data
     });
     return notification.data;
+}
+
+export const freelancerList = () => async dispatch => {
+    const freelancer = await axios.get(`/api/freelancer/list`)
+
+    return freelancer.data;
 }
 
 export const deleteNotification = (id) => async dispatch => {
