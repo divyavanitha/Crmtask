@@ -43,11 +43,7 @@ const RequestList = (props) => {
                 window.location.reload();           
             })
       });
-
-   
-
       
-
    }, []);
    const request_list = useSelector((state) => state.request && state.request.requests && state.request.requests.responseData);
 

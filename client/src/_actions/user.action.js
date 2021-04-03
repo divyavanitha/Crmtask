@@ -206,9 +206,8 @@ export const getNotification = () => async dispatch => {
     return notification.data;
 }
 
-export const freelancerList = () => async dispatch => {
-    const freelancer = await axios.get(`/api/freelancer/list`)
-
+export const freelancerList = (page = 1) => async dispatch => {
+    const freelancer = await axios.get(`/api/freelancer/list?page=${page}`)
     return freelancer.data;
 }
 
@@ -335,6 +334,7 @@ export const getLanguage = (data) => async dispatch => {
         type: GET_LANGUAGE,
         payload: languages.data
     });
+    return languages.data.responseData;
 }
 
 

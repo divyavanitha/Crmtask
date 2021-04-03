@@ -387,11 +387,11 @@ function Header() {
                                             <Link onClick={selectMenu}  className="dropdown-item" to="/request/manage"> Manage Requests </Link>
                                         </div>
                                         <Link onClick={selectMenu}  className="dropdown-item" to="/contacts"> Contacts </Link>
-                                        <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#referrals"> My Referrals </a>
+                                        {/* <a className="dropdown-item dropdown-toggle" href="#" data-toggle="collapse" data-target="#referrals"> My Referrals </a>
                                         <div id="referrals" className="dropdown-submenu collapse">
                                             <Link onClick={selectMenu}  className="dropdown-item" to="/referrals"> User Referrals </Link>
                                             <a className="dropdown-item" href="proposal_referrals" data-target="#referrals"> Proposal Referrals  </a>
-                                        </div>
+                                        </div> */}
                                         <Link className="dropdown-item" to="/profile"> My Profile </Link>
                                         <div className="dropdown-divider"></div>
                                         <a onClick={() => dispatch(logout())} className="dropdown-item">

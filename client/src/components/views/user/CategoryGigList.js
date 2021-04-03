@@ -19,7 +19,7 @@ function CategoryGigList() {
 
    useEffect(() => {
       dispatch(getGigbyCategory({subcategory: subcategory}))
-   }, []);
+   }, [subcategory]);
 
    const gig = useSelector((state) => state.user && state.user.gig && state.user.gig.responseData && state.user.gig.responseData.gigs);
 

@@ -36,9 +36,7 @@ const Chat = (props) => {
    var socket = io(process.env.REACT_APP_URL);
 
    const getChat = (id) => {
-     
-         history.push("/chat/"+id);
-      
+         history.push("/chat/"+id);     
    }
 
    const scrollToBottom = () => {

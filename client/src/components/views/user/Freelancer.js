@@ -4,7 +4,9 @@ import { Link, useParams, useHistory } from "react-router-dom";
 //import { useToasts } from 'react-toast-notifications'
 import $ from 'jquery';
 import moment from 'moment';
-import { freelancerList } from "../../../_actions/user.action";
+import { freelancerList, getCountry, getLanguage } from "../../../_actions/user.action";
+import ReactPaginate from 'react-paginate';
+import '../../../../src/pagination.css';
 
 const Freelancer = (props) => {
 
@@ -12,14 +14,47 @@ const Freelancer = (props) => {
    let history = useHistory();
    const auth = useSelector((state) => state.user);
    const [freelancers, setFreelancers] = useState([]);
+   const [offset, setOffset] = useState(0);
+   const [perPage, setPerPage] = useState(1);
+   const [pageCount, setPageCount] = useState(0);
+   const [countries, setCountries] = useState([]);
+   const [languages, setLanguages] = useState([]);
+
    useEffect(() => {
       dispatch(freelancerList()).then((res) => {
+         setPerPage(res.responseData.per_page)
          setFreelancers(res.responseData.data.freelancers)
-         console.log("res", res.responseData.data.freelancers);
+         setPageCount(Math.ceil((res.responseData.total) / res.responseData.per_page))
       })
 
+      dispatch(getCountry()).then((res) => {
+         console.log(res)
+         setCountries(res.countries)
+      });
+
+      dispatch(getLanguage()).then((res) => {
+         console.log(res, "res")
+         setLanguages(res.languages)
+      })
 
    }, []);
+
+   const handlePageClick = (e) => {
+      console.log(e);
+      const selectedPage = e.selected;
+
+      dispatch(freelancerList(selectedPage+1)).then((res) => {
+         setPerPage(res.responseData.per_page)
+         setFreelancers(res.responseData.data.freelancers)
+         setPageCount(Math.ceil((res.responseData.total) / res.responseData.per_page))
+      })
+   };
+
+   const countryChange = (country_name) => {
+
+      console.log(country_name)
+
+   }
 
 
    return (
@@ -41,7 +76,7 @@ const Freelancer = (props) => {
             
       <div className="col-xl-10 col-lg-12 col-md-12">
          <div className="row">
-            <div className="col-lg-3 col-md-4 col-sm-12 ">
+            {/*<div className="col-lg-3 col-md-4 col-sm-12 ">
                          
                <div className="card border-success mb-3">
                   <div className="card-body pb-2 pt-3 ">
@@ -59,89 +94,18 @@ const Freelancer = (props) => {
                <div className="card border-success mb-3">
                   <div className="card-header bg-success">
                      <h3 className="float-left text-white h5">Seller Location</h3>
-                     <button className="btn btn-secondary btn-sm float-right clear_seller_country clearlink" onclick="clearCountry()">
+                     <button className="btn btn-secondary btn-sm float-right clear_seller_country clearlink">
                         <i className='fa fa-times-circle'></i> Clear Filter    </button>
                   </div>
                   <div className="card-body">
                      <ul className="nav flex-column">
-                        <li className="nav-item checkbox checkbox-success">
-                        <label>
-                        <input type="checkbox" value="France" className="get_seller_country" />
-                        <span>France</span>
-                        </label>
-                     </li>
-                        <li className="nav-item checkbox checkbox-success">
-                        <label>
-                        <input type="checkbox" value="Ecuador" className="get_seller_country" />
-                        <span>Ecuador</span>
-                        </label>
-                     </li>
-                        <li className="nav-item checkbox checkbox-success">
-                        <label>
-                        <input type="checkbox" value="Canada" className="get_seller_country" />
-                        <span>Canada</span>
-                        </label>
-                     </li>
-                        <li className="nav-item checkbox checkbox-success">
-                        <label>
-                        <input type="checkbox" value="pakistan" className="get_seller_country" />
-                        <span>pakistan</span>
-                        </label>
-                     </li>
-                        <li className="nav-item checkbox checkbox-success">
-                        <label>
-                        <input type="checkbox" value="United States" className="get_seller_country" />
-                        <span>United States</span>
-                        </label>
-                     </li>
-                        <li className="nav-item checkbox checkbox-success">
-                        <label>
-                        <input type="checkbox" value="Austria" className="get_seller_country" />
-                        <span>Austria</span>
-                        </label>
-                     </li>
-                        <li className="nav-item checkbox checkbox-success">
-                        <label>
-                        <input type="checkbox" value="Saudi Arabia" className="get_seller_country" />
-                        <span>Saudi Arabia</span>
-                        </label>
-                     </li>
-                        <li className="nav-item checkbox checkbox-success">
-                        <label>
-                        <input type="checkbox" value="Germany" className="get_seller_country" />
-                        <span>Germany</span>
-                        </label>
-                     </li>
-                        <li className="nav-item checkbox checkbox-success">
-                        <label>
-                        <input type="checkbox" value="US" className="get_seller_country" />
-                        <span>US</span>
-                        </label>
-                     </li>
-                        <li className="nav-item checkbox checkbox-success">
-                        <label>
-                        <input type="checkbox" value="Efc" className="get_seller_country"/>
-                        <span>Efc</span>
-                        </label>
-                     </li>
-                        <li className="nav-item checkbox checkbox-success">
-                        <label>
-                        <input type="checkbox" value="Jamaica" className="get_seller_country"/>
-                        <span>Jamaica</span>
-                        </label>
-                     </li>
-                        <li className="nav-item checkbox checkbox-success">
-                        <label>
-                        <input type="checkbox" value="India" className="get_seller_country" />
-                        <span>India</span>
-                        </label>
-                     </li>
-                        <li className="nav-item checkbox checkbox-success">
-                        <label>
-                        <input type="checkbox" value="Peru" className="get_seller_country"/>
-                        <span>Peru</span>
-                        </label>
-                     </li>
+                        {countries && countries.map((list, index) => (<li key={index} className="nav-item checkbox checkbox-success">
+                           <label>
+                           <input type="checkbox" onClick={countryChange(list.name)} value={list.name} className="get_seller_country" />
+                           <span>{list.name}</span>
+                           </label>
+                        </li>))}
+                       
                        </ul>
                   </div>
                </div>
@@ -149,7 +113,7 @@ const Freelancer = (props) => {
                <div className="card border-success mb-3">
                   <div className="card-header bg-success">
                      <h3 className="float-left text-white h5">Seller Level</h3>
-                     <button className="btn btn-secondary btn-sm float-right clear_seller_level clearlink" onclick="clearLevel()">
+                     <button className="btn btn-secondary btn-sm float-right clear_seller_level clearlink" >
                         <i className='fa fa-times-circle'></i> Clear Filter    </button>
                   </div>
                   <div className="card-body">
@@ -184,70 +148,45 @@ const Freelancer = (props) => {
                <div className="card border-success mb-3">
                   <div className="card-header bg-success">
                      <h3 className="float-left text-white h5">Seller Lang</h3>
-                     <button className="btn btn-secondary btn-sm float-right clear_seller_language clearlink" onclick="clearLanguage()">
+                     <button className="btn btn-secondary btn-sm float-right clear_seller_language clearlink" >
                         <i className='fa fa-times-circle'></i> Clear Filter       
                      </button>
                   </div>
                   <div className="card-body">
                      <ul className="nav flex-column">
-                                 <li className="nav-item checkbox checkbox-success">
+                        {languages && languages.map((list, index) => (<li key={index} className="nav-item checkbox checkbox-success">
                            <label>
-                           <input type="checkbox" value="45" className="get_seller_language" />
-                           <span>Francais</span>
+                           <input type="checkbox" value={list._id} className="get_seller_language" />
+                           <span>{list.name}</span>
                            </label>
-                        </li>
-                              <li className="nav-item checkbox checkbox-success">
-                           <label>
-                           <input type="checkbox" value="35" className="get_seller_language" />
-                           <span>English </span>
-                           </label>
-                        </li>
-                              <li className="nav-item checkbox checkbox-success">
-                           <label>
-                           <input type="checkbox" value="38" className="get_seller_language" />
-                           <span>Arabic</span>
-                           </label>
-                        </li>
-                              <li className="nav-item checkbox checkbox-success">
-                           <label>
-                           <input type="checkbox" value="37" className="get_seller_language" />
-                           <span>Spanish</span>
-                           </label>
-                        </li>
-                              <li className="nav-item checkbox checkbox-success">
-                           <label>
-                           <input type="checkbox" value="43" className="get_seller_language" />
-                           <span>Turkish</span>
-                           </label>
-                        </li>
-                             
+                        </li>))}
                      </ul>
                   </div>
                </div>        
-            </div>
+            </div>*/}
             <div className="col-lg-9 col-md-8 col-sm-12 ">
                <div className="row flex-wrap" id="freelancers">                   
-                  {freelancers && freelancers.map((list, index) => (<Fragment><div className="col-md-12">
-                     <div className="card card-body mb-4 freelancerBox">
-                        <figure className="wt-userlistingimg">
-                           <img src={list.profilePhoto} width="100" className="rounded img-fluid" />
-                              <small className="text-muted mt-1">
-                                 <i className='fa fa-circle text-danger'></i>
-                                 {auth.isAuthenticated ? "Online" : "Offline"}     
-                              </small>
-                           <div className="wt-userdropdown wt-away template-content tipso_style wt-tipso">
-                              <img src="images/level_badge_3.png" className="level_badge" />
-                           </div>
-                           <a id="chatBtn" data-toggle="tooltip" data-placement="top" title="Chat With Me" href="conversations/message.php?seller_id=1" className="btn btn-success mt-4 text-white "><i className="fa fa-comments-o" aria-hidden="true"></i> 
-                              Chat
-                           </a>
-                        </figure>
+                  {freelancers && freelancers.map((list, index) => (<Fragment key={index}><div className="col-md-12">
+                     <div className="card card-body mb-4 freelancerBox">                        
+                           <figure className="wt-userlistingimg">
+                              <img src={list.profilePhoto} width="100" className="rounded img-fluid" />
+                                 <small className="text-muted mt-1">
+                                    <i className={'fa fa-circle' + (auth.isAuthenticated ? 'text-success' : 'text-danger')}></i>
+                                    {auth.isAuthenticated ? "Online" : "Offline"}     
+                                 </small>
+                              <div className="wt-userdropdown wt-away template-content tipso_style wt-tipso">
+                                 <img src="images/level_badge_3.png" className="level_badge" />
+                              </div>
+                              <Link id="chatBtn" data-toggle="tooltip" data-placement="top" title="Chat With Me" to={(auth.user._id != list._id) ? "/chat/" + list._id : "/" } className="btn btn-success mt-4 text-white "><i className="fa fa-comments-o" aria-hidden="true"></i> 
+                                 Chat
+                              </Link>
+                           </figure>                        
                         <div className="request-description">
                            <div className="row">
                               <div className="col-lg-9 col-md-12">
                                  <a href="fixmywebsite">
                                  <h6 className="font-weight-normal"><i className="fa fa-check-circle" style={{color:"#00cc8d"}}></i> {list.firstName} </h6>
-                                 <h5 className="text-success"> Website Fixer </h5>
+                                 <h5 className="text-success"> {list.headline} </h5>
                                  </a>
                                  <ul className="tagline mb-2 p-0">
                                     <li>
@@ -260,7 +199,7 @@ const Freelancer = (props) => {
                                     </li>
                                     <li>
                                        <i className="fa fa-map-marker"></i>
-                                       <strong>Country: </strong> {list.country.name}               
+                                       <strong>Country: </strong> {list.country ? list.country.name : ""}               
                                     </li>
                                     <li>
                                        <a href="conversations/message.php?seller_id=1"><i className="fa fa-comments-o"></i> <strong>Contact:</strong> {list.firstName} </a>
@@ -269,32 +208,42 @@ const Freelancer = (props) => {
                               </div>
                               <div className="col-lg-3 col-md-12">
                                  <div className="star-rating">
-                                  <i className='fa fa-star'></i>  <i className='fa fa-star'></i>  <i className='fa fa-star'></i>  <i className='fa fa-star'></i>  <i className='fa fa-star-o'></i>            <h4 className="mb-1">{list.rating}/<small className="text-muted font-weight-normal">5</small></h4>
-                                 <a>(9 Reviews)</a>
+                                  <i className='fa fa-star'></i>  
+                                  <i className='fa fa-star'></i>  
+                                  <i className='fa fa-star'></i>  
+                                  <i className='fa fa-star'></i>  
+                                  <i className='fa fa-star-o'></i>            
+                                  <h4 className="mb-1">{list.rating ? list.rating : 0}/<small className="text-muted font-weight-normal">5</small></h4>
+                                 {/* <a>(9 Reviews)</a> */}
                                  </div>
                               </div>
                            </div>
                            <p className="lead mb-2 mt-0">{list.description}</p>
                            <div className="skills">
+                           {list && list.skill.map((list, index) => (<button className="btn btn-light tags-19">{list.skill}</button>))}
                            </div>
                         </div>
                      </div>
                   </div></Fragment>))}
                </div>
+
+               <ReactPaginate
+                    previousLabel={"prev"}
+                    nextLabel={"next"}
+                    breakLabel={"..."}
+                    breakClassName={"break-me"}
+                    pageCount={pageCount}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={handlePageClick}
+                    containerClassName={"pagination"}
+                    subContainerClassName={"pages pagination"}
+                    activeClassName={"active"}
+               />
+
                <div id="wait"></div>
                       <br />
-             <div className="row justify-content-center mb-5 mt-0">
-                  <nav>
-                    <ul className="pagination" id="freelancer_pagination">    
-                        <li className='page-item'>
-                        <a className='page-link' href='?page=1&'>First Page</a>
-                        </li><li className='page-item active'><a className='page-link' href='?page=1&'>1</a></li><li className='page-item'><a href='?page=2&' className='page-link'>2</a></li><li className='page-item'><a href='?page=3&' className='page-link'>3</a></li><li className='page-item'><a href='?page=4&' className='page-link'>4</a></li><li className='page-item'><a href='?page=5&' className='page-link'>5</a></li><li className='page-item'><a href='?page=6&' className='page-link'>6</a></li><li className='page-item' href='#'><a className='page-link'>...</a></li><li className='page-item '><a className='page-link' href='?page=24&'>24</a></li>  
-                        <li className='page-item'>
-                        <a className='page-link' href='?page=24&'>Last Page</a>
-                        </li>              
-                     </ul>
-                  </nav>
-             </div>
+             
             </div>
          </div>
        </div>
