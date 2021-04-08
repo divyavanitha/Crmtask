@@ -228,7 +228,7 @@ exports.checkout = async (req, res) => {
 
 
 exports.updateOrder = async (req, res) => {
-
+console.log(req.body);
     if ((req.body.status).toUpperCase() == "DELIVERED") {
         var schema = Joi.object().options({ abortEarly: false }).keys({
             id: Joi.string().required().label("Order Id"),
@@ -239,7 +239,7 @@ exports.updateOrder = async (req, res) => {
         var schema = Joi.object().options({ abortEarly: false }).keys({
             id: Joi.string().required().label("Order Id"),
             status: Joi.string().required().label("Status"),
-            revison_message: Joi.string().required().label("revison_message")
+            revison_message: Joi.string().required().label("Revision Message")
         }).unknown(true);
     } else if ((req.body.status).toUpperCase() == "CANCELLATION REQUESTED") {
         var schema = Joi.object().options({ abortEarly: false }).keys({
@@ -430,7 +430,7 @@ exports.updateOrder = async (req, res) => {
                 message = arr[index];
             }
             console.log('message', message);
-            if((order.status == "PENDING") || (order.status == "PROGRESS")) order.status = "PROGRESS"; 
+            if(req.body.sent_by == "buyer") if((order.status == "PENDING") || (order.status == "PROGRESS")) order.status = "PROGRESS"; 
         }
 
         
@@ -590,6 +590,7 @@ exports.tips = async (req, res) => {
 
             let paymentLog = {};
             let random = "FIV"+ Math.floor(Math.random() * (10000 - 1)) + 1;
+            if(req.body.tip_status == 1){
             if((order_detail.payment_mode).toUpperCase() == "WALLET"){
                 if(buyer.wallet >= req.body.tips){
 
@@ -652,6 +653,7 @@ exports.tips = async (req, res) => {
                         return res.status(errorResponse.statusCode).json(errorResponse);
                     }
                 }
+            }
             }
             if(req.body.tip_status == 1){
                 var notification = {

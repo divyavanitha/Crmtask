@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter, Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { getMenu, getSlide, getGigWithoutAuth } from "../../../_actions/user.action";
@@ -9,15 +9,24 @@ import OwlCarousel from 'react-owl-carousel';
 
 
 function Landing() {
-
+   let history = useHistory();
    const dispatch = useDispatch();
    let auth = useSelector((state) => state.user);
+   const [service, setService] = useState("");
 
    useEffect(() => {
       dispatch(getMenu())
       dispatch(getSlide())
       dispatch(getGigWithoutAuth())
    }, []);
+
+   const handleSearch = async () => {
+      history.push({
+        pathname: '/search',
+        search: '',
+        state: { service }
+      })
+   }
 
    const menus = useSelector((state) => state.menu);
    const menuList = menus && menus.menu.menus;
@@ -39,16 +48,16 @@ function Landing() {
                   <h5>freelance services for your business</h5>
                   <div className="row justify-content-center">
                      <div className="">
-                        <form action="" method="post">
+                        
                            <div className="input-group space20 bannerFormBox" style={{ top: '-80px' }}>
-                              <input type="text" name="search_query" className="form-control" value="" placeholder="Find Services" style={{ top: 0 }} />
+                              <input type="text" value={service} name="search_query" onChange={e => setService(e.target.value)} className="form-control" placeholder="Find Services" style={{ top: 0 }} />
                               <div className="input-group-append move-icon-up" style={{ top: 0 }}>
-                                 <button name="search" type="submit" className="search_button">
+                                 <button name="search" onClick={handleSearch} type="submit" className="search_button">
                                     <img src={require('../../../assets/images/srch.png')} className="srch2" />
                                  </button>
                               </div>
                            </div>
-                        </form>
+                       
                      </div>
                   </div>
                </div>

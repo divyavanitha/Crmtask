@@ -77,6 +77,8 @@ export const BUY_IT_AGAIN = 'BUY_IT_AGAIN';
 
 export const PROFILE_GIGS = 'PROFILE_GIGS';
 
+export const GET_SERVICE_GIGS = 'GET_SERVICE_GIGS';
+
 export const CREATE_GIGS = 'CREATE_GIGS';
 export const GET_MYALLGIGS = 'GET_MYALLGIGS';
 export const GET_GIGSBYID = 'GET_GIGSBYID';

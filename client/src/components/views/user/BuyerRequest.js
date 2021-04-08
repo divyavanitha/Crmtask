@@ -324,9 +324,9 @@ const BuyerRequest = (props) => {
                {gig.gig && gig.gig.map((list, index) => (<div key={list._id}>
                <div className="proposal-picture">
 
-                  <input type="radio" id={list._id} className="radio-custom" onChange={() => { setGigId(list._id) } } data-title={list.title} name="gig_id" checked={gigId == list._id ? true: false}   />
+                  <input type="radio" id={list._id} value={list._id}  className="radio-custom" onChange={() => { console.log("lai", list._id); setGigId(list._id) } } data-title={list.title} name="gig_id" checked={gigId == list._id ? true: false}   />
 
-                  <label htmlFor="radio" className="radio-custom-label"></label>
+                  <label htmlFor="input" className="radio-custom-label"></label>
 
                   <img src={list.photo ? list.photo[0].photo : ""} width="50" height="50" style={{ borderRadius: '2% !important' }} />
 

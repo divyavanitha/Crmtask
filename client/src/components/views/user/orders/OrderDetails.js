@@ -67,10 +67,16 @@ const Cart = (props) => {
         setIsLoading(true)
         dispatch(updateOrder(data)).then(res => {
           console.log('id',res);
-          setStatus(res.responseData.status);
-          setOrderDetails(res.responseData);
-          addToast(res.message, { appearance: res.status, autoDismiss: true, })  
-          setIsLoading(false)        
+          if(res.status == "success"){
+            setStatus(res.responseData.status);
+            setOrderDetails(res.responseData);
+            addToast(res.message, { appearance: res.status, autoDismiss: true, })  
+          }else{
+            addToast(res.error.revison_message, { appearance: res.status, autoDismiss: true, }) 
+                  
+          } 
+          $("#revision-request-modal").modal("hide");
+          setIsLoading(false) 
         })
 
       });
@@ -143,8 +149,14 @@ const Cart = (props) => {
         
         
         dispatch(tips(data)).then(res => {
-          setOrderDetails(res.responseData);
-          addToast(res.message, { appearance: res.status, autoDismiss: true, })
+          if(res.status == "success"){
+            setOrderDetails(res.responseData);
+            addToast(res.message, { appearance: res.status, autoDismiss: true, }) 
+          }else{
+            //addToast(res.error.revison_message, { appearance: res.status, autoDismiss: true, }) 
+                  
+          } 
+          
           $("#tipModal2").modal("hide");           
         })
     }
@@ -157,6 +169,7 @@ const Cart = (props) => {
       data.append("message_file", messageFile.current.files[0]);
       data.append("message", message.current.value);
       data.append("sent_by", "buyer");
+      data.append("status", "Progress");
 
       console.log("data", data)
       setIsLoading(true)
@@ -210,7 +223,7 @@ const Cart = (props) => {
 
             let data = {
                 order_id: params.id,
-                buyer_rating: values.rating,
+                buyer_rating: values.rating ? values.rating : "1",
                 buyer_comment: values.comment,
                 type: "buyer"
             };
@@ -218,9 +231,16 @@ const Cart = (props) => {
             
               dispatch(rating(data)).then(res => {
                 console.log('id',res.responseData);
-                setRatings(res.responseData.ratings);
-                setOrderDetails(res.responseData.orders);
-                addToast(res.message, { appearance: res.status, autoDismiss: true, })  
+                if(res.status == "success"){
+                    setRatings(res.responseData.ratings)
+                    setOrderDetails(res.responseData.orders);
+                    addToast(res.message, { appearance: res.status, autoDismiss: true, })  
+                }else{
+                  if(res.error.buyer_comment)
+                  addToast(res.error.buyer_comment, { appearance: res.status, autoDismiss: true, }) 
+                  else
+                  addToast(res.error.buyer_rating, { appearance: res.status, autoDismiss: true, }) 
+                } 
                  
               })
            
@@ -426,9 +446,9 @@ const Cart = (props) => {
 
                                              {list.deliveredMessage}
 
-                                                 <a href={list.delivery_file} className='d-block mt-2 ml-1' target='_blank'>
+                                                 {list.delivery_file && <a href={list.delivery_file} className='d-block mt-2 ml-1' target='_blank'>
                                                    <i className='fa fa-download'></i> {(list.delivery_file).substring((list.delivery_file).lastIndexOf('/') + 1)}
-                                                 </a>
+                                                 </a>}
                                                
                                              </p>
 
@@ -452,9 +472,9 @@ const Cart = (props) => {
 
                                       {list.revision_message}
 
-                                      <a href={list.revision_file} className='d-block mt-2 ml-1' target='_blank'>
+                                      {list.revision_file && <a href={list.revision_file} className='d-block mt-2 ml-1' target='_blank'>
                                        <i className='fa fa-download'></i> {(list.revision_file).substring((list.revision_file).lastIndexOf('/') + 1)}
-                                      </a>
+                                      </a> }
                                       </p>
 
                                       <p className="text-right text-muted mb-0"> {list.updated_at} </p>

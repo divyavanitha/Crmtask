@@ -516,14 +516,14 @@ exports.orderOffer = async (req, res) => {
             }
 
             let orderData = await db._store(Order, order);
+            if(req.body.message_id){
+                let msg = await db._find(Message, {_id: req.body.message_id});
 
-            let msg = await db._find(Message, {_id: req.body.message_id});
+                msg.offer.order = orderData._id;
+                msg.offer.status = "ORDERED";
 
-            msg.offer.order = orderData._id;
-            msg.offer.status = "ORDERED";
-
-            await db._update(Message, {_id: req.body.message_id}, msg);
-                
+                await db._update(Message, {_id: req.body.message_id}, msg);
+            }   
             await db._store(PaymentLog, paymentLog);
             await db._update(User, { _id: orderData.seller }, user);
             await db._update(User, { _id: orderData.buyer }, buyer);

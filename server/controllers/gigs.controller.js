@@ -30,6 +30,10 @@ exports.listgigs = async (req, res) => {
             projection.subCategory = subcategory._id;
         }
 
+        if(req.query.service) {
+            projection.title =  new RegExp(req.query.service, 'i')           
+        }
+
         projection.status = 'ACTIVE';
         projection.deleted_at = null;
 

@@ -48,9 +48,14 @@ const Cart = (props) => {
 
             dispatch(rating(data)).then(res => {
                 console.log('id',res.responseData);
-                setRatings(res.responseData.ratings)
-                setOrderDetails(res.responseData.orders);
-                addToast(res.message, { appearance: res.status, autoDismiss: true, })  
+                if(res.status == "success"){
+                    setRatings(res.responseData.ratings)
+                    setOrderDetails(res.responseData.orders);
+                    addToast(res.message, { appearance: res.status, autoDismiss: true, })  
+                }else{
+                  addToast(res.error.seller_comment, { appearance: res.status, autoDismiss: true, }) 
+                        
+                } 
                  
             })
       });
@@ -149,9 +154,14 @@ const Cart = (props) => {
           
                 dispatch(updateOrder(data)).then(res => {
                   console.log('id',res);
-                  setStatus(res.responseData.status);
-                  setOrderDetails(res.responseData);
-                  addToast(res.message, { appearance: res.status, autoDismiss: true, })
+                  if(res.status == "success"){
+                    setStatus(res.responseData.status);
+                    setOrderDetails(res.responseData);
+                    addToast(res.message, { appearance: res.status, autoDismiss: true, })  
+                  }else{
+                    addToast(res.error.delivered_message, { appearance: res.status, autoDismiss: true, }) 
+                          
+                  } 
                   $('#deliver-order-modal').modal("hide");
                  
                 })
@@ -342,9 +352,9 @@ const Cart = (props) => {
 
                                              {list.deliveredMessage}
 
-                                                 <a href={list.delivery_file} className='d-block mt-2 ml-1' target='_blank'>
+                                                 {list.delivery_file && <a href={list.delivery_file} className='d-block mt-2 ml-1' target='_blank'>
                                                    <i className='fa fa-download'></i> {(list.delivery_file).substring((list.delivery_file).lastIndexOf('/') + 1)}
-                                                 </a>
+                                                 </a>}
                                                
                                              </p>
 
@@ -366,9 +376,9 @@ const Cart = (props) => {
 
                                       {list.revision_message}
 
-                                      <a href={list.revision_file} className='d-block mt-2 ml-1' target='_blank'>
+                                      {list.revision_file && <a href={list.revision_file} className='d-block mt-2 ml-1' target='_blank'>
                                        <i className='fa fa-download'></i> {(list.revision_file).substring((list.revision_file).lastIndexOf('/') + 1)}
-                                      </a>
+                                      </a>}
                                       </p>
 
                                       <p className="text-right text-muted mb-0"> {list.updated_at} </p>

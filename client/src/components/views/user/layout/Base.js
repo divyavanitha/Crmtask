@@ -49,7 +49,7 @@ import Notification from "../Notification";
 import StartSelling from "../StartSelling";
 import SellerProfile from "../gigs/SellerProfile";
 import Freelancer from "../Freelancer";
-
+import Search from "../Search";
 import "../../../../assets/css/custom.css";
 
 import { getPagelist, getPages, getFavourites } from "../../../../_actions/user.action";
@@ -83,6 +83,7 @@ const Base = () => {
             <Nav />
             <Switch>
                 <Route exact={true} path="/" component={auth.isAuthenticated ? Home : Landing} />
+                <Route path="/search" component={Search} />
                 <Route path="/categories/:category/:subcategory" component={CategoryGigList} />
                 <Route path="/profile/:id/:user" component={SellerProfile} />
                 <ProtectedRoute path="/freelancer" component={Freelancer} />

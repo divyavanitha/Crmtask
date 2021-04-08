@@ -45,7 +45,8 @@ import {
     GET_SELLER_BUYER,
     GET_NOTIFICATION,
     BUY_IT_AGAIN,
-    PROFILE_GIGS
+    PROFILE_GIGS,
+    GET_SERVICE_GIGS
 } from './types';
 
 
@@ -404,7 +405,7 @@ export const addCart = (data) => async dispatch => {
 }
 
 export const getGigWithoutAuth = (data) => async dispatch => {
-
+    console.log(queryString.stringify(data));
     let gig = await axios.get( `/api/list/gigs?${ queryString.stringify(data) }` );
 
     dispatch({
@@ -412,6 +413,18 @@ export const getGigWithoutAuth = (data) => async dispatch => {
         payload: gig.data
     });
 
+};
+
+export const getGigWithService = (data) => async dispatch => {
+
+    let gig = await axios.get( `/api/list/gigs?service=${data}` );
+
+    dispatch({
+        type: GET_SERVICE_GIGS,
+        payload: gig.data
+    });
+
+    return gig.data.responseData;
 };
 
 export const getCartList = (data) => async dispatch => {
