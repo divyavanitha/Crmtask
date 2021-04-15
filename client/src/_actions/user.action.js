@@ -207,8 +207,12 @@ export const getNotification = () => async dispatch => {
     return notification.data;
 }
 
-export const freelancerList = (page = 1) => async dispatch => {
-    const freelancer = await axios.get(`/api/freelancer/list?page=${page}`)
+export const freelancerList = (page = 1, country=null, sellerLevel=null, lang=null) => async dispatch => {
+    let url = `/api/freelancer/list?page=${page}`;
+    if(country) url += `&country_id=${country}`;
+    if(sellerLevel) url += `&seller_level=${sellerLevel}`;
+    if(lang) url += `&language_name=${lang}`;
+    const freelancer = await axios.get(url)
     return freelancer.data;
 }
 

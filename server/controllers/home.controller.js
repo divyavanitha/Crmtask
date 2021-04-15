@@ -329,6 +329,7 @@ exports.listPackage = async (req, res) => {
 }
 
 exports.freelancerList = async (req, res) => {
+
    try {
 
         if(!req.query.length) req.query.length = 10;
@@ -338,16 +339,126 @@ exports.freelancerList = async (req, res) => {
 
         let skip = (req.query.page * req.query.length) - req.query.length;
 
-        let freelancers = await db._get(User, null, null, {populate: 
-            [{ path: 'country', model: 'Country', select: 'name' },
-            { path: 'city', model: 'city', select: 'name' },
-            { path: 'state', model: 'state', select: 'name' }], limit: req.query.length, skip: skip });
+        let query = [];
 
-        let count = await db._count(User);
+        console.log("skip", skip);
+        console.log("limit", req.query.length);
+        if(req.query.country_id){
+            var string = req.query.country_id;
+            var array = string.split(" ");
+        query.push({$match: {country: { $in: array }}});
+        }
+        if(req.query.seller_level){
+            var seller_level = req.query.seller_level;
+            var seller = seller_level.split(" ");
+        query.push({$match: {type: { $in: seller }}});
+        }
+        if(req.query.language_name){
+            var language_name = req.query.language_name;
+            let data = language_name.split(",");
+            console.log("data",data);
+        query.push({$match: { "language": {$elemMatch: {language: {$in : data} } } } });
+        }
+       
+        query.push({$project:{
+                    _id: 1,firstName: 1,lastName: 1,email: 1,mobile: 1,city: {"$toInt": "$city"},state: {"$toInt": "$state"},language: 1,profilePhoto: 1,coverPhoto: 1,headline: 1,experience: 1,skill: 1,education: 1,certification: 1,wallet: 1,gig: 1,rating: 1,recentDelivery:1,type:1,createdAt:1,country: {"$toInt": "$country"}
+                  }})
+
+        query.push({
+                    "$lookup": {
+                        "from": "countries",
+                        "let": { "id": "$country" },
+                        "pipeline": [
+                            {
+                                "$match": {
+                                    "$expr": {
+                                       
+                                        "$eq": [
+                                            "$$id",
+                                            "$_id"
+                                        ]
+                                            
+                                    }
+
+                                },
+
+                            },
+                            {"$project": {"name" : 1}},
+                          
+                        ],
+                        "as": "country"
+                    }
+                })
+        query.push({
+                    "$lookup": {
+                        "from": "cities",
+                        "let": { "id": "$city" },
+                        "pipeline": [
+                            {
+                                "$match": {
+                                    "$expr": {
+                                       
+                                        "$eq": [
+                                            "$$id",
+                                            "$_id"
+                                        ]
+                                            
+                                    }
+
+                                },
+
+                            },
+                            {"$project": {"name" : 1}},
+                          
+                        ],
+                        "as": "city"
+                    }
+                })
+        query.push({
+                    "$lookup": {
+                        "from": "states",
+                        "let": { "id": "$state" },
+                        "pipeline": [
+                            {
+                                "$match": {
+                                    "$expr": {
+                                       
+                                        "$eq": [
+                                            "$$id",
+                                            "$_id"
+                                        ]
+                                            
+                                    }
+
+                                },
+
+                            },
+                            {"$project": {"name" : 1}},
+                          
+                        ],
+                        "as": "state"
+                    }
+                })
+
+
+        query.push({
+              $facet: {
+                freelancers: [
+                  { $skip: skip },
+                  { $limit: req.query.length }
+                ],
+                totalCount: [
+                  { $count: 'totalCount' }
+                ]
+              }
+        });
+        const [{ freelancers, totalCount }] =  await User.aggregate(query);
+
+        //console.log(freelancers, totalCount);
 
         const data = { freelancers };
 
-        const response = helper.response({ data: helper.paginate(req, data, count) });
+        const response = helper.response({ data: helper.paginate(req, data, ((totalCount.length > 0) ? totalCount[0].totalCount : 0) )});
 
         return res.status(response.statusCode).json(response);
 
@@ -382,7 +493,6 @@ exports.listcategory = async (req, res) => {
                                             ]
                                         }]
                                 }
-
                             },
 
                         },
