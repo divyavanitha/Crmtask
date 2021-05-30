@@ -1,6 +1,5 @@
 const express = require('express');
 const { Admin, validate } = require('../../models/admin');
-const { Role } = require('../../models/Role');
 const { User} = require('../../models/user');
 const mongoose = require('mongoose');
 const Joi = require('@hapi/joi');
@@ -32,18 +31,18 @@ exports.adminAuth = async (req, res) => {
 
         if (error) res.status(422).json( helper.response(  { status: 422, error : errors }   ));
 
-        let user = await Admin.findOne({ email: req.body.email }).populate('roles.role');
+        let user = await Admin.findOne({ email: req.body.email });
         if (!user) res.status(422).json( helper.response(  { status: 422, error : { message: 'Invalid credentials' } }   ));
 
         const validPassword = await bcrypt.compare(req.body.password, user.password);
         if (!validPassword) res.status(422).json( helper.response(  { status: 422, error : { message: 'Invalid credentials' } }   ));
 
-        let payload = _.pick(user, ['_id', 'name', 'email', 'roles']);
+        let payload = _.pick(user, ['_id', 'name', 'email']);
 
-        let roleList = _.map(payload.roles, 'role');
+        /*let roleList = _.map(payload.roles, 'role');
         let role = _.map(roleList, 'name');
         
-        payload.roles = role;
+        payload.roles = role;*/
         
         const token = user.generateAuthToken(payload);
         const refreshToken = user.generateRefreshToken(payload);
@@ -112,46 +111,7 @@ exports.adminAuthRegister = async (req, res) => {
 
 };
 
-exports.getPermissions = async (req, res) => {
-    try {
 
-        if(req.admin) {
-            let query = db._get(Role, { 'name': { $in: req.admin.roles } }, {}, {populate: { path: 'permissions.permission' } })
-            
-            const roles = await query;
-
-            let obj = {};
-
-            for(let role of roles) {
-                let rules = [];
-                for(let i in role.permissions) {
-                    rules.push(role.permissions[i].permission.name);
-                }
-
-                obj[role.name] = rules
-                
-            }
-
-            const response = helper.response({ data: obj });
-
-            return res.status(response.statusCode).json(response);
-        } else {
-            return res.status(200).json({
-                "statusCode": 200,
-                "title": "OK",
-                "message": "",
-                "responseData": {
-                },
-                "error": {}
-            });
-        }
-        
-
-    } catch (err) {
-        console.log(err);
-    }
-      
-};
 
 exports.getAdministrators = async (req, res) => {
     try {
@@ -191,14 +151,14 @@ exports.refresh = async (req, res) => {
         let refresh_token = req.body.refresh_token;
 
         if( refresh_token && (refresh_token in adminTokenList)) {
-            let user = await Admin.findOne({ email: adminTokenList[refresh_token]['email'] }).populate('roles.role');
+            let user = await Admin.findOne({ email: adminTokenList[refresh_token]['email'] });
 
             let payload = _.pick(user, ['_id', 'name', 'email', 'roles']);
 
-            let roleList = _.map(payload.roles, 'role');
+            l/*et roleList = _.map(payload.roles, 'role');
             let role = _.map(roleList, 'name');
             
-            payload.roles = role;
+            payload.roles = role;*/
 
             const token = user.generateAuthToken(payload);
             const refreshToken = user.generateRefreshToken(payload);

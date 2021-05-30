@@ -10,7 +10,6 @@ import AdminAuthRoute from './utils/admin_auth_route';
 import { site } from "../_actions/setting.action";
 
 
-
 function App() {
 
   const dispatch = useDispatch();

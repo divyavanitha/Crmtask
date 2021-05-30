@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { login, social_login } from "../../../../_actions/user.action";
+import { login } from "../../../../_actions/user.action";
 import { useEffect } from 'react';
 import SocialButton from '../includes/SocialButton';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
@@ -14,47 +14,6 @@ function Login() {
 
     let settings = useSelector((state) => state.settings);
 
-    let social = settings.settings && settings.settings.social;
-
-    const handleSocialLogin = (user) => {
-        if(user._provider == 'google') {
-
-            let dataToSubmit = {
-                first_name: user._profile.firstName,
-                last_name: user._profile.lastName,
-                email: user._profile.email,
-                mobile: user._profile.mobile,
-                profile_photo: user._profile.profilePicURL,
-                social_unique_id: user._profile.id,
-                login_by: 'GOOGLE'
-            };
-
-            dispatch(social_login(dataToSubmit)).then((res) => {
-                $('#login-modal').modal('hide');
-            })
-
-        } else if(user._provider == 'facebook') {
-
-            let dataToSubmit = {
-                first_name: user._profile.firstName,
-                last_name: user._profile.lastName,
-                email: user._profile.email,
-                mobile: user._profile.mobile,
-                profile_photo: user._profile.profilePicURL,
-                social_unique_id: user._profile.id,
-                login_by: 'FACEBOOK'
-            };
-
-            dispatch(social_login(dataToSubmit)).then((res) => {
-                $('#login-modal').modal('hide');
-            })
-
-        }
-    }
-
-    const handleSocialLoginFailure = (err) => {
-        console.error(err)
-    }
 
     return (
         <Formik
@@ -129,19 +88,7 @@ function Login() {
                                         </form>
                                         <div className="clearfix"></div>
 
-                                        { social && social.status == 1 && (social.facebookAppId != "" || social.googleClientId != "" ) &&
-                                        <Fragment>
-                                            <div className="text-center pt-4 pb-2">OR</div>
-                                            <hr />
-                                            <div className="line mt-3"><span></span></div>
-                                            <div className="text-center">
-                                                <SocialButton className="btn btn-success btn-fb-connect" provider='facebook' appId={social.facebookAppId} onLoginSuccess={handleSocialLogin} onLoginFailure={handleSocialLoginFailure} > <i className="fa fa-facebook"></i> FACEBOOK </SocialButton>
-                                                &nbsp; &nbsp;
-                                                <SocialButton className="btn btn-danger btn-gplus-connect" provider='google' appId={social.googleClientId} onLoginSuccess={handleSocialLogin} onLoginFailure={handleSocialLoginFailure} > <i className="fa fa-google"></i> GOOGLE </SocialButton>
-                                            </div>
-                                        <div className="clearfix"></div>
-                                        </Fragment>
-                                        }
+                                     
 
                                         <div className="text-center mt-3">
                                             <a href="#" className="text-success" data-toggle="modal" data-target="#register-modal" data-dismiss="modal">

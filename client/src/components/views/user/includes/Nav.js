@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { getCategory } from "../../../../_actions/user.action";
+
 import $ from 'jquery';
 
 function Nav() {
@@ -14,9 +14,6 @@ function Nav() {
     let site = settings.settings && settings.settings.site;
 
     useEffect(() => {
-
-        // Update the document title using the browser API
-        dispatch(getCategory())
 
     }, []);
 

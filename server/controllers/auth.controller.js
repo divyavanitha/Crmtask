@@ -1,10 +1,5 @@
 
 const { User, validate } = require('./../models/user');
-const { Country } = require('./../models/country');
-const { State } = require('./../models/state');
-const { City } = require('./../models/city');
-const { Language } = require('./../models/language');
-const { Skill } = require('./../models/skill');
 
 const Joi = require('@hapi/joi');
 const jwt = require('jsonwebtoken');
@@ -517,78 +512,6 @@ exports.refresh = async (req, res) => {
 };
 
 
-exports.country = async (req, res) => {
-    try {
-        let countries = await db._get(Country, { status: 1}, {createdAt: 0, updatedAt: 0 });
 
-        const data = { countries };
-
-        const response = helper.response({ data });
-        return res.status(response.statusCode).json(response);
-
-    } catch (err) {
-        console.log(err);
-    }
-};
-
-exports.state = async (req, res) => {
-    try {
-
-        let states = await db._get(State, { status: 1, countryId: req.params.id}, {createdAt: 0, updatedAt: 0 });
-
-        const data = { states };
-
-        const response = helper.response({ data });
-        return res.status(response.statusCode).json(response);
-
-    } catch (err) {
-        console.log(err);
-    }
-};
-
-exports.city = async (req, res) => {
-    try {
-
-        let cities = await db._get(City, { status: 1, stateId: req.params.id}, {createdAt: 0, updatedAt: 0 });
-
-        const data = { cities };
-
-        const response = helper.response({ data });
-        return res.status(response.statusCode).json(response);
-
-    } catch (err) {
-        console.log(err);
-    }
-};
-
-exports.language = async (req, res) => {
-    try {
-
-        let languages = await db._get(Language, { status: 1}, {createdAt: 0, updatedAt: 0 });
-
-        const data = { languages };
-
-        const response = helper.response({ data });
-        return res.status(response.statusCode).json(response);
-
-    } catch (err) {
-        console.log(err);
-    }
-};
-
-exports.skill = async (req, res) => {
-    try {
-
-        let skills = await db._get(Skill, { status: 1}, {createdAt: 0, updatedAt: 0 });
-
-        const data = { skills };
-
-        const response = helper.response({ data });
-        return res.status(response.statusCode).json(response);
-
-    } catch (err) {
-        console.log(err);
-    }
-};
 
 

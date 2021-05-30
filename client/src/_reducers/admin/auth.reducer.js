@@ -1,4 +1,4 @@
-import { ADMIN_USER, LOG_OUT, RBA } from "../../_actions/admin/types";
+import { ADMIN_USER, LOG_OUT } from "../../_actions/admin/types";
 
 const intialState = {
   isAuthenticated: false,
@@ -16,11 +16,7 @@ const adminReducer = (state = intialState, action) => {
         isAuthenticated: (action.payload !== "") ? true : false,
         admin: action.payload
       };
-    case RBA:
-      return {
-        ...state,
-        permissions: action.payload
-      };
+    
     case LOG_OUT:
       return {
         ...state,

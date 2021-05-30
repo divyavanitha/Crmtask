@@ -11,8 +11,8 @@ import jwt_decode from 'jwt-decode';
 import axios from "axios";
 
 import { AUTH_USER, LOGOUT_USER } from './_actions/types';
-import { ADMIN_USER, RBA, LOG_OUT } from './_actions/admin/types';
-import { ADD_CART_COUNT } from './_actions/types';
+import { ADMIN_USER, LOG_OUT } from './_actions/admin/types';
+
 import store from "./store.js";
 import $ from 'jquery';
 
@@ -32,41 +32,16 @@ if (localStorage.token) {
 
   });
 
-  /*decoded.wallet = 
-
-  "_id": "5fdb2f99f6a1971be19f9020",
-  "firstName": "User",
-  "lastName": "Demo",
-  "email": "demo@demo.com",
-  "mobile": "9876543210",
-  "wallet": 170,*/
-
   store.dispatch({
     type: AUTH_USER,
     payload: decoded
   })
 
-  axios.get("/api/cart/count").then((response) => {
-    store.dispatch({
-      type: ADD_CART_COUNT,
-      payload: response.data.responseData.count
-    });
-  }).catch((err) => {
-
-  });
+  
 }
 if (localStorage.adminToken) {
 
   const decoded = jwt_decode(localStorage.adminToken);
-  if (decoded) {
-    axios.post("/api/admin/permissions", {}, { headers: { 'Authorization': `${localStorage.adminToken}` } }).then((response) => {
-      store.dispatch({
-        type: RBA,
-        payload: response.data.responseData
-      });
-    }).catch((err) => {
-    });
-  }
 
 
   store.dispatch({

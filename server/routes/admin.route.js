@@ -6,21 +6,9 @@ const middleware = require("../middlewares/common");
 
 const adminController = require('../controllers/admin/admin.controller');
 const settingController = require('../controllers/admin/settings.controller');
-const pageController = require('../controllers/admin/page.controller');
-const couponController = require('../controllers/admin/coupon.controller');
-const deliveryTimeController = require('../controllers/admin/deliveryTime.controller');
-const categoryController = require('../controllers/admin/category.controller');
-const subcategoryController = require('../controllers/admin/subCategory.controller');
-const packageController = require('../controllers/admin/package.controller');
-const menuController = require('../controllers/admin/menu.controller');
-const skillController = require('../controllers/admin/skill.controller');
-const languageController = require('../controllers/admin/language.controller');
-const slideController = require('../controllers/admin/slide.controller');
-const homeController = require('../controllers/home.controller');
 const userController = require('../controllers/admin/user.controller');
-const cancelReasonController = require('../controllers/admin/cancelReason.controller');
-const requestController = require('../controllers/admin/request.controller');
-const gigController = require('../controllers/admin/gigs.controller');
+const commentController = require('../controllers/admin/comment.controller');
+const postController = require('../controllers/admin/post.controller');
 
 router.post('/login', (req, res) => {
   adminController.adminAuth(req, res);
@@ -30,228 +18,29 @@ router.post('/register', (req, res) => {
   adminController.adminAuthRegister(req, res);
 });
 
-router.post('/permissions', (req, res) => {
-  adminController.getPermissions(req, res);
-});
 
-router.get('/administrator', (req, res) => {
-  adminController.getAdministrators(req, res);
+router.get('/post', (req, res) => {
+  postController.listPost(req, res);
 });
-
-router.post('/administrator', (req, res) => {
-  adminController.addAdministrator(req, res);
-});
-
-router.post('/refresh', (req, res) => {
-  adminController.refresh(req, res);
-});
-
-router.get('/category', middleware.admin, (req, res) => {
-  categoryController.listcategory(req, res);
-});
-router.post('/category', (req, res) => {
-  categoryController.createcategory(req, res);
-});
-router.patch('/category', (req, res) => {
-  categoryController.updateCategory(req, res);
-});
-router.delete('/category/:id', (req, res) => {
-  categoryController.deletecategory(req, res);
-});
-router.get('/get/category/:id', (req, res) => {
-  categoryController.listcategorybyid(req, res);
-});
-router.get('/category/changestatus/:id/:status', (req, res) => {
-  categoryController.changeStatus(req, res);
-});
-router.get('/list/category', (req, res) => {
-  categoryController.categorylist(req, res);
-});
-
-
-router.get('/subcategory', (req, res) => {
-  subcategoryController.listSubCategory(req, res);
-});
-router.post('/subcategory', (req, res) => {
-  subcategoryController.createSubCategory(req, res);
-});
-router.patch('/subcategory', (req, res) => {
-  subcategoryController.updateSubCategory(req, res);
-});
-router.delete('/subcategory/:id', (req, res) => {
-  subcategoryController.deleteSubCategory(req, res);
-});
-router.get('/get/subcategory/:id', (req, res) => {
-  subcategoryController.listSubCategorybyid(req, res);
-});
-router.get('/subcategory/changestatus/:id/:status', (req, res) => {
-  subcategoryController.changeStatus(req, res);
-});
-
-
-router.get('/skill', (req, res) => {
-  skillController.listSkill(req, res);
-});
-router.post('/skill', (req, res) => {
-  skillController.createSkill(req, res);
-});
-router.patch('/skill', (req, res) => {
-  skillController.updateSkill(req, res);
-});
-router.delete('/skill/:id', (req, res) => {
-  skillController.deleteSkill(req, res);
-});
-router.get('/get/skill/:id', (req, res) => {
-  skillController.listSkillbyid(req, res);
-});
-
-
-router.get('/delivery/time', (req, res) => {
-  deliveryTimeController.listDeliveryTime(req, res);
-});
-router.post('/delivery/time', (req, res) => {
-  deliveryTimeController.createDeliveryTime(req, res);
-});
-router.patch('/delivery/time', (req, res) => {
-  deliveryTimeController.updateDeliveryTime(req, res);
-});
-router.delete('/delivery/time/:id', (req, res) => {
-  deliveryTimeController.deleteDeliveryTime(req, res);
-});
-router.get('/get/delivery/time/:id', (req, res) => {
-  deliveryTimeController.listDeliveryTimebyid(req, res);
-});
-
-
-router.get('/language', (req, res) => {
-  languageController.listLanguage(req, res);
-});
-router.post('/language', (req, res) => {
-  languageController.createLanguage(req, res);
-});
-router.patch('/language', (req, res) => {
-  languageController.updateLanguage(req, res);
-});
-router.delete('/language/:id', (req, res) => {
-  languageController.deleteLanguage(req, res);
-});
-router.get('/get/language/:id', (req, res) => {
-  languageController.listLanguagebyid(req, res);
-});
-
-
-router.get('/coupon', (req, res) => {
-  couponController.listCoupon(req, res);
-});
-router.post('/coupon', (req, res) => {
-  couponController.createCoupon(req, res);
-});
-router.patch('/coupon', (req, res) => {
-  couponController.updateCoupon(req, res);
-});
-router.delete('/coupon/:id', (req, res) => {
-  couponController.deleteCoupon(req, res);
-});
-router.get('/get/coupon/:id', (req, res) => {
-  couponController.listCouponbyid(req, res);
-});
-
-router.get('/slide', (req, res) => {
-  slideController.listSlide(req, res);
-});
-router.post('/slide', [middleware.upload( path.join(__dirname, '../storage/images/slide/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], (req, res) => {
+router.post('/post', [middleware.upload( path.join(__dirname, '../storage/images/post/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], (req, res) => {
   console.log(req.files);
-  slideController.createSlide(req, res);
+  postController.createPost(req, res);
 });
-router.patch('/slide', [middleware.upload( path.join(__dirname, '../storage/images/slide/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], (req, res) => {
+router.patch('/post', [middleware.upload( path.join(__dirname, '../storage/images/post/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], (req, res) => {
   console.log(req.files);
-  slideController.updateSlide(req, res);
+  postController.updatePost(req, res);
 });
-router.delete('/slide/:id', (req, res) => {
-  slideController.deleteSlide(req, res);
+router.delete('/post/:id', (req, res) => {
+  postController.deletePost(req, res);
 });
-router.get('/get/slide/:id', (req, res) => {
-  slideController.listSlidebyid(req, res);
+router.get('/get/post/:id', (req, res) => {
+  postController.listPostbyid(req, res);
 });
-router.get('/slide/changestatus/:id/:status', (req, res) => {
-  slideController.changeStatus(req, res);
-});
-
-router.get('/menu', (req, res) => {
-  menuController.listMenu(req, res);
-});
-router.post('/menu', [middleware.upload( path.join(__dirname, '../storage/images/menu/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], (req, res) => {
-  menuController.createMenu(req, res);
-});
-router.patch('/menu', [middleware.upload( path.join(__dirname, '../storage/images/menu/') ).fields([{ name: 'layoutPhoto', maxCount: 1 }]) ], (req, res) => {
-  menuController.updateMenu(req, res);
-});
-router.delete('/menu/:id', (req, res) => {
-  menuController.deleteMenu(req, res);
-});
-router.get('/get/menu/:id', (req, res) => {
-  menuController.listMenubyid(req, res);
-});
-router.get('/menu/changestatus/:id/:status', (req, res) => {
-  menuController.changeStatus(req, res);
+router.get('/post/changestatus/:id/:status', (req, res) => {
+  postController.changeStatus(req, res);
 });
 
-router.get('/package', (req, res) => {
-  packageController.listPackage(req, res);
-});
-router.post('/package', (req, res) => {
-  packageController.createPackage(req, res);
-});
-router.patch('/package', (req, res) => {
-  packageController.updatePackage(req, res);
-});
-router.delete('/package/:id', (req, res) => {
-  packageController.deletePackage(req, res);
-});
-router.get('/get/package/:id', (req, res) => {
-  packageController.listPackagebyid(req, res);
-});
-router.get('/package/changestatus/:id/:status', (req, res) => {
-  packageController.changeStatus(req, res);
-});
 
-router.get('/page', (req, res) => {
-  pageController.listpage(req, res);
-});
-router.post('/page', (req, res) => {
-  pageController.createpage(req, res);
-});
-router.patch('/page', (req, res) => {
-  pageController.updatePage(req, res);
-});
-router.delete('/page/:id', (req, res) => {
-  pageController.deletepage(req, res);
-});
-router.get('/get/page/:id', (req, res) => {
-  pageController.listPagebyid(req, res);
-});
-router.get('/page/changestatus/:id/:status', (req, res) => {
-  pageController.changeStatus(req, res);
-});
-
-router.get('/cancel/reason', middleware.admin, (req, res) => {
-  cancelReasonController.listCancelReason(req, res);
-});
-router.post('/cancel/reason', middleware.admin, (req, res) => {
-  cancelReasonController.createCancelReason(req, res);
-});
-router.patch('/cancel/reason', middleware.admin, (req, res) => {
-  cancelReasonController.updateCancelReason(req, res);
-});
-router.delete('/cancel/reason/:id', middleware.admin, (req, res) => {
-  cancelReasonController.deleteCancelReason(req, res);
-});
-router.get('/get/cancel/reason/:id', middleware.admin, (req, res) => {
-  cancelReasonController.listCancelReasonbyid(req, res);
-});
-router.get('/cancel/reason/changestatus/:id/:status', middleware.admin, (req, res) => {
-  cancelReasonController.changeStatus(req, res);
-});
 
 router.get('/user', (req, res) => {
   userController.listusers(req, res);
@@ -272,42 +61,13 @@ router.get('/user/changestatus/:id/:status', (req, res) => {
   userController.changeStatus(req, res);
 });
 
-router.get('/requests', (req, res) => {
-  requestController.listRequests(req, res);
-});
-router.delete('/request/:id', (req, res) => {
-  requestController.deleteRequest(req, res);
-});
-router.get('/request/changestatus/:id/:status', (req, res) => {
-  requestController.changeStatus(req, res);
+router.get('/comment', (req, res) => {
+  commentController.listComments(req, res);
 });
 
-router.get('/gigs', (req, res) => {
-  gigController.listgigs(req, res);
+router.get('/comment/changestatus/:id/:status', (req, res) => {
+  commentController.changeStatus(req, res);
 });
-router.get('/change/gigstatus/:id/:status', (req, res) => {
-  gigController.gigStatus(req, res);
-});
-router.delete('/gig/delete/:id', function(req, res){
-  gigController.deleteGig(req, res);
-});
-router.get('/gig/details/:id', (req, res) => {
-  gigController.getGigDetails(req, res);
-});
-router.post('/gig/request/modification',  (req, res) => {
-  gigController.requestModification(req, res);
-});
-
-router.get('/withdrawl', (req, res) => {
-  requestController.withdrawlList(req, res);
-});
-router.get('/withdrawl/changestatus/:id/:status', (req, res) => {
-  requestController.withdrawlChangeStatus(req, res);
-});
-router.get('/userdetails/:id', (req, res) => {
-  requestController.sellerDetails(req, res);
-});
-
 
 router.get('/settings', (req, res) => {
   settingController.getSetting(req, res);
@@ -321,41 +81,6 @@ router.post('/settings/social_links',  (req, res) => {
   settingController.updateSocialLink(req, res);
 });
 
-router.post('/settings/push',  (req, res) => {
-  settingController.updatePush(req, res);
-});
-
-router.post('/settings/social',  (req, res) => {
-  settingController.updateSocial(req, res);
-});
-
-router.post('/settings/sms',  (req, res) => {
-  settingController.updateSms(req, res);
-});
-
-router.post('/settings/mail',  (req, res) => {
-  settingController.updateMail(req, res);
-});
-
-router.post('/settings/payment',  (req, res) => {
-  settingController.updatePayment(req, res);
-});
-
-router.post('/settings/application',  (req, res) => {
-  settingController.updateApplication(req, res);
-});
-
-router.post('/settings/seller',  (req, res) => {
-  settingController.updateSeller(req, res);
-});
-
-router.post('/settings/gig',  (req, res) => {
-  settingController.updateGig(req, res);
-});
-
-router.post('/settings/pricing',  (req, res) => {
-  settingController.updatePricing(req, res);
-});
 
 
 module.exports = router;

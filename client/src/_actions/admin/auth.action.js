@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LOG_OUT, ADMIN_USER, ADD_NOTIFICATION, RBA } from "./types";
+import { LOG_OUT, ADMIN_USER } from "./types";
 
 export const login = (data) => async dispatch => {
     try {
@@ -9,12 +9,6 @@ export const login = (data) => async dispatch => {
         localStorage.setItem("adminToken", token);
         localStorage.setItem("adminRefreshToken", refreshToken);
 
-        let permissions = await axios.post("/api/admin/permissions", {}, { headers: { 'Authorization': `${token}` } });
-
-        dispatch({
-            type: RBA,
-            payload: permissions.data.responseData
-        });
 
         dispatch({
             type: ADMIN_USER,
@@ -22,10 +16,7 @@ export const login = (data) => async dispatch => {
         });
 
     } catch (e) {
-        dispatch({
-            type: ADD_NOTIFICATION,
-            //payload: { title: e.response.data.title, message: e.response.data.error.message }
-        });
+        
         console.log('err', e.response.data);
     }
 };

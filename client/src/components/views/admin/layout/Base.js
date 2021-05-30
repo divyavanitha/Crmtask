@@ -14,59 +14,16 @@ import "../../../../assets/admin/css/admin-customStyle.css";
 
 import Header from "../includes/Header";
 import Sidepanel from "../includes/Sidepanel";
-import AddCategory from "../categories/AddCategory";
-import Category from "../categories/Category";
-import AddDeliveryTime from "../deliverytimes/AddDeliveryTime";
-import DeliveryTime from "../deliverytimes/DeliveryTime";
-import AddSubCategory from "../subcategories/AddSubCategory";
-import SubCategory from "../subcategories/SubCategory";
-import AddLanguage from "../languages/AddLanguage";
-import Language from "../languages/Language";
-import AddCoupon from "../coupons/AddCoupon";
-import AddSkill from "../skills/AddSkill";
 import General from "../settings/General";
-import Skill from "../skills/Skill";
-import Coupon from "../coupons/Coupon";
-import AddSlide from "../slides/AddSlide";
-import Slide from "../slides/Slide";
-import AddMenu from "../menus/AddMenu";
-import Menu from "../menus/Menu";
-import AddPackage from "../packages/AddPackage";
-import Package from "../packages/Package";
-import AddPage from "../pages/AddPage";
-import Page from "../pages/Page";
-import AddCancelReason from "../cancelReasons/AddCancelReason";
-import CancelReason from "../cancelReasons/CancelReason";
+import AddPost from "../posts/AddPost";
+import Post from "../posts/Post";
 import AddAdmin from "../admin/AddAdmin";
 import Admin from "../admin/Admin";
 import AddUser from "../users/AddUser";
+import Comment from "../comments";
 import User from "../users/User";
-import Request from "../requests/Request";
-import ActiveRequest from "../requests/ActiveRequest";
-import PendingRequest from "../requests/PendingRequest";
-import PausedRequest from "../requests/PausedRequest";
-import DeclinedRequest from "../requests/DeclinedRequest";
-import Dashboard from "../Dashboard";
-import Gigs from "../gigs/Gigs";
-import ActiveGigs from "../gigs/ActiveGigs";
-import FeatureGigs from "../gigs/FeatureGigs";
-import PendingGigs from "../gigs/PendingGigs";
-import PausedGigs from "../gigs/PausedGigs";
-import ModifyGigs from "../gigs/Modification";
 import SocialLink from "../settings/SocialLink";
-import Application from "../settings/Application";
-import GigSetting from "../settings/GigSetting";
-import Pricing from "../settings/Pricing";
-import Seller from "../settings/Seller";
-import Social from "../settings/Social";
-import Sms from "../settings/Sms";
-import Mail from "../settings/Mail";
-import Push from "../settings/Push";
-import Payment from "../settings/Payment";
-import Pending from "../payouts/Pending";
-import Decline from "../payouts/Decline";
-import Approve from "../payouts/Approve";
-import Userdetails from "../payouts/Userdetails";
+
 
 const Base = () => {
 
@@ -94,72 +51,15 @@ const Base = () => {
 
 
           <Switch>
-            <Route path="/admin/dashboard" component={Dashboard}></Route>
-            <Route path="/admin/gigs" component={Gigs}></Route>
-            <Route path="/admin/active/gigs" component={ActiveGigs}></Route>
-            <Route path="/admin/feature/gigs" component={FeatureGigs}></Route>
-            <Route path="/admin/pending/gigs" component={PendingGigs}></Route>
-            <Route path="/admin/paused/gigs" component={PausedGigs}></Route>
-            <Route path="/admin/modify/:id" component={ModifyGigs}></Route>
-            <Route path="/admin/category/add" component={AddCategory}></Route>
-            <Route path="/admin/category/:id/edit" component={AddCategory}></Route>
-            <Route path="/admin/category" component={Category}></Route>
-            <Route path="/admin/subcategory/add" component={AddSubCategory}></Route>
-            <Route path="/admin/subcategory/:id/edit" component={AddSubCategory}></Route>
-            <Route path="/admin/subcategory" component={SubCategory}></Route>
-            <Route path="/admin/language/add" component={AddLanguage}></Route>
-            <Route path="/admin/language/:id/edit" component={AddLanguage}></Route>
-            <Route path="/admin/language" component={Language}></Route>
-            <Route path="/admin/delivery/time/add" component={AddDeliveryTime}></Route>
-            <Route path="/admin/delivery/time/:id/edit" component={AddDeliveryTime}></Route>
-            <Route path="/admin/delivery/time" component={DeliveryTime}></Route>
-            <Route path="/admin/skill/add" component={AddSkill}></Route>
-            <Route path="/admin/skill/:id/edit" component={AddSkill}></Route>
-            <Route path="/admin/skill" component={Skill}></Route>
-            <Route path="/admin/promocode/add" component={AddCoupon}></Route>
-            <Route path="/admin/promocode/:id/edit" component={AddCoupon}></Route>
-            <Route path="/admin/promocode" component={Coupon}></Route>
-            <Route path="/admin/slide/add" component={AddSlide}></Route>
-            <Route path="/admin/slide/:id/edit" component={AddSlide}></Route>
-            <Route path="/admin/slide" component={Slide}></Route>
-            <Route path="/admin/menu/add" component={AddMenu}></Route>
-            <Route path="/admin/menu/:id/edit" component={AddMenu}></Route>
-            <Route path="/admin/menu" component={Menu}></Route>
-            <Route path="/admin/package/add" component={AddPackage}></Route>
-            <Route path="/admin/package/:id/edit" component={AddPackage}></Route>
-            <Route path="/admin/package" component={Package}></Route>
-            <Route path="/admin/page/add" component={AddPage}></Route>
-            <Route path="/admin/page/:id/edit" component={AddPage}></Route>
-            <Route path="/admin/page" component={Page}></Route>
-            <Route path="/admin/cancel/reason/add" component={AddCancelReason}></Route>
-            <Route path="/admin/cancel/reason/:id/edit" component={AddCancelReason}></Route>
-            <Route path="/admin/cancel/reason" component={CancelReason}></Route>
-            <Route path="/admin/admininstrator/add" component={AddAdmin}></Route>
-            <Route path="/admin/admininstrator/:id/edit" component={AddAdmin}></Route>
-            <Route path="/admin/admininstrator" component={Admin}></Route>
+            <Route path="/admin/post/add" component={AddPost}></Route>
+            <Route path="/admin/post/:id/edit" component={AddPost}></Route>
+            <Route path="/admin/post" component={Post}></Route>
+            <Route path="/admin/comments" component={Comment}></Route>
             <Route path="/admin/user/add" component={AddUser}></Route>
             <Route path="/admin/user/:id/edit" component={AddUser}></Route>
             <Route path="/admin/user" component={User}></Route>
-            <Route path="/admin/request" component={Request}></Route>
-            <Route path="/admin/active/request" component={ActiveRequest}></Route>
-            <Route path="/admin/pending/request" component={PendingRequest}></Route>
-            <Route path="/admin/paused/request" component={PausedRequest}></Route>
-            <Route path="/admin/decline/request" component={DeclinedRequest}></Route>
             <Route path="/admin/settings/general" component={General}></Route>
             <Route path="/admin/settings/social/links" component={SocialLink}></Route>
-            <Route path="/admin/settings/social" component={Social}></Route>
-            <Route path="/admin/settings/sms" component={Sms}></Route>
-            <Route path="/admin/settings/mail" component={Mail}></Route>
-            <Route path="/admin/settings/push" component={Push}></Route>
-            <Route path="/admin/settings/payment" component={Payment}></Route>
-            <Route path="/admin/settings/application" component={Application}></Route>
-            <Route path="/admin/settings/seller" component={Seller}></Route>
-            <Route path="/admin/settings/gig" component={GigSetting}></Route>
-            <Route path="/admin/settings/pricing" component={Pricing}></Route>
-            <Route path="/admin/pending/withdrawl" component={Pending}></Route>
-            <Route path="/admin/decline/withdrawl" component={Decline}></Route>
-            <Route path="/admin/approve/withdrawl" component={Approve}></Route>
-             <Route path="/admin/userdetails/:id" component={Userdetails}></Route>
 
           </Switch>
 

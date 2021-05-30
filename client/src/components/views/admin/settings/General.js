@@ -112,11 +112,7 @@ const General = (props) => {
                                             <div className="tab-container">
                                                 <Link to="/admin/settings/general" className="tab-item active">General</Link>
                                                 <Link to="/admin/settings/social/links" className="tab-item">Social Links</Link>
-                                                <Link to="/admin/settings/push" className="tab-item">Push Notification</Link>
-                                                <Link to="/admin/settings/social" className="tab-item">Social Config</Link>
-                                                <Link to="/admin/settings/sms" className="tab-item">SMS Config</Link>
-                                                <Link to="/admin/settings/mail" className="tab-item">Mail Settings</Link>
-                                                <Link to="/admin/settings/payment" className="tab-item">Payment Config</Link>
+                                                
                                             </div>
                                         </div>
                                         <div className="addFormBox">

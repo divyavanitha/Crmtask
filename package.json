@@ -1,7 +1,7 @@
 {
-  "name": "freelancer",
+  "name": "crm",
   "version": "1.0.0",
-  "description": "Freelancer Application",
+  "description": "Crm Application",
   "main": "app.js",
   "scripts": {
     "start": "node server/bin/www",
@@ -14,7 +14,7 @@
     "test": "mocha server/test/* --timeout 10000 --exit"
   },
   "keywords": [
-    "Freelancer"
+    "Crm"
   ],
   "author": "",
   "license": "ISC",

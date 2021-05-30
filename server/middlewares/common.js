@@ -2,8 +2,6 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
-const { Role } = require('../models/Role');
-const { Permission } = require('../models/Permission');
 const db = require('../services/model.js');
 const helper = require('../services/helper.js');
 const _ = require('lodash');
@@ -52,7 +50,7 @@ async function admin(req, res, next) {
 
             rules = req.session.rules;
 
-        } else {
+        } /*else {
             let query = db._get(Role, { 'name': { $in: req.admin.roles } }, {}, {populate: { path: 'permissions.permission' } })
             
             const roles = await query;
@@ -77,7 +75,7 @@ async function admin(req, res, next) {
 
             req.session.rules = rules;
         }
-        
+        */
 
         /*let path = (req.route.path).substring(1);
 
@@ -142,15 +140,18 @@ function permission(req, res, next) {
 }
 
 function upload(destinationPath) {
+    console.log(destinationPath);
     if (!fs.existsSync(destinationPath)) {
         fs.mkdirSync(destinationPath, { recursive: true });
     }
 
     let storage = multer.diskStorage({
         destination: function (req, file, cb) {
+            console.log(file, "file1");
             cb(null, destinationPath);
         },
         filename: function (req, file, cb) {
+            console.log(file, "file2");
             cb(null, Date.now().toString() + '_' + file.originalname);
         }
     });

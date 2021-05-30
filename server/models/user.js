@@ -33,95 +33,10 @@ const userSchema = mongoose.Schema({
         minlength: 6,
         trim: true,
     },
-    loginBy: {
-        type: String
-    },
-    socialUniqueId: {
-        type: String
-    },
-    deviceType: {
-        type: String
-    },
-    deviceToken: {
-        type: String
-    },
-    country: { type: String, ref: 'country' },
-    city: { type: String, ref: 'city' },
-    state: { type: String, ref: 'state' },
-    language: [{
-        language: { type: String },
-        level: { type: String },
-        status: { type: Boolean, default: false }
-    }],
     profilePhoto: {
         type: String
     },
-    coverPhoto: {
-        type: String
-    },
-    headline: {
-        type: String
-    },
-    description: {
-        type: String
-    },
-    experience: {
-        type: String
-    },
-    skill: [{
-        skill: { type: String },
-        level: { type: String },
-    }],
-    education: [{
-        country: { type: String, ref: 'country' },
-        institute: { type: String },
-        title: { type: String },
-        major: { type: String },
-        year: { type: Number },
-    }],
-    certification: [{
-        name: { type: String },
-        certifier: { type: String },
-        year: { type: Number },
-    }],
-    wallet: {
-        type: Number,
-        default: 0
-    },
-    gig : {
-        type: Schema.Types.ObjectId,
-        ref: 'gigs'
-    },
-    rating: {
-        type: Number
-    },
-    ratingPercent: {
-        type: Number
-    },
-    completedOrder: {
-        type: Number,
-        default: 0
-    },
-    recentDelivery: {
-        type: Date,
-        default: Date.now
-    },
-    referralId: {
-        type: String,
-        minlength: 6,
-        trim: true,
-    },
-    type: {
-        type: String,
-        default: "NEWSELLER"
-    },
-    stripeId: {
-        type: String
-    },
-    is_active: {
-        type: Boolean,
-        default: false
-    },
+    
     status: {
         type: Boolean,
         default: false
